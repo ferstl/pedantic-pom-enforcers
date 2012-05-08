@@ -1,7 +1,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
-  <groupId>ch.sferstl.maven.enforcerrules</groupId>
+  <groupId>ch.sferstl.maven.pom.enforcer</groupId>
   <artifactId>enforcer-rules-it</artifactId>
   <version>1.0-SNAPSHOT</version>
 
@@ -29,13 +29,13 @@
         <configuration>
           <rules>
             <AlwaysPass/>
-            <myCustomRule implementation="ch.sferstl.maven.enforcerrules.TestRule" />
+            <myCustomRule implementation="ch.sferstl.maven.pom.enforcer.TestRule" />
           </rules>
           <fail>false</fail>
         </configuration>
         <dependencies>
           <dependency>
-            <groupId>ch.sferstl.maven.enforcerrules</groupId>
+            <groupId>ch.sferstl.maven.pom.enforcer</groupId>
             <artifactId>enforcer-rules</artifactId>
             <version>@project.version@</version>
           </dependency>

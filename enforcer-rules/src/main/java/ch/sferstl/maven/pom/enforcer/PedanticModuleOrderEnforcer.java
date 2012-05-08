@@ -1,4 +1,4 @@
-package ch.sferstl.maven.enforcerrules;
+package ch.sferstl.maven.pom.enforcer;
 
 import java.io.File;
 import java.io.IOException;

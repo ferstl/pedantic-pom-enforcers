@@ -10,6 +10,8 @@ import org.codehaus.plexus.logging.console.ConsoleLogger;
 import org.junit.Before;
 import org.junit.Test;
 
+import ch.sferstl.maven.pom.enforcer.TestRule;
+
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
