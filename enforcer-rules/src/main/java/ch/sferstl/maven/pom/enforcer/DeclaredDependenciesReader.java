@@ -23,20 +23,17 @@ public class DeclaredDependenciesReader extends AbstractPomSectionReader<List<De
     super(pom);
   }
 
-  /** {@inheritDoc} */
   @Override
   protected XPathExpression createXPathExpression(XPath xpath) throws XPathExpressionException {
     return xpath.compile(DEPENDENCIES_XPATH);
   }
 
-  /** {@inheritDoc} */
   @Override
   protected void configureXStream(XStream xstream) {
     xstream.alias(DEPENDENCIES_ALIAS, List.class);
     xstream.alias(DEPENDENCY_ALIAS, Dependency.class);
   }
 
-  /** {@inheritDoc} */
   @Override
   protected List<Dependency> getUndeclaredSection() {
     return Lists.newArrayList();

@@ -33,7 +33,6 @@ public class TestRule implements EnforcerRule {
     return this.docBuilder.parse(file);
   }
 
-  /** {@inheritDoc} */
   @Override
   public void execute(EnforcerRuleHelper helper) throws EnforcerRuleException {
     Log log = helper.getLog();
@@ -60,19 +59,17 @@ public class TestRule implements EnforcerRule {
     }
   }
 
-  /** {@inheritDoc} */
   @Override
   public boolean isCacheable() {
     return false;
   }
 
-  /** {@inheritDoc} */
   @Override
   public boolean isResultValid(EnforcerRule cachedRule) {
     return false;
   }
 
-  /** {@inheritDoc} */
+  
   @Override
   public String getCacheId() {
     return "uncachable";

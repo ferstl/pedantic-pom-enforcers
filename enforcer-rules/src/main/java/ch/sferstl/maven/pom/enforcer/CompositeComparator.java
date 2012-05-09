@@ -15,7 +15,6 @@ public class CompositeComparator<T> implements Comparator<T> {
     this.comparators = comparators;
   }
 
-  /** {@inheritDoc} */
   @Override
   public int compare(T o1, T o2) {
     int result = 0;

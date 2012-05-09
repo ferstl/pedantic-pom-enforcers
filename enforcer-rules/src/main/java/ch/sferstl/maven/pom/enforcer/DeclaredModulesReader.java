@@ -22,20 +22,17 @@ public class DeclaredModulesReader extends AbstractPomSectionReader<List<String>
     super(pom);
   }
 
-  /** {@inheritDoc} */
   @Override
   protected XPathExpression createXPathExpression(XPath xpath) throws XPathExpressionException {
     return xpath.compile(MODULES_XPATH);
   }
 
-  /** {@inheritDoc} */
   @Override
   protected void configureXStream(XStream xstream) {
     xstream.alias(MODULES_ALIAS, List.class);
     xstream.alias(MODULE_ALIAS, String.class);
   }
 
-  /** {@inheritDoc} */
   @Override
   protected List<String> getUndeclaredSection() {
     return Lists.newArrayList();
