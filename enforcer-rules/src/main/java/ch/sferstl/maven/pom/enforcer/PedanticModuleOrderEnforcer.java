@@ -11,12 +11,14 @@ import javax.xml.parsers.ParserConfigurationException;
 import org.apache.maven.enforcer.rule.api.EnforcerRule;
 import org.apache.maven.enforcer.rule.api.EnforcerRuleException;
 import org.apache.maven.enforcer.rule.api.EnforcerRuleHelper;
+import org.apache.maven.plugin.logging.Log;
 import org.apache.maven.project.MavenProject;
 import org.codehaus.plexus.component.configurator.expression.ExpressionEvaluationException;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Ordering;
 
 
@@ -24,11 +26,41 @@ public class PedanticModuleOrderEnforcer implements EnforcerRule {
 
   private DocumentBuilder docBuilder;
 
+  /** All modules in this list won't be checked for the correct order. */
+  private final List<String> ignoredModules;
+
   public PedanticModuleOrderEnforcer() {
+    this.ignoredModules = Lists.newArrayList();
     try {
       this.docBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
     } catch (ParserConfigurationException e) {
       throw new IllegalStateException("Cannot create document builder", e);
+    }
+  }
+
+  @Override
+  public void execute(EnforcerRuleHelper helper) throws EnforcerRuleException {
+    Log log = helper.getLog();
+    log.info("Enforcing alphabetical module order. These modules are ignored: " + this.ignoredModules);
+    MavenProject project;
+    try {
+      project = (MavenProject) helper.evaluate("${project}");
+    } catch (ExpressionEvaluationException e) {
+      throw new EnforcerRuleException("Unable to get maven project", e);
+    }
+
+    // Read the POM
+    Document pomDoc = this.parseXml(project.getFile());
+
+    // Remove all modules to be ignored.
+    List<String> declaredModules = new DeclaredModulesReader(pomDoc).read();
+    declaredModules.removeAll(this.ignoredModules);
+
+    // Enforce the module order
+    Ordering<String> moduleOrdering = Ordering.natural();
+    if (!moduleOrdering.isOrdered(declaredModules)) {
+      ImmutableList<String> orderedModules = moduleOrdering.immutableSortedCopy(declaredModules);
+      throw new EnforcerRuleException("Wrong module order. Correct order is: " + orderedModules);
     }
   }
 
@@ -40,42 +72,16 @@ public class PedanticModuleOrderEnforcer implements EnforcerRule {
     }
   }
 
-  /** {@inheritDoc} */
-  @Override
-  public void execute(EnforcerRuleHelper helper) throws EnforcerRuleException {
-    MavenProject project;
-    try {
-      project = (MavenProject) helper.evaluate("${project}");
-    } catch (ExpressionEvaluationException e) {
-      throw new EnforcerRuleException("Unable to get maven project", e);
-    }
-
-    Document pomDoc = this.parseXml(project.getFile());
-
-    List<String> declaredModules = new DeclaredModulesReader(pomDoc).read();
-    Ordering<String> moduleOrdering = Ordering.natural();
-    if (!moduleOrdering.isOrdered(declaredModules)) {
-      ImmutableList<String> orderedModules = moduleOrdering.immutableSortedCopy(declaredModules);
-      throw new EnforcerRuleException("Wrong module order. Correct order: " + orderedModules);
-    }
-
-    System.out.println(declaredModules);
-
-  }
-
-  /** {@inheritDoc} */
   @Override
   public boolean isCacheable() {
     return false;
   }
 
-  /** {@inheritDoc} */
   @Override
   public boolean isResultValid(EnforcerRule cachedRule) {
     return false;
   }
 
-  /** {@inheritDoc} */
   @Override
   public String getCacheId() {
     return "uncachable";
