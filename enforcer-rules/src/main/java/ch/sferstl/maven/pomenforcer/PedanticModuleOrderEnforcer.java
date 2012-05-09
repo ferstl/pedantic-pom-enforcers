@@ -21,6 +21,8 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Ordering;
 
+import ch.sferstl.maven.pomenforcer.reader.DeclaredModulesReader;
+
 
 public class PedanticModuleOrderEnforcer implements EnforcerRule {
 

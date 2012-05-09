@@ -1,4 +1,4 @@
-package ch.sferstl.maven.pomenforcer;
+package ch.sferstl.maven.pomenforcer.reader;
 
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;

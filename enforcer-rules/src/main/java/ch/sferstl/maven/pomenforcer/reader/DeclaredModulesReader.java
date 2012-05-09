@@ -1,4 +1,4 @@
-package ch.sferstl.maven.pomenforcer;
+package ch.sferstl.maven.pomenforcer.reader;
 
 import java.util.List;
 
