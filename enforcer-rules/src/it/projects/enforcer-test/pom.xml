@@ -36,7 +36,7 @@
         <version>1.0.1</version>
         <configuration>
           <rules>
-            <myCustomRule implementation="ch.sferstl.maven.pom.enforcer.PedanticModuleOrderEnforcer">
+            <myCustomRule implementation="ch.sferstl.maven.pomenforcer.PedanticModuleOrderEnforcer">
               <ignoredModules>
                 <module>module3</module>
                 <module>module4</module>

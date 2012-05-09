@@ -1,4 +1,4 @@
-package ch.sferstl.maven.pom.enforcer;
+package ch.sferstl.maven.pomenforcer;
 
 import java.util.List;
 

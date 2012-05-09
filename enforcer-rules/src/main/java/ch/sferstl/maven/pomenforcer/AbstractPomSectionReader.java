@@ -1,4 +1,4 @@
-package ch.sferstl.maven.pom.enforcer;
+package ch.sferstl.maven.pomenforcer;
 
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
