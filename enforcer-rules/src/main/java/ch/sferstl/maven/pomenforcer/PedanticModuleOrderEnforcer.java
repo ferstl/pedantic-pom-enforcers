@@ -40,14 +40,19 @@ public class PedanticModuleOrderEnforcer implements EnforcerRule {
 
   @Override
   public void execute(EnforcerRuleHelper helper) throws EnforcerRuleException {
-    Log log = helper.getLog();
-    log.info("Enforcing alphabetical module order. These modules are ignored: " + this.ignoredModules);
     MavenProject project;
     try {
       project = (MavenProject) helper.evaluate("${project}");
     } catch (ExpressionEvaluationException e) {
       throw new EnforcerRuleException("Unable to get maven project", e);
     }
+    // Do nothing if the project is not a parent project
+    if (!this.isParentProject(project)) {
+      return;
+    }
+
+    Log log = helper.getLog();
+    log.info("Enforcing alphabetical module order. These modules are ignored: " + this.ignoredModules);
 
     // Read the POM
     Document pomDoc = this.parseXml(project.getFile());
@@ -70,6 +75,10 @@ public class PedanticModuleOrderEnforcer implements EnforcerRule {
     } catch (SAXException | IOException e) {
       throw new IllegalStateException("Unable to parse XML file " + file, e);
     }
+  }
+
+  private boolean isParentProject(MavenProject project) {
+    return "pom".equals(project.getPackaging());
   }
 
   @Override
