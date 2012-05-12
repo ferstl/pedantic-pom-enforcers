@@ -95,7 +95,7 @@ public class PedanticModuleOrderEnforcer implements EnforcerRule {
 
   @Override
   public String getCacheId() {
-    return "uncachable";
+    return this.getClass() + "uncachable";
   }
 
 }
