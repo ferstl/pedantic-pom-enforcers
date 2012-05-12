@@ -36,7 +36,6 @@ public abstract class AbstractPomSectionReader<T> {
       throw new IllegalStateException("Unable to extract POM section", e);
     }
 
-    // POM element is not declared
     T section;
     if (pomElement == null) {
       section = this.getUndeclaredSection();
@@ -53,8 +52,9 @@ public abstract class AbstractPomSectionReader<T> {
   protected abstract void configureXStream(XStream xstream);
 
   /**
-   * Returns a default value for an undeclared section in the POM. Override this method in case you don't want to deal
-   * with <code>null</code> values.
+   * Returns a default value (aka. null object) for an undeclared section in the
+   * POM. Override this method in case you don't want to deal with
+   * <code>null</code> values.
    * @return The default value for an undeclared section.
    */
   protected T getUndeclaredSection() {
