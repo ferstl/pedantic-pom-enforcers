@@ -48,8 +48,10 @@ public class PedanticModuleOrderEnforcer implements EnforcerRule {
     } catch (ExpressionEvaluationException e) {
       throw new EnforcerRuleException("Unable to get maven project", e);
     }
+    System.out.println(project.isExecutionRoot());
+    System.out.println(project.getParent());
     // Do nothing if the project is not a parent project
-    if (!this.isParentProject(project)) {
+    if (!this.isPomProject(project)) {
       return;
     }
 
@@ -79,7 +81,7 @@ public class PedanticModuleOrderEnforcer implements EnforcerRule {
     }
   }
 
-  private boolean isParentProject(MavenProject project) {
+  private boolean isPomProject(MavenProject project) {
     return "pom".equals(project.getPackaging());
   }
 
