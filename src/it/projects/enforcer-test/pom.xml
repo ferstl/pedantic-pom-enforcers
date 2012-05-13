@@ -61,8 +61,8 @@
         </configuration>
         <dependencies>
           <dependency>
-            <groupId>ch.sferstl.maven.pom.enforcer</groupId>
-            <artifactId>enforcer-rules</artifactId>
+            <groupId>ch.sferstl.maven.enforcer</groupId>
+            <artifactId>pedantic-pom-enforcers</artifactId>
             <version>@project.version@</version>
           </dependency>
         </dependencies>
