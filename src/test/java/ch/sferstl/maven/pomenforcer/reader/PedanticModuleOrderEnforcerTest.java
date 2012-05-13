@@ -1,4 +1,4 @@
-package ch.sferstl.maven.enforcerrules;
+package ch.sferstl.maven.pomenforcer.reader;
 
 import java.io.File;
 
@@ -10,7 +10,7 @@ import org.codehaus.plexus.logging.console.ConsoleLogger;
 import org.junit.Before;
 import org.junit.Test;
 
-import ch.sferstl.maven.pomenforcer.PedanticModuleOrderEnforcer;
+import ch.sferstl.maven.pomenforcer.PedanticPomSectionOrderEnforcer;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -32,7 +32,7 @@ public class PedanticModuleOrderEnforcerTest {
 
   @Test
   public void test() throws Exception {
-    PedanticModuleOrderEnforcer rule = new PedanticModuleOrderEnforcer();
+    PedanticPomSectionOrderEnforcer rule = new PedanticPomSectionOrderEnforcer();
     rule.execute(this.mockHelper);
   }
 
