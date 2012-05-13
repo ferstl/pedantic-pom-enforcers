@@ -1,0 +1,2 @@
+pedantic-pom-enforcers
+======================
