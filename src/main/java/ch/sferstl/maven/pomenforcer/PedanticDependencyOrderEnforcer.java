@@ -20,11 +20,6 @@ import ch.sferstl.maven.pomenforcer.reader.DeclaredDependenciesReader;
 
 public class PedanticDependencyOrderEnforcer extends AbstractPedanticEnforcer {
 
-
-  public PedanticDependencyOrderEnforcer() {
-
-  }
-
   @Override
   public void execute(EnforcerRuleHelper helper) throws EnforcerRuleException {
     MavenProject project = this.getMavenProject(helper);
