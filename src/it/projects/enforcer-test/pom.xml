@@ -55,7 +55,8 @@
                 <module>module4</module>
               </ignoredModules>
             </myCustomRule-->
-            <myCustomRule implementation="ch.sferstl.maven.pomenforcer.PedanticDependencyOrderEnforcer"></myCustomRule>
+            <!-- myCustomRule implementation="ch.sferstl.maven.pomenforcer.PedanticDependencyOrderEnforcer"></myCustomRule-->
+            <myCustomRule implementation="ch.sferstl.maven.pomenforcer.PedanticPomSectionOrderEnforcer"></myCustomRule>
           </rules>
           <fail>true</fail>
         </configuration>
