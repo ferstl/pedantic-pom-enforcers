@@ -66,15 +66,11 @@ public class PedanticDependencyOrderEnforcer extends AbstractPedanticEnforcer {
         for (Dependency dependency : projectDependencies) {
           if (dependency.getGroupId().equals(input.getGroupId())
            && dependency.getArtifactId().equals(input.getArtifactId())) {
-            input.setVersion(dependency.getVersion());
-            input.setClassifier(dependency.getClassifier());
-            input.setOptional(dependency.isOptional());
-            input.setScope(dependency.getScope());
-            input.setType(dependency.getType());
-            break;
+            return dependency.clone();
           }
         }
-        return input;
+        throw new IllegalStateException(
+            "Found declared dependency '" + input + "' which is not available in the project's dependencies.");
       }
     };
     return Collections2.transform(declaredDependencies, completeFunction);
