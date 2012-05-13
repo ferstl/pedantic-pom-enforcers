@@ -13,20 +13,33 @@
     <module>module4</module>
     <module>module3</module>
   </modules>
-
-  <dependencies>
-    <dependency>
-      <groupId>commons-lang</groupId>
-      <artifactId>commons-lang</artifactId>
-      <version>2.6</version>
-    </dependency>
-    <dependency>
-      <groupId>commons-codec</groupId>
-      <artifactId>commons-codec</artifactId>
-      <version>1.6</version>
-      <scope>test</scope>
-    </dependency>
-  </dependencies>
+  
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>commons-lang</groupId>
+        <artifactId>commons-lang</artifactId>
+        <version>2.6</version>
+      </dependency>
+      <dependency>
+        <groupId>commons-codec</groupId>
+        <artifactId>commons-codec</artifactId>
+        <version>1.6</version>
+      </dependency>
+      <dependency>
+        <groupId>javax.servlet</groupId>
+        <artifactId>servlet-api</artifactId>
+        <version>2.5</version>
+        <scope>provided</scope>
+      </dependency>
+      <dependency>
+        <groupId>junit</groupId>
+        <artifactId>junit</artifactId>
+        <version>4.10</version>
+        <scope>test</scope>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
 
   <build>
     <plugins>
@@ -36,12 +49,13 @@
         <version>1.0.1</version>
         <configuration>
           <rules>
-            <myCustomRule implementation="ch.sferstl.maven.pomenforcer.PedanticModuleOrderEnforcer">
+            <!-- myCustomRule implementation="ch.sferstl.maven.pomenforcer.PedanticModuleOrderEnforcer">
               <ignoredModules>
                 <module>module3</module>
                 <module>module4</module>
               </ignoredModules>
-            </myCustomRule>
+            </myCustomRule-->
+            <myCustomRule implementation="ch.sferstl.maven.pomenforcer.PedanticDependencyOrderEnforcer"></myCustomRule>
           </rules>
           <fail>true</fail>
         </configuration>
