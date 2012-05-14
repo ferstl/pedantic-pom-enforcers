@@ -32,6 +32,7 @@ public class DeclaredDependenciesReader extends AbstractPomSectionReader<List<De
   protected void configureXStream(XStream xstream) {
     xstream.alias(DEPENDENCIES_ALIAS, List.class);
     xstream.alias(DEPENDENCY_ALIAS, Dependency.class);
+    xstream.omitField(Dependency.class, "exclusions");
   }
 
   @Override
