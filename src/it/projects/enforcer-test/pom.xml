@@ -14,6 +14,10 @@
     <module>module3</module>
   </modules>
   
+  <properties>
+    <dependency.order>com.foo</dependency.order>
+  </properties>
+  
   <dependencyManagement>
     <dependencies>
       <dependency>
@@ -27,6 +31,11 @@
         <version>1.6</version>
       </dependency>
       <dependency>
+        <groupId>com.googlecode.lambdaj</groupId>
+        <artifactId>lambdaj</artifactId>
+        <version>2.3.3</version>
+      </dependency>
+      <dependency>
         <groupId>javax.servlet</groupId>
         <artifactId>servlet-api</artifactId>
         <version>2.5</version>
@@ -36,6 +45,12 @@
         <groupId>junit</groupId>
         <artifactId>junit</artifactId>
         <version>4.10</version>
+        <scope>test</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.hamcrest</groupId>
+        <artifactId>hamcrest-library</artifactId>
+        <version>1.2.1</version>
         <scope>test</scope>
       </dependency>
     </dependencies>
@@ -55,8 +70,10 @@
                 <module>module4</module>
               </ignoredModules>
             </myCustomRule-->
-            <!-- myCustomRule implementation="ch.sferstl.maven.pomenforcer.PedanticDependencyOrderEnforcer"></myCustomRule-->
-            <myCustomRule implementation="ch.sferstl.maven.pomenforcer.PedanticPomSectionOrderEnforcer"></myCustomRule>
+            <myCustomRule implementation="ch.sferstl.maven.pomenforcer.PedanticDependencyOrderEnforcer">
+              <firstGroupIds>${dependency.order}</firstGroupIds>
+            </myCustomRule>
+            <!-- myCustomRule implementation="ch.sferstl.maven.pomenforcer.PedanticPomSectionOrderEnforcer"></myCustomRule-->
           </rules>
           <fail>true</fail>
         </configuration>

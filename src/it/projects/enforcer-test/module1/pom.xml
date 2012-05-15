@@ -9,7 +9,10 @@
   </parent>
   
   <artifactId>module1</artifactId>
-
+  
+  <properties>
+    <dependency.order>commons-,org.hamcrest</dependency.order>
+  </properties>
 
   <dependencies>
     <dependency>
@@ -17,8 +20,27 @@
       <artifactId>commons-lang</artifactId>
     </dependency>
     <dependency>
+      <groupId>com.googlecode.lambdaj</groupId>
+      <artifactId>lambdaj</artifactId>
+      <version>2.3.3</version>
+    </dependency>
+    <dependency>
+      <groupId>javax.servlet</groupId>
+      <artifactId>servlet-api</artifactId>
+      <version>2.5</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.hamcrest</groupId>
+      <artifactId>hamcrest-library</artifactId>
+      <version>1.2.1</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
+      <version>4.10</version>
+      <scope>test</scope>
     </dependency>
   </dependencies>
 </project>

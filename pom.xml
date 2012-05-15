@@ -28,6 +28,12 @@
       <artifactId>enforcer-api</artifactId>
       <version>${maven-enforcer-plugin.version}</version>
       <scope>provided</scope>
+      <exclusions>
+        <exclusion>
+          <artifactId>junit</artifactId>
+          <groupId>junit</groupId>
+        </exclusion>
+      </exclusions>
     </dependency>
     <dependency>
       <groupId>org.apache.maven</groupId>
@@ -46,16 +52,28 @@
       <artifactId>mockito-core</artifactId>
       <version>1.9.0</version>
       <scope>test</scope>
+      <exclusions>
+        <exclusion>
+          <artifactId>hamcrest-core</artifactId>
+          <groupId>org.hamcrest</groupId>
+        </exclusion>
+      </exclusions>
     </dependency>
     <dependency>
       <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
+      <artifactId>junit-dep</artifactId>
       <version>4.10</version>
       <scope>test</scope>
+      <exclusions>
+        <exclusion>
+          <artifactId>hamcrest-core</artifactId>
+          <groupId>org.hamcrest</groupId>
+        </exclusion>
+      </exclusions>
     </dependency>
     <dependency>
       <groupId>org.hamcrest</groupId>
-      <artifactId>hamcrest-core</artifactId>
+      <artifactId>hamcrest-library</artifactId>
       <version>1.2.1</version>
       <scope>test</scope>
     </dependency>

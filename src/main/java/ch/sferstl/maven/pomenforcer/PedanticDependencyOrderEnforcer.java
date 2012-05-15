@@ -1,6 +1,7 @@
 package ch.sferstl.maven.pomenforcer;
 
 import java.util.Collection;
+import java.util.Set;
 
 import org.apache.maven.enforcer.rule.api.EnforcerRuleException;
 import org.apache.maven.enforcer.rule.api.EnforcerRuleHelper;
@@ -10,22 +11,35 @@ import org.apache.maven.project.MavenProject;
 import org.w3c.dom.Document;
 
 import com.google.common.base.Function;
+import com.google.common.base.Splitter;
 import com.google.common.collect.Collections2;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Ordering;
+import com.google.common.collect.Sets;
 
 import ch.sferstl.maven.pomenforcer.reader.DeclaredDependenciesReader;
 
 
 public class PedanticDependencyOrderEnforcer extends AbstractPedanticEnforcer {
 
+  /** Comma separated list of group IDs that should be first (in order of declaration) in the dependencies section. */
+  private Set<String> firstGroupIds;
+
+
+  /**
+   *
+   */
+  public PedanticDependencyOrderEnforcer() {
+    this.firstGroupIds = Sets.newLinkedHashSet();
+  }
+
   @Override
   public void execute(EnforcerRuleHelper helper) throws EnforcerRuleException {
     MavenProject project = this.getMavenProject(helper);
 
     Log log = helper.getLog();
-    log.info("Enforcing dependency order.");
+    log.info("Enforcing dependency order. Priorized group IDs: " + this.firstGroupIds);
 
     // Read the POM
     Document pomDoc = this.parseXml(project.getFile());
@@ -35,7 +49,7 @@ public class PedanticDependencyOrderEnforcer extends AbstractPedanticEnforcer {
 
     declaredDependencies = this.completeDeclaredDependencies(declaredDependencies, projectDependencies);
     Ordering<Dependency> dependencyOrdering = Ordering.from(DependencyComparator.SCOPE)
-                                                      .compound(DependencyComparator.GROUP_ID)
+                                                      .compound(new PriorizedGroupIdDependencyComparator(this.firstGroupIds))
                                                       .compound(DependencyComparator.ARTIFACT_ID);
 
     if (!dependencyOrdering.isOrdered(declaredDependencies)) {
@@ -43,6 +57,17 @@ public class PedanticDependencyOrderEnforcer extends AbstractPedanticEnforcer {
       throw new EnforcerRuleException("Wrong dependency order. Correct order is:" + sortedDependencies);
     }
 
+  }
+
+  /**
+   * Sets the group IDs that should be listed first in the dependencies declaration.
+   * All group IDs that <strong>start with</strong> any of the priorized group IDs in the given list, are required
+   * to be located first in the dependencies section.
+   * @param commaSeparatedGroupIds Comma separated list of group IDs.
+   */
+  public void setFirstGroupIds(String commaSeparatedGroupIds) {
+    Iterable<String> priorizedGroupIds = Splitter.on(",").split(commaSeparatedGroupIds);
+    this.firstGroupIds = Sets.newLinkedHashSet(priorizedGroupIds);
   }
 
   /**
@@ -69,6 +94,6 @@ public class PedanticDependencyOrderEnforcer extends AbstractPedanticEnforcer {
       }
     };
     return Collections2.transform(declaredDependencies, completeFunction);
-  }
+  };
 
 }
