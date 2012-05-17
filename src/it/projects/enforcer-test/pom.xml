@@ -15,6 +15,7 @@
   </modules>
   
   <properties>
+    <order.by>scope,groupId,artifactId</order.by>
     <dependency.order>com.foo</dependency.order>
   </properties>
   
@@ -71,7 +72,8 @@
               </ignoredModules>
             </myCustomRule-->
             <myCustomRule implementation="ch.sferstl.maven.pomenforcer.PedanticDependencyOrderEnforcer">
-              <firstGroupIds>${dependency.order}</firstGroupIds>
+              <groupIdPriorities>${dependency.order}</groupIdPriorities>
+              <orderBy>${order.by}</orderBy>
             </myCustomRule>
             <!-- myCustomRule implementation="ch.sferstl.maven.pomenforcer.PedanticPomSectionOrderEnforcer"></myCustomRule-->
           </rules>

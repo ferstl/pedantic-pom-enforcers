@@ -47,7 +47,7 @@ public class PedanticDependencyOrderEnforcerTest {
   @Test
   public void testWithPriorizedGroupIds() throws Exception {
     PedanticDependencyOrderEnforcer rule = new PedanticDependencyOrderEnforcer();
-    rule.setFirstGroupIds("commons-,org.hamcrest");
+    rule.setGroupIdPriorities("commons-,org.hamcrest");
     rule.execute(this.mockHelper);
   }
 

@@ -1,6 +1,8 @@
 package ch.sferstl.maven.pomenforcer;
 
 import java.util.Collection;
+import java.util.Comparator;
+import java.util.List;
 import java.util.Set;
 
 import org.apache.maven.enforcer.rule.api.EnforcerRuleException;
@@ -14,6 +16,7 @@ import com.google.common.base.Function;
 import com.google.common.base.Splitter;
 import com.google.common.collect.Collections2;
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Ordering;
 import com.google.common.collect.Sets;
@@ -23,12 +26,66 @@ import ch.sferstl.maven.pomenforcer.reader.DeclaredDependenciesReader;
 
 public class PedanticDependencyOrderEnforcer extends AbstractPedanticEnforcer {
 
-  /** Comma separated list of group IDs that should be first (in order of declaration) in the dependencies section. */
-  private Set<String> firstGroupIds;
+  private static final Splitter COMMA_SPLITTER = Splitter.on(",");
+
+  private final Set<DependencyElement> orderBy;
+  private final Set<String> groupIdPriorities;
+  private final Set<String> artifactIdPriorities;
+  private final Set<String> scopePriorities;
 
 
   public PedanticDependencyOrderEnforcer() {
-    this.firstGroupIds = Sets.newLinkedHashSet();
+    this.groupIdPriorities = Sets.newLinkedHashSet();
+    this.artifactIdPriorities = Sets.newLinkedHashSet();
+    this.scopePriorities = Sets.newLinkedHashSet();
+    this.orderBy = Sets.newLinkedHashSet();
+    this.orderBy.add(DependencyElement.SCOPE);
+    this.orderBy.add(DependencyElement.GROUP_ID);
+    this.orderBy.add(DependencyElement.ARTIFACT_ID);
+  }
+
+  public void setOrderBy(String commaSeparatedDependencyElements) {
+    this.orderBy.clear();
+    Iterable<String> order = COMMA_SPLITTER.split(commaSeparatedDependencyElements);
+    for (String elementName : order) {
+      this.orderBy.add(DependencyElement.getByElementName(elementName));
+    }
+  }
+
+  /**
+   * Sets the group IDs that should be listed first in the dependencies declaration. All group IDs
+   * that <strong>start with</strong> any of the priorized group IDs in the given list, are required
+   * to be located first in the dependencies section.
+   * @param commaSeparatedGroupIds Comma separated list of group IDs.
+   */
+  public void setGroupIdPriorities(String commaSeparatedGroupIds) {
+    Iterable<String> priorizedGroupIds = COMMA_SPLITTER.split(commaSeparatedGroupIds);
+    this.groupIdPriorities.clear();
+    Iterables.addAll(this.groupIdPriorities, priorizedGroupIds);
+  }
+
+  /**
+   * Sets the artifact IDs that should be listed first in the dependencies declaration. All artifact
+   * IDs that <strong>start with</strong> any of the priorized IDs in the given list, are required
+   * to be located first in the dependencies section.
+   * @param commaSeparatedArtifactIds Comma separated list of artifact IDs.
+   */
+  public void setArtifactIdPriorities(String commaSeparatedArtifactIds) {
+    Iterable<String> priorizedArtifactIds = COMMA_SPLITTER.split(commaSeparatedArtifactIds);
+    this.artifactIdPriorities.clear();
+    Iterables.addAll(this.artifactIdPriorities, priorizedArtifactIds);
+  }
+
+  /**
+   * Sets the scopes that should be listed first in the dependencies declaration. All scopes that
+   * equal any of the scopes in the given list, are required to be located first in the dependencies
+   * section.
+   * @param commaSeparatedScopes Comma separated list of scopes.
+   */
+  public void setScopePriorities(String commaSeparatedScopes) {
+    Iterable<String> priorizedScopes = COMMA_SPLITTER.split(commaSeparatedScopes);
+    this.scopePriorities.clear();
+    Iterables.addAll(this.scopePriorities, priorizedScopes);
   }
 
   @Override
@@ -36,7 +93,7 @@ public class PedanticDependencyOrderEnforcer extends AbstractPedanticEnforcer {
     MavenProject project = this.getMavenProject(helper);
 
     Log log = helper.getLog();
-    log.info("Enforcing dependency order. Priorized group IDs: " + this.firstGroupIds);
+    log.info("Enforcing dependency order. Priorized group IDs: " + this.groupIdPriorities);
 
     // Read the POM
     Document pomDoc = this.parseXml(project.getFile());
@@ -45,35 +102,14 @@ public class PedanticDependencyOrderEnforcer extends AbstractPedanticEnforcer {
     Collection<Dependency> projectDependencies = Lists.newArrayList(project.getDependencies());
 
     declaredDependencies = this.completeDeclaredDependencies(declaredDependencies, projectDependencies);
-    Function<Dependency, String> transformer = new Function<Dependency, String>() {
-      @Override
-      public String apply(Dependency input) {
-        return input.getGroupId();
-      }
-    };
-    PriorityComparator<String, Dependency> groupIdComparator =
-        new PriorityComparator<>(this.firstGroupIds, transformer, new StringStartsWithEquivalence());
 
-    Ordering<Dependency> dependencyOrdering = Ordering.from(DependencyComparator.SCOPE)
-                                                      .compound(groupIdComparator)
-                                                      .compound(DependencyComparator.ARTIFACT_ID);
+    Ordering<Dependency> dependencyOrdering = this.createDependencyOrdering();
 
     if (!dependencyOrdering.isOrdered(declaredDependencies)) {
       ImmutableList<Dependency> sortedDependencies = dependencyOrdering.immutableSortedCopy(declaredDependencies);
       throw new EnforcerRuleException("Wrong dependency order. Correct order is:" + sortedDependencies);
     }
 
-  }
-
-  /**
-   * Sets the group IDs that should be listed first in the dependencies declaration.
-   * All group IDs that <strong>start with</strong> any of the priorized group IDs in the given list, are required
-   * to be located first in the dependencies section.
-   * @param commaSeparatedGroupIds Comma separated list of group IDs.
-   */
-  public void setFirstGroupIds(String commaSeparatedGroupIds) {
-    Iterable<String> priorizedGroupIds = Splitter.on(",").split(commaSeparatedGroupIds);
-    this.firstGroupIds = Sets.newLinkedHashSet(priorizedGroupIds);
   }
 
   /**
@@ -100,6 +136,37 @@ public class PedanticDependencyOrderEnforcer extends AbstractPedanticEnforcer {
       }
     };
     return Collections2.transform(declaredDependencies, completeFunction);
-  };
+  }
+
+  private Ordering<Dependency> createDependencyOrdering() {
+    List<Comparator<Dependency>> comparators = Lists.newArrayListWithCapacity(this.orderBy.size());
+    for (DependencyElement element : this.orderBy) {
+      switch(element) {
+        case GROUP_ID:
+          comparators.add(element.createPriorityComparator(this.groupIdPriorities));
+          break;
+        case ARTIFACT_ID:
+          comparators.add(element.createPriorityComparator(this.artifactIdPriorities));
+          break;
+        case SCOPE:
+          comparators.add(element.createPriorityComparator(this.scopePriorities));
+          break;
+        default:
+          throw new IllegalArgumentException("Unsupported dependency element: '" + element.getElementName() + "'");
+      }
+    }
+
+    Ordering<Dependency> ordering;
+    if (comparators.size() > 0) {
+      ordering = Ordering.from(comparators.get(0));
+      for (Comparator<Dependency> comparator : comparators.subList(1, comparators.size())) {
+        ordering.compound(comparator);
+      }
+    } else {
+      throw new IllegalStateException("Undefined dependency order. Either define it or remove the <orderBy> "
+                                    + "configuration to use the default ordering.");
+    }
+    return ordering;
+  }
 
 }
