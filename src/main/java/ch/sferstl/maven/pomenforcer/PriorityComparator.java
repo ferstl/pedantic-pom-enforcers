@@ -43,9 +43,9 @@ public class PriorityComparator<P extends Comparable<P>, T> implements Comparato
     this.transformer = transformer;
   }
 
-  public PriorityComparator(Collection<P> priorizedItems, Function<T, P> transformer) {
+  public PriorityComparator(Collection<P> priorityCollection, Function<T, P> transformer) {
     // Equivalences.equals() would do the same job but it returns Equivalence<Object> which does not fit here.
-    this(priorizedItems, transformer, new Equivalence<P>() {
+    this(priorityCollection, transformer, new Equivalence<P>() {
       @Override
       protected boolean doEquivalent(P a, P b) {
         return a.equals(b);
