@@ -25,12 +25,12 @@ public class PriorityComparator<P extends Comparable<P>, T> implements Comparato
   /** The priority collection. */
   private final Collection<P> priorityCollection;
 
-  /** Matches the values to be compared with the items in the priority list. */
+  /** Matches the values to be compared with the items in the priority collection. */
   private final Equivalence<P> priorityMatcher;
 
   /**
-   * Transforms the type of the objects to be compared into the type of the priority list. Use
-   * {@link Functions#identity()} if the type of the priority list and the type of the objects to be
+   * Transforms the type of the objects to be compared into the type of the priority collection. Use
+   * {@link Functions#identity()} if the type of the priority collection and the type of the objects to be
    * compared are the same.
    */
   private final Function<T, P> transformer;
@@ -74,11 +74,11 @@ public class PriorityComparator<P extends Comparable<P>, T> implements Comparato
   }
 
   /**
-   * Determine the priority of the given item by matching it against the priority list.
+   * Determine the priority of the given item by matching it against the priority collection.
    * The lower the rank, the higher the priority.
    * @param item The item to priorize.
    * @return The priority of the given item or {@link Integer#MAX_VALUE} if the given item does not
-   *         match any element of the priorized item list.
+   *         match any element of the priority collection.
    */
   private int rank(P item) {
     int i = 0;
