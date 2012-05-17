@@ -27,9 +27,6 @@ public class PedanticDependencyOrderEnforcer extends AbstractPedanticEnforcer {
   private Set<String> firstGroupIds;
 
 
-  /**
-   *
-   */
   public PedanticDependencyOrderEnforcer() {
     this.firstGroupIds = Sets.newLinkedHashSet();
   }
@@ -48,8 +45,17 @@ public class PedanticDependencyOrderEnforcer extends AbstractPedanticEnforcer {
     Collection<Dependency> projectDependencies = Lists.newArrayList(project.getDependencies());
 
     declaredDependencies = this.completeDeclaredDependencies(declaredDependencies, projectDependencies);
+    Function<Dependency, String> transformer = new Function<Dependency, String>() {
+      @Override
+      public String apply(Dependency input) {
+        return input.getGroupId();
+      }
+    };
+    PriorityComparator<String, Dependency> groupIdComparator =
+        new PriorityComparator<>(this.firstGroupIds, transformer, new StringStartsWithEquivalence());
+
     Ordering<Dependency> dependencyOrdering = Ordering.from(DependencyComparator.SCOPE)
-                                                      .compound(new PriorizedGroupIdDependencyComparator(this.firstGroupIds))
+                                                      .compound(groupIdComparator)
                                                       .compound(DependencyComparator.ARTIFACT_ID);
 
     if (!dependencyOrdering.isOrdered(declaredDependencies)) {
