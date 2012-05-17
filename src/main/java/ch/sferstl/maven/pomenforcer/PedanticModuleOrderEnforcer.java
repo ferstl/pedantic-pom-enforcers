@@ -43,7 +43,7 @@ public class PedanticModuleOrderEnforcer extends AbstractPedanticEnforcer {
     log.info("  -> These modules are ignored: " + Joiner.on(",").join(this.ignoredModules));
 
     // Read the POM
-    Document pomDoc = this.parseXml(project.getFile());
+    Document pomDoc = XmlParser.parseXml(project.getFile());
 
     // Remove all modules to be ignored.
     List<String> declaredModules = new DeclaredModulesReader(pomDoc).read();

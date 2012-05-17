@@ -94,7 +94,7 @@ public class PedanticDependencyOrderEnforcer extends AbstractPedanticEnforcer {
     log.info("  -> Artifact ID priorities: " + joiner.join(this.artifactIdPriorities));
 
     // Read the POM
-    Document pomDoc = this.parseXml(project.getFile());
+    Document pomDoc = XmlParser.parseXml(project.getFile());
 
     Collection<Dependency> declaredDependencies = new DeclaredDependenciesReader(pomDoc).read();
     Collection<Dependency> projectDependencies = Lists.newArrayList(project.getDependencies());

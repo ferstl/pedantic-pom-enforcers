@@ -47,7 +47,7 @@ public class PedanticPomSectionOrderEnforcer extends AbstractPedanticEnforcer {
     log.info("  -> Section priorities: " + Joiner.on(",").join(this.sectionPriorities));
 
     // Read the POM
-    Document pomDoc = this.parseXml(project.getFile());
+    Document pomDoc = XmlParser.parseXml(project.getFile());
 
     // Get the declared POM sections
     NodeList childNodes = pomDoc.getFirstChild().getChildNodes();
