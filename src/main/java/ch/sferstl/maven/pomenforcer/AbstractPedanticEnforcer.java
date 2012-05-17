@@ -2,6 +2,7 @@ package ch.sferstl.maven.pomenforcer;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Collection;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -14,9 +15,15 @@ import org.codehaus.plexus.component.configurator.expression.ExpressionEvaluatio
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
+import com.google.common.base.Function;
+import com.google.common.base.Functions;
+import com.google.common.base.Splitter;
+import com.google.common.collect.Iterables;
+
 
 public abstract class AbstractPedanticEnforcer implements EnforcerRule {
 
+  private static final Splitter COMMA_SPLITTER = Splitter.on(",");
   private DocumentBuilder docBuilder;
 
   public AbstractPedanticEnforcer() {
@@ -43,6 +50,20 @@ public abstract class AbstractPedanticEnforcer implements EnforcerRule {
       throw new IllegalStateException("Unable to get maven project", e);
     }
     return project;
+  }
+
+  protected void splitAndAddToCollection(String commaSeparatedItems, Collection<String> collection) {
+    Function<String, String> identity = Functions.identity();
+    this.splitAndAddToCollection(commaSeparatedItems, collection, identity);
+  }
+
+  protected <T> void splitAndAddToCollection(String commaSeparatedItems, Collection<T> collection, Function<String, T> transformer) {
+    Iterable<String> items = COMMA_SPLITTER.split(commaSeparatedItems);
+    // Don't touch the collection if there is nothing to add.
+    if (items.iterator().hasNext()) {
+      collection.clear();
+    }
+    Iterables.addAll(collection, Iterables.transform(items, transformer));
   }
 
   @Override

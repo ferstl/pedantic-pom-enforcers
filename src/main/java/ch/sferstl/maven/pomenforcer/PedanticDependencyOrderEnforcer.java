@@ -13,10 +13,9 @@ import org.apache.maven.project.MavenProject;
 import org.w3c.dom.Document;
 
 import com.google.common.base.Function;
-import com.google.common.base.Splitter;
+import com.google.common.base.Joiner;
 import com.google.common.collect.Collections2;
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Ordering;
 import com.google.common.collect.Sets;
@@ -25,8 +24,6 @@ import ch.sferstl.maven.pomenforcer.reader.DeclaredDependenciesReader;
 
 
 public class PedanticDependencyOrderEnforcer extends AbstractPedanticEnforcer {
-
-  private static final Splitter COMMA_SPLITTER = Splitter.on(",");
 
   private final Set<DependencyElement> orderBy;
   private final Set<String> groupIdPriorities;
@@ -44,56 +41,57 @@ public class PedanticDependencyOrderEnforcer extends AbstractPedanticEnforcer {
     this.orderBy.add(DependencyElement.ARTIFACT_ID);
   }
 
-  public void setOrderBy(String commaSeparatedDependencyElements) {
-    this.orderBy.clear();
-    Iterable<String> order = COMMA_SPLITTER.split(commaSeparatedDependencyElements);
-    for (String elementName : order) {
-      this.orderBy.add(DependencyElement.getByElementName(elementName));
-    }
+  public void setOrderBy(String dependencyElements) {
+    Function<String, DependencyElement> transformer = new Function<String, DependencyElement>() {
+      @Override
+      public DependencyElement apply(String input) {
+        return DependencyElement.getByElementName(input);
+      }
+    };
+    this.splitAndAddToCollection(dependencyElements, this.orderBy, transformer);
   }
 
   /**
    * Sets the group IDs that should be listed first in the dependencies declaration. All group IDs
    * that <strong>start with</strong> any of the priorized group IDs in the given list, are required
    * to be located first in the dependencies section.
-   * @param commaSeparatedGroupIds Comma separated list of group IDs.
+   * @param groupIds Comma separated list of group IDs.
    */
-  public void setGroupIdPriorities(String commaSeparatedGroupIds) {
-    Iterable<String> priorizedGroupIds = COMMA_SPLITTER.split(commaSeparatedGroupIds);
-    this.groupIdPriorities.clear();
-    Iterables.addAll(this.groupIdPriorities, priorizedGroupIds);
+  public void setGroupIdPriorities(String groupIds) {
+    this.splitAndAddToCollection(groupIds, this.groupIdPriorities);
   }
 
   /**
    * Sets the artifact IDs that should be listed first in the dependencies declaration. All artifact
    * IDs that <strong>start with</strong> any of the priorized IDs in the given list, are required
    * to be located first in the dependencies section.
-   * @param commaSeparatedArtifactIds Comma separated list of artifact IDs.
+   * @param artifactIds Comma separated list of artifact IDs.
    */
-  public void setArtifactIdPriorities(String commaSeparatedArtifactIds) {
-    Iterable<String> priorizedArtifactIds = COMMA_SPLITTER.split(commaSeparatedArtifactIds);
-    this.artifactIdPriorities.clear();
-    Iterables.addAll(this.artifactIdPriorities, priorizedArtifactIds);
+  public void setArtifactIdPriorities(String artifactIds) {
+    this.splitAndAddToCollection(artifactIds, this.artifactIdPriorities);
   }
 
   /**
    * Sets the scopes that should be listed first in the dependencies declaration. All scopes that
    * equal any of the scopes in the given list, are required to be located first in the dependencies
    * section.
-   * @param commaSeparatedScopes Comma separated list of scopes.
+   * @param scopes Comma separated list of scopes.
    */
-  public void setScopePriorities(String commaSeparatedScopes) {
-    Iterable<String> priorizedScopes = COMMA_SPLITTER.split(commaSeparatedScopes);
-    this.scopePriorities.clear();
-    Iterables.addAll(this.scopePriorities, priorizedScopes);
+  public void setScopePriorities(String scopes) {
+    this.splitAndAddToCollection(scopes, this.scopePriorities);
   }
 
   @Override
   public void execute(EnforcerRuleHelper helper) throws EnforcerRuleException {
     MavenProject project = this.getMavenProject(helper);
 
+    Joiner joiner = Joiner.on(",");
     Log log = helper.getLog();
-    log.info("Enforcing dependency order. Priorized group IDs: " + this.groupIdPriorities);
+    log.info("Enforcing dependency order.");
+    log.info("  -> Dependencies have to be ordered by: " + joiner.join(this.orderBy));
+    log.info("  -> Scope priorities: " + joiner.join(this.scopePriorities));
+    log.info("  -> Group ID priorities: " + joiner.join(this.groupIdPriorities));
+    log.info("  -> Artifact ID priorities: " + joiner.join(this.artifactIdPriorities));
 
     // Read the POM
     Document pomDoc = this.parseXml(project.getFile());

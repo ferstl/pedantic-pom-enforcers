@@ -52,12 +52,12 @@ public enum DependencyElement implements PriorityComparatorFactory<String, Depen
     }
   };
 
-  private static Map<String, DependencyElement> valueMap;
+  private static Map<String, DependencyElement> elementMap;
 
   static {
-    valueMap = Maps.newLinkedHashMap();
+    elementMap = Maps.newLinkedHashMap();
     for (DependencyElement element : values()) {
-      valueMap.put(element.getElementName(), element);
+      elementMap.put(element.getElementName(), element);
     }
   }
 
@@ -66,7 +66,7 @@ public enum DependencyElement implements PriorityComparatorFactory<String, Depen
       throw new NullPointerException("Element name is null");
     }
 
-    DependencyElement result = valueMap.get(elementName);
+    DependencyElement result = elementMap.get(elementName);
     if (result == null) {
       throw new IllegalArgumentException("No dependency element with name " + elementName);
     }
