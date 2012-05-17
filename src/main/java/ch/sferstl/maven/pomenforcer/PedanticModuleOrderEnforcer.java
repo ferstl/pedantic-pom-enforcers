@@ -1,6 +1,7 @@
 package ch.sferstl.maven.pomenforcer;
 
 import java.util.List;
+import java.util.Set;
 
 import org.apache.maven.enforcer.rule.api.EnforcerRuleException;
 import org.apache.maven.enforcer.rule.api.EnforcerRuleHelper;
@@ -10,8 +11,8 @@ import org.w3c.dom.Document;
 
 import com.google.common.base.Joiner;
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Lists;
 import com.google.common.collect.Ordering;
+import com.google.common.collect.Sets;
 
 import ch.sferstl.maven.pomenforcer.reader.DeclaredModulesReader;
 
@@ -19,10 +20,10 @@ import ch.sferstl.maven.pomenforcer.reader.DeclaredModulesReader;
 public class PedanticModuleOrderEnforcer extends AbstractPedanticEnforcer {
 
   /** All modules in this set won't be checked for the correct order. */
-  private final List<String> ignoredModules;
+  private final Set<String> ignoredModules;
 
   public PedanticModuleOrderEnforcer() {
-    this.ignoredModules = Lists.newArrayList();
+    this.ignoredModules = Sets.newLinkedHashSet();
   }
 
   public void setIgnoredModules(String ignoredModules) {
