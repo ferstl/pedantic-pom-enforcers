@@ -1,7 +1,11 @@
 package ch.sferstl.maven.pomenforcer;
 
+import java.util.Collection;
+import java.util.Comparator;
 import java.util.Map;
 
+import com.google.common.base.Function;
+import com.google.common.base.Functions;
 import com.google.common.collect.Maps;
 
 
@@ -46,7 +50,11 @@ public enum PomSection {
     }
   }
 
-  public static PomSection bySectionName(String sectionName) {
+  public static PomSection getBySectionName(String sectionName) {
+    if (sectionName == null) {
+      throw new NullPointerException("Section name is null.");
+    }
+
     PomSection value = pomSectionMap.get(sectionName);
     if (value == null) {
       throw new IllegalArgumentException("POM section " + sectionName + " does not exist.");
@@ -62,6 +70,11 @@ public enum PomSection {
 
   public String getSectionName() {
     return this.sectionName;
+  }
+
+  public static Comparator<PomSection> createPriorityComparator(Collection<PomSection> priorityList) {
+    Function<PomSection, PomSection> identity = Functions.identity();
+      return new PriorityComparator<>(priorityList, identity);
   }
 
 }

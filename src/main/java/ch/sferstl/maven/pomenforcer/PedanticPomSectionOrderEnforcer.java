@@ -1,8 +1,8 @@
 package ch.sferstl.maven.pomenforcer;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
+import java.util.Set;
 
 import org.apache.maven.enforcer.rule.api.EnforcerRuleException;
 import org.apache.maven.enforcer.rule.api.EnforcerRuleHelper;
@@ -13,11 +13,30 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import com.google.common.base.Function;
+import com.google.common.base.Joiner;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Ordering;
+import com.google.common.collect.Sets;
 
 
 public class PedanticPomSectionOrderEnforcer extends AbstractPedanticEnforcer {
+
+  private final Set<PomSection> sectionPriorities;
+
+
+  public PedanticPomSectionOrderEnforcer() {
+    this.sectionPriorities = Sets.newLinkedHashSet();
+  }
+
+  public void setSectionPriorities(String sectionPriorities) {
+    Function<String, PomSection> transformer = new Function<String, PomSection>() {
+      @Override
+      public PomSection apply(String input) {
+        return PomSection.getBySectionName(input);
+      }
+    };
+    this.splitAndAddToCollection(sectionPriorities, this.sectionPriorities, transformer);
+  }
 
   @Override
   public void execute(EnforcerRuleHelper helper) throws EnforcerRuleException {
@@ -25,6 +44,7 @@ public class PedanticPomSectionOrderEnforcer extends AbstractPedanticEnforcer {
 
     Log log = helper.getLog();
     log.info("Enforcing correct POM section order.");
+    log.info("  -> Section priorities: " + Joiner.on(",").join(this.sectionPriorities));
 
     // Read the POM
     Document pomDoc = this.parseXml(project.getFile());
@@ -35,17 +55,12 @@ public class PedanticPomSectionOrderEnforcer extends AbstractPedanticEnforcer {
     for (int i = 0; i < childNodes.getLength(); i++) {
       Node node = childNodes.item(i);
       if (node.getNodeType() == Node.ELEMENT_NODE) {
-        pomSections.add(PomSection.bySectionName(node.getNodeName()));
+        pomSections.add(PomSection.getBySectionName(node.getNodeName()));
       }
     }
 
     // The default ordering is the order of the PomSection enum.
-    Ordering<PomSection> ordering = Ordering.from(new Comparator<PomSection>() {
-      @Override
-      public int compare(PomSection s1, PomSection s2) {
-        return s1.compareTo(s2);
-      }
-    });
+    Ordering<PomSection> ordering = Ordering.from(PomSection.createPriorityComparator(this.sectionPriorities));
 
     if (!ordering.isOrdered(pomSections)) {
       List<String> sortedPomSections =
