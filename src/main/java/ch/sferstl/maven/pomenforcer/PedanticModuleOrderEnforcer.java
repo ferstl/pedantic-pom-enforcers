@@ -8,6 +8,7 @@ import org.apache.maven.plugin.logging.Log;
 import org.apache.maven.project.MavenProject;
 import org.w3c.dom.Document;
 
+import com.google.common.base.Joiner;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Ordering;
@@ -17,11 +18,15 @@ import ch.sferstl.maven.pomenforcer.reader.DeclaredModulesReader;
 
 public class PedanticModuleOrderEnforcer extends AbstractPedanticEnforcer {
 
-  /** All modules in this list won't be checked for the correct order. */
+  /** All modules in this set won't be checked for the correct order. */
   private final List<String> ignoredModules;
 
   public PedanticModuleOrderEnforcer() {
     this.ignoredModules = Lists.newArrayList();
+  }
+
+  public void setIgnoredModules(String ignoredModules) {
+    this.splitAndAddToCollection(ignoredModules, this.ignoredModules);
   }
 
   @Override
@@ -33,7 +38,8 @@ public class PedanticModuleOrderEnforcer extends AbstractPedanticEnforcer {
     }
 
     Log log = helper.getLog();
-    log.info("Enforcing alphabetical module order. These modules are ignored: " + this.ignoredModules);
+    log.info("Enforcing alphabetical module order.");
+    log.info("  -> These modules are ignored: " + Joiner.on(",").join(this.ignoredModules));
 
     // Read the POM
     Document pomDoc = this.parseXml(project.getFile());
