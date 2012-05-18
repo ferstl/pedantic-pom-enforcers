@@ -10,6 +10,17 @@
     <connection>scm:git:git@github.com:ferstl/pedantic-pom-enforcers.git</connection>
     <url>https://github.com/ferstl/pedantic-pom-enforcers</url>
   </scm>
+  
+  <distributionManagement>
+    <repository>
+      <id>nexus</id>
+      <url>${distribution.release.url}</url>
+    </repository>
+    <snapshotRepository>
+      <id>nexus</id>
+      <url>${distribution.snapshot.url}</url>
+    </snapshotRepository>
+  </distributionManagement>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
