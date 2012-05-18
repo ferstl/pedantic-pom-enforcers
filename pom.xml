@@ -6,6 +6,11 @@
   <artifactId>pedantic-pom-enforcers</artifactId>
   <version>1.0-SNAPSHOT</version>
 
+  <scm>
+    <connection>scm:git:git@github.com:ferstl/pedantic-pom-enforcers.git</connection>
+    <url>https://github.com/ferstl/pedantic-pom-enforcers</url>
+  </scm>
+
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <maven-enforcer-plugin.version>1.0.1</maven-enforcer-plugin.version>
