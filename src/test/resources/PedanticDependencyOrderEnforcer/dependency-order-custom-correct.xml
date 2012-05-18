@@ -1,0 +1,55 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>ch.sferstl.maven.pom.enforcer</groupId>
+  <artifactId>dependency-order-custom</artifactId>
+  <version>1.0-SNAPSHOT</version>
+  
+  <description>
+    Test POM to test this customized dependency ordering:
+    - scope: 1) test, 2) provided, 3) default scope ordering
+    - artifact ID: 1) junit, 2) lambdaj, 3) default artifactId ordering
+    - groupId ID: 1) org.apache.commons, 2) default groupId ordering
+  </description>
+
+  <dependencies>
+    <!-- test dependencies -->
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.hamcrest</groupId>
+      <artifactId>hamcrest-library</artifactId>
+    </dependency>
+    
+    <!-- provided dependencies -->
+    <dependency>
+      <groupId>javax.servlet</groupId>
+      <artifactId>servlet-api</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>javax.transaction</groupId>
+      <artifactId>transaction-api</artifactId>
+    </dependency>
+    
+    <!-- compile dependencies -->
+    <dependency>
+      <groupId>com.googlecode.lambdaj</groupId>
+      <artifactId>lambdaj</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>commons-codec</groupId>
+      <artifactId>commons-codec</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.commons</groupId>
+      <artifactId>commons-lang</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>commons-lang</groupId>
+      <artifactId>commons-lang</artifactId>
+    </dependency>
+  </dependencies>
+
+</project>

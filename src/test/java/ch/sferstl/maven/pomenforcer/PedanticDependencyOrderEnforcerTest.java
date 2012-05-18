@@ -1,8 +1,12 @@
 package ch.sferstl.maven.pomenforcer;
 
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
 import java.io.File;
 import java.util.List;
 
+import org.apache.maven.enforcer.rule.api.EnforcerRuleException;
 import org.apache.maven.enforcer.rule.api.EnforcerRuleHelper;
 import org.apache.maven.model.Dependency;
 import org.apache.maven.monitor.logging.DefaultLog;
@@ -10,34 +14,30 @@ import org.apache.maven.project.MavenProject;
 import org.codehaus.plexus.logging.Logger;
 import org.codehaus.plexus.logging.console.ConsoleLogger;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
+import org.w3c.dom.Document;
 
-import com.google.common.collect.Lists;
-
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import ch.sferstl.maven.pomenforcer.reader.DeclaredDependenciesReader;
 
 
 public class PedanticDependencyOrderEnforcerTest {
 
+  private static final File ALL_DEPENDENCIES_FILE =
+      new File("target/test-classes/all-dependencies.xml");
+  private static final File TEST_DIRECTORY =
+      new File("target/test-classes/PedanticDependencyOrderEnforcer");
+  
   private EnforcerRuleHelper mockHelper;
+  private MavenProject mockProject;
 
   @Before
   public void setUp() throws Exception {
-    List<Dependency> projectDependencies = Lists.newArrayList(
-        this.createDependency("commons-lang", "commons-lang", "compile"),
-        this.createDependency("commons-foo", "commons-lang", "compile"),
-        this.createDependency("commons-codec", "commons-codec", "compile"),
-        this.createDependency("com.googlecode.lambdaj", "lambdaj", "compile"),
-        this.createDependency("junit", "junit", "test"),
-        this.createDependency("org.hamcrest", "hamcrest-library", "test")
-        );
-
+    Document allDepsPom = XmlParser.parseXml(ALL_DEPENDENCIES_FILE);
+    List<Dependency> allDeps = new DeclaredDependenciesReader(allDepsPom).read();
+    
     this.mockHelper = mock(EnforcerRuleHelper.class);
-    MavenProject mockProject = mock(MavenProject.class);
-    when(mockProject.getFile()).thenReturn(new File("target/test-classes/test-pom.xml"));
-    when(mockProject.getDependencies()).thenReturn(projectDependencies);
+    mockProject = mock(MavenProject.class);
+    when(mockProject.getDependencies()).thenReturn(allDeps);
     ConsoleLogger plexusLogger = new ConsoleLogger(Logger.LEVEL_DEBUG, "testLogger");
     when(this.mockHelper.getLog()).thenReturn(new DefaultLog(plexusLogger));
     when(this.mockHelper.evaluate("${project}")).thenReturn(mockProject);
@@ -45,25 +45,33 @@ public class PedanticDependencyOrderEnforcerTest {
   }
 
   @Test
-  public void testWithPriorizedGroupIds() throws Exception {
+  public void testDefaultSettings() throws Exception {
+    File testPomFile = new File(TEST_DIRECTORY, "dependency-order-default-correct.xml");
+    when(mockProject.getFile()).thenReturn(testPomFile);
+    
     PedanticDependencyOrderEnforcer rule = new PedanticDependencyOrderEnforcer();
-    rule.setGroupIdPriorities("commons-,org.hamcrest");
+    rule.execute(this.mockHelper);
+  }
+  
+  @Test(expected = EnforcerRuleException.class)
+  public void testDefaultSettingsWrongOrder() throws Exception {
+    File testPomFile = new File(TEST_DIRECTORY, "dependency-order-default-wrong.xml");
+    when(mockProject.getFile()).thenReturn(testPomFile);
+    
+    PedanticDependencyOrderEnforcer rule = new PedanticDependencyOrderEnforcer();
     rule.execute(this.mockHelper);
   }
 
   @Test
-  @Ignore
-  public void testNoPriorizedGroupIds() throws Exception {
+  public void testCustomSettings() throws Exception {
+    File testPomFile = new File(TEST_DIRECTORY, "dependency-order-custom-correct.xml");
+    when(mockProject.getFile()).thenReturn(testPomFile);
+    
     PedanticDependencyOrderEnforcer rule = new PedanticDependencyOrderEnforcer();
+    rule.setOrderBy("scope,artifactId,groupId");
+    rule.setScopePriorities("test,provided");
+    rule.setArtifactIdPriorities("junit,lambdaj");
+    rule.setGroupIdPriorities("org.apache.commons");
     rule.execute(this.mockHelper);
   }
-
-  private Dependency createDependency(String groupId, String artifactId, String scope) {
-    Dependency dependency = new Dependency();
-    dependency.setGroupId(groupId);
-    dependency.setArtifactId(artifactId);
-    dependency.setScope(scope);
-    return dependency;
-  }
-
 }

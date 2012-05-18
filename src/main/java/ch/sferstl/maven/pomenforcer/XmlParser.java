@@ -23,6 +23,9 @@ public final class XmlParser {
   }
   
   public static Document parseXml(File file) {
+    if (!file.exists()) {
+      throw new IllegalArgumentException("File " + file + " does not exist.");
+    }
     try {
       return docBuilder.parse(file);
     } catch (SAXException | IOException e) {
