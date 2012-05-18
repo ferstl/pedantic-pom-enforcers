@@ -158,7 +158,7 @@ public class PedanticDependencyOrderEnforcer extends AbstractPedanticEnforcer {
     if (comparators.size() > 0) {
       ordering = Ordering.from(comparators.get(0));
       for (Comparator<Dependency> comparator : comparators.subList(1, comparators.size())) {
-        ordering.compound(comparator);
+        ordering = ordering.compound(comparator);
       }
     } else {
       throw new IllegalStateException("Undefined dependency order. Either define it or remove the <orderBy> "
