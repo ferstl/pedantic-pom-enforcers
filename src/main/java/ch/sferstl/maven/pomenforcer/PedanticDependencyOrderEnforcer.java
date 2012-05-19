@@ -99,7 +99,7 @@ public class PedanticDependencyOrderEnforcer extends AbstractPedanticEnforcer {
     Collection<Artifact> projectDependencies = project.getDependencyArtifacts();
 
     Collection<Artifact> dependencyArtifaccts =
-        this.matchWithProjectDependencies(declaredDependencies, projectDependencies);
+        this.matchWithArtifacts(declaredDependencies, projectDependencies);
 
     Ordering<Artifact> dependencyOrdering = this.createDependencyOrdering();
 
@@ -111,28 +111,29 @@ public class PedanticDependencyOrderEnforcer extends AbstractPedanticEnforcer {
   }
 
   /**
-   * Matches the declared dependencies with the project's dependency artifacts.
-   * @param declaredDependencies declared dependencies.
-   * @param projectDependencies project dependency artifacts.
+   * Matches the given dependencies with the given artifacts. The dependencies have to be a subset
+   * of the artifacts.
+   * @param dependencies dependencies.
+   * @param artifacts artifacts.
    * @return The project's dependency artifacts in the order in which they were declared.
    */
-  private Collection<Artifact> matchWithProjectDependencies(
-      final Collection<Dependency> declaredDependencies, final Collection<Artifact> projectDependencies) {
+  private Collection<Artifact> matchWithArtifacts(
+      final Collection<Dependency> dependencies, final Collection<Artifact> artifacts) {
 
-    Function<Dependency, Artifact> completeFunction = new Function<Dependency, Artifact>() {
+    Function<Dependency, Artifact> matchFunction = new Function<Dependency, Artifact>() {
       @Override
-      public Artifact apply(Dependency input) {
-        for (Artifact projectDependency : projectDependencies) {
-          if (projectDependency.getGroupId().equals(input.getGroupId())
-           && projectDependency.getArtifactId().equals(input.getArtifactId())) {
-            return projectDependency;
+      public Artifact apply(Dependency dependency) {
+        for (Artifact artifact : artifacts) {
+          if (artifact.getGroupId().equals(dependency.getGroupId())
+           && artifact.getArtifactId().equals(dependency.getArtifactId())) {
+            return artifact;
           }
         }
         throw new IllegalStateException(
-            "Found declared dependency '" + input + "' which is not available in the project's dependencies.");
+            "Could not match dependency '" + dependency + "' with artifacts '."+ artifacts + "'.");
       }
     };
-    return Collections2.transform(declaredDependencies, completeFunction);
+    return Collections2.transform(dependencies, matchFunction);
   }
 
   private Ordering<Artifact> createDependencyOrdering() {
