@@ -4,19 +4,19 @@ import java.util.Collection;
 import java.util.Comparator;
 import java.util.Map;
 
-import org.apache.maven.model.Dependency;
+import org.apache.maven.artifact.Artifact;
 
 import com.google.common.base.Function;
 import com.google.common.collect.Maps;
 
-public enum DependencyElement implements PriorityComparatorFactory<String, Dependency> {
+public enum DependencyElement implements PriorityComparatorFactory<String, Artifact> {
   GROUP_ID("groupId") {
     @Override
-    public Comparator<Dependency> createPriorityComparator(Collection<String> priorityCollection) {
+    public Comparator<Artifact> createPriorityComparator(Collection<String> priorityCollection) {
       StringStartsWithEquivalence priorityMatcher = new StringStartsWithEquivalence();
-      Function<Dependency, String> transformer = new Function<Dependency, String>() {
+      Function<Artifact, String> transformer = new Function<Artifact, String>() {
         @Override
-        public String apply(Dependency input) {
+        public String apply(Artifact input) {
           return input.getGroupId();
         }
       };
@@ -26,11 +26,11 @@ public enum DependencyElement implements PriorityComparatorFactory<String, Depen
 
   ARTIFACT_ID("artifactId") {
     @Override
-    public Comparator<Dependency> createPriorityComparator(Collection<String> priorityCollection) {
+    public Comparator<Artifact> createPriorityComparator(Collection<String> priorityCollection) {
       StringStartsWithEquivalence priorityMatcher = new StringStartsWithEquivalence();
-      Function<Dependency, String> transformer = new Function<Dependency, String>() {
+      Function<Artifact, String> transformer = new Function<Artifact, String>() {
         @Override
-        public String apply(Dependency input) {
+        public String apply(Artifact input) {
           return input.getArtifactId();
         }
       };
@@ -40,10 +40,10 @@ public enum DependencyElement implements PriorityComparatorFactory<String, Depen
 
   SCOPE("scope") {
     @Override
-    public PriorityComparator<String, Dependency> createPriorityComparator(Collection<String> priorityCollection) {
-      Function<Dependency, String> transformer = new Function<Dependency, String>() {
+    public PriorityComparator<String, Artifact> createPriorityComparator(Collection<String> priorityCollection) {
+      Function<Artifact, String> transformer = new Function<Artifact, String>() {
         @Override
-        public String apply(Dependency input) {
+        public String apply(Artifact input) {
           return input.getScope();
         }
       };

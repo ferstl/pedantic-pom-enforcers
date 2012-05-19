@@ -15,17 +15,20 @@
       <groupId>com.googlecode.lambdaj</groupId>
       <artifactId>lambdaj</artifactId>
       <version>2.3.3</version>
+      <type>jar</type>
       <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>commons-lang</groupId>
       <artifactId>commons-lang</artifactId>
       <version>2.6</version>
+      <type>jar</type>
       <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>commons-codec</groupId>
       <artifactId>commons-codec</artifactId>
+      <type>jar</type>
       <scope>compile</scope>
       <version>1.6</version>
       <exclusions>
@@ -39,30 +42,35 @@
       <groupId>org.apache.commons</groupId>
       <artifactId>commons-lang</artifactId>
       <version>3.0</version>
+      <type>jar</type>
       <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>javax.servlet</groupId>
       <artifactId>servlet-api</artifactId>
       <version>2.5</version>
+      <type>jar</type>
       <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>javax.transaction</groupId>
       <artifactId>transaction-api</artifactId>
       <version>1.1</version>
+      <type>jar</type>
       <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
       <version>4.10</version>
+      <type>jar</type>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.hamcrest</groupId>
       <artifactId>hamcrest-library</artifactId>
       <version>1.2.1</version>
+      <type>jar</type>
       <scope>test</scope>
     </dependency>
   </dependencies>

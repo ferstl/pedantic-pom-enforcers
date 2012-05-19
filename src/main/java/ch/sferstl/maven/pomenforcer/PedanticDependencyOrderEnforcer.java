@@ -5,6 +5,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
 
+import org.apache.maven.artifact.Artifact;
 import org.apache.maven.enforcer.rule.api.EnforcerRuleException;
 import org.apache.maven.enforcer.rule.api.EnforcerRuleHelper;
 import org.apache.maven.model.Dependency;
@@ -95,36 +96,36 @@ public class PedanticDependencyOrderEnforcer extends AbstractPedanticEnforcer {
     Document pomDoc = XmlParser.parseXml(project.getFile());
 
     Collection<Dependency> declaredDependencies = new DeclaredDependenciesReader(pomDoc).read();
-    Collection<Dependency> projectDependencies = Lists.newArrayList(project.getDependencies());
+    Collection<Artifact> projectDependencies = project.getDependencyArtifacts();
 
-    declaredDependencies = this.completeDeclaredDependencies(declaredDependencies, projectDependencies);
+    Collection<Artifact> dependencyArtifaccts =
+        this.matchWithProjectDependencies(declaredDependencies, projectDependencies);
 
-    Ordering<Dependency> dependencyOrdering = this.createDependencyOrdering();
+    Ordering<Artifact> dependencyOrdering = this.createDependencyOrdering();
 
-    if (!dependencyOrdering.isOrdered(declaredDependencies)) {
-      ImmutableList<Dependency> sortedDependencies = dependencyOrdering.immutableSortedCopy(declaredDependencies);
+    if (!dependencyOrdering.isOrdered(dependencyArtifaccts)) {
+      ImmutableList<Artifact> sortedDependencies = dependencyOrdering.immutableSortedCopy(dependencyArtifaccts);
       throw new EnforcerRuleException("Wrong dependency order. Correct order is:" + sortedDependencies);
     }
 
   }
 
   /**
-   * Completes the declared dependencies with information from the project's dependencies.
+   * Matches the declared dependencies with the project's dependency artifacts.
    * @param declaredDependencies declared dependencies.
-   * @param projectDependencies project dependencies.
-   * @return The completed list of declared dependencies.
+   * @param projectDependencies project dependency artifacts.
+   * @return The project's dependency artifacts in the order in which they were declared.
    */
-  private Collection<Dependency> completeDeclaredDependencies(
-      final Collection<Dependency> declaredDependencies, final Collection<Dependency> projectDependencies) {
+  private Collection<Artifact> matchWithProjectDependencies(
+      final Collection<Dependency> declaredDependencies, final Collection<Artifact> projectDependencies) {
 
-    // TODO: really?!
-    Function<Dependency, Dependency> completeFunction = new Function<Dependency, Dependency>() {
+    Function<Dependency, Artifact> completeFunction = new Function<Dependency, Artifact>() {
       @Override
-      public Dependency apply(Dependency input) {
-        for (Dependency dependency : projectDependencies) {
-          if (dependency.getGroupId().equals(input.getGroupId())
-           && dependency.getArtifactId().equals(input.getArtifactId())) {
-            return dependency.clone();
+      public Artifact apply(Dependency input) {
+        for (Artifact projectDependency : projectDependencies) {
+          if (projectDependency.getGroupId().equals(input.getGroupId())
+           && projectDependency.getArtifactId().equals(input.getArtifactId())) {
+            return projectDependency;
           }
         }
         throw new IllegalStateException(
@@ -134,8 +135,8 @@ public class PedanticDependencyOrderEnforcer extends AbstractPedanticEnforcer {
     return Collections2.transform(declaredDependencies, completeFunction);
   }
 
-  private Ordering<Dependency> createDependencyOrdering() {
-    List<Comparator<Dependency>> comparators = Lists.newArrayListWithCapacity(this.orderBy.size());
+  private Ordering<Artifact> createDependencyOrdering() {
+    List<Comparator<Artifact>> comparators = Lists.newArrayListWithCapacity(this.orderBy.size());
     for (DependencyElement element : this.orderBy) {
       switch(element) {
         case GROUP_ID:
@@ -152,10 +153,10 @@ public class PedanticDependencyOrderEnforcer extends AbstractPedanticEnforcer {
       }
     }
 
-    Ordering<Dependency> ordering;
+    Ordering<Artifact> ordering;
     if (comparators.size() > 0) {
       ordering = Ordering.from(comparators.get(0));
-      for (Comparator<Dependency> comparator : comparators.subList(1, comparators.size())) {
+      for (Comparator<Artifact> comparator : comparators.subList(1, comparators.size())) {
         ordering = ordering.compound(comparator);
       }
     } else {
