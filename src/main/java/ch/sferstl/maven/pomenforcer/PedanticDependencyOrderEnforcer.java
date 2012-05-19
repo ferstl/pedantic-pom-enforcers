@@ -13,7 +13,6 @@ import org.apache.maven.project.MavenProject;
 import org.w3c.dom.Document;
 
 import com.google.common.base.Function;
-import com.google.common.base.Joiner;
 import com.google.common.collect.Collections2;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
@@ -85,13 +84,12 @@ public class PedanticDependencyOrderEnforcer extends AbstractPedanticEnforcer {
   public void execute(EnforcerRuleHelper helper) throws EnforcerRuleException {
     MavenProject project = this.getMavenProject(helper);
 
-    Joiner joiner = Joiner.on(",");
     Log log = helper.getLog();
     log.info("Enforcing dependency order.");
-    log.info("  -> Dependencies have to be ordered by: " + joiner.join(this.orderBy));
-    log.info("  -> Scope priorities: " + joiner.join(this.scopePriorities));
-    log.info("  -> Group ID priorities: " + joiner.join(this.groupIdPriorities));
-    log.info("  -> Artifact ID priorities: " + joiner.join(this.artifactIdPriorities));
+    log.info("  -> Dependencies have to be ordered by: " + COMMA_JOINER.join(this.orderBy));
+    log.info("  -> Scope priorities: " + COMMA_JOINER.join(this.scopePriorities));
+    log.info("  -> Group ID priorities: " + COMMA_JOINER.join(this.groupIdPriorities));
+    log.info("  -> Artifact ID priorities: " + COMMA_JOINER.join(this.artifactIdPriorities));
 
     // Read the POM
     Document pomDoc = XmlParser.parseXml(project.getFile());

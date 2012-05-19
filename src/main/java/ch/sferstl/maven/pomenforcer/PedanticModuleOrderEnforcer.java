@@ -9,7 +9,6 @@ import org.apache.maven.plugin.logging.Log;
 import org.apache.maven.project.MavenProject;
 import org.w3c.dom.Document;
 
-import com.google.common.base.Joiner;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Ordering;
 import com.google.common.collect.Sets;
@@ -40,7 +39,7 @@ public class PedanticModuleOrderEnforcer extends AbstractPedanticEnforcer {
 
     Log log = helper.getLog();
     log.info("Enforcing alphabetical module order.");
-    log.info("  -> These modules are ignored: " + Joiner.on(",").join(this.ignoredModules));
+    log.info("  -> These modules are ignored: " + COMMA_JOINER.join(this.ignoredModules));
 
     // Read the POM
     Document pomDoc = XmlParser.parseXml(project.getFile());

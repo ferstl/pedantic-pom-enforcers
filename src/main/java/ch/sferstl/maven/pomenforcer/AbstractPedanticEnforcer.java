@@ -9,6 +9,7 @@ import org.codehaus.plexus.component.configurator.expression.ExpressionEvaluatio
 
 import com.google.common.base.Function;
 import com.google.common.base.Functions;
+import com.google.common.base.Joiner;
 import com.google.common.base.Splitter;
 import com.google.common.collect.Iterables;
 
@@ -16,6 +17,7 @@ import com.google.common.collect.Iterables;
 public abstract class AbstractPedanticEnforcer implements EnforcerRule {
 
   private static final Splitter COMMA_SPLITTER = Splitter.on(",");
+  protected static final Joiner COMMA_JOINER = Joiner.on(",");
 
   protected MavenProject getMavenProject(EnforcerRuleHelper helper) {
     MavenProject project;

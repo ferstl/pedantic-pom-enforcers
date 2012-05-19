@@ -13,7 +13,6 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import com.google.common.base.Function;
-import com.google.common.base.Joiner;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Ordering;
 import com.google.common.collect.Sets;
@@ -22,7 +21,6 @@ import com.google.common.collect.Sets;
 public class PedanticPomSectionOrderEnforcer extends AbstractPedanticEnforcer {
 
   private final Set<PomSection> sectionPriorities;
-
 
   public PedanticPomSectionOrderEnforcer() {
     this.sectionPriorities = Sets.newLinkedHashSet();
@@ -44,7 +42,7 @@ public class PedanticPomSectionOrderEnforcer extends AbstractPedanticEnforcer {
 
     Log log = helper.getLog();
     log.info("Enforcing correct POM section order.");
-    log.info("  -> Section priorities: " + Joiner.on(",").join(this.sectionPriorities));
+    log.info("  -> Section priorities: " + COMMA_JOINER.join(this.sectionPriorities));
 
     // Read the POM
     Document pomDoc = XmlParser.parseXml(project.getFile());
