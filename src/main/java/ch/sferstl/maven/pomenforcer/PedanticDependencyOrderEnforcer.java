@@ -1,8 +1,7 @@
 package ch.sferstl.maven.pomenforcer;
 
 import java.util.Collection;
-import java.util.Comparator;
-import java.util.List;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 import org.apache.maven.artifact.Artifact;
@@ -16,7 +15,6 @@ import org.w3c.dom.Document;
 import com.google.common.base.Function;
 import com.google.common.collect.Collections2;
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Lists;
 import com.google.common.collect.Ordering;
 import com.google.common.collect.Sets;
 
@@ -25,30 +23,28 @@ import ch.sferstl.maven.pomenforcer.reader.DeclaredDependenciesReader;
 
 public class PedanticDependencyOrderEnforcer extends AbstractPedanticEnforcer {
 
-  private final Set<DependencyElement> orderBy;
-  private final Set<String> groupIdPriorities;
-  private final Set<String> artifactIdPriorities;
-  private final Set<String> scopePriorities;
-
+  private final ArtifactOrdering artifactOrdering;
 
   public PedanticDependencyOrderEnforcer() {
-    this.groupIdPriorities = Sets.newLinkedHashSet();
-    this.artifactIdPriorities = Sets.newLinkedHashSet();
-    this.scopePriorities = Sets.newLinkedHashSet();
-    this.orderBy = Sets.newLinkedHashSet();
-    this.orderBy.add(DependencyElement.SCOPE);
-    this.orderBy.add(DependencyElement.GROUP_ID);
-    this.orderBy.add(DependencyElement.ARTIFACT_ID);
+    Set<ArtifactElement> orderBy = Sets.newLinkedHashSet();
+    orderBy.add(ArtifactElement.SCOPE);
+    orderBy.add(ArtifactElement.GROUP_ID);
+    orderBy.add(ArtifactElement.ARTIFACT_ID);
+
+    this.artifactOrdering = new ArtifactOrdering();
+    this.artifactOrdering.orderBy(orderBy);
   }
 
   public void setOrderBy(String dependencyElements) {
-    Function<String, DependencyElement> transformer = new Function<String, DependencyElement>() {
+    Set<ArtifactElement> orderBy = Sets.newLinkedHashSet();
+    Function<String, ArtifactElement> transformer = new Function<String, ArtifactElement>() {
       @Override
-      public DependencyElement apply(String input) {
-        return DependencyElement.getByElementName(input);
+      public ArtifactElement apply(String input) {
+        return ArtifactElement.getByElementName(input);
       }
     };
-    this.splitAndAddToCollection(dependencyElements, this.orderBy, transformer);
+    this.splitAndAddToCollection(dependencyElements, orderBy, transformer);
+    this.artifactOrdering.orderBy(orderBy);
   }
 
   /**
@@ -58,7 +54,9 @@ public class PedanticDependencyOrderEnforcer extends AbstractPedanticEnforcer {
    * @param groupIds Comma separated list of group IDs.
    */
   public void setGroupIdPriorities(String groupIds) {
-    this.splitAndAddToCollection(groupIds, this.groupIdPriorities);
+    LinkedHashSet<String> groupIdPriorities = Sets.newLinkedHashSet();
+    this.splitAndAddToCollection(groupIds, groupIdPriorities);
+    this.artifactOrdering.setPriorities(ArtifactElement.GROUP_ID, groupIdPriorities);
   }
 
   /**
@@ -68,7 +66,9 @@ public class PedanticDependencyOrderEnforcer extends AbstractPedanticEnforcer {
    * @param artifactIds Comma separated list of artifact IDs.
    */
   public void setArtifactIdPriorities(String artifactIds) {
-    this.splitAndAddToCollection(artifactIds, this.artifactIdPriorities);
+    LinkedHashSet<String> artifactIdPriorities = Sets.newLinkedHashSet();
+    this.splitAndAddToCollection(artifactIds, artifactIdPriorities);
+    this.artifactOrdering.setPriorities(ArtifactElement.ARTIFACT_ID, artifactIdPriorities);
   }
 
   /**
@@ -78,7 +78,9 @@ public class PedanticDependencyOrderEnforcer extends AbstractPedanticEnforcer {
    * @param scopes Comma separated list of scopes.
    */
   public void setScopePriorities(String scopes) {
-    this.splitAndAddToCollection(scopes, this.scopePriorities);
+    LinkedHashSet<String> scopePriorities = Sets.newLinkedHashSet();
+    this.splitAndAddToCollection(scopes, scopePriorities);
+    this.artifactOrdering.setPriorities(ArtifactElement.SCOPE, scopePriorities);
   }
 
   @Override
@@ -87,10 +89,14 @@ public class PedanticDependencyOrderEnforcer extends AbstractPedanticEnforcer {
 
     Log log = helper.getLog();
     log.info("Enforcing dependency order.");
-    log.info("  -> Dependencies have to be ordered by: " + COMMA_JOINER.join(this.orderBy));
-    log.info("  -> Scope priorities: " + COMMA_JOINER.join(this.scopePriorities));
-    log.info("  -> Group ID priorities: " + COMMA_JOINER.join(this.groupIdPriorities));
-    log.info("  -> Artifact ID priorities: " + COMMA_JOINER.join(this.artifactIdPriorities));
+    log.info("  -> Dependencies have to be ordered by: "
+           + COMMA_JOINER.join(this.artifactOrdering.getOrderBy()));
+    log.info("  -> Scope priorities: "
+           + COMMA_JOINER.join(this.artifactOrdering.getPriorities(ArtifactElement.SCOPE)));
+    log.info("  -> Group ID priorities: "
+           + COMMA_JOINER.join(this.artifactOrdering.getPriorities(ArtifactElement.GROUP_ID)));
+    log.info("  -> Artifact ID priorities: "
+           + COMMA_JOINER.join(this.artifactOrdering.getPriorities(ArtifactElement.ARTIFACT_ID)));
 
     // Read the POM
     Document pomDoc = XmlParser.parseXml(project.getFile());
@@ -101,7 +107,7 @@ public class PedanticDependencyOrderEnforcer extends AbstractPedanticEnforcer {
     Collection<Artifact> dependencyArtifaccts =
         this.matchWithArtifacts(declaredDependencies, projectDependencies);
 
-    Ordering<Artifact> dependencyOrdering = this.createDependencyOrdering();
+    Ordering<Artifact> dependencyOrdering = this.artifactOrdering.createArtifactOrdering();
 
     if (!dependencyOrdering.isOrdered(dependencyArtifaccts)) {
       ImmutableList<Artifact> sortedDependencies =
@@ -137,36 +143,4 @@ public class PedanticDependencyOrderEnforcer extends AbstractPedanticEnforcer {
     };
     return Collections2.transform(dependencies, matchFunction);
   }
-
-  private Ordering<Artifact> createDependencyOrdering() {
-    List<Comparator<Artifact>> comparators = Lists.newArrayListWithCapacity(this.orderBy.size());
-    for (DependencyElement element : this.orderBy) {
-      switch(element) {
-        case GROUP_ID:
-          comparators.add(element.createPriorityComparator(this.groupIdPriorities));
-          break;
-        case ARTIFACT_ID:
-          comparators.add(element.createPriorityComparator(this.artifactIdPriorities));
-          break;
-        case SCOPE:
-          comparators.add(element.createPriorityComparator(this.scopePriorities));
-          break;
-        default:
-          throw new IllegalArgumentException("Unsupported dependency element: '" + element.getElementName() + "'");
-      }
-    }
-
-    Ordering<Artifact> ordering;
-    if (comparators.size() > 0) {
-      ordering = Ordering.from(comparators.get(0));
-      for (Comparator<Artifact> comparator : comparators.subList(1, comparators.size())) {
-        ordering = ordering.compound(comparator);
-      }
-    } else {
-      throw new IllegalStateException("Undefined dependency order. Either define it or remove the <orderBy> "
-                                    + "configuration to use the default ordering.");
-    }
-    return ordering;
-  }
-
 }

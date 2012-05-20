@@ -29,12 +29,14 @@ public abstract class AbstractPedanticEnforcer implements EnforcerRule {
     return project;
   }
 
-  protected void splitAndAddToCollection(String commaSeparatedItems, Collection<String> collection) {
+  protected void splitAndAddToCollection(
+      String commaSeparatedItems, Collection<String> collection) {
     Function<String, String> identity = Functions.identity();
     this.splitAndAddToCollection(commaSeparatedItems, collection, identity);
   }
 
-  protected <T> void splitAndAddToCollection(String commaSeparatedItems, Collection<T> collection, Function<String, T> transformer) {
+  protected <T> void splitAndAddToCollection(
+      String commaSeparatedItems, Collection<T> collection, Function<String, T> transformer) {
     Iterable<String> items = COMMA_SPLITTER.split(commaSeparatedItems);
     // Don't touch the collection if there is nothing to add.
     if (items.iterator().hasNext()) {

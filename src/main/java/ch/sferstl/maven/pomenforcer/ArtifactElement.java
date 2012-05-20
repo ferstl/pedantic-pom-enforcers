@@ -9,7 +9,7 @@ import org.apache.maven.artifact.Artifact;
 import com.google.common.base.Function;
 import com.google.common.collect.Maps;
 
-public enum DependencyElement implements PriorityComparatorFactory<String, Artifact> {
+public enum ArtifactElement implements PriorityComparatorFactory<String, Artifact> {
   GROUP_ID("groupId") {
     @Override
     public Comparator<Artifact> createPriorityComparator(Collection<String> priorityCollection) {
@@ -51,21 +51,21 @@ public enum DependencyElement implements PriorityComparatorFactory<String, Artif
     }
   };
 
-  private static Map<String, DependencyElement> elementMap;
+  private static Map<String, ArtifactElement> elementMap;
 
   static {
     elementMap = Maps.newLinkedHashMap();
-    for (DependencyElement element : values()) {
+    for (ArtifactElement element : values()) {
       elementMap.put(element.getElementName(), element);
     }
   }
 
-  public static DependencyElement getByElementName(String elementName) {
+  public static ArtifactElement getByElementName(String elementName) {
     if (elementName == null) {
       throw new NullPointerException("Element name is null");
     }
 
-    DependencyElement result = elementMap.get(elementName);
+    ArtifactElement result = elementMap.get(elementName);
     if (result == null) {
       throw new IllegalArgumentException("No dependency element with name " + elementName);
     }
@@ -75,7 +75,7 @@ public enum DependencyElement implements PriorityComparatorFactory<String, Artif
 
   private final String elementName;
 
-  private DependencyElement(String elementName) {
+  private ArtifactElement(String elementName) {
     this.elementName = elementName;
   }
 
