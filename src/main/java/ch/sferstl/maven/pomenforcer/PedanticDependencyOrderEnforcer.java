@@ -104,8 +104,10 @@ public class PedanticDependencyOrderEnforcer extends AbstractPedanticEnforcer {
     Ordering<Artifact> dependencyOrdering = this.createDependencyOrdering();
 
     if (!dependencyOrdering.isOrdered(dependencyArtifaccts)) {
-      ImmutableList<Artifact> sortedDependencies = dependencyOrdering.immutableSortedCopy(dependencyArtifaccts);
-      throw new EnforcerRuleException("Wrong dependency order. Correct order is:" + sortedDependencies);
+      ImmutableList<Artifact> sortedDependencies =
+          dependencyOrdering.immutableSortedCopy(dependencyArtifaccts);
+      throw new EnforcerRuleException(
+          "Wrong dependency order. Correct order is:" + sortedDependencies);
     }
 
   }
