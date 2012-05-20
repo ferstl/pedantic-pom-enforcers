@@ -7,13 +7,11 @@ import java.util.Set;
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.enforcer.rule.api.EnforcerRuleException;
 import org.apache.maven.enforcer.rule.api.EnforcerRuleHelper;
-import org.apache.maven.model.Dependency;
 import org.apache.maven.plugin.logging.Log;
 import org.apache.maven.project.MavenProject;
 import org.w3c.dom.Document;
 
 import com.google.common.base.Function;
-import com.google.common.collect.Collections2;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Ordering;
 import com.google.common.collect.Sets;
@@ -101,46 +99,20 @@ public class PedanticDependencyOrderEnforcer extends AbstractPedanticEnforcer {
     // Read the POM
     Document pomDoc = XmlParser.parseXml(project.getFile());
 
-    Collection<Dependency> declaredDependencies = new DeclaredDependenciesReader(pomDoc).read();
+    Collection<Artifact> declaredDependencies = new DeclaredDependenciesReader(pomDoc).read();
     Collection<Artifact> projectDependencies = project.getDependencyArtifacts();
 
-    Collection<Artifact> dependencyArtifaccts =
-        this.matchWithArtifacts(declaredDependencies, projectDependencies);
+    ArtifactMatcher artifactMatcher = new ArtifactMatcher();
+    Collection<Artifact> dependencyArtifacts =
+        artifactMatcher.matchArtifacts(declaredDependencies, projectDependencies);
 
     Ordering<Artifact> dependencyOrdering = this.artifactOrdering.createArtifactOrdering();
 
-    if (!dependencyOrdering.isOrdered(dependencyArtifaccts)) {
+    if (!dependencyOrdering.isOrdered(dependencyArtifacts)) {
       ImmutableList<Artifact> sortedDependencies =
-          dependencyOrdering.immutableSortedCopy(dependencyArtifaccts);
+          dependencyOrdering.immutableSortedCopy(dependencyArtifacts);
       throw new EnforcerRuleException(
           "Wrong dependency order. Correct order is:" + sortedDependencies);
     }
-
-  }
-
-  /**
-   * Matches the given dependencies with the given artifacts. The dependencies have to be a subset
-   * of the artifacts.
-   * @param dependencies dependencies.
-   * @param artifacts artifacts.
-   * @return The project's dependency artifacts in the order in which they were declared.
-   */
-  private Collection<Artifact> matchWithArtifacts(
-      final Collection<Dependency> dependencies, final Collection<Artifact> artifacts) {
-
-    Function<Dependency, Artifact> matchFunction = new Function<Dependency, Artifact>() {
-      @Override
-      public Artifact apply(Dependency dependency) {
-        for (Artifact artifact : artifacts) {
-          if (artifact.getGroupId().equals(dependency.getGroupId())
-           && artifact.getArtifactId().equals(dependency.getArtifactId())) {
-            return artifact;
-          }
-        }
-        throw new IllegalStateException(
-            "Could not match dependency '" + dependency + "' with artifacts '."+ artifacts + "'.");
-      }
-    };
-    return Collections2.transform(dependencies, matchFunction);
   }
 }
