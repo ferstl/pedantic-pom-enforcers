@@ -15,7 +15,7 @@ import com.thoughtworks.xstream.XStream;
 
 public class DeclaredDependencyManagementReader extends AbstractPomSectionReader<List<Artifact>> {
 
-  private static final String DEPENDENCIES_XPATH = "/project/dependencyManagement/dependencies";
+  private static final String DEPENDENCY_MANAGEMENT_XPATH = "/project/dependencyManagement/dependencies";
   private static final String DEPENDENCIES_ALIAS = "dependencies";
   private static final String DEPENDENCY_ALIAS = "dependency";
 
@@ -25,7 +25,7 @@ public class DeclaredDependencyManagementReader extends AbstractPomSectionReader
 
   @Override
   protected XPathExpression createXPathExpression(XPath xpath) throws XPathExpressionException {
-    return xpath.compile(DEPENDENCIES_XPATH);
+    return xpath.compile(DEPENDENCY_MANAGEMENT_XPATH);
   }
 
   @Override
