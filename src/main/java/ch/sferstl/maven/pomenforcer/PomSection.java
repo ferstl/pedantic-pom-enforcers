@@ -8,6 +8,8 @@ import com.google.common.base.Function;
 import com.google.common.base.Functions;
 import com.google.common.collect.Maps;
 
+import ch.sferstl.maven.pomenforcer.priority.PriorityComparator;
+
 
 public enum PomSection {
   MODEL_VERSION("modelVersion"),

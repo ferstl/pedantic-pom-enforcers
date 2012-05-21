@@ -12,6 +12,8 @@ import org.w3c.dom.Document;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Ordering;
 
+import ch.sferstl.maven.pomenforcer.artifact.ArtifactElement;
+import ch.sferstl.maven.pomenforcer.artifact.ArtifactMatcher;
 import ch.sferstl.maven.pomenforcer.reader.DeclaredDependenciesReader;
 
 

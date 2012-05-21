@@ -1,4 +1,4 @@
-package ch.sferstl.maven.pomenforcer;
+package ch.sferstl.maven.pomenforcer.artifact;
 
 import java.util.Collection;
 import java.util.Comparator;
@@ -8,6 +8,10 @@ import org.apache.maven.artifact.Artifact;
 
 import com.google.common.base.Function;
 import com.google.common.collect.Maps;
+
+import ch.sferstl.maven.pomenforcer.priority.PriorityComparator;
+import ch.sferstl.maven.pomenforcer.priority.PriorityComparatorFactory;
+import ch.sferstl.maven.pomenforcer.priority.StringStartsWithEquivalence;
 
 public enum ArtifactElement implements PriorityComparatorFactory<String, Artifact> {
   GROUP_ID("groupId") {

@@ -1,4 +1,4 @@
-package ch.sferstl.maven.pomenforcer;
+package ch.sferstl.maven.pomenforcer.priority;
 
 import java.util.ArrayList;
 
@@ -8,6 +8,8 @@ import org.junit.Test;
 import com.google.common.base.Function;
 import com.google.common.base.Functions;
 import com.google.common.collect.Lists;
+
+import ch.sferstl.maven.pomenforcer.priority.PriorityComparator;
 
 import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.is;

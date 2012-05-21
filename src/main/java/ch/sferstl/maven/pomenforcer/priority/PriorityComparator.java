@@ -1,4 +1,4 @@
-package ch.sferstl.maven.pomenforcer;
+package ch.sferstl.maven.pomenforcer.priority;
 
 import java.util.Collection;
 import java.util.Comparator;

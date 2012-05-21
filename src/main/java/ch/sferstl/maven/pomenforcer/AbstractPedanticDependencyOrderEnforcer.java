@@ -6,6 +6,9 @@ import java.util.Set;
 import com.google.common.base.Function;
 import com.google.common.collect.Sets;
 
+import ch.sferstl.maven.pomenforcer.artifact.ArtifactElement;
+import ch.sferstl.maven.pomenforcer.artifact.ArtifactOrdering;
+
 public abstract class AbstractPedanticDependencyOrderEnforcer extends
     AbstractPedanticEnforcer {
 

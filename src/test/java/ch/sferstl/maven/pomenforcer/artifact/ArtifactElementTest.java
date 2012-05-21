@@ -1,6 +1,8 @@
-package ch.sferstl.maven.pomenforcer;
+package ch.sferstl.maven.pomenforcer.artifact;
 
 import org.junit.Test;
+
+import ch.sferstl.maven.pomenforcer.artifact.ArtifactElement;
 
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
