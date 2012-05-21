@@ -13,7 +13,7 @@ import org.xml.sax.SAXException;
 public final class XmlParser {
 
   private static final DocumentBuilder docBuilder;
-  
+
   static {
     try {
       docBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
@@ -21,7 +21,7 @@ public final class XmlParser {
       throw new IllegalStateException("Cannot create document builder", e);
     }
   }
-  
+
   public static Document parseXml(File file) {
     if (!file.exists()) {
       throw new IllegalArgumentException("File " + file + " does not exist.");
@@ -32,6 +32,6 @@ public final class XmlParser {
       throw new IllegalStateException("Unable to parse XML file " + file, e);
     }
   }
-  
+
   private XmlParser() {}
 }

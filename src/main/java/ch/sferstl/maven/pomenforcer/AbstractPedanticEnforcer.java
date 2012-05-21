@@ -57,7 +57,7 @@ public abstract class AbstractPedanticEnforcer implements EnforcerRule {
 
   @Override
   public String getCacheId() {
-    return this.getClass() + "-uncachable";
+    return getClass() + "-uncachable";
   }
 
 }

@@ -38,7 +38,7 @@ public abstract class AbstractPomSectionReader<T> {
 
     T section;
     if (pomElement == null) {
-      section = this.getUndeclaredSection();
+      section = getUndeclaredSection();
     } else {
       DomReader domReader = new DomReader(pomElement);
       XStream xstream = new XStream();
