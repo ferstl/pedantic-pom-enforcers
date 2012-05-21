@@ -22,9 +22,9 @@
   <dependencyManagement>
     <dependencies>
       <dependency>
-        <groupId>commons-lang</groupId>
-        <artifactId>commons-lang</artifactId>
-        <version>2.6</version>
+        <groupId>com.googlecode.lambdaj</groupId>
+        <artifactId>lambdaj</artifactId>
+        <version>2.3.3</version>
       </dependency>
       <dependency>
         <groupId>commons-codec</groupId>
@@ -32,9 +32,9 @@
         <version>1.6</version>
       </dependency>
       <dependency>
-        <groupId>com.googlecode.lambdaj</groupId>
-        <artifactId>lambdaj</artifactId>
-        <version>2.3.3</version>
+        <groupId>commons-lang</groupId>
+        <artifactId>commons-lang</artifactId>
+        <version>2.6</version>
       </dependency>
       <dependency>
         <groupId>javax.servlet</groupId>
@@ -71,7 +71,15 @@
                 <module>module4</module>
               </ignoredModules>
             </myCustomRule-->
-            <myCustomRule implementation="ch.sferstl.maven.pomenforcer.PedanticDependencyOrderEnforcer">
+            <dependencyOrder implementation="ch.sferstl.maven.pomenforcer.PedanticDependencyOrderEnforcer">
+              <groupIdPriorities>${dependency.order}</groupIdPriorities>
+              <orderBy>${order.by}</orderBy>
+            </dependencyOrder>
+            <dependencyManagementOrder implementation="ch.sferstl.maven.pomenforcer.PedanticDependencyOrderEnforcer">
+              <groupIdPriorities>${dependency.order}</groupIdPriorities>
+              <orderBy>${order.by}</orderBy>
+            </dependencyManagementOrder>
+            <myCustomRule implementation="ch.sferstl.maven.pomenforcer.PedanticDependencyManagementOrderEnforcer">
               <groupIdPriorities>${dependency.order}</groupIdPriorities>
               <orderBy>${order.by}</orderBy>
             </myCustomRule>
