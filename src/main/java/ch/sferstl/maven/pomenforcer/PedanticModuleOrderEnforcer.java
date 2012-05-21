@@ -31,9 +31,9 @@ public class PedanticModuleOrderEnforcer extends AbstractPedanticEnforcer {
 
   @Override
   public void execute(EnforcerRuleHelper helper) throws EnforcerRuleException {
-    MavenProject project = this.getMavenProject(helper);
+    MavenProject project = getMavenProject(helper);
     // Do nothing if the project is not a parent project
-    if (!this.isPomProject(project)) {
+    if (!isPomProject(project)) {
       return;
     }
 
@@ -52,7 +52,12 @@ public class PedanticModuleOrderEnforcer extends AbstractPedanticEnforcer {
     Ordering<String> moduleOrdering = Ordering.natural();
     if (!moduleOrdering.isOrdered(declaredModules)) {
       ImmutableList<String> orderedModules = moduleOrdering.immutableSortedCopy(declaredModules);
-      throw new EnforcerRuleException("Wrong module order. Correct order is: " + orderedModules);
+      String message = "One does not simply declare modules! "
+          + "You have to sort your modules alphabetically: " + orderedModules;
+      if (!this.ignoredModules.isEmpty()) {
+        message += " You may place these modules in any order: " + this.ignoredModules;
+      }
+      throw new EnforcerRuleException(message);
     }
   }
 

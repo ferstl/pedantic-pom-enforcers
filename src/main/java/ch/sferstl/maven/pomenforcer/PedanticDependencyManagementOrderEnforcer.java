@@ -54,8 +54,8 @@ extends AbstractPedanticDependencyOrderEnforcer {
     if (!dependencyOrdering.isOrdered(dependencyArtifacts)) {
       ImmutableList<Artifact> sortedDependencies =
           dependencyOrdering.immutableSortedCopy(dependencyArtifacts);
-      throw new EnforcerRuleException(
-          "Wrong order in dependency management. Correct order is:" + sortedDependencies);
+      throw new EnforcerRuleException("One does not simply declare dependency management! "
+          + "Your dependency management has to be ordered this way:" + sortedDependencies);
     }
   }
 

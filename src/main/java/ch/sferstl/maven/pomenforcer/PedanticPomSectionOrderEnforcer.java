@@ -38,7 +38,7 @@ public class PedanticPomSectionOrderEnforcer extends AbstractPedanticEnforcer {
 
   @Override
   public void execute(EnforcerRuleHelper helper) throws EnforcerRuleException {
-    MavenProject project = this.getMavenProject(helper);
+    MavenProject project = getMavenProject(helper);
 
     Log log = helper.getLog();
     log.info("Enforcing correct POM section order.");
@@ -68,7 +68,8 @@ public class PedanticPomSectionOrderEnforcer extends AbstractPedanticEnforcer {
           return input.getSectionName();
         }
       });
-      throw new EnforcerRuleException("Wrong POM section order. Should be: " + sortedPomSections);
+      throw new EnforcerRuleException("One does not simply write a POM file! "
+        + "Your POM file has to be organized this way: " + sortedPomSections);
     }
 
 
