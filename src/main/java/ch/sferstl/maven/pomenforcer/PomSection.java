@@ -72,7 +72,8 @@ public enum PomSection {
     return this.sectionName;
   }
 
-  public static Comparator<PomSection> createPriorityComparator(Collection<PomSection> priorityCollection) {
+  public static Comparator<PomSection> createPriorityComparator(
+      Collection<PomSection> priorityCollection) {
     Function<PomSection, PomSection> identity = Functions.identity();
       return new PriorityComparator<>(priorityCollection, identity);
   }
