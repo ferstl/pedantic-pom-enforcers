@@ -2,7 +2,7 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>ch.sferstl.maven.pom.enforcer</groupId>
-  <artifactId>enforcer-rules-it</artifactId>
+  <artifactId>default-settings-it</artifactId>
   <version>1.0-SNAPSHOT</version>
   <packaging>pom</packaging>
 
@@ -15,17 +15,14 @@
   </modules>
   
   <properties>
-    <order.by>scope,groupId,artifactId</order.by>
-    <dependency.order>com.foo</dependency.order>
+    <dependencies.orderBy>scope,groupId,artifactId</dependencies.orderBy>
+    <dependencies.groupIdPriorities>commons-</dependencies.groupIdPriorities>
+    <plugins.orderBy>scope,groupId,artifactId</plugins.orderBy>
+    <plugins.groupIdPriorities>org.apache.maven.plugins</plugins.groupIdPriorities>
   </properties>
   
   <dependencyManagement>
     <dependencies>
-      <dependency>
-        <groupId>com.googlecode.lambdaj</groupId>
-        <artifactId>lambdaj</artifactId>
-        <version>2.3.3</version>
-      </dependency>
       <dependency>
         <groupId>commons-codec</groupId>
         <artifactId>commons-codec</artifactId>
@@ -35,6 +32,11 @@
         <groupId>commons-lang</groupId>
         <artifactId>commons-lang</artifactId>
         <version>2.6</version>
+      </dependency>
+      <dependency>
+        <groupId>com.googlecode.lambdaj</groupId>
+        <artifactId>lambdaj</artifactId>
+        <version>2.3.3</version>
       </dependency>
       <dependency>
         <groupId>javax.servlet</groupId>
@@ -83,28 +85,24 @@
         <version>1.0.1</version>
         <configuration>
           <rules>
-            <!-- myCustomRule implementation="ch.sferstl.maven.pomenforcer.PedanticModuleOrderEnforcer">
+            <moduleOrder implementation="ch.sferstl.maven.pomenforcer.PedanticModuleOrderEnforcer">
               <ignoredModules>
                 <module>module3</module>
                 <module>module4</module>
               </ignoredModules>
-            </myCustomRule-->
-            <dependencyOrder implementation="ch.sferstl.maven.pomenforcer.PedanticDependencyOrderEnforcer">
-              <groupIdPriorities>${dependency.order}</groupIdPriorities>
-              <orderBy>${order.by}</orderBy>
-            </dependencyOrder>
-            <dependencyOrder implementation="ch.sferstl.maven.pomenforcer.PedanticDependencyOrderEnforcer">
-              <groupIdPriorities>${dependency.order}</groupIdPriorities>
-              <orderBy>${order.by}</orderBy>
-            </dependencyOrder>
+            </moduleOrder>
             <dependencyManagementOrder implementation="ch.sferstl.maven.pomenforcer.PedanticDependencyManagementOrderEnforcer">
-              <groupIdPriorities>${dependency.order}</groupIdPriorities>
-              <orderBy>${order.by}</orderBy>
+              <orderBy>${dependencies.orderBy}</orderBy>
+              <groupIdPriorities>${dependencies.groupIdPriorities}</groupIdPriorities>
             </dependencyManagementOrder>
-            <dependencyManagementOrder implementation="ch.sferstl.maven.pomenforcer.PedanticPluginManagementOrderEnforcer">
-              <groupIdPriorities>${dependency.order}</groupIdPriorities>
-              <orderBy>${order.by}</orderBy>
-            </dependencyManagementOrder>
+            <dependencyOrder implementation="ch.sferstl.maven.pomenforcer.PedanticDependencyOrderEnforcer">
+              <orderBy>${dependencies.orderBy}</orderBy>
+              <groupIdPriorities>${dependencies.groupIdPriorities}</groupIdPriorities>
+            </dependencyOrder>
+            <pluginManagementOrder implementation="ch.sferstl.maven.pomenforcer.PedanticPluginManagementOrderEnforcer">
+              <orderBy>${plugins.orderBy}</orderBy>
+              <groupIdPriorities>${dependencies.groupIdPriorities}</groupIdPriorities>
+            </pluginManagementOrder>
           </rules>
           <fail>true</fail>
         </configuration>

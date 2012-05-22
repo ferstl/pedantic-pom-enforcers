@@ -7,6 +7,7 @@ import org.apache.maven.artifact.DefaultArtifact;
 import org.apache.maven.enforcer.rule.api.EnforcerRuleException;
 import org.apache.maven.enforcer.rule.api.EnforcerRuleHelper;
 import org.apache.maven.model.Dependency;
+import org.apache.maven.model.DependencyManagement;
 import org.apache.maven.plugin.logging.Log;
 import org.apache.maven.project.MavenProject;
 import org.w3c.dom.Document;
@@ -14,6 +15,7 @@ import org.w3c.dom.Document;
 import com.google.common.base.Function;
 import com.google.common.base.Strings;
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Ordering;
 
 import ch.sferstl.maven.pomenforcer.artifact.ArtifactElement;
@@ -47,7 +49,7 @@ extends AbstractPedanticDependencyOrderEnforcer {
     ArtifactMatcher<Dependency> artifactMatcher = new ArtifactMatcher<>(new DependencyToArtifactTransformer());
     Collection<Artifact> dependencyArtifacts =
         artifactMatcher.matchArtifacts(
-            declaredDependencyManagement, project.getDependencyManagement().getDependencies());
+            declaredDependencyManagement, getManagedDependencies(project));
 
     Ordering<Artifact> dependencyOrdering = getArtifactSorter().createOrdering();
 
@@ -57,6 +59,17 @@ extends AbstractPedanticDependencyOrderEnforcer {
       throw new EnforcerRuleException("One does not simply declare dependency management! "
           + "Your dependency management has to be ordered this way:" + sortedDependencies);
     }
+  }
+
+  private Collection<Dependency> getManagedDependencies(MavenProject project) {
+    DependencyManagement dependencyManagement = project.getDependencyManagement();
+    Collection<Dependency> managedDependencies;
+    if (dependencyManagement != null) {
+      managedDependencies = dependencyManagement.getDependencies();
+    } else {
+      managedDependencies = Lists.newArrayList();
+    }
+    return managedDependencies;
   }
 
   private static class DependencyToArtifactTransformer implements Function<Dependency, Artifact> {

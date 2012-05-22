@@ -1,0 +1,38 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  
+  <groupId>ch.sferstl.maven.pom.enforcer</groupId>
+  <artifactId>simple-project-it</artifactId>
+  <version>1.0-SNAPSHOT</version>
+  
+  <description>
+    Integration test which verifies that the enforcer rules work with the simplest possible maven project.
+  </description>
+  
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-enforcer-plugin</artifactId>
+        <version>1.0.1</version>
+        <configuration>
+          <rules>
+            <moduleOrder implementation="ch.sferstl.maven.pomenforcer.PedanticModuleOrderEnforcer" />
+            <dependencyManagementOrder implementation="ch.sferstl.maven.pomenforcer.PedanticDependencyManagementOrderEnforcer" />
+            <dependencyOrder implementation="ch.sferstl.maven.pomenforcer.PedanticDependencyOrderEnforcer" />
+            <pluginManagementOrder implementation="ch.sferstl.maven.pomenforcer.PedanticPluginManagementOrderEnforcer" />
+          </rules>
+          <fail>true</fail>
+        </configuration>
+        <dependencies>
+          <dependency>
+            <groupId>ch.sferstl.maven.enforcer</groupId>
+            <artifactId>pedantic-pom-enforcers</artifactId>
+            <version>@project.version@</version>
+          </dependency>
+        </dependencies>
+      </plugin>
+    </plugins>
+  </build>
+</project>
