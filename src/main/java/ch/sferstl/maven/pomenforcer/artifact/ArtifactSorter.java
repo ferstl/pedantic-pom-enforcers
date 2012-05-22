@@ -14,12 +14,12 @@ import com.google.common.collect.Multimap;
 import com.google.common.collect.Ordering;
 import com.google.common.collect.Sets;
 
-public class ArtifactOrdering {
+public class ArtifactSorter {
 
   private final Set<ArtifactElement> orderBy;
   private final Multimap<ArtifactElement, String> priorityMap;
 
-  public ArtifactOrdering() {
+  public ArtifactSorter() {
     this.orderBy = Sets.newLinkedHashSet();
     this.priorityMap = LinkedHashMultimap.create();
   }

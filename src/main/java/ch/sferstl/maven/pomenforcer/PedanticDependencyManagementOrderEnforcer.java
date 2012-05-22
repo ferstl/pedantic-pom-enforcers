@@ -30,13 +30,13 @@ extends AbstractPedanticDependencyOrderEnforcer {
     Log log = helper.getLog();
     log.info("Enforcing dependency management order.");
     log.info("  -> Dependencies have to be ordered by: "
-           + COMMA_JOINER.join(getArtifactOrdering().getOrderBy()));
+           + COMMA_JOINER.join(getArtifactSorter().getOrderBy()));
     log.info("  -> Scope priorities: "
-           + COMMA_JOINER.join(getArtifactOrdering().getPriorities(ArtifactElement.SCOPE)));
+           + COMMA_JOINER.join(getArtifactSorter().getPriorities(ArtifactElement.SCOPE)));
     log.info("  -> Group ID priorities: "
-           + COMMA_JOINER.join(getArtifactOrdering().getPriorities(ArtifactElement.GROUP_ID)));
+           + COMMA_JOINER.join(getArtifactSorter().getPriorities(ArtifactElement.GROUP_ID)));
     log.info("  -> Artifact ID priorities: "
-           + COMMA_JOINER.join(getArtifactOrdering().getPriorities(ArtifactElement.ARTIFACT_ID)));
+           + COMMA_JOINER.join(getArtifactSorter().getPriorities(ArtifactElement.ARTIFACT_ID)));
 
     // Read the POM
     Document pomDoc = XmlParser.parseXml(project.getFile());
@@ -49,7 +49,7 @@ extends AbstractPedanticDependencyOrderEnforcer {
         artifactMatcher.matchArtifacts(
             declaredDependencyManagement, project.getDependencyManagement().getDependencies());
 
-    Ordering<Artifact> dependencyOrdering = getArtifactOrdering().createOrdering();
+    Ordering<Artifact> dependencyOrdering = getArtifactSorter().createOrdering();
 
     if (!dependencyOrdering.isOrdered(dependencyArtifacts)) {
       ImmutableList<Artifact> sortedDependencies =
