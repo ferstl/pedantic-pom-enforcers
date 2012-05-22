@@ -13,7 +13,6 @@ import org.w3c.dom.Document;
 
 import com.google.common.base.Function;
 import com.google.common.base.Strings;
-import com.google.common.collect.Collections2;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Ordering;
 
@@ -44,14 +43,13 @@ extends AbstractPedanticDependencyOrderEnforcer {
 
     Collection<Artifact> declaredDependencyManagement =
         new DeclaredDependencyManagementReader(pomDoc).read();
-    Collection<Artifact> projectDeptMgmtArtifacts =
-        transformToArtifactCollection(project.getDependencyManagement().getDependencies());
 
-    ArtifactMatcher artifactMatcher = new ArtifactMatcher();
+    ArtifactMatcher<Dependency> artifactMatcher = new ArtifactMatcher<>(new DependencyToArtifactTransformer());
     Collection<Artifact> dependencyArtifacts =
-        artifactMatcher.matchArtifacts(declaredDependencyManagement, projectDeptMgmtArtifacts);
+        artifactMatcher.matchArtifacts(
+            declaredDependencyManagement, project.getDependencyManagement().getDependencies());
 
-    Ordering<Artifact> dependencyOrdering = getArtifactOrdering().createArtifactOrdering();
+    Ordering<Artifact> dependencyOrdering = getArtifactOrdering().createOrdering();
 
     if (!dependencyOrdering.isOrdered(dependencyArtifacts)) {
       ImmutableList<Artifact> sortedDependencies =
@@ -61,19 +59,17 @@ extends AbstractPedanticDependencyOrderEnforcer {
     }
   }
 
-  private Collection<Artifact> transformToArtifactCollection(Collection<Dependency> dependencies) {
-    return Collections2.transform(dependencies, new Function<Dependency, Artifact>() {
-      @Override
-      public Artifact apply(Dependency input) {
-        return new DefaultArtifact(
-            input.getGroupId(),
-            input.getArtifactId(),
-            input.getVersion(),
-            input.getScope() != null ? input.getScope() : "compile",
-            input.getType() != null ? input.getType() : "jar",
-            Strings.nullToEmpty(input.getClassifier()),
-            null);
-      }
-    });
+  private static class DependencyToArtifactTransformer implements Function<Dependency, Artifact> {
+    @Override
+    public Artifact apply(Dependency input) {
+      return new DefaultArtifact(
+          input.getGroupId(),
+          input.getArtifactId(),
+          input.getVersion(),
+          input.getScope() != null ? input.getScope() : "compile",
+          input.getType() != null ? input.getType() : "jar",
+          Strings.nullToEmpty(input.getClassifier()),
+          null);
+    }
   }
 }

@@ -8,7 +8,13 @@ import com.google.common.base.Function;
 import com.google.common.collect.Collections2;
 
 
-public class ArtifactMatcher {
+public class ArtifactMatcher<T> {
+
+  private final Function<T, Artifact> supersetTransformer;
+
+  public ArtifactMatcher(Function<T, Artifact> supersetTransformer) {
+    this.supersetTransformer = supersetTransformer;
+  }
 
   /**
    * Matches a subset of artifacts with a superset of artifacts.
@@ -18,19 +24,20 @@ public class ArtifactMatcher {
    *         they occur in the subset.
    */
   public Collection<Artifact> matchArtifacts(
-      final Collection<Artifact> subset, final Collection<Artifact> superset) {
+      final Collection<Artifact> subset, final Collection<T> superset) {
+    final Collection<Artifact> artifactSuperset = Collections2.transform(superset, this.supersetTransformer);
 
     Function<Artifact, Artifact> matchFunction = new Function<Artifact, Artifact>() {
       @Override
       public Artifact apply(Artifact artifact) {
-        for (Artifact supersetArtifact : superset) {
+        for (Artifact supersetArtifact : artifactSuperset) {
           if (supersetArtifact.getGroupId().equals(artifact.getGroupId())
            && supersetArtifact.getArtifactId().equals(artifact.getArtifactId())) {
             return supersetArtifact;
           }
         }
         throw new IllegalStateException(
-            "Could not match artifact '" + artifact + "' with superset '."+ superset + "'.");
+            "Could not match artifact '" + artifact + "' with superset '." + superset + "'.");
       }
     };
     return Collections2.transform(subset, matchFunction);

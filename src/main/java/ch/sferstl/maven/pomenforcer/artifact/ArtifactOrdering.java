@@ -41,7 +41,7 @@ public class ArtifactOrdering {
     return this.priorityMap.get(artifactElement);
   }
 
-  public Ordering<Artifact> createArtifactOrdering() {
+  public Ordering<Artifact> createOrdering() {
     List<Comparator<Artifact>> comparators = Lists.newArrayListWithCapacity(this.orderBy.size());
     for (ArtifactElement artifactElement : this.orderBy) {
       Comparator<Artifact> comparator =

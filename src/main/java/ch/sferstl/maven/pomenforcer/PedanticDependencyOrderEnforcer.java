@@ -9,6 +9,7 @@ import org.apache.maven.plugin.logging.Log;
 import org.apache.maven.project.MavenProject;
 import org.w3c.dom.Document;
 
+import com.google.common.base.Functions;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Ordering;
 
@@ -40,11 +41,11 @@ public class PedanticDependencyOrderEnforcer extends AbstractPedanticDependencyO
     Collection<Artifact> declaredDependencies = new DeclaredDependenciesReader(pomDoc).read();
     Collection<Artifact> projectDependencies = project.getDependencyArtifacts();
 
-    ArtifactMatcher artifactMatcher = new ArtifactMatcher();
+    ArtifactMatcher<Artifact> artifactMatcher = new ArtifactMatcher<>(Functions.<Artifact>identity());
     Collection<Artifact> dependencyArtifacts =
         artifactMatcher.matchArtifacts(declaredDependencies, projectDependencies);
 
-    Ordering<Artifact> dependencyOrdering = getArtifactOrdering().createArtifactOrdering();
+    Ordering<Artifact> dependencyOrdering = getArtifactOrdering().createOrdering();
 
     if (!dependencyOrdering.isOrdered(dependencyArtifacts)) {
       ImmutableList<Artifact> sortedDependencies =

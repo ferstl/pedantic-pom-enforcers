@@ -58,6 +58,24 @@
   </dependencyManagement>
 
   <build>
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-compiler-plugin</artifactId>
+          <version>2.3.2</version>
+          <configuration>
+            <source>1.7</source>
+            <target>1.7</target>
+          </configuration>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-dependency-plugin</artifactId>
+          <version>2.4</version>
+        </plugin>
+      </plugins>
+    </pluginManagement>
     <plugins>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
@@ -75,15 +93,18 @@
               <groupIdPriorities>${dependency.order}</groupIdPriorities>
               <orderBy>${order.by}</orderBy>
             </dependencyOrder>
-            <dependencyManagementOrder implementation="ch.sferstl.maven.pomenforcer.PedanticDependencyOrderEnforcer">
+            <dependencyOrder implementation="ch.sferstl.maven.pomenforcer.PedanticDependencyOrderEnforcer">
+              <groupIdPriorities>${dependency.order}</groupIdPriorities>
+              <orderBy>${order.by}</orderBy>
+            </dependencyOrder>
+            <dependencyManagementOrder implementation="ch.sferstl.maven.pomenforcer.PedanticDependencyManagementOrderEnforcer">
               <groupIdPriorities>${dependency.order}</groupIdPriorities>
               <orderBy>${order.by}</orderBy>
             </dependencyManagementOrder>
-            <myCustomRule implementation="ch.sferstl.maven.pomenforcer.PedanticDependencyManagementOrderEnforcer">
+            <dependencyManagementOrder implementation="ch.sferstl.maven.pomenforcer.PedanticPluginManagementOrderEnforcer">
               <groupIdPriorities>${dependency.order}</groupIdPriorities>
               <orderBy>${order.by}</orderBy>
-            </myCustomRule>
-            <!-- myCustomRule implementation="ch.sferstl.maven.pomenforcer.PedanticPomSectionOrderEnforcer"></myCustomRule-->
+            </dependencyManagementOrder>
           </rules>
           <fail>true</fail>
         </configuration>
