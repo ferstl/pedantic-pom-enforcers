@@ -3,9 +3,9 @@ package ch.sferstl.maven.pomenforcer;
 import java.io.File;
 import java.util.List;
 
-import org.apache.maven.artifact.Artifact;
 import org.apache.maven.enforcer.rule.api.EnforcerRuleException;
 import org.apache.maven.enforcer.rule.api.EnforcerRuleHelper;
+import org.apache.maven.model.Dependency;
 import org.apache.maven.monitor.logging.DefaultLog;
 import org.apache.maven.project.MavenProject;
 import org.codehaus.plexus.logging.Logger;
@@ -14,7 +14,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.w3c.dom.Document;
 
-import com.google.common.collect.Sets;
+import com.google.common.collect.Lists;
 
 import ch.sferstl.maven.pomenforcer.reader.DeclaredDependenciesReader;
 
@@ -37,11 +37,11 @@ public class PedanticDependencyOrderEnforcerTest {
     Document allDepsPom = XmlParser.parseXml(ALL_DEPENDENCIES_FILE);
 
     // Read all dependencies and convert them to artifacts (classifier = "", ArtifactHandler = null)
-    List<Artifact> allDeps = new DeclaredDependenciesReader(allDepsPom).read();
+    List<Dependency> allDeps = new DeclaredDependenciesReader(allDepsPom).read();
 
     this.mockHelper = mock(EnforcerRuleHelper.class);
     this.mockProject = mock(MavenProject.class);
-    when(this.mockProject.getDependencyArtifacts()).thenReturn(Sets.newLinkedHashSet(allDeps));
+    when(this.mockProject.getDependencies()).thenReturn(Lists.newArrayList(allDeps));
     ConsoleLogger plexusLogger = new ConsoleLogger(Logger.LEVEL_DEBUG, "testLogger");
     when(this.mockHelper.getLog()).thenReturn(new DefaultLog(plexusLogger));
     when(this.mockHelper.evaluate("${project}")).thenReturn(this.mockProject);
@@ -71,7 +71,7 @@ public class PedanticDependencyOrderEnforcerTest {
     File testPomFile = new File(TEST_DIRECTORY, "dependency-order-custom-correct.xml");
     when(this.mockProject.getFile()).thenReturn(testPomFile);
 
-    PedanticDependencyOrderEnforcer rule = new PedanticDependencyOrderEnforcer();
+    AbstractPedanticDependencyOrderEnforcer rule = new PedanticDependencyOrderEnforcer();
     rule.setOrderBy("scope,artifactId,groupId");
     rule.setScopePriorities("test,provided");
     rule.setArtifactIdPriorities("junit,lambdaj");

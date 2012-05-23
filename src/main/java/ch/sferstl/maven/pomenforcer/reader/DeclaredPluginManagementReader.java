@@ -6,15 +6,14 @@ import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathExpression;
 import javax.xml.xpath.XPathExpressionException;
 
-import org.apache.maven.artifact.Artifact;
-import org.apache.maven.artifact.DefaultArtifact;
+import org.apache.maven.model.Plugin;
 import org.w3c.dom.Document;
 
 import com.google.common.collect.Lists;
 import com.thoughtworks.xstream.XStream;
 
 
-public class DeclaredPluginManagementReader extends AbstractPomSectionReader<List<Artifact>> {
+public class DeclaredPluginManagementReader extends AbstractPomSectionReader<List<Plugin>> {
 
   private static final String PLUGIN_MANAGEMENT_XPATH = "/project/build/pluginManagement/plugins";
   private static final String PLUGINS_ALIAS = "plugins";
@@ -32,16 +31,16 @@ public class DeclaredPluginManagementReader extends AbstractPomSectionReader<Lis
   @Override
   protected void configureXStream(XStream xstream) {
     xstream.alias(PLUGINS_ALIAS, List.class);
-    xstream.alias(PLUGIN_ALIAS, DefaultArtifact.class);
-    xstream.omitField(DefaultArtifact.class, "configuration");
-    xstream.omitField(DefaultArtifact.class, "extensions");
-    xstream.omitField(DefaultArtifact.class, "goals");
-    xstream.omitField(DefaultArtifact.class, "executions");
-    xstream.omitField(DefaultArtifact.class, "dependencies");
+    xstream.alias(PLUGIN_ALIAS, Plugin.class);
+    xstream.omitField(Plugin.class, "configuration");
+    xstream.omitField(Plugin.class, "extensions");
+    xstream.omitField(Plugin.class, "goals");
+    xstream.omitField(Plugin.class, "executions");
+    xstream.omitField(Plugin.class, "dependencies");
   }
 
   @Override
-  protected List<Artifact> getUndeclaredSection() {
+  protected List<Plugin> getUndeclaredSection() {
     return Lists.newArrayList();
   }
 }

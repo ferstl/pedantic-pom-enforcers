@@ -4,7 +4,7 @@ import java.util.Collection;
 import java.util.Comparator;
 import java.util.Map;
 
-import org.apache.maven.artifact.Artifact;
+import org.apache.maven.model.Dependency;
 
 import com.google.common.base.Function;
 import com.google.common.collect.Maps;
@@ -13,14 +13,14 @@ import ch.sferstl.maven.pomenforcer.priority.PriorityComparator;
 import ch.sferstl.maven.pomenforcer.priority.PriorityComparatorFactory;
 import ch.sferstl.maven.pomenforcer.priority.StringStartsWithEquivalence;
 
-public enum ArtifactElement implements PriorityComparatorFactory<String, Artifact> {
+public enum DependencyElement implements PriorityComparatorFactory<String, Dependency> {
   GROUP_ID("groupId") {
     @Override
-    public Comparator<Artifact> createPriorityComparator(Collection<String> priorityCollection) {
+    public Comparator<Dependency> createPriorityComparator(Collection<String> priorityCollection) {
       StringStartsWithEquivalence priorityMatcher = new StringStartsWithEquivalence();
-      Function<Artifact, String> transformer = new Function<Artifact, String>() {
+      Function<Dependency, String> transformer = new Function<Dependency, String>() {
         @Override
-        public String apply(Artifact input) {
+        public String apply(Dependency input) {
           return input.getGroupId();
         }
       };
@@ -30,11 +30,11 @@ public enum ArtifactElement implements PriorityComparatorFactory<String, Artifac
 
   ARTIFACT_ID("artifactId") {
     @Override
-    public Comparator<Artifact> createPriorityComparator(Collection<String> priorityCollection) {
+    public Comparator<Dependency> createPriorityComparator(Collection<String> priorityCollection) {
       StringStartsWithEquivalence priorityMatcher = new StringStartsWithEquivalence();
-      Function<Artifact, String> transformer = new Function<Artifact, String>() {
+      Function<Dependency, String> transformer = new Function<Dependency, String>() {
         @Override
-        public String apply(Artifact input) {
+        public String apply(Dependency input) {
           return input.getArtifactId();
         }
       };
@@ -44,10 +44,10 @@ public enum ArtifactElement implements PriorityComparatorFactory<String, Artifac
 
   SCOPE("scope") {
     @Override
-    public PriorityComparator<String, Artifact> createPriorityComparator(Collection<String> priorityCollection) {
-      Function<Artifact, String> transformer = new Function<Artifact, String>() {
+    public PriorityComparator<String, Dependency> createPriorityComparator(Collection<String> priorityCollection) {
+      Function<Dependency, String> transformer = new Function<Dependency, String>() {
         @Override
-        public String apply(Artifact input) {
+        public String apply(Dependency input) {
           return input.getScope();
         }
       };
@@ -55,21 +55,21 @@ public enum ArtifactElement implements PriorityComparatorFactory<String, Artifac
     }
   };
 
-  private static Map<String, ArtifactElement> elementMap;
+  private static Map<String, DependencyElement> elementMap;
 
   static {
     elementMap = Maps.newLinkedHashMap();
-    for (ArtifactElement element : values()) {
+    for (DependencyElement element : values()) {
       elementMap.put(element.getElementName(), element);
     }
   }
 
-  public static ArtifactElement getByElementName(String elementName) {
+  public static DependencyElement getByElementName(String elementName) {
     if (elementName == null) {
       throw new NullPointerException("Element name is null");
     }
 
-    ArtifactElement result = elementMap.get(elementName);
+    DependencyElement result = elementMap.get(elementName);
     if (result == null) {
       throw new IllegalArgumentException("No dependency element with name " + elementName);
     }
@@ -79,7 +79,7 @@ public enum ArtifactElement implements PriorityComparatorFactory<String, Artifac
 
   private final String elementName;
 
-  private ArtifactElement(String elementName) {
+  private DependencyElement(String elementName) {
     this.elementName = elementName;
   }
 

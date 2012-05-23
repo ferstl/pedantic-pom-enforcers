@@ -6,53 +6,53 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
 
-import org.apache.maven.artifact.Artifact;
-
 import com.google.common.collect.LinkedHashMultimap;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.Ordering;
 import com.google.common.collect.Sets;
 
-public class ArtifactSorter {
+import ch.sferstl.maven.pomenforcer.priority.PriorityComparatorFactory;
 
-  private final Set<ArtifactElement> orderBy;
-  private final Multimap<ArtifactElement, String> priorityMap;
+public class ArtifactSorter<T, F extends PriorityComparatorFactory<String, T>> {
+
+  private final Set<F> orderBy;
+  private final Multimap<F, String> priorityMap;
 
   public ArtifactSorter() {
     this.orderBy = Sets.newLinkedHashSet();
     this.priorityMap = LinkedHashMultimap.create();
   }
 
-  public void orderBy(Collection<ArtifactElement> artifactElements) {
+  public void orderBy(Collection<F> artifactElements) {
     this.orderBy.clear();
     this.orderBy.addAll(artifactElements);
   }
 
-  public void setPriorities(ArtifactElement artifactElement, Iterable<String> priorities) {
+  public void setPriorities(F artifactElement, Iterable<String> priorities) {
     this.priorityMap.putAll(artifactElement, priorities);
   }
 
-  public Collection<ArtifactElement> getOrderBy() {
+  public Collection<F> getOrderBy() {
     return Collections.unmodifiableCollection(this.orderBy);
   }
 
-  public Collection<String> getPriorities(ArtifactElement artifactElement) {
+  public Collection<String> getPriorities(F artifactElement) {
     return this.priorityMap.get(artifactElement);
   }
 
-  public Ordering<Artifact> createOrdering() {
-    List<Comparator<Artifact>> comparators = Lists.newArrayListWithCapacity(this.orderBy.size());
-    for (ArtifactElement artifactElement : this.orderBy) {
-      Comparator<Artifact> comparator =
+  public Ordering<T> createOrdering() {
+    List<Comparator<T>> comparators = Lists.newArrayListWithCapacity(this.orderBy.size());
+    for (F artifactElement : this.orderBy) {
+      Comparator<T> comparator =
           artifactElement.createPriorityComparator(this.priorityMap.get(artifactElement));
       comparators.add(comparator);
     }
 
-    Ordering<Artifact> ordering;
+    Ordering<T> ordering;
     if (comparators.size() > 0) {
       ordering = Ordering.from(comparators.get(0));
-      for (Comparator<Artifact> comparator : comparators.subList(1, comparators.size())) {
+      for (Comparator<T> comparator : comparators.subList(1, comparators.size())) {
         ordering = ordering.compound(comparator);
       }
     } else {

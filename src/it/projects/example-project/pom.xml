@@ -17,7 +17,7 @@
   <properties>
     <dependencies.orderBy>scope,groupId,artifactId</dependencies.orderBy>
     <dependencies.groupIdPriorities>commons-</dependencies.groupIdPriorities>
-    <plugins.orderBy>scope,groupId,artifactId</plugins.orderBy>
+    <plugins.orderBy>groupId,artifactId</plugins.orderBy>
     <plugins.groupIdPriorities>org.apache.maven.plugins</plugins.groupIdPriorities>
   </properties>
   
@@ -101,7 +101,7 @@
             </dependencyOrder>
             <pluginManagementOrder implementation="ch.sferstl.maven.pomenforcer.PedanticPluginManagementOrderEnforcer">
               <orderBy>${plugins.orderBy}</orderBy>
-              <groupIdPriorities>${dependencies.groupIdPriorities}</groupIdPriorities>
+              <groupIdPriorities>${plugins.groupIdPriorities}</groupIdPriorities>
             </pluginManagementOrder>
           </rules>
           <fail>true</fail>
