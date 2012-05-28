@@ -19,7 +19,7 @@ import ch.sferstl.maven.pomenforcer.reader.DeclaredDependenciesReader;
 public class PedanticDependencyOrderEnforcer extends AbstractPedanticDependencyOrderEnforcer {
 
   @Override
-  public void execute(EnforcerRuleHelper helper) throws EnforcerRuleException {
+  protected void doEnforce(EnforcerRuleHelper helper, Document pom) throws EnforcerRuleException {
     MavenProject project = getMavenProject(helper);
 
     Log log = helper.getLog();
@@ -33,10 +33,7 @@ public class PedanticDependencyOrderEnforcer extends AbstractPedanticDependencyO
     log.info("  -> Artifact ID priorities: "
            + COMMA_JOINER.join(getArtifactSorter().getPriorities(DependencyElement.ARTIFACT_ID)));
 
-    // Read the POM
-    Document pomDoc = XmlParser.parseXml(project.getFile());
-
-    Collection<Dependency> declaredDependencies = new DeclaredDependenciesReader(pomDoc).read();
+    Collection<Dependency> declaredDependencies = new DeclaredDependenciesReader(pom).read();
     Collection<Dependency> projectDependencies = project.getDependencies();
 
     Collection<Dependency> dependencyArtifacts = matchDependencies(declaredDependencies, projectDependencies);

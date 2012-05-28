@@ -30,7 +30,7 @@ public class PedanticModuleOrderEnforcer extends AbstractPedanticEnforcer {
   }
 
   @Override
-  public void execute(EnforcerRuleHelper helper) throws EnforcerRuleException {
+  protected void doEnforce(EnforcerRuleHelper helper, Document pom) throws EnforcerRuleException {
     MavenProject project = getMavenProject(helper);
     // Do nothing if the project is not a parent project
     if (!isPomProject(project)) {
@@ -41,11 +41,8 @@ public class PedanticModuleOrderEnforcer extends AbstractPedanticEnforcer {
     log.info("Enforcing alphabetical module order.");
     log.info("  -> These modules are ignored: " + COMMA_JOINER.join(this.ignoredModules));
 
-    // Read the POM
-    Document pomDoc = XmlParser.parseXml(project.getFile());
-
     // Remove all modules to be ignored.
-    List<String> declaredModules = new DeclaredModulesReader(pomDoc).read();
+    List<String> declaredModules = new DeclaredModulesReader(pom).read();
     declaredModules.removeAll(this.ignoredModules);
 
     // Enforce the module order

@@ -69,9 +69,8 @@ public class PedanticPluginManagementOrderEnforcer extends AbstractPedanticEnfor
   }
 
   @Override
-  public void execute(EnforcerRuleHelper helper) throws EnforcerRuleException {
+  protected void doEnforce(EnforcerRuleHelper helper, Document pom) throws EnforcerRuleException {
     MavenProject project = getMavenProject(helper);
-
     Log log = helper.getLog();
     log.info("Enforcing plugin management order.");
     log.info("  -> Plugins have to be ordered by: "
@@ -81,11 +80,8 @@ public class PedanticPluginManagementOrderEnforcer extends AbstractPedanticEnfor
     log.info("  -> Artifact ID priorities: "
            + COMMA_JOINER.join(this.artifactSorter.getPriorities(PluginElement.ARTIFACT_ID)));
 
-    // Read the POM
-    Document pomDoc = XmlParser.parseXml(project.getFile());
-
     Collection<Plugin> declaredPluginManagement =
-        new DeclaredPluginManagementReader(pomDoc).read();
+        new DeclaredPluginManagementReader(pom).read();
 
     Collection<Plugin> managedPlugins = matchPlugins(declaredPluginManagement, project.getPluginManagement().getPlugins());
 

@@ -3,9 +3,11 @@ package ch.sferstl.maven.pomenforcer;
 import java.util.Collection;
 
 import org.apache.maven.enforcer.rule.api.EnforcerRule;
+import org.apache.maven.enforcer.rule.api.EnforcerRuleException;
 import org.apache.maven.enforcer.rule.api.EnforcerRuleHelper;
 import org.apache.maven.project.MavenProject;
 import org.codehaus.plexus.component.configurator.expression.ExpressionEvaluationException;
+import org.w3c.dom.Document;
 
 import com.google.common.base.Function;
 import com.google.common.base.Functions;
@@ -18,6 +20,16 @@ public abstract class AbstractPedanticEnforcer implements EnforcerRule {
 
   private static final Splitter COMMA_SPLITTER = Splitter.on(",");
   protected static final Joiner COMMA_JOINER = Joiner.on(",");
+
+  @Override
+  public void execute(EnforcerRuleHelper helper) throws EnforcerRuleException {
+    // Read the POM
+    MavenProject project = getMavenProject(helper);
+    Document pom = XmlParser.parseXml(project.getFile());
+
+    // Enforce
+    doEnforce(helper, pom);
+  }
 
   protected MavenProject getMavenProject(EnforcerRuleHelper helper) {
     MavenProject project;
@@ -44,6 +56,8 @@ public abstract class AbstractPedanticEnforcer implements EnforcerRule {
     }
     Iterables.addAll(collection, Iterables.transform(items, transformer));
   }
+
+  protected abstract void doEnforce(EnforcerRuleHelper helper, Document pom) throws EnforcerRuleException;
 
   protected abstract void accept(PedanticEnforcerVisitor visitor);
 

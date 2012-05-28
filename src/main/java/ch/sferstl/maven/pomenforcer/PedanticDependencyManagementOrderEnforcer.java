@@ -21,7 +21,7 @@ public class PedanticDependencyManagementOrderEnforcer
 extends AbstractPedanticDependencyOrderEnforcer {
 
   @Override
-  public void execute(EnforcerRuleHelper helper) throws EnforcerRuleException {
+  protected void doEnforce(EnforcerRuleHelper helper, Document pom) throws EnforcerRuleException {
     MavenProject project = getMavenProject(helper);
 
     Log log = helper.getLog();
@@ -35,11 +35,8 @@ extends AbstractPedanticDependencyOrderEnforcer {
     log.info("  -> Artifact ID priorities: "
            + COMMA_JOINER.join(getArtifactSorter().getPriorities(DependencyElement.ARTIFACT_ID)));
 
-    // Read the POM
-    Document pomDoc = XmlParser.parseXml(project.getFile());
-
     Collection<Dependency> declaredDependencyManagement =
-        new DeclaredDependencyManagementReader(pomDoc).read();
+        new DeclaredDependencyManagementReader(pom).read();
 
     Collection<Dependency> managedDependencyArtifacts =
         matchDependencies(declaredDependencyManagement, getManagedDependencies(project));

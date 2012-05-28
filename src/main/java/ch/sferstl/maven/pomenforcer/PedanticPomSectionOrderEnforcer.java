@@ -7,7 +7,6 @@ import java.util.Set;
 import org.apache.maven.enforcer.rule.api.EnforcerRuleException;
 import org.apache.maven.enforcer.rule.api.EnforcerRuleHelper;
 import org.apache.maven.plugin.logging.Log;
-import org.apache.maven.project.MavenProject;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -37,18 +36,13 @@ public class PedanticPomSectionOrderEnforcer extends AbstractPedanticEnforcer {
   }
 
   @Override
-  public void execute(EnforcerRuleHelper helper) throws EnforcerRuleException {
-    MavenProject project = getMavenProject(helper);
-
+  protected void doEnforce(EnforcerRuleHelper helper, Document pom) throws EnforcerRuleException {
     Log log = helper.getLog();
     log.info("Enforcing correct POM section order.");
     log.info("  -> Section priorities: " + COMMA_JOINER.join(this.sectionPriorities));
 
-    // Read the POM
-    Document pomDoc = XmlParser.parseXml(project.getFile());
-
     // Get the declared POM sections
-    NodeList childNodes = pomDoc.getFirstChild().getChildNodes();
+    NodeList childNodes = pom.getFirstChild().getChildNodes();
     ArrayList<PomSection> pomSections = Lists.newArrayList();
     for (int i = 0; i < childNodes.getLength(); i++) {
       Node node = childNodes.item(i);
