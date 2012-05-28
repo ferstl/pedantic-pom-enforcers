@@ -49,4 +49,9 @@ public class PedanticDependencyOrderEnforcer extends AbstractPedanticDependencyO
         + "Your dependencies have to be sorted this way: " + sortedDependencies);
     }
   }
+
+  @Override
+  protected void accept(PedanticEnforcerVisitor visitor) {
+    visitor.visit(this);
+  }
 }

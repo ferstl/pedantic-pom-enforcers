@@ -45,6 +45,8 @@ public abstract class AbstractPedanticEnforcer implements EnforcerRule {
     Iterables.addAll(collection, Iterables.transform(items, transformer));
   }
 
+  protected abstract void accept(PedanticEnforcerVisitor visitor);
+
   @Override
   public boolean isCacheable() {
     return false;

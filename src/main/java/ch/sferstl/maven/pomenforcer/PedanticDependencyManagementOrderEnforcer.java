@@ -54,6 +54,11 @@ extends AbstractPedanticDependencyOrderEnforcer {
     }
   }
 
+  @Override
+  protected void accept(PedanticEnforcerVisitor visitor) {
+    visitor.visit(this);
+  }
+
   private Collection<Dependency> getManagedDependencies(MavenProject project) {
     DependencyManagement dependencyManagement = project.getDependencyManagement();
     Collection<Dependency> managedDependencies;

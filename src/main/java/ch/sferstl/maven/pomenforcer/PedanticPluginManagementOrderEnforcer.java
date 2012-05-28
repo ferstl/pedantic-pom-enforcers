@@ -99,6 +99,11 @@ public class PedanticPluginManagementOrderEnforcer extends AbstractPedanticEnfor
     }
   }
 
+  @Override
+  protected void accept(PedanticEnforcerVisitor visitor) {
+    visitor.visit(this);
+  }
+
   private Collection<Plugin> matchPlugins(
       final Collection<Plugin> subset, final Collection<Plugin> superset) {
 

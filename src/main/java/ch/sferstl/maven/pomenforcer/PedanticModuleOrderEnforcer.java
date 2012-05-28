@@ -61,6 +61,11 @@ public class PedanticModuleOrderEnforcer extends AbstractPedanticEnforcer {
     }
   }
 
+  @Override
+  protected void accept(PedanticEnforcerVisitor visitor) {
+    visitor.visit(this);
+  }
+
   private boolean isPomProject(MavenProject project) {
     return "pom".equals(project.getPackaging());
   }

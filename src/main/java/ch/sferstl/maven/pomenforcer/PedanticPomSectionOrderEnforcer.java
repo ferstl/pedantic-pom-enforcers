@@ -71,8 +71,11 @@ public class PedanticPomSectionOrderEnforcer extends AbstractPedanticEnforcer {
       throw new EnforcerRuleException("One does not simply write a POM file! "
         + "Your POM file has to be organized this way: " + sortedPomSections);
     }
+  }
 
-
+  @Override
+  protected void accept(PedanticEnforcerVisitor visitor) {
+    visitor.visit(this);
   }
 
 }
