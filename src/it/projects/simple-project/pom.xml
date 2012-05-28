@@ -18,10 +18,25 @@
         <version>1.0.1</version>
         <configuration>
           <rules>
-            <moduleOrder implementation="ch.sferstl.maven.pomenforcer.PedanticModuleOrderEnforcer" />
-            <dependencyManagementOrder implementation="ch.sferstl.maven.pomenforcer.PedanticDependencyManagementOrderEnforcer" />
-            <dependencyOrder implementation="ch.sferstl.maven.pomenforcer.PedanticDependencyOrderEnforcer" />
-            <pluginManagementOrder implementation="ch.sferstl.maven.pomenforcer.PedanticPluginManagementOrderEnforcer" />
+            <compound implementation="ch.sferstl.maven.pomenforcer.CompoundPedanticEnforcer">
+              <!-- Enforcers -->
+              <enforcers>POM_SECTION_ORDER,MODULE_ORDER,DEPENDENCY_MANAGEMENT_ORDER,DEPENDENCY_ORDER,PLUGIN_MANAGEMENT_ORDER</enforcers>
+            
+              <!-- Module order -->
+              <moduleOrderIgnores>module3,module4</moduleOrderIgnores>
+              
+              <!-- Dependency Management Order -->
+              <dependencyManagementOrderBy>${dependencies.orderBy}</dependencyManagementOrderBy>
+              <dependencyManagementGroupIdPriorities>${dependencies.groupIdPriorities}</dependencyManagementGroupIdPriorities>
+              
+              <!-- Dependencies Order -->
+              <dependenciesOrderBy>${dependencies.orderBy}</dependenciesOrderBy>
+              <dependenciesGroupIdPriorities>${dependencies.groupIdPriorities}</dependenciesGroupIdPriorities>
+              
+              <!-- Plugin Management Order -->
+              <pluginManagementOrderBy>${plugins.orderBy}</pluginManagementOrderBy>
+              <pluginManagementGroupIdPriorities>${plugins.groupIdPriorities}</pluginManagementGroupIdPriorities>
+            </compound>
           </rules>
           <fail>true</fail>
         </configuration>
