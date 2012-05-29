@@ -16,7 +16,7 @@
   
   <properties>
     <dependencies.orderBy>scope,groupId,artifactId</dependencies.orderBy>
-    <dependencies.groupIdPriorities>commons-</dependencies.groupIdPriorities>
+    <dependencies.groupIdPriorities>ch.sferstl,commons-</dependencies.groupIdPriorities>
     <plugins.orderBy>groupId,artifactId</plugins.orderBy>
     <plugins.groupIdPriorities>org.apache.maven.plugins</plugins.groupIdPriorities>
   </properties>

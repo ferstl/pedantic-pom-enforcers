@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
+import org.apache.maven.enforcer.rule.api.EnforcerRuleHelper;
 import org.apache.maven.model.Dependency;
 
 import com.google.common.base.Function;
@@ -80,14 +81,18 @@ public abstract class AbstractPedanticDependencyOrderEnforcer extends AbstractPe
   }
 
   protected Collection<Dependency> matchDependencies(
-      final Collection<Dependency> subset, final Collection<Dependency> superset) {
+      final Collection<Dependency> subset,
+      final Collection<Dependency> superset,
+      final EnforcerRuleHelper helper) {
 
     Function<Dependency, Dependency> matchFunction = new Function<Dependency, Dependency>() {
       @Override
       public Dependency apply(Dependency dependency) {
         for (Dependency supersetDependency : superset) {
-          if (supersetDependency.getGroupId().equals(dependency.getGroupId())
-           && supersetDependency.getArtifactId().equals(dependency.getArtifactId())) {
+          String groupId = resolveStringProperty(dependency.getGroupId(), helper);
+          String artifactId = resolveStringProperty(dependency.getArtifactId(), helper);
+          if (supersetDependency.getGroupId().equals(groupId)
+           && supersetDependency.getArtifactId().equals(artifactId)) {
             Dependency matchedDependency = supersetDependency.clone();
             matchedDependency.setScope(Objects.firstNonNull(supersetDependency.getScope(), "compile"));
             return matchedDependency;

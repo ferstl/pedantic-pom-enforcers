@@ -36,7 +36,8 @@ public class PedanticDependencyOrderEnforcer extends AbstractPedanticDependencyO
     Collection<Dependency> declaredDependencies = new DeclaredDependenciesReader(pom).read();
     Collection<Dependency> projectDependencies = project.getDependencies();
 
-    Collection<Dependency> dependencyArtifacts = matchDependencies(declaredDependencies, projectDependencies);
+    Collection<Dependency> dependencyArtifacts =
+        matchDependencies(declaredDependencies, projectDependencies, helper);
     Ordering<Dependency> dependencyOrdering = getArtifactSorter().createOrdering();
 
     if (!dependencyOrdering.isOrdered(dependencyArtifacts)) {

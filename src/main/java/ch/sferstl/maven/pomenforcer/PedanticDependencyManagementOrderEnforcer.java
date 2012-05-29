@@ -39,7 +39,7 @@ extends AbstractPedanticDependencyOrderEnforcer {
         new DeclaredDependencyManagementReader(pom).read();
 
     Collection<Dependency> managedDependencyArtifacts =
-        matchDependencies(declaredDependencyManagement, getManagedDependencies(project));
+        matchDependencies(declaredDependencyManagement, getManagedDependencies(project), helper);
 
     Ordering<Dependency> dependencyOrdering = getArtifactSorter().createOrdering();
 

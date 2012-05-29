@@ -13,6 +13,7 @@ import com.google.common.base.Function;
 import com.google.common.base.Functions;
 import com.google.common.base.Joiner;
 import com.google.common.base.Splitter;
+import com.google.common.base.Strings;
 import com.google.common.collect.Iterables;
 
 
@@ -55,6 +56,19 @@ public abstract class AbstractPedanticEnforcer implements EnforcerRule {
       collection.clear();
     }
     Iterables.addAll(collection, Iterables.transform(items, transformer));
+  }
+
+  protected String resolveStringProperty(String property, EnforcerRuleHelper helper) {
+    if (!Strings.isNullOrEmpty(property) && property.startsWith("${") && property.endsWith("}")) {
+      try {
+        return (String) helper.evaluate(property);
+      } catch (ExpressionEvaluationException e) {
+        throw new IllegalArgumentException("Unable to resolve property " + property);
+      } catch (ClassCastException e) {
+        throw new IllegalArgumentException("Property " + property + " does not evaluate to String");
+      }
+    }
+    return property;
   }
 
   protected abstract void doEnforce(EnforcerRuleHelper helper, Document pom) throws EnforcerRuleException;

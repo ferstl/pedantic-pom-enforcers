@@ -10,4 +10,12 @@
   
   <artifactId>module5</artifactId>
 
+  <dependencies>
+    <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>module1</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+  </dependencies>
+  
 </project>

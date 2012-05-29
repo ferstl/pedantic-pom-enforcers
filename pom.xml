@@ -129,6 +129,7 @@
               </pomIncludes>
               <goals>
                 <goal>clean</goal>
+                <goal>install</goal>
                 <goal>org.apache.maven.plugins:maven-enforcer-plugin:${maven-enforcer-plugin.version}:enforce</goal>
               </goals>
             </configuration>
