@@ -8,12 +8,12 @@ import org.apache.maven.enforcer.rule.api.EnforcerRuleHelper;
 import org.apache.maven.model.Dependency;
 
 import com.google.common.base.Function;
-import com.google.common.base.Objects;
-import com.google.common.collect.Collections2;
 import com.google.common.collect.Sets;
 
 import ch.sferstl.maven.pomenforcer.artifact.ArtifactSorter;
 import ch.sferstl.maven.pomenforcer.artifact.DependencyElement;
+import ch.sferstl.maven.pomenforcer.artifact.DependencyMatcher;
+import ch.sferstl.maven.pomenforcer.util.CommaSeparatorUtils;
 
 public abstract class AbstractPedanticDependencyOrderEnforcer extends AbstractPedanticEnforcer {
 
@@ -36,7 +36,7 @@ public abstract class AbstractPedanticDependencyOrderEnforcer extends AbstractPe
         return DependencyElement.getByElementName(input);
       }
     };
-    this.splitAndAddToCollection(dependencyElements, orderBy, transformer);
+    CommaSeparatorUtils.splitAndAddToCollection(dependencyElements, orderBy, transformer);
     this.artifactSorter.orderBy(orderBy);
   }
 
@@ -48,7 +48,7 @@ public abstract class AbstractPedanticDependencyOrderEnforcer extends AbstractPe
    */
   public void setGroupIdPriorities(String groupIds) {
     LinkedHashSet<String> groupIdPriorities = Sets.newLinkedHashSet();
-    this.splitAndAddToCollection(groupIds, groupIdPriorities);
+    CommaSeparatorUtils.splitAndAddToCollection(groupIds, groupIdPriorities);
     this.artifactSorter.setPriorities(DependencyElement.GROUP_ID, groupIdPriorities);
   }
 
@@ -60,7 +60,7 @@ public abstract class AbstractPedanticDependencyOrderEnforcer extends AbstractPe
    */
   public void setArtifactIdPriorities(String artifactIds) {
     LinkedHashSet<String> artifactIdPriorities = Sets.newLinkedHashSet();
-    this.splitAndAddToCollection(artifactIds, artifactIdPriorities);
+    CommaSeparatorUtils.splitAndAddToCollection(artifactIds, artifactIdPriorities);
     this.artifactSorter.setPriorities(DependencyElement.ARTIFACT_ID, artifactIdPriorities);
   }
 
@@ -72,7 +72,7 @@ public abstract class AbstractPedanticDependencyOrderEnforcer extends AbstractPe
    */
   public void setScopePriorities(String scopes) {
     LinkedHashSet<String> scopePriorities = Sets.newLinkedHashSet();
-    this.splitAndAddToCollection(scopes, scopePriorities);
+    CommaSeparatorUtils.splitAndAddToCollection(scopes, scopePriorities);
     this.artifactSorter.setPriorities(DependencyElement.SCOPE, scopePriorities);
   }
 
@@ -84,24 +84,6 @@ public abstract class AbstractPedanticDependencyOrderEnforcer extends AbstractPe
       final Collection<Dependency> subset,
       final Collection<Dependency> superset,
       final EnforcerRuleHelper helper) {
-
-    Function<Dependency, Dependency> matchFunction = new Function<Dependency, Dependency>() {
-      @Override
-      public Dependency apply(Dependency dependency) {
-        for (Dependency supersetDependency : superset) {
-          String groupId = resolveStringProperty(dependency.getGroupId(), helper);
-          String artifactId = resolveStringProperty(dependency.getArtifactId(), helper);
-          if (supersetDependency.getGroupId().equals(groupId)
-           && supersetDependency.getArtifactId().equals(artifactId)) {
-            Dependency matchedDependency = supersetDependency.clone();
-            matchedDependency.setScope(Objects.firstNonNull(supersetDependency.getScope(), "compile"));
-            return matchedDependency;
-          }
-        }
-        throw new IllegalStateException(
-            "Could not match dependency '" + dependency + "' with superset '." + superset + "'.");
-      }
-    };
-    return Collections2.transform(subset, matchFunction);
+    return new DependencyMatcher(superset, helper).match(subset);
   }
 }

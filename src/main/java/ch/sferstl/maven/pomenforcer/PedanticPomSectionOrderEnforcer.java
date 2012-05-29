@@ -16,6 +16,8 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Ordering;
 import com.google.common.collect.Sets;
 
+import ch.sferstl.maven.pomenforcer.util.CommaSeparatorUtils;
+
 
 public class PedanticPomSectionOrderEnforcer extends AbstractPedanticEnforcer {
 
@@ -32,14 +34,14 @@ public class PedanticPomSectionOrderEnforcer extends AbstractPedanticEnforcer {
         return PomSection.getBySectionName(input);
       }
     };
-    this.splitAndAddToCollection(sectionPriorities, this.sectionPriorities, transformer);
+    CommaSeparatorUtils.splitAndAddToCollection(sectionPriorities, this.sectionPriorities, transformer);
   }
 
   @Override
   protected void doEnforce(EnforcerRuleHelper helper, Document pom) throws EnforcerRuleException {
     Log log = helper.getLog();
     log.info("Enforcing correct POM section order.");
-    log.info("  -> Section priorities: " + COMMA_JOINER.join(this.sectionPriorities));
+    log.info("  -> Section priorities: " + CommaSeparatorUtils.join(this.sectionPriorities));
 
     // Get the declared POM sections
     NodeList childNodes = pom.getFirstChild().getChildNodes();

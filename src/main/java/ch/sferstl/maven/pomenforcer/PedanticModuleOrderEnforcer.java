@@ -14,6 +14,8 @@ import com.google.common.collect.Ordering;
 import com.google.common.collect.Sets;
 
 import ch.sferstl.maven.pomenforcer.reader.DeclaredModulesReader;
+import ch.sferstl.maven.pomenforcer.util.CommaSeparatorUtils;
+import ch.sferstl.maven.pomenforcer.util.EnforcerRuleUtils;
 
 
 public class PedanticModuleOrderEnforcer extends AbstractPedanticEnforcer {
@@ -26,12 +28,12 @@ public class PedanticModuleOrderEnforcer extends AbstractPedanticEnforcer {
   }
 
   public void setIgnoredModules(String ignoredModules) {
-    this.splitAndAddToCollection(ignoredModules, this.ignoredModules);
+    CommaSeparatorUtils.splitAndAddToCollection(ignoredModules, this.ignoredModules);
   }
 
   @Override
   protected void doEnforce(EnforcerRuleHelper helper, Document pom) throws EnforcerRuleException {
-    MavenProject project = getMavenProject(helper);
+    MavenProject project = EnforcerRuleUtils.getMavenProject(helper);
     // Do nothing if the project is not a parent project
     if (!isPomProject(project)) {
       return;
@@ -39,7 +41,7 @@ public class PedanticModuleOrderEnforcer extends AbstractPedanticEnforcer {
 
     Log log = helper.getLog();
     log.info("Enforcing alphabetical module order.");
-    log.info("  -> These modules are ignored: " + COMMA_JOINER.join(this.ignoredModules));
+    log.info("  -> These modules are ignored: " + CommaSeparatorUtils.join(this.ignoredModules));
 
     // Remove all modules to be ignored.
     List<String> declaredModules = new DeclaredModulesReader(pom).read();

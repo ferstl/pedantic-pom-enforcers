@@ -16,24 +16,26 @@ import com.google.common.collect.Ordering;
 
 import ch.sferstl.maven.pomenforcer.artifact.DependencyElement;
 import ch.sferstl.maven.pomenforcer.reader.DeclaredDependencyManagementReader;
+import ch.sferstl.maven.pomenforcer.util.CommaSeparatorUtils;
+import ch.sferstl.maven.pomenforcer.util.EnforcerRuleUtils;
 
 public class PedanticDependencyManagementOrderEnforcer
 extends AbstractPedanticDependencyOrderEnforcer {
 
   @Override
   protected void doEnforce(EnforcerRuleHelper helper, Document pom) throws EnforcerRuleException {
-    MavenProject project = getMavenProject(helper);
+    MavenProject project = EnforcerRuleUtils.getMavenProject(helper);
 
     Log log = helper.getLog();
     log.info("Enforcing dependency management order.");
     log.info("  -> Dependencies have to be ordered by: "
-           + COMMA_JOINER.join(getArtifactSorter().getOrderBy()));
+           + CommaSeparatorUtils.join(getArtifactSorter().getOrderBy()));
     log.info("  -> Scope priorities: "
-           + COMMA_JOINER.join(getArtifactSorter().getPriorities(DependencyElement.SCOPE)));
+           + CommaSeparatorUtils.join(getArtifactSorter().getPriorities(DependencyElement.SCOPE)));
     log.info("  -> Group ID priorities: "
-           + COMMA_JOINER.join(getArtifactSorter().getPriorities(DependencyElement.GROUP_ID)));
+           + CommaSeparatorUtils.join(getArtifactSorter().getPriorities(DependencyElement.GROUP_ID)));
     log.info("  -> Artifact ID priorities: "
-           + COMMA_JOINER.join(getArtifactSorter().getPriorities(DependencyElement.ARTIFACT_ID)));
+           + CommaSeparatorUtils.join(getArtifactSorter().getPriorities(DependencyElement.ARTIFACT_ID)));
 
     Collection<Dependency> declaredDependencyManagement =
         new DeclaredDependencyManagementReader(pom).read();

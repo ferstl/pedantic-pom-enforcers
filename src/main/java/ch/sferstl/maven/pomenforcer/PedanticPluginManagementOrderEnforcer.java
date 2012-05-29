@@ -11,14 +11,16 @@ import org.apache.maven.project.MavenProject;
 import org.w3c.dom.Document;
 
 import com.google.common.base.Function;
-import com.google.common.collect.Collections2;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Ordering;
 import com.google.common.collect.Sets;
 
 import ch.sferstl.maven.pomenforcer.artifact.ArtifactSorter;
 import ch.sferstl.maven.pomenforcer.artifact.PluginElement;
+import ch.sferstl.maven.pomenforcer.artifact.PluginMatcher;
 import ch.sferstl.maven.pomenforcer.reader.DeclaredPluginManagementReader;
+import ch.sferstl.maven.pomenforcer.util.CommaSeparatorUtils;
+import ch.sferstl.maven.pomenforcer.util.EnforcerRuleUtils;
 
 public class PedanticPluginManagementOrderEnforcer extends AbstractPedanticEnforcer {
 
@@ -40,7 +42,7 @@ public class PedanticPluginManagementOrderEnforcer extends AbstractPedanticEnfor
         return PluginElement.getByElementName(input);
       }
     };
-    this.splitAndAddToCollection(pluginElements, orderBy, transformer);
+    CommaSeparatorUtils.splitAndAddToCollection(pluginElements, orderBy, transformer);
     this.artifactSorter.orderBy(orderBy);
   }
 
@@ -52,7 +54,7 @@ public class PedanticPluginManagementOrderEnforcer extends AbstractPedanticEnfor
    */
   public void setGroupIdPriorities(String groupIds) {
     LinkedHashSet<String> groupIdPriorities = Sets.newLinkedHashSet();
-    this.splitAndAddToCollection(groupIds, groupIdPriorities);
+    CommaSeparatorUtils.splitAndAddToCollection(groupIds, groupIdPriorities);
     this.artifactSorter.setPriorities(PluginElement.GROUP_ID, groupIdPriorities);
   }
 
@@ -64,21 +66,21 @@ public class PedanticPluginManagementOrderEnforcer extends AbstractPedanticEnfor
    */
   public void setArtifactIdPriorities(String artifactIds) {
     LinkedHashSet<String> artifactIdPriorities = Sets.newLinkedHashSet();
-    this.splitAndAddToCollection(artifactIds, artifactIdPriorities);
+    CommaSeparatorUtils.splitAndAddToCollection(artifactIds, artifactIdPriorities);
     this.artifactSorter.setPriorities(PluginElement.ARTIFACT_ID, artifactIdPriorities);
   }
 
   @Override
   protected void doEnforce(EnforcerRuleHelper helper, Document pom) throws EnforcerRuleException {
-    MavenProject project = getMavenProject(helper);
+    MavenProject project = EnforcerRuleUtils.getMavenProject(helper);
     Log log = helper.getLog();
     log.info("Enforcing plugin management order.");
     log.info("  -> Plugins have to be ordered by: "
-           + COMMA_JOINER.join(this.artifactSorter.getOrderBy()));
+           + CommaSeparatorUtils.join(this.artifactSorter.getOrderBy()));
     log.info("  -> Group ID priorities: "
-           + COMMA_JOINER.join(this.artifactSorter.getPriorities(PluginElement.GROUP_ID)));
+           + CommaSeparatorUtils.join(this.artifactSorter.getPriorities(PluginElement.GROUP_ID)));
     log.info("  -> Artifact ID priorities: "
-           + COMMA_JOINER.join(this.artifactSorter.getPriorities(PluginElement.ARTIFACT_ID)));
+           + CommaSeparatorUtils.join(this.artifactSorter.getPriorities(PluginElement.ARTIFACT_ID)));
 
     Collection<Plugin> declaredPluginManagement =
         new DeclaredPluginManagementReader(pom).read();
@@ -100,22 +102,7 @@ public class PedanticPluginManagementOrderEnforcer extends AbstractPedanticEnfor
     visitor.visit(this);
   }
 
-  private Collection<Plugin> matchPlugins(
-      final Collection<Plugin> subset, final Collection<Plugin> superset) {
-
-    Function<Plugin, Plugin> matchFunction = new Function<Plugin, Plugin>() {
-      @Override
-      public Plugin apply(Plugin dependency) {
-        for (Plugin supdersetDependency : superset) {
-          if (supdersetDependency.getGroupId().equals(dependency.getGroupId())
-           && supdersetDependency.getArtifactId().equals(dependency.getArtifactId())) {
-            return supdersetDependency;
-          }
-        }
-        throw new IllegalStateException(
-            "Could not match dependency '" + dependency + "' with superset '." + superset + "'.");
-      }
-    };
-    return Collections2.transform(subset, matchFunction);
+  private Collection<Plugin> matchPlugins(Collection<Plugin> subset, Collection<Plugin> superset) {
+    return new PluginMatcher(superset).match(subset);
   }
 }

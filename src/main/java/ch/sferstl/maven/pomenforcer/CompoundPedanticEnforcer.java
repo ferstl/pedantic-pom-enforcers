@@ -11,6 +11,9 @@ import com.google.common.base.Function;
 import com.google.common.base.Strings;
 import com.google.common.collect.Sets;
 
+import ch.sferstl.maven.pomenforcer.util.CommaSeparatorUtils;
+import ch.sferstl.maven.pomenforcer.util.EnforcerRuleUtils;
+
 public class CompoundPedanticEnforcer extends AbstractPedanticEnforcer {
 
   /** See {@link PedanticPomSectionOrderEnforcer#setSectionPriorities(String)}.*/
@@ -63,7 +66,7 @@ public class CompoundPedanticEnforcer extends AbstractPedanticEnforcer {
   }
 
   public void setEnforcers(String enforcers) {
-    splitAndAddToCollection(enforcers, this.enforcers, new Function<String, PedanticEnforcerRule>() {
+    CommaSeparatorUtils.splitAndAddToCollection(enforcers, this.enforcers, new Function<String, PedanticEnforcerRule>() {
       @Override
       public PedanticEnforcerRule apply(String input) {
         return PedanticEnforcerRule.valueOf(input);
@@ -73,7 +76,7 @@ public class CompoundPedanticEnforcer extends AbstractPedanticEnforcer {
 
   @Override
   public void execute(EnforcerRuleHelper helper) throws EnforcerRuleException {
-    MavenProject project = getMavenProject(helper);
+    MavenProject project = EnforcerRuleUtils.getMavenProject(helper);
     Document pom = XmlParser.parseXml(project.getFile());
     doEnforce(helper, pom);
   }
