@@ -16,7 +16,7 @@ public final class EnforcerRuleUtils {
     }
   }
 
-  public static String resolveStringProperty(String property, EnforcerRuleHelper helper) {
+  public static String evaluateStringProperty(String property, EnforcerRuleHelper helper) {
     // That's exactly the way properties are detected within the maven evaluators
     if (!Strings.isNullOrEmpty(property) && property.startsWith("${") && property.endsWith("}")) {
       try {
