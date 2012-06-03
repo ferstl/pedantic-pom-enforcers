@@ -46,7 +46,7 @@ To activate the *Pedantic POM enforcers*, just declare them in the configuration
     </build>
 
 ### Available Enforcer Rules
-These are the currently available *Pedantic POM Enforcers*. The ID is required by the `CompoundPedanticEnforcer`'s configuration.
+These are the currently available *Pedantic POM Enforcers*. The ID is required by the `CompoundPedanticEnforcer`'s configuration. For further details take a look at the [Wiki](wiki/Pedantic-POM-Enforcers).
 
 | Enforcer Rule | ID | Description |
 | ------------- | --- | ----------- |
