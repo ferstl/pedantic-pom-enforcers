@@ -23,7 +23,7 @@ To activate the *Pedantic POM enforcers*, just declare them in the configuration
           <version>1.0.1</version>
           <configuration>
             <rules>
-              <compound implementation="ch.sferstl.maven.pomenforcer.CompoundPedanticEnforcer">
+              <compound implementation="com.github.ferstl.maven.pomenforcers.CompoundPedanticEnforcer">
                 <!-- Enforcers -->
                 <enforcers>POM_SECTION_ORDER,MODULE_ORDER,DEPENDENCY_MANAGEMENT_ORDER,DEPENDENCY_ORDER,PLUGIN_MANAGEMENT_ORDER</enforcers>
               
