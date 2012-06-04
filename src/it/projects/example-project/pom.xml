@@ -1,7 +1,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
-  <groupId>ch.sferstl.maven.pom.enforcer</groupId>
+  <groupId>com.github.ferstl</groupId>
   <artifactId>example-settings-it</artifactId>
   <version>1.0-SNAPSHOT</version>
   <packaging>pom</packaging>
@@ -16,7 +16,7 @@
   
   <properties>
     <dependencies.orderBy>scope,groupId,artifactId</dependencies.orderBy>
-    <dependencies.groupIdPriorities>ch.sferstl,commons-</dependencies.groupIdPriorities>
+    <dependencies.groupIdPriorities>com.github.ferstl,commons-</dependencies.groupIdPriorities>
     <plugins.orderBy>groupId,artifactId</plugins.orderBy>
     <plugins.groupIdPriorities>org.apache.maven.plugins</plugins.groupIdPriorities>
   </properties>
@@ -109,7 +109,7 @@
         </configuration>
         <dependencies>
           <dependency>
-            <groupId>ch.sferstl.maven.enforcer</groupId>
+            <groupId>com.github.ferstl</groupId>
             <artifactId>pedantic-pom-enforcers</artifactId>
             <version>@project.version@</version>
           </dependency>

@@ -35,7 +35,7 @@ To activate the *Pedantic POM enforcers*, just declare them in the configuration
           </configuration>
           <dependencies>
             <dependency>
-              <groupId>ch.sferstl.maven.enforcer</groupId>
+              <groupId>com.github.ferstl</groupId>
               <artifactId>pedantic-pom-enforcers</artifactId>
               <version>${pedantic-pom-enforcers.version}</version>
             </dependency>
