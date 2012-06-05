@@ -17,6 +17,12 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
   
+  <parent>
+    <groupId>org.sonatype.oss</groupId>
+    <artifactId>oss-parent</artifactId>
+    <version>7</version>
+  </parent>
+  
   <groupId>com.github.ferstl</groupId>
   <artifactId>pedantic-pom-enforcers</artifactId>
   <version>1.0-SNAPSHOT</version>
@@ -39,6 +45,7 @@
     <developer>
       <id>ferstl</id>
       <name>Stefan Ferstl</name>
+      <email>st.ferstl@gmail.com</email>
       <url>https://github.com/ferstl</url>
     </developer>
   </developers>
@@ -51,11 +58,11 @@
   
   <distributionManagement>
     <repository>
-      <id>nexus</id>
+      <id>${distribution.release.id}</id>
       <url>${distribution.release.url}</url>
     </repository>
     <snapshotRepository>
-      <id>nexus</id>
+      <id>${distribution.snapshot.id}</id>
       <url>${distribution.snapshot.url}</url>
     </snapshotRepository>
   </distributionManagement>
