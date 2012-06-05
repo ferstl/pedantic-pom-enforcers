@@ -16,13 +16,37 @@
 -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
+  
   <groupId>com.github.ferstl</groupId>
   <artifactId>pedantic-pom-enforcers</artifactId>
   <version>1.0-SNAPSHOT</version>
+  <packaging>jar</packaging>
+  <name>Pedantic POM Enforcers</name>
+  <description>
+    The Pedantic POM Enforcers consist of serveral Maven enforcer rules that help you keep your
+    project setup consistent and organized. 
+  </description>
+  <url>https://github.com/ferstl/pedantic-pom-enforcers</url>
+  <licenses>
+    <license>
+      <name>Apache 2</name>
+      <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+      <distribution>repo</distribution>
+    </license>
+  </licenses>
+  
+  <developers>
+    <developer>
+      <id>ferstl</id>
+      <name>Stefan Ferstl</name>
+      <url>https://github.com/ferstl</url>
+    </developer>
+  </developers>
 
   <scm>
     <connection>scm:git:git@github.com:ferstl/pedantic-pom-enforcers.git</connection>
-    <url>https://github.com/ferstl/pedantic-pom-enforcers</url>
+    <developerConnection>scm:git:git@github.com:ferstl/pedantic-pom-enforcers.git</developerConnection>
+    <url>${project.url}</url>
   </scm>
   
   <distributionManagement>
