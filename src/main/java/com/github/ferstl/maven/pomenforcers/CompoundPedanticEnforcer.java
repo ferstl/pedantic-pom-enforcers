@@ -168,7 +168,7 @@ public class CompoundPedanticEnforcer extends AbstractPedanticEnforcer {
       if (!Strings.isNullOrEmpty(CompoundPedanticEnforcer.this.pluginManagementOrderBy)) {
         pluginManagementOrderEnforcer.setOrderBy(CompoundPedanticEnforcer.this.pluginManagementOrderBy);
       }
-      if (!Strings.isNullOrEmpty(CompoundPedanticEnforcer.this.dependenciesGroupIdPriorities)) {
+      if (!Strings.isNullOrEmpty(CompoundPedanticEnforcer.this.pluginManagementGroupIdPriorities)) {
         pluginManagementOrderEnforcer.setGroupIdPriorities(
             CompoundPedanticEnforcer.this.pluginManagementGroupIdPriorities);
       }
