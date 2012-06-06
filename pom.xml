@@ -63,9 +63,21 @@
   </distributionManagement>
 
   <properties>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <maven-enforcer-plugin.version>1.0.1</maven-enforcer-plugin.version>
+    <!-- Previous released version of this project. Used to validate this POM file. -->
+    <previous.version>1.0-alpha-2</previous.version>
+    
+    <!-- Plugin versions. -->
     <maven-license-plugin.version>1.9.0</maven-license-plugin.version>
+    <maven-compiler-plugin.version>2.3.2</maven-compiler-plugin.version>
+    <maven-enforcer-plugin.version>1.0.1</maven-enforcer-plugin.version>
+    <maven-gpg-plugin.version>1.4</maven-gpg-plugin.version>
+    <maven-invoker-plugin.version>1.5</maven-invoker-plugin.version>
+    <maven-javadoc-plugin.version>2.8.1</maven-javadoc-plugin.version>
+    <maven-release-plugin.version>2.3</maven-release-plugin.version>
+    <maven-source-plugin.version>2.1.2</maven-source-plugin.version>
+    
+    <!-- Other settings. -->
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <maven.version>3.0.4</maven.version>
   </properties>
 
@@ -81,16 +93,10 @@
       <version>1.4.2</version>
     </dependency>
     <dependency>
-      <groupId>org.apache.maven.enforcer</groupId>
-      <artifactId>enforcer-api</artifactId>
-      <version>${maven-enforcer-plugin.version}</version>
+      <groupId>org.apache.maven</groupId>
+      <artifactId>maven-core</artifactId>
+      <version>${maven.version}</version>
       <scope>provided</scope>
-      <exclusions>
-        <exclusion>
-          <artifactId>junit</artifactId>
-          <groupId>junit</groupId>
-        </exclusion>
-      </exclusions>
     </dependency>
     <dependency>
       <groupId>org.apache.maven</groupId>
@@ -99,20 +105,14 @@
       <scope>provided</scope>
     </dependency>
     <dependency>
-      <groupId>org.apache.maven</groupId>
-      <artifactId>maven-core</artifactId>
-      <version>${maven.version}</version>
+      <groupId>org.apache.maven.enforcer</groupId>
+      <artifactId>enforcer-api</artifactId>
+      <version>${maven-enforcer-plugin.version}</version>
       <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.mockito</groupId>
-      <artifactId>mockito-core</artifactId>
-      <version>1.9.0</version>
-      <scope>test</scope>
       <exclusions>
         <exclusion>
-          <artifactId>hamcrest-core</artifactId>
-          <groupId>org.hamcrest</groupId>
+          <artifactId>junit</artifactId>
+          <groupId>junit</groupId>
         </exclusion>
       </exclusions>
     </dependency>
@@ -134,95 +134,160 @@
       <version>1.2.1</version>
       <scope>test</scope>
     </dependency>
+    <dependency>
+      <groupId>org.mockito</groupId>
+      <artifactId>mockito-core</artifactId>
+      <version>1.9.0</version>
+      <scope>test</scope>
+      <exclusions>
+        <exclusion>
+          <artifactId>hamcrest-core</artifactId>
+          <groupId>org.hamcrest</groupId>
+        </exclusion>
+      </exclusions>
+    </dependency>
   </dependencies>
 
   <build>
     <pluginManagement>
       <plugins>
         <plugin>
+          <groupId>com.mycila.maven-license-plugin</groupId>
+          <artifactId>maven-license-plugin</artifactId>
+          <version>${maven-license-plugin.version}</version>
+          <configuration>
+            <header>${basedir}/src/etc/header.txt</header>
+            <strictCheck>true</strictCheck>
+            <mapping>
+              <java>SLASHSTAR_STYLE</java>
+            </mapping>
+            <includes>
+              <include>src/main/**</include>
+              <include>src/test/java/**</include>
+            </includes>
+          </configuration>
+        </plugin>
+        
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-compiler-plugin</artifactId>
+          <version>2.3.2</version>
+          <configuration>
+            <source>1.7</source>
+            <target>1.7</target>
+          </configuration>
+        </plugin>
+        
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-enforcer-plugin</artifactId>
+          <version>${maven-enforcer-plugin.version}</version>
+          <configuration>
+            <rules>
+              <compound implementation="com.github.ferstl.maven.pomenforcers.CompoundPedanticEnforcer">
+                <!-- Enforcers -->
+                <enforcers>POM_SECTION_ORDER,DEPENDENCY_MANAGEMENT_ORDER,DEPENDENCY_ORDER,PLUGIN_MANAGEMENT_ORDER</enforcers>
+              </compound>
+            </rules>
+            <fail>true</fail>
+          </configuration>
+          <dependencies>
+            <dependency>
+              <groupId>com.github.ferstl</groupId>
+              <artifactId>pedantic-pom-enforcers</artifactId>
+              <version>${previous.version}</version>
+            </dependency>
+          </dependencies>
+        </plugin>
+        
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-gpg-plugin</artifactId>
+          <version>${maven-gpg-plugin.version}</version>
+        </plugin>
+        
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-invoker-plugin</artifactId>
+          <version>${maven-invoker-plugin.version}</version>
+          <configuration>
+            <settingsFile>src/it/settings.xml</settingsFile>
+            <localRepositoryPath>${project.build.directory}/local-repo</localRepositoryPath>
+            <projectsDirectory>src/it</projectsDirectory>
+            <pomIncludes>
+              <pomInclude>projects/*/*pom.xml</pomInclude>
+            </pomIncludes>
+            <cloneProjectsTo>${project.build.directory}/it</cloneProjectsTo>
+            <postBuildHookScript>verify</postBuildHookScript>
+            <debug>false</debug>
+            <goals>
+              <goal>clean</goal>
+              <goal>install</goal>
+              <goal>org.apache.maven.plugins:maven-enforcer-plugin:${maven-enforcer-plugin.version}:enforce</goal>
+            </goals>
+          </configuration>
+        </plugin>
+        
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-javadoc-plugin</artifactId>
+          <version>${maven-javadoc-plugin.version}</version>
+        </plugin>
+        
+        <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-release-plugin</artifactId>
-          <version>2.3</version>
+          <version>${maven-release-plugin.version}</version>
           <configuration>
             <mavenExecutorId>forked-path</mavenExecutorId>
             <useReleaseProfile>false</useReleaseProfile>
             <arguments>-Pdeploy-to-sonatype-oss</arguments>
           </configuration>
         </plugin>
+        
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-source-plugin</artifactId>
+          <version>${maven-source-plugin.version}</version>
+          <executions>
+            <execution>
+              <id>attach-sources</id>
+              <goals>
+                <goal>jar-no-fork</goal>
+              </goals>
+            </execution>
+          </executions>
+        </plugin>
       </plugins>
     </pluginManagement>
+    
     <plugins>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-compiler-plugin</artifactId>
-        <version>2.3.2</version>
-        <configuration>
-          <source>1.7</source>
-          <target>1.7</target>
-        </configuration>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-source-plugin</artifactId>
-        <version>2.1.2</version>
+        <artifactId>maven-enforcer-plugin</artifactId>
         <executions>
           <execution>
-            <id>attach-sources</id>
+            <id>be-pedantic</id>
+            <phase>initialize</phase>
             <goals>
-              <goal>jar-no-fork</goal>
+              <goal>enforce</goal>
             </goals>
           </execution>
         </executions>
-      </plugin>
+       </plugin>
+       
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-invoker-plugin</artifactId>
-        <version>1.5</version>
-        <configuration>
-          <projectsDirectory>src/it</projectsDirectory>
-          <cloneProjectsTo>${project.build.directory}/it</cloneProjectsTo>
-          <postBuildHookScript>verify</postBuildHookScript>
-          <localRepositoryPath>${project.build.directory}/local-repo</localRepositoryPath>
-          <settingsFile>src/it/settings.xml</settingsFile>
-          <debug>false</debug>
-          <!-- properties> <allowReleasePluginSnapshot>true</allowReleasePluginSnapshot> <dryRun>true</dryRun> </properties -->
-        </configuration>
         <executions>
           <execution>
             <id>integration-test-prepare</id>
-            <configuration>
-              <!-- setupIncludes> <setupInclude>setup/*/pom.xml</setupInclude> </setupIncludes -->
-              <pomIncludes>
-                <pomInclude>projects/*/*pom.xml</pomInclude>
-              </pomIncludes>
-              <goals>
-                <goal>clean</goal>
-                <goal>install</goal>
-                <goal>org.apache.maven.plugins:maven-enforcer-plugin:${maven-enforcer-plugin.version}:enforce</goal>
-              </goals>
-            </configuration>
             <goals>
               <goal>install</goal>
               <goal>run</goal>
             </goals>
           </execution>
         </executions>
-      </plugin>
-      <plugin>
-        <groupId>com.mycila.maven-license-plugin</groupId>
-        <artifactId>maven-license-plugin</artifactId>
-        <version>${maven-license-plugin.version}</version>
-        <configuration>
-          <header>${basedir}/src/etc/header.txt</header>
-          <strictCheck>true</strictCheck>
-          <mapping>
-            <java>SLASHSTAR_STYLE</java>
-          </mapping>
-          <includes>
-            <include>src/main/**</include>
-            <include>src/test/java/**</include>
-          </includes>
-        </configuration>
       </plugin>
     </plugins>
   </build>
@@ -235,7 +300,6 @@
           <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-javadoc-plugin</artifactId>
-            <version>2.8.1</version>
             <executions>
               <execution>
                 <id>attach-javadocs</id>
@@ -248,7 +312,6 @@
           <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-gpg-plugin</artifactId>
-            <version>1.4</version>
             <executions>
               <execution>
                 <id>sign-artifacts</id>
