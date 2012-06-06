@@ -63,9 +63,6 @@
   </distributionManagement>
 
   <properties>
-    <!-- Previous released version of this project. Used to validate this POM file. -->
-    <previous.version>1.0-alpha-2</previous.version>
-    
     <!-- Plugin versions. -->
     <maven-license-plugin.version>1.9.0</maven-license-plugin.version>
     <maven-compiler-plugin.version>2.3.2</maven-compiler-plugin.version>
@@ -180,28 +177,6 @@
         
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-enforcer-plugin</artifactId>
-          <version>${maven-enforcer-plugin.version}</version>
-          <configuration>
-            <rules>
-              <compound implementation="com.github.ferstl.maven.pomenforcers.CompoundPedanticEnforcer">
-                <!-- Enforcers -->
-                <enforcers>POM_SECTION_ORDER,DEPENDENCY_MANAGEMENT_ORDER,DEPENDENCY_ORDER,PLUGIN_MANAGEMENT_ORDER</enforcers>
-              </compound>
-            </rules>
-            <fail>true</fail>
-          </configuration>
-          <dependencies>
-            <dependency>
-              <groupId>com.github.ferstl</groupId>
-              <artifactId>pedantic-pom-enforcers</artifactId>
-              <version>${previous.version}</version>
-            </dependency>
-          </dependencies>
-        </plugin>
-        
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-gpg-plugin</artifactId>
           <version>${maven-gpg-plugin.version}</version>
         </plugin>
@@ -311,30 +286,5 @@
         </plugins>
       </build>
     </profile>
-    
-    <profile>
-      <id>self-enforce</id>
-      <activation>
-        <activeByDefault>false</activeByDefault>
-      </activation>
-      <build>
-        <plugins>
-          <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-enforcer-plugin</artifactId>
-            <executions>
-              <execution>
-                <id>be-pedantic</id>
-                <phase>initialize</phase>
-                <goals>
-                  <goal>enforce</goal>
-                </goals>
-              </execution>
-            </executions>
-          </plugin>
-        </plugins>
-      </build>
-    </profile>
   </profiles>
-  
 </project>
