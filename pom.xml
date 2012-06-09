@@ -175,6 +175,31 @@
           </configuration>
         </plugin>
         
+        <!-- Obey the own rules!
+             (Has to be disabled because the maven-release-plugin doesn't like depending on the
+             artifact which it is releasing.
+             And no, putting it into an inactive profile doesn't work either -->
+        <!-- plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-enforcer-plugin</artifactId>
+          <version>1.0.1</version>
+          <configuration>
+            <rules>
+              <compound implementation="com.github.ferstl.maven.pomenforcers.CompoundPedanticEnforcer">
+                <enforcers>POM_SECTION_ORDER,DEPENDENCY_MANAGEMENT_ORDER,DEPENDENCY_ORDER,PLUGIN_MANAGEMENT_ORDER</enforcers>
+              </compound>
+            </rules>
+            <fail>true</fail>
+          </configuration>
+          <dependencies>
+            <dependency>
+              <groupId>com.github.ferstl</groupId>
+              <artifactId>pedantic-pom-enforcers</artifactId>
+              <version>${project.version}</version>
+            </dependency>
+          </dependencies>
+        </plugin-->
+        
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-gpg-plugin</artifactId>
