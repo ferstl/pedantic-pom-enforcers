@@ -58,8 +58,8 @@ public class PedanticPomSectionOrderEnforcer extends AbstractPedanticEnforcer {
     log.info("Enforcing correct POM section order.");
     log.info("  -> Section priorities: " + CommaSeparatorUtils.join(this.sectionPriorities));
 
-    // Get the declared POM sections
-    NodeList childNodes = pom.getFirstChild().getChildNodes();
+    Node firstChild = getProjectRoot(pom);
+    NodeList childNodes = firstChild.getChildNodes();
     ArrayList<PomSection> pomSections = Lists.newArrayList();
     for (int i = 0; i < childNodes.getLength(); i++) {
       Node node = childNodes.item(i);
@@ -82,6 +82,23 @@ public class PedanticPomSectionOrderEnforcer extends AbstractPedanticEnforcer {
       throw new EnforcerRuleException("One does not simply write a POM file! "
         + "Your POM file has to be organized this way: " + sortedPomSections);
     }
+  }
+
+  /**
+   * Gets the <code>&lt;project&gt;</code> node from the given POM file.
+   * @param pom POM document.
+   * @return The <code>&lt;project&gt;</code> node or <code>null</code> if not found.
+   */
+  private Node getProjectRoot(Document pom) {
+    Node node = pom.getFirstChild();
+    do {
+      if ("project".equals(node.getNodeName())) {
+        break;
+      } else {
+        node = node.getNextSibling();
+      }
+    } while (node.getNextSibling() != null);
+    return node;
   }
 
   @Override

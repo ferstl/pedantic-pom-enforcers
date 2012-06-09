@@ -1,0 +1,33 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion/>
+  <prerequisites/>
+  <parent/>
+  <groupId/>
+  <artifactId/>
+  <version/>
+  <packaging/>
+  <name/>
+  <description/>
+  <url/>
+  <licenses/>
+  <organization/>
+  <inceptionYear/>
+  <ciManagement/>
+  <mailingLists/>
+  <issueManagement/>
+  <developers/>
+  <contributors/>
+  <scm/>
+  <repositories/>
+  <pluginRepositories/>
+  <distributionManagement/>
+  <modules/>
+  <properties/>
+  <dependencyManagement/>
+  <dependencies/>
+  <build/>
+  <profiles/>
+  <reporting/>
+  <reports/>
+</project>
