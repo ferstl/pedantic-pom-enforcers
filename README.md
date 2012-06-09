@@ -20,7 +20,7 @@ To activate the *Pedantic POM enforcers*, just declare them in the configuration
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-enforcer-plugin</artifactId>
-          <version>1.0.1</version>
+          <version>1.1</version>
           <configuration>
             <rules>
               <compound implementation="com.github.ferstl.maven.pomenforcers.CompoundPedanticEnforcer">
