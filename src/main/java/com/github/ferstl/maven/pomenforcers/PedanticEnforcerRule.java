@@ -47,6 +47,12 @@ public enum PedanticEnforcerRule {
     public AbstractPedanticEnforcer createEnforcerRule() {
       return new PedanticPluginManagementOrderEnforcer();
     }
+  },
+  PLUGIN_CONFIGURATION {
+    @Override
+    public AbstractPedanticEnforcer createEnforcerRule() {
+      return new PedanticPluginConfigurationEnforcer();
+    }
   };
 
   public abstract AbstractPedanticEnforcer createEnforcerRule();
