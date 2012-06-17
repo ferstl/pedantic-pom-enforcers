@@ -34,8 +34,7 @@ public class PedanticPluginConfigurationEnforcer extends AbstractPedanticEnforce
 
     if (versionedPlugins.size() != 0) {
       throw new EnforcerRuleException("One does not simply declare plugin versions! "
-          + "The versions of these plugins have to be configured in the <pluginManagement> section: "
-          + versionedPlugins);
+          + "Use <pluginManagement> to declare the version of these plugins: " + versionedPlugins);
     }
   }
 
