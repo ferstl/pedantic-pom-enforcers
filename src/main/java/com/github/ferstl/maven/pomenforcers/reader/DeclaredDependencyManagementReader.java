@@ -52,7 +52,7 @@ public class DeclaredDependencyManagementReader extends AbstractPomSectionReader
 
   @Override
   protected List<Dependency> getUndeclaredSection() {
-    return Lists.newArrayList();
+    return Lists.newArrayListWithCapacity(0);
   }
 
 }

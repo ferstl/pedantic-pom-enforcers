@@ -56,6 +56,6 @@ public class DeclaredPluginManagementReader extends AbstractPomSectionReader<Lis
 
   @Override
   protected List<Plugin> getUndeclaredSection() {
-    return Lists.newArrayList();
+    return Lists.newArrayListWithCapacity(0);
   }
 }

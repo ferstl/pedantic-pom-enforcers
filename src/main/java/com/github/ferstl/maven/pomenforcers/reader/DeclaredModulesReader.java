@@ -50,6 +50,6 @@ public class DeclaredModulesReader extends AbstractPomSectionReader<List<String>
 
   @Override
   protected List<String> getUndeclaredSection() {
-    return Lists.newArrayList();
+    return Lists.newArrayListWithCapacity(0);
   }
 }
