@@ -105,8 +105,7 @@ public class PedanticPluginManagementOrderEnforcer extends AbstractPedanticEnfor
     Ordering<Plugin> pluginOrdering = this.artifactSorter.createOrdering();
 
     if (!pluginOrdering.isOrdered(managedPlugins)) {
-      ImmutableList<Plugin> sortedDependencies =
-          pluginOrdering.immutableSortedCopy(managedPlugins);
+      ImmutableList<Plugin> sortedDependencies = pluginOrdering.immutableSortedCopy(managedPlugins);
       throw new EnforcerRuleException("One does not simply declare plugin management! "
           + "Your plugin management has to be ordered this way:" + sortedDependencies);
     }
