@@ -68,7 +68,7 @@
     <maven-compiler-plugin.version>2.3.2</maven-compiler-plugin.version>
     <maven-enforcer-plugin.version>1.1</maven-enforcer-plugin.version>
     <maven-gpg-plugin.version>1.4</maven-gpg-plugin.version>
-    <maven-invoker-plugin.version>1.5</maven-invoker-plugin.version>
+    <maven-invoker-plugin.version>1.6</maven-invoker-plugin.version>
     <maven-javadoc-plugin.version>2.8.1</maven-javadoc-plugin.version>
     <maven-release-plugin.version>2.3</maven-release-plugin.version>
     <maven-source-plugin.version>2.1.2</maven-source-plugin.version>
@@ -219,7 +219,7 @@
             </pomIncludes>
             <cloneProjectsTo>${project.build.directory}/it</cloneProjectsTo>
             <postBuildHookScript>verify</postBuildHookScript>
-            <debug>false</debug>
+            <debug>true</debug>
             <goals>
               <goal>clean</goal>
               <goal>install</goal>
