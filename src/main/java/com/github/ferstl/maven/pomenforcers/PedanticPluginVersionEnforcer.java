@@ -12,14 +12,7 @@ import com.github.ferstl.maven.pomenforcers.reader.DeclaredPluginsReader;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
 
-// project.getParent().getFile() == null, if parent POM not available (i.e. in local repo)
-// project.getParent() != null, if there is a parent
-//
-// rule: if project has a parent
-//       -> plugin version has to be declared in parent's <pluginManagement>
-//       -> plugin configuration has to be defined in parent's <pluginManagement>
-//          EXCEPT the configuration is declared in within an <execution>
-public class PedanticPluginConfigurationEnforcer extends AbstractPedanticEnforcer {
+public class PedanticPluginVersionEnforcer extends AbstractPedanticEnforcer {
 
   @Override
   protected void doEnforce(EnforcerRuleHelper helper, Document pom) throws EnforcerRuleException {

@@ -179,7 +179,7 @@ public class CompoundPedanticEnforcer extends AbstractPedanticEnforcer {
     }
 
     @Override
-    public void visit(PedanticPluginConfigurationEnforcer pedanticPluginConfigurationEnforcer) {
+    public void visit(PedanticPluginVersionEnforcer pedanticPluginVersionEnforcer) {
       // TODO Auto-generated method stub
 
     }

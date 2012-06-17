@@ -28,7 +28,7 @@
           <rules>
             <compound implementation="com.github.ferstl.maven.pomenforcers.CompoundPedanticEnforcer">
               <!-- Enforcers -->
-              <enforcers>POM_SECTION_ORDER,MODULE_ORDER,DEPENDENCY_MANAGEMENT_ORDER,DEPENDENCY_ORDER,PLUGIN_MANAGEMENT_ORDER,PLUGIN_CONFIGURATION</enforcers>
+              <enforcers>POM_SECTION_ORDER,MODULE_ORDER,DEPENDENCY_MANAGEMENT_ORDER,DEPENDENCY_ORDER,PLUGIN_MANAGEMENT_ORDER,PLUGIN_VERSION</enforcers>
             
               <!-- Module order -->
               <moduleOrderIgnores>module3,module4</moduleOrderIgnores>
