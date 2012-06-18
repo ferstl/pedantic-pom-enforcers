@@ -55,3 +55,5 @@ These are the currently available *Pedantic POM Enforcers*. The ID is required b
 | `PedanticDependencyManagementOrderEnforcer` | `DEPENDENCY_MANAGEMENT_ORDER` | Enforces that the dependencies in your `<dependencyManagement>` are ordered. |
 | `PedanticDependencyOrderEnforcer` | `DEPENDENCY_ORDER` | Enforces that your `<dependencies>` are ordered.|
 | `PedanticPluginManagementOrderEnforcer` | `PLUGIN_MANAGEMENT_ORDER` | Enforces that the plugins in your `<pluginManagement>` are ordered. |
+| `PedanticPluginVersionEnforcer` | `PLUGIN_VERSION` | Enforces that plugin versions may only be declared in `<pluginManagement>` but not in <plugins>. |
+| `PedanticPluginManagementLocationEnforcer` | `PLUGIN_MANAGEMENT_LOCATION` | Enforces that `<pluginManagement>` may only be declared in specific POMs. |

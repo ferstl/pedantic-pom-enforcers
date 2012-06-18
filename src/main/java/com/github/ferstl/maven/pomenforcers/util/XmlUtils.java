@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.ferstl.maven.pomenforcers;
+package com.github.ferstl.maven.pomenforcers.util;
 
 import java.io.File;
 import java.io.IOException;
@@ -21,17 +21,25 @@ import java.io.IOException;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.xpath.XPath;
+import javax.xml.xpath.XPathConstants;
+import javax.xml.xpath.XPathExpression;
+import javax.xml.xpath.XPathExpressionException;
+import javax.xml.xpath.XPathFactory;
 
 import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 import org.xml.sax.SAXException;
 
-public final class XmlParser {
+public final class XmlUtils {
 
-  private static final DocumentBuilder docBuilder;
+  private static final DocumentBuilder DOC_BUILDER;
+  private static final XPath XPATH;
 
   static {
+    XPATH = XPathFactory.newInstance().newXPath();
     try {
-      docBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+      DOC_BUILDER = DocumentBuilderFactory.newInstance().newDocumentBuilder();
     } catch (ParserConfigurationException e) {
       throw new IllegalStateException("Cannot create document builder", e);
     }
@@ -42,11 +50,20 @@ public final class XmlParser {
       throw new IllegalArgumentException("File " + file + " does not exist.");
     }
     try {
-      return docBuilder.parse(file);
+      return DOC_BUILDER.parse(file);
     } catch (SAXException | IOException e) {
       throw new IllegalStateException("Unable to parse XML file " + file, e);
     }
   }
 
-  private XmlParser() {}
+  public static Element evaluateXPath(String expression, Document document) {
+    try {
+      XPathExpression compiledExpression = XPATH.compile(expression);
+      return (Element) compiledExpression.evaluate(document, XPathConstants.NODE);
+    } catch (XPathExpressionException e) {
+      throw new IllegalArgumentException("Cannot evaluate XPath expression '" + expression + "'");
+    }
+  }
+
+  private XmlUtils() {}
 }

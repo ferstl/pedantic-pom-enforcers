@@ -31,8 +31,8 @@ import org.w3c.dom.Document;
 
 import com.github.ferstl.maven.pomenforcers.AbstractPedanticDependencyOrderEnforcer;
 import com.github.ferstl.maven.pomenforcers.PedanticDependencyOrderEnforcer;
-import com.github.ferstl.maven.pomenforcers.XmlParser;
 import com.github.ferstl.maven.pomenforcers.reader.DeclaredDependenciesReader;
+import com.github.ferstl.maven.pomenforcers.util.XmlUtils;
 import com.google.common.collect.Lists;
 
 
@@ -52,7 +52,7 @@ public class PedanticDependencyOrderEnforcerTest {
 
   @Before
   public void setUp() throws Exception {
-    Document allDepsPom = XmlParser.parseXml(ALL_DEPENDENCIES_FILE);
+    Document allDepsPom = XmlUtils.parseXml(ALL_DEPENDENCIES_FILE);
 
     // Read all dependencies and convert them to artifacts (classifier = "", ArtifactHandler = null)
     List<Dependency> allDeps = new DeclaredDependenciesReader(allDepsPom).read();

@@ -219,7 +219,7 @@
             </pomIncludes>
             <cloneProjectsTo>${project.build.directory}/it</cloneProjectsTo>
             <postBuildHookScript>verify</postBuildHookScript>
-            <debug>true</debug>
+            <debug>false</debug>
             <goals>
               <goal>clean</goal>
               <goal>install</goal>

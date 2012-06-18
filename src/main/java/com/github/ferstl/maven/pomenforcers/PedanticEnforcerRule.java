@@ -53,6 +53,12 @@ public enum PedanticEnforcerRule {
     public AbstractPedanticEnforcer createEnforcerRule() {
       return new PedanticPluginVersionEnforcer();
     }
+  },
+  PLUGIN_MANAGEMENT_LOCATION {
+    @Override
+    public AbstractPedanticEnforcer createEnforcerRule() {
+      return new PedanticPluginManagementLocationEnforcer();
+    }
   };
 
   public abstract AbstractPedanticEnforcer createEnforcerRule();

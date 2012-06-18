@@ -17,10 +17,6 @@ package com.github.ferstl.maven.pomenforcers.reader;
 
 import java.util.List;
 
-import javax.xml.xpath.XPath;
-import javax.xml.xpath.XPathExpression;
-import javax.xml.xpath.XPathExpressionException;
-
 import org.apache.maven.artifact.DefaultArtifact;
 import org.apache.maven.model.Dependency;
 import org.w3c.dom.Document;
@@ -39,8 +35,8 @@ public class DeclaredDependencyManagementReader extends AbstractPomSectionReader
   }
 
   @Override
-  protected XPathExpression createXPathExpression(XPath xpath) throws XPathExpressionException {
-    return xpath.compile(DEPENDENCY_MANAGEMENT_XPATH);
+  protected String getXPathExpression() {
+    return DEPENDENCY_MANAGEMENT_XPATH;
   }
 
   @Override

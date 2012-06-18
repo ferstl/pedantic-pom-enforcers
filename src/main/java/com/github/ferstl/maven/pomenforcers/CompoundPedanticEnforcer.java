@@ -24,6 +24,7 @@ import org.w3c.dom.Document;
 
 import com.github.ferstl.maven.pomenforcers.util.CommaSeparatorUtils;
 import com.github.ferstl.maven.pomenforcers.util.EnforcerRuleUtils;
+import com.github.ferstl.maven.pomenforcers.util.XmlUtils;
 import com.google.common.base.Function;
 import com.google.common.base.Strings;
 import com.google.common.collect.Sets;
@@ -70,6 +71,9 @@ public class CompoundPedanticEnforcer extends AbstractPedanticEnforcer {
   /** See {@link PedanticPluginManagementOrderEnforcer#setArtifactIdPriorities(String)}.*/
   private String pluginManagementArtifactIdPriorities;
 
+  /** See {@link PedanticPluginManagementLocationEnforcer#setPluginManagingPoms(String)}. */
+  public String pluginManagingPoms;
+
   /** Collection of enforcers to execute. */
   private final Collection<PedanticEnforcerRule> enforcers;
 
@@ -92,7 +96,7 @@ public class CompoundPedanticEnforcer extends AbstractPedanticEnforcer {
   @Override
   public void execute(EnforcerRuleHelper helper) throws EnforcerRuleException {
     MavenProject project = EnforcerRuleUtils.getMavenProject(helper);
-    Document pom = XmlParser.parseXml(project.getFile());
+    Document pom = XmlUtils.parseXml(project.getFile());
     doEnforce(helper, pom);
   }
 
@@ -113,82 +117,80 @@ public class CompoundPedanticEnforcer extends AbstractPedanticEnforcer {
   private class PropertyInitializationVisitor implements PedanticEnforcerVisitor {
 
     @Override
-    public void visit(PedanticPomSectionOrderEnforcer sectionOrderEnforcer) {
+    public void visit(PedanticPomSectionOrderEnforcer enforcer) {
       if (!Strings.isNullOrEmpty(CompoundPedanticEnforcer.this.pomSectionPriorities)) {
-        sectionOrderEnforcer.setSectionPriorities(CompoundPedanticEnforcer.this.pomSectionPriorities);
+        enforcer.setSectionPriorities(CompoundPedanticEnforcer.this.pomSectionPriorities);
       }
     }
 
     @Override
-    public void visit(PedanticModuleOrderEnforcer moduleOrderEnforcer) {
+    public void visit(PedanticModuleOrderEnforcer enforcer) {
       if (!Strings.isNullOrEmpty(CompoundPedanticEnforcer.this.moduleOrderIgnores)) {
-        moduleOrderEnforcer.setIgnoredModules(CompoundPedanticEnforcer.this.moduleOrderIgnores);
+        enforcer.setIgnoredModules(CompoundPedanticEnforcer.this.moduleOrderIgnores);
       }
     }
 
     @Override
-    public void visit(PedanticDependencyManagementOrderEnforcer dependencyManagementOrderEnforcer) {
+    public void visit(PedanticDependencyManagementOrderEnforcer enforcer) {
       if (!Strings.isNullOrEmpty(CompoundPedanticEnforcer.this.dependencyManagementOrderBy)) {
-        dependencyManagementOrderEnforcer.setOrderBy(
-            CompoundPedanticEnforcer.this.dependencyManagementOrderBy);
+        enforcer.setOrderBy(CompoundPedanticEnforcer.this.dependencyManagementOrderBy);
       }
       if (!Strings.isNullOrEmpty(CompoundPedanticEnforcer.this.dependencyManagementGroupIdPriorities)) {
-        dependencyManagementOrderEnforcer.setGroupIdPriorities(
-            CompoundPedanticEnforcer.this.dependencyManagementGroupIdPriorities);
+        enforcer.setGroupIdPriorities(CompoundPedanticEnforcer.this.dependencyManagementGroupIdPriorities);
       }
       if (!Strings.isNullOrEmpty(CompoundPedanticEnforcer.this.dependencyManagementArtifactIdPriorities)) {
-        dependencyManagementOrderEnforcer.setArtifactIdPriorities(
-            CompoundPedanticEnforcer.this.dependencyManagementArtifactIdPriorities);
+        enforcer.setArtifactIdPriorities(CompoundPedanticEnforcer.this.dependencyManagementArtifactIdPriorities);
       }
       if (!Strings.isNullOrEmpty(CompoundPedanticEnforcer.this.dependencyManagementScopePriorities)) {
-        dependencyManagementOrderEnforcer.setScopePriorities(
-            CompoundPedanticEnforcer.this.dependencyManagementScopePriorities);
+        enforcer.setScopePriorities(CompoundPedanticEnforcer.this.dependencyManagementScopePriorities);
       }
     }
 
     @Override
-    public void visit(PedanticDependencyOrderEnforcer dependencyOrderEnforcer) {
+    public void visit(PedanticDependencyOrderEnforcer enforcer) {
       if (!Strings.isNullOrEmpty(CompoundPedanticEnforcer.this.dependenciesOrderBy)) {
-        dependencyOrderEnforcer.setOrderBy(CompoundPedanticEnforcer.this.dependenciesOrderBy);
+        enforcer.setOrderBy(CompoundPedanticEnforcer.this.dependenciesOrderBy);
       }
       if (!Strings.isNullOrEmpty(CompoundPedanticEnforcer.this.dependenciesGroupIdPriorities)) {
-        dependencyOrderEnforcer.setGroupIdPriorities(CompoundPedanticEnforcer.this.dependenciesGroupIdPriorities);
+        enforcer.setGroupIdPriorities(CompoundPedanticEnforcer.this.dependenciesGroupIdPriorities);
       }
       if (!Strings.isNullOrEmpty(CompoundPedanticEnforcer.this.dependenciesArtifactIdPriorities)) {
-        dependencyOrderEnforcer.setArtifactIdPriorities(
-            CompoundPedanticEnforcer.this.dependenciesArtifactIdPriorities);
+        enforcer.setArtifactIdPriorities(CompoundPedanticEnforcer.this.dependenciesArtifactIdPriorities);
       }
       if (!Strings.isNullOrEmpty(CompoundPedanticEnforcer.this.dependenciesScopePriorities)) {
-        dependencyOrderEnforcer.setScopePriorities(CompoundPedanticEnforcer.this.dependenciesScopePriorities);
+        enforcer.setScopePriorities(CompoundPedanticEnforcer.this.dependenciesScopePriorities);
       }
     }
 
     @Override
-    public void visit(PedanticPluginManagementOrderEnforcer pluginManagementOrderEnforcer) {
+    public void visit(PedanticPluginManagementOrderEnforcer enforcer) {
       if (!Strings.isNullOrEmpty(CompoundPedanticEnforcer.this.pluginManagementOrderBy)) {
-        pluginManagementOrderEnforcer.setOrderBy(CompoundPedanticEnforcer.this.pluginManagementOrderBy);
+        enforcer.setOrderBy(CompoundPedanticEnforcer.this.pluginManagementOrderBy);
       }
       if (!Strings.isNullOrEmpty(CompoundPedanticEnforcer.this.pluginManagementGroupIdPriorities)) {
-        pluginManagementOrderEnforcer.setGroupIdPriorities(
-            CompoundPedanticEnforcer.this.pluginManagementGroupIdPriorities);
+        enforcer.setGroupIdPriorities(CompoundPedanticEnforcer.this.pluginManagementGroupIdPriorities);
       }
       if (!Strings.isNullOrEmpty(CompoundPedanticEnforcer.this.pluginManagementArtifactIdPriorities)) {
-        pluginManagementOrderEnforcer.setArtifactIdPriorities(
-            CompoundPedanticEnforcer.this.pluginManagementArtifactIdPriorities);
+        enforcer.setArtifactIdPriorities(CompoundPedanticEnforcer.this.pluginManagementArtifactIdPriorities);
       }
     }
 
     @Override
-    public void visit(PedanticPluginVersionEnforcer pedanticPluginVersionEnforcer) {
-      // TODO Auto-generated method stub
-
-    }
-
-    @Override
-    public void visit(CompoundPedanticEnforcer compoundEnforcer) {
+    public void visit(PedanticPluginVersionEnforcer enforcer) {
       // nothing to do.
     }
 
+    @Override
+    public void visit(PedanticPluginManagementLocationEnforcer enforcer) {
+      if (!Strings.isNullOrEmpty(CompoundPedanticEnforcer.this.pluginManagingPoms)) {
+        enforcer.setPluginManagingPoms(CompoundPedanticEnforcer.this.pluginManagingPoms);
+      }
+    }
+
+    @Override
+    public void visit(CompoundPedanticEnforcer enforcer) {
+      // nothing to do.
+    }
   }
 
 }

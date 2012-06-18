@@ -22,6 +22,7 @@ import org.apache.maven.project.MavenProject;
 import org.w3c.dom.Document;
 
 import com.github.ferstl.maven.pomenforcers.util.EnforcerRuleUtils;
+import com.github.ferstl.maven.pomenforcers.util.XmlUtils;
 
 
 
@@ -31,7 +32,7 @@ public abstract class AbstractPedanticEnforcer implements EnforcerRule {
   public void execute(EnforcerRuleHelper helper) throws EnforcerRuleException {
     // Read the POM
     MavenProject project = EnforcerRuleUtils.getMavenProject(helper);
-    Document pom = XmlParser.parseXml(project.getFile());
+    Document pom = XmlUtils.parseXml(project.getFile());
 
     // Enforce
     doEnforce(helper, pom);

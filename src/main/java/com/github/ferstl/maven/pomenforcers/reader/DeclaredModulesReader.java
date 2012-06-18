@@ -17,10 +17,6 @@ package com.github.ferstl.maven.pomenforcers.reader;
 
 import java.util.List;
 
-import javax.xml.xpath.XPath;
-import javax.xml.xpath.XPathExpression;
-import javax.xml.xpath.XPathExpressionException;
-
 import org.w3c.dom.Document;
 
 import com.google.common.collect.Lists;
@@ -38,8 +34,8 @@ public class DeclaredModulesReader extends AbstractPomSectionReader<List<String>
   }
 
   @Override
-  protected XPathExpression createXPathExpression(XPath xpath) throws XPathExpressionException {
-    return xpath.compile(MODULES_XPATH);
+  protected String getXPathExpression() {
+    return MODULES_XPATH;
   }
 
   @Override

@@ -17,6 +17,7 @@
   <properties>
     <dependencies.orderBy>scope,groupId,artifactId</dependencies.orderBy>
     <dependencies.groupIdPriorities>com.github.ferstl,commons-</dependencies.groupIdPriorities>
+    <pluginManagingPoms>${project.groupId}:example-settings-it,${project.groupId}:module1</pluginManagingPoms>
     <plugins.orderBy>groupId,artifactId</plugins.orderBy>
     <plugins.groupIdPriorities>org.apache.maven.plugins</plugins.groupIdPriorities>
   </properties>
@@ -91,7 +92,7 @@
           <rules>
             <compound implementation="com.github.ferstl.maven.pomenforcers.CompoundPedanticEnforcer">
               <!-- Enforcers -->
-              <enforcers>POM_SECTION_ORDER,MODULE_ORDER,DEPENDENCY_MANAGEMENT_ORDER,DEPENDENCY_ORDER,PLUGIN_MANAGEMENT_ORDER,PLUGIN_VERSION</enforcers>
+              <enforcers>POM_SECTION_ORDER,MODULE_ORDER,DEPENDENCY_MANAGEMENT_ORDER,DEPENDENCY_ORDER,PLUGIN_MANAGEMENT_ORDER,PLUGIN_VERSION,PLUGIN_MANAGEMENT_LOCATION</enforcers>
             
               <!-- Module order -->
               <moduleOrderIgnores>module3,module4</moduleOrderIgnores>
@@ -107,6 +108,11 @@
               <!-- Plugin Management Order -->
               <pluginManagementOrderBy>${plugins.orderBy}</pluginManagementOrderBy>
               <pluginManagementGroupIdPriorities>${plugins.groupIdPriorities}</pluginManagementGroupIdPriorities>
+              
+              <!-- Plugin Management Location -->
+              <!-- Note that properties get resolved in sub modules as well.
+                   Defining ${groupId}:${artifactId} will allow each POM to declare pluginManagement -->
+              <pluginManagingPoms>${pluginManagingPoms}</pluginManagingPoms>
             </compound>
           </rules>
           <fail>true</fail>
