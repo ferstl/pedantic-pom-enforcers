@@ -72,7 +72,13 @@ public class CompoundPedanticEnforcer extends AbstractPedanticEnforcer {
   private String pluginManagementArtifactIdPriorities;
 
   /** See {@link PedanticPluginManagementLocationEnforcer#setPluginManagingPoms(String)}. */
-  public String pluginManagingPoms;
+  private String pluginManagingPoms;
+
+  /** See {@link PedanticPluginConfigurationEnforcer#managePluginVersions} */
+  private Boolean managePluginVersions;
+
+  /** See {@link PedanticPluginConfigurationEnforcer#managePluginConfigurations} */
+  private Boolean managePluginConfigurations;
 
   /** Collection of enforcers to execute. */
   private final Collection<PedanticEnforcerRule> enforcers;
@@ -176,8 +182,13 @@ public class CompoundPedanticEnforcer extends AbstractPedanticEnforcer {
     }
 
     @Override
-    public void visit(PedanticPluginVersionEnforcer enforcer) {
-      // nothing to do.
+    public void visit(PedanticPluginConfigurationEnforcer enforcer) {
+      if (CompoundPedanticEnforcer.this.managePluginVersions != null) {
+        enforcer.setManageVersions(CompoundPedanticEnforcer.this.managePluginVersions);
+      }
+      if (CompoundPedanticEnforcer.this.managePluginConfigurations != null) {
+        enforcer.setManageConfigurations(CompoundPedanticEnforcer.this.managePluginConfigurations);
+      }
     }
 
     @Override

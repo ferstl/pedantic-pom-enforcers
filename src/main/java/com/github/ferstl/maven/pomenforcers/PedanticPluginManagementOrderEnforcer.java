@@ -28,7 +28,8 @@ import org.w3c.dom.Document;
 import com.github.ferstl.maven.pomenforcers.artifact.ArtifactSorter;
 import com.github.ferstl.maven.pomenforcers.artifact.PluginElement;
 import com.github.ferstl.maven.pomenforcers.artifact.PluginMatcher;
-import com.github.ferstl.maven.pomenforcers.reader.DeclaredPluginManagementReader;
+import com.github.ferstl.maven.pomenforcers.reader.DeclaredPluginsReader;
+import com.github.ferstl.maven.pomenforcers.reader.XPathExpressions;
 import com.github.ferstl.maven.pomenforcers.util.CommaSeparatorUtils;
 import com.github.ferstl.maven.pomenforcers.util.EnforcerRuleUtils;
 import com.google.common.base.Function;
@@ -98,7 +99,7 @@ public class PedanticPluginManagementOrderEnforcer extends AbstractPedanticEnfor
            + CommaSeparatorUtils.join(this.artifactSorter.getPriorities(PluginElement.ARTIFACT_ID)));
 
     Collection<Plugin> declaredPluginManagement =
-        new DeclaredPluginManagementReader(pom).read();
+        new DeclaredPluginsReader(pom).read(XPathExpressions.POM_MANAGED_PLUGINS);
 
     Collection<Plugin> managedPlugins = matchPlugins(declaredPluginManagement, project.getPluginManagement().getPlugins());
 

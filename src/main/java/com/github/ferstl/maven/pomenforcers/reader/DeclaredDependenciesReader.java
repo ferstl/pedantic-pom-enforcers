@@ -26,17 +26,11 @@ import com.thoughtworks.xstream.XStream;
 
 public class DeclaredDependenciesReader extends AbstractPomSectionReader<List<Dependency>> {
 
-  private static final String DEPENDENCIES_XPATH = "/project/dependencies";
   private static final String DEPENDENCIES_ALIAS = "dependencies";
   private static final String DEPENDENCY_ALIAS = "dependency";
 
   public DeclaredDependenciesReader(Document pom) {
     super(pom);
-  }
-
-  @Override
-  protected String getXPathExpression() {
-    return DEPENDENCIES_XPATH;
   }
 
   @Override

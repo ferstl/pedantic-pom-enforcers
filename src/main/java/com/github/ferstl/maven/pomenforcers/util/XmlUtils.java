@@ -18,6 +18,7 @@ package com.github.ferstl.maven.pomenforcers.util;
 import java.io.File;
 import java.io.IOException;
 
+import javax.xml.namespace.QName;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -29,6 +30,8 @@ import javax.xml.xpath.XPathFactory;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 public final class XmlUtils {
@@ -56,10 +59,32 @@ public final class XmlUtils {
     }
   }
 
-  public static Element evaluateXPath(String expression, Document document) {
+  public static Element evaluateXPathAsElement(String expression, Document document) {
+    return evaluateXpath(expression, document, XPathConstants.NODE);
+  }
+
+  public static NodeList evaluateXPathAsNodeList(String expression, Document document) {
+    return evaluateXpath(expression, document, XPathConstants.NODESET);
+  }
+
+  public static Document createDocument(String root, NodeList content) {
+    Document document = DOC_BUILDER.newDocument();
+    Element rootElement = document.createElement(root);
+    document.appendChild(rootElement);
+
+    for (int i = 0; i < content.getLength(); i++) {
+      Node item = content.item(i);
+      item = document.adoptNode(item.cloneNode(true));
+      rootElement.appendChild(item);
+    }
+    return document;
+  }
+
+  @SuppressWarnings("unchecked")
+  private static <T> T evaluateXpath(String expression, Document document, QName dataType) {
     try {
       XPathExpression compiledExpression = XPATH.compile(expression);
-      return (Element) compiledExpression.evaluate(document, XPathConstants.NODE);
+      return (T) compiledExpression.evaluate(document, dataType);
     } catch (XPathExpressionException e) {
       throw new IllegalArgumentException("Cannot evaluate XPath expression '" + expression + "'");
     }

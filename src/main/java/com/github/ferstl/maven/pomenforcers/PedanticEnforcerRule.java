@@ -48,10 +48,10 @@ public enum PedanticEnforcerRule {
       return new PedanticPluginManagementOrderEnforcer();
     }
   },
-  PLUGIN_VERSION {
+  PLUGIN_CONFIGURATION {
     @Override
     public AbstractPedanticEnforcer createEnforcerRule() {
-      return new PedanticPluginVersionEnforcer();
+      return new PedanticPluginConfigurationEnforcer();
     }
   },
   PLUGIN_MANAGEMENT_LOCATION {

@@ -25,17 +25,11 @@ import com.thoughtworks.xstream.XStream;
 
 public class DeclaredModulesReader extends AbstractPomSectionReader<List<String>> {
 
-  private static final String MODULES_XPATH = "/project/modules";
   private static final String MODULES_ALIAS = "modules";
   private static final String MODULE_ALIAS = "module";
 
   public DeclaredModulesReader(Document pom) {
     super(pom);
-  }
-
-  @Override
-  protected String getXPathExpression() {
-    return MODULES_XPATH;
   }
 
   @Override

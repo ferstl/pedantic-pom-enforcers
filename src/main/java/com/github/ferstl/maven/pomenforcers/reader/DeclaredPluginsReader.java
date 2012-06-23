@@ -10,17 +10,11 @@ import com.thoughtworks.xstream.XStream;
 
 public class DeclaredPluginsReader extends AbstractPomSectionReader<List<Plugin>> {
 
-  private static final String PLUGINS_XPATH = "/project/build/plugins";
   private static final String PLUGINS_ALIAS = "plugins";
   private static final String PLUGIN_ALIAS = "plugin";
 
   public DeclaredPluginsReader(Document pom) {
     super(pom);
-  }
-
-  @Override
-  protected String getXPathExpression() {
-    return PLUGINS_XPATH;
   }
 
   @Override

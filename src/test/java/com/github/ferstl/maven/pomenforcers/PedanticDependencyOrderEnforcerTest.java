@@ -29,12 +29,10 @@ import org.junit.Before;
 import org.junit.Test;
 import org.w3c.dom.Document;
 
-import com.github.ferstl.maven.pomenforcers.AbstractPedanticDependencyOrderEnforcer;
-import com.github.ferstl.maven.pomenforcers.PedanticDependencyOrderEnforcer;
 import com.github.ferstl.maven.pomenforcers.reader.DeclaredDependenciesReader;
+import com.github.ferstl.maven.pomenforcers.reader.XPathExpressions;
 import com.github.ferstl.maven.pomenforcers.util.XmlUtils;
 import com.google.common.collect.Lists;
-
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -55,7 +53,7 @@ public class PedanticDependencyOrderEnforcerTest {
     Document allDepsPom = XmlUtils.parseXml(ALL_DEPENDENCIES_FILE);
 
     // Read all dependencies and convert them to artifacts (classifier = "", ArtifactHandler = null)
-    List<Dependency> allDeps = new DeclaredDependenciesReader(allDepsPom).read();
+    List<Dependency> allDeps = new DeclaredDependenciesReader(allDepsPom).read(XPathExpressions.POM_DEPENENCIES);
 
     this.mockHelper = mock(EnforcerRuleHelper.class);
     this.mockProject = mock(MavenProject.class);

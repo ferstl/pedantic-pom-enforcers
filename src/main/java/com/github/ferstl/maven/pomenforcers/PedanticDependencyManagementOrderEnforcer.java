@@ -26,7 +26,8 @@ import org.apache.maven.project.MavenProject;
 import org.w3c.dom.Document;
 
 import com.github.ferstl.maven.pomenforcers.artifact.DependencyElement;
-import com.github.ferstl.maven.pomenforcers.reader.DeclaredDependencyManagementReader;
+import com.github.ferstl.maven.pomenforcers.reader.DeclaredDependenciesReader;
+import com.github.ferstl.maven.pomenforcers.reader.XPathExpressions;
 import com.github.ferstl.maven.pomenforcers.util.CommaSeparatorUtils;
 import com.github.ferstl.maven.pomenforcers.util.EnforcerRuleUtils;
 import com.google.common.collect.ImmutableList;
@@ -53,7 +54,7 @@ extends AbstractPedanticDependencyOrderEnforcer {
            + CommaSeparatorUtils.join(getArtifactSorter().getPriorities(DependencyElement.ARTIFACT_ID)));
 
     Collection<Dependency> declaredDependencyManagement =
-        new DeclaredDependencyManagementReader(pom).read();
+        new DeclaredDependenciesReader(pom).read(XPathExpressions.POM_MANAGED_DEPENDENCIES);
 
     Collection<Dependency> managedDependencyArtifacts =
         matchDependencies(declaredDependencyManagement, getManagedDependencies(project), helper);

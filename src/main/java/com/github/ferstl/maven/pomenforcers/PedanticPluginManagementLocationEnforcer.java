@@ -41,8 +41,7 @@ public class PedanticPluginManagementLocationEnforcer extends AbstractPedanticEn
   }
 
   private boolean containsPluginManagement(Document pom) {
-    return XmlUtils.evaluateXPath("/project/build/pluginManagement", pom) != null;
-
+    return XmlUtils.evaluateXPathAsElement("/project/build/pluginManagement", pom) != null;
   }
 
   private boolean isPluginManagementAllowed(final MavenProject project) {

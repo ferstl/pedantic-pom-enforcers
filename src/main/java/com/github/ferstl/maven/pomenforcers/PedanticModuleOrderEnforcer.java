@@ -25,6 +25,7 @@ import org.apache.maven.project.MavenProject;
 import org.w3c.dom.Document;
 
 import com.github.ferstl.maven.pomenforcers.reader.DeclaredModulesReader;
+import com.github.ferstl.maven.pomenforcers.reader.XPathExpressions;
 import com.github.ferstl.maven.pomenforcers.util.CommaSeparatorUtils;
 import com.github.ferstl.maven.pomenforcers.util.EnforcerRuleUtils;
 import com.google.common.collect.ImmutableList;
@@ -59,7 +60,7 @@ public class PedanticModuleOrderEnforcer extends AbstractPedanticEnforcer {
     log.info("  -> These modules are ignored: " + CommaSeparatorUtils.join(this.ignoredModules));
 
     // Remove all modules to be ignored.
-    List<String> declaredModules = new DeclaredModulesReader(pom).read();
+    List<String> declaredModules = new DeclaredModulesReader(pom).read(XPathExpressions.POM_MODULES);
     declaredModules.removeAll(this.ignoredModules);
 
     // Enforce the module order

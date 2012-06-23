@@ -31,8 +31,8 @@ public abstract class AbstractPomSectionReader<T> {
   }
 
   @SuppressWarnings("unchecked")
-  public T read() {
-    Element pomElement = XmlUtils.evaluateXPath(getXPathExpression(), this.pom);
+  public T read(String xpath) {
+    Element pomElement = XmlUtils.evaluateXPathAsElement(xpath, this.pom);
 
     T section;
     if (pomElement == null) {
@@ -46,7 +46,6 @@ public abstract class AbstractPomSectionReader<T> {
     return section;
   }
 
-  protected abstract String getXPathExpression();
   protected abstract void configureXStream(XStream xstream);
 
   /**
