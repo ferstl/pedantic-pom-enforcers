@@ -41,6 +41,13 @@
             </rules>
             <fail>true</fail>
           </configuration>
+          <dependencies>
+            <dependency>
+              <groupId>com.github.ferstl</groupId>
+              <artifactId>pedantic-pom-enforcers</artifactId>
+              <version>@project.version@</version>
+            </dependency>
+          </dependencies>
         </plugin>
       </plugins>
     </pluginManagement>
@@ -48,13 +55,6 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-enforcer-plugin</artifactId>
-        <dependencies>
-          <dependency>
-            <groupId>com.github.ferstl</groupId>
-            <artifactId>pedantic-pom-enforcers</artifactId>
-            <version>@project.version@</version>
-          </dependency>
-        </dependencies>
       </plugin>
     </plugins>
   </build>

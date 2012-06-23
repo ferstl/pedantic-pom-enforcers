@@ -80,6 +80,10 @@ public class CompoundPedanticEnforcer extends AbstractPedanticEnforcer {
   /** See {@link PedanticPluginConfigurationEnforcer#managePluginConfigurations} */
   private Boolean managePluginConfigurations;
 
+  /** See {@link PedanticPluginConfigurationEnforcer#managePluginDependencies} */
+  private Boolean managePluginDependencies;
+
+
   /** Collection of enforcers to execute. */
   private final Collection<PedanticEnforcerRule> enforcers;
 
@@ -188,6 +192,9 @@ public class CompoundPedanticEnforcer extends AbstractPedanticEnforcer {
       }
       if (CompoundPedanticEnforcer.this.managePluginConfigurations != null) {
         enforcer.setManageConfigurations(CompoundPedanticEnforcer.this.managePluginConfigurations);
+      }
+      if (CompoundPedanticEnforcer.this.managePluginDependencies != null) {
+        enforcer.setManageDependencies(CompoundPedanticEnforcer.this.managePluginDependencies);
       }
     }
 

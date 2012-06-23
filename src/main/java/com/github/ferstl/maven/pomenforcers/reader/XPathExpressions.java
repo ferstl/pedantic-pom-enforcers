@@ -9,6 +9,7 @@ public final class XPathExpressions {
   public static final String POM_PLUGINS = "/project/build/plugins";
   public static final String POM_VERSIONED_PLUGINS = "/project/build/plugins/plugin[version]";
   public static final String POM_CONFIGURED_PLUGINS = "/project/build/plugins/plugin[configuration]";
+  public static final String POM_CONFIGURED_PLUGIN_DEPENDENCIES = "/project/build/plugins/plugin[dependencies]";
 
   public static final String STANDALONE_PLUGINS = "/plugins";
 

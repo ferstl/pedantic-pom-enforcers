@@ -16,6 +16,7 @@ public class PedanticPluginConfigurationEnforcer extends AbstractPedanticEnforce
 
   private boolean manageVersions = true;
   private boolean manageConfigurations = true;
+  private boolean manageDependencies = true;
 
   public void setManageVersions(boolean manageVersions) {
     this.manageVersions = manageVersions;
@@ -23,6 +24,10 @@ public class PedanticPluginConfigurationEnforcer extends AbstractPedanticEnforce
 
   public void setManageConfigurations(boolean manageConfigurations) {
     this.manageConfigurations = manageConfigurations;
+  }
+
+  public void setManageDependencies(boolean manageDependencies) {
+    this.manageDependencies = manageDependencies;
   }
 
   @Override
@@ -33,6 +38,10 @@ public class PedanticPluginConfigurationEnforcer extends AbstractPedanticEnforce
 
     if (this.manageConfigurations) {
       enforceManagedConfiguration(pom);
+    }
+
+    if (this.manageDependencies) {
+      enforceManagedDependencies(pom);
     }
   }
 
@@ -50,6 +59,15 @@ public class PedanticPluginConfigurationEnforcer extends AbstractPedanticEnforce
     if (configuredPlugins.size() > 0) {
       throw new EnforcerRuleException("One does not simply configure plugins. Use <pluginManagement> to configure "
           +	"these plugins or configure them for a specific <execution>: " + configuredPlugins);
+    }
+  }
+
+  private void enforceManagedDependencies(Document pom) throws EnforcerRuleException {
+    Collection<Plugin> configuredPluginDependencies =
+        searchForPlugins(pom, XPathExpressions.POM_CONFIGURED_PLUGIN_DEPENDENCIES);
+    if (configuredPluginDependencies.size() > 0) {
+      throw new EnforcerRuleException("One does not simply configure plugin dependencies. Use <pluginManagement> "
+      	+ "to configure plugin dependencies: " + configuredPluginDependencies);
     }
   }
 
