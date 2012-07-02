@@ -46,7 +46,7 @@ To activate the *Pedantic POM enforcers*, just declare them in the configuration
     </build>
 
 ### Available Enforcer Rules
-These are the currently available *Pedantic POM Enforcers*. The ID is required by the `CompoundPedanticEnforcer`'s configuration. For further details take a look at the [Wiki](pedantic-pom-enforcers/wiki/Pedantic-POM-Enforcers).
+These are the currently available *Pedantic POM Enforcers*. The ID in parentheses is required by the `CompoundPedanticEnforcer`'s configuration. For further details take a look at the [Wiki](pedantic-pom-enforcers/wiki/Pedantic-POM-Enforcers).
 
  - `PedanticPomSectionOrderEnforcer` (`POM_SECTION_ORDER`):
   - Enforces that your POM sections are in order, e.g. 1: `<modelVersion>`, 2: `<groupId>` 3: `<artifactId>`, ...
