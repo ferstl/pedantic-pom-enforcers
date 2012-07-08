@@ -186,7 +186,7 @@
           <configuration>
             <rules>
               <compound implementation="com.github.ferstl.maven.pomenforcers.CompoundPedanticEnforcer">
-                <enforcers>POM_SECTION_ORDER,DEPENDENCY_MANAGEMENT_ORDER,DEPENDENCY_ORDER,PLUGIN_MANAGEMENT_ORDER</enforcers>
+                <enforcers>POM_SECTION_ORDER,DEPENDENCY_MANAGEMENT_ORDER,DEPENDENCY_ORDER,PLUGIN_MANAGEMENT_ORDER,PLUGIN_CONFIGURATION,PLUGIN_MANAGEMENT_LOCATION</enforcers>
               </compound>
             </rules>
             <fail>true</fail>
