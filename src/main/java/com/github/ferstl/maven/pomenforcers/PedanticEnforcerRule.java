@@ -42,6 +42,12 @@ public enum PedanticEnforcerRule {
       return new PedanticDependencyOrderEnforcer();
     }
   },
+  DEPENDENCY_CONFIGURATION {
+    @Override
+    public AbstractPedanticEnforcer createEnforcerRule() {
+      return new PedanticDependencyConfigurationEnforcer();
+    }
+  },
   PLUGIN_MANAGEMENT_ORDER {
     @Override
     public AbstractPedanticEnforcer createEnforcerRule() {

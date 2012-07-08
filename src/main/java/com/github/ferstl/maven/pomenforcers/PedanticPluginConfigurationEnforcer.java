@@ -5,6 +5,7 @@ import java.util.Collection;
 import org.apache.maven.enforcer.rule.api.EnforcerRuleException;
 import org.apache.maven.enforcer.rule.api.EnforcerRuleHelper;
 import org.apache.maven.model.Plugin;
+import org.apache.maven.plugin.logging.Log;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 
@@ -32,15 +33,19 @@ public class PedanticPluginConfigurationEnforcer extends AbstractPedanticEnforce
 
   @Override
   protected void doEnforce(EnforcerRuleHelper helper, Document pom) throws EnforcerRuleException {
+    Log log = helper.getLog();
     if (this.manageVersions) {
+      log.info("Enforcing managed plugin versions.");
       enforceManagedVersions(pom);
     }
 
     if (this.manageConfigurations) {
+      log.info("Enforcing managed plugin configurations.");
       enforceManagedConfiguration(pom);
     }
 
     if (this.manageDependencies) {
+      log.info("Enforcing managed plugin dependencies.");
       enforceManagedDependencies(pom);
     }
   }
@@ -73,8 +78,8 @@ public class PedanticPluginConfigurationEnforcer extends AbstractPedanticEnforce
 
   private Collection<Plugin> searchForPlugins(Document pom, String xpath) {
     NodeList plugins = XmlUtils.evaluateXPathAsNodeList(xpath, pom);
-    Document pluginDoc = XmlUtils.createDocument("plugins", plugins);
-    return new DeclaredPluginsReader(pluginDoc).read(XPathExpressions.STANDALONE_PLUGINS);
+    Document pluginsDoc = XmlUtils.createDocument("plugins", plugins);
+    return new DeclaredPluginsReader(pluginsDoc).read(XPathExpressions.STANDALONE_PLUGINS);
   }
 
   @Override

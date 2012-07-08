@@ -62,6 +62,15 @@ public class CompoundPedanticEnforcer extends AbstractPedanticEnforcer {
   /** See {@link PedanticDependencyManagementOrderEnforcer#setScopePriorities(String)}.*/
   private String dependencyManagementScopePriorities;
 
+  /** See {@link PedanticDependencyConfigurationEnforcer#setManageVersions(boolean)}. */
+  private Boolean manageDependencyVersions;
+
+  /** See {@link PedanticDependencyConfigurationEnforcer#setAllowUnmanagedProjectVersions(boolean)}. */
+  private Boolean allowUnmangedProjectVersions;
+
+  /** See {@link PedanticDependencyConfigurationEnforcer#setManageExclusions(boolean)}. */
+  private Boolean manageDependencyExclusions;
+
   /** See {@link PedanticPluginManagementOrderEnforcer#setOrderBy(String)}.*/
   private String pluginManagementOrderBy;
 
@@ -169,6 +178,20 @@ public class CompoundPedanticEnforcer extends AbstractPedanticEnforcer {
       }
       if (!Strings.isNullOrEmpty(CompoundPedanticEnforcer.this.dependenciesScopePriorities)) {
         enforcer.setScopePriorities(CompoundPedanticEnforcer.this.dependenciesScopePriorities);
+      }
+    }
+
+    @Override
+    public void visit(PedanticDependencyConfigurationEnforcer dependencyConfigurationEnforcer) {
+      if (CompoundPedanticEnforcer.this.manageDependencyVersions != null) {
+        dependencyConfigurationEnforcer.setManageVersions(CompoundPedanticEnforcer.this.manageDependencyVersions);
+      }
+      if (CompoundPedanticEnforcer.this.allowUnmangedProjectVersions != null) {
+        dependencyConfigurationEnforcer.setAllowUnmanagedProjectVersions(
+            CompoundPedanticEnforcer.this.allowUnmangedProjectVersions);
+      }
+      if (CompoundPedanticEnforcer.this.manageDependencyExclusions != null) {
+        dependencyConfigurationEnforcer.setManageExclusions(CompoundPedanticEnforcer.this.manageDependencyExclusions);
       }
     }
 

@@ -21,22 +21,7 @@
             <rules>
               <compound implementation="com.github.ferstl.maven.pomenforcers.CompoundPedanticEnforcer">
                 <!-- Enforcers -->
-                <enforcers>POM_SECTION_ORDER,MODULE_ORDER,DEPENDENCY_MANAGEMENT_ORDER,DEPENDENCY_ORDER,PLUGIN_MANAGEMENT_ORDER,PLUGIN_CONFIGURATION,PLUGIN_MANAGEMENT_LOCATION</enforcers>
-              
-                <!-- Module order -->
-                <moduleOrderIgnores>module3,module4</moduleOrderIgnores>
-                
-                <!-- Dependency Management Order -->
-                <dependencyManagementOrderBy>${dependencies.orderBy}</dependencyManagementOrderBy>
-                <dependencyManagementGroupIdPriorities>${dependencies.groupIdPriorities}</dependencyManagementGroupIdPriorities>
-                
-                <!-- Dependencies Order -->
-                <dependenciesOrderBy>${dependencies.orderBy}</dependenciesOrderBy>
-                <dependenciesGroupIdPriorities>${dependencies.groupIdPriorities}</dependenciesGroupIdPriorities>
-                
-                <!-- Plugin Management Order -->
-                <pluginManagementOrderBy>${plugins.orderBy}</pluginManagementOrderBy>
-                <pluginManagementGroupIdPriorities>${plugins.groupIdPriorities}</pluginManagementGroupIdPriorities>
+                <enforcers>POM_SECTION_ORDER,MODULE_ORDER,DEPENDENCY_MANAGEMENT_ORDER,DEPENDENCY_ORDER,DEPENDENCY_CONFIGURATION,PLUGIN_MANAGEMENT_ORDER,PLUGIN_CONFIGURATION,PLUGIN_MANAGEMENT_LOCATION</enforcers>
               </compound>
             </rules>
             <fail>true</fail>
