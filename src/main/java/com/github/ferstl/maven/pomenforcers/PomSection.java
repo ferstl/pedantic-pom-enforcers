@@ -20,7 +20,6 @@ import java.util.Comparator;
 import java.util.Map;
 
 import com.github.ferstl.maven.pomenforcers.priority.PriorityComparator;
-import com.google.common.base.Function;
 import com.google.common.base.Functions;
 import com.google.common.collect.Maps;
 
@@ -89,10 +88,8 @@ public enum PomSection {
     return this.sectionName;
   }
 
-  public static Comparator<PomSection> createPriorityComparator(
-      Collection<PomSection> priorityCollection) {
-    Function<PomSection, PomSection> identity = Functions.identity();
-      return new PriorityComparator<>(priorityCollection, identity);
+  public static Comparator<PomSection> createPriorityComparator(Collection<PomSection> priorityCollection) {
+    return new PriorityComparator<>(priorityCollection, Functions.<PomSection>identity());
   }
 
 }
