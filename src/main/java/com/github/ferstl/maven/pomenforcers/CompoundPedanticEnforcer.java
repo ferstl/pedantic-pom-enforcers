@@ -71,6 +71,27 @@ public class CompoundPedanticEnforcer extends AbstractPedanticEnforcer {
   /** See {@link PedanticDependencyConfigurationEnforcer#setManageExclusions(boolean)}. */
   private Boolean manageDependencyExclusions;
 
+  /** See {@link PedanticDependencyScopeEnforcer#setCompileDependencies(String)}. */
+  private String compileDependencies;
+
+  /** See {@link PedanticDependencyScopeEnforcer#setProvidedDependencies(String)}. */
+  private String providedDependencies;
+
+  /** See {@link PedanticDependencyScopeEnforcer#setRuntimeDependencies(String)}. */
+  private String runtimeDependencies;
+
+  /** See {@link PedanticDependencyScopeEnforcer#setSystemDependencies(String)}. */
+  private String systemDependencies;
+
+  /** See {@link PedanticDependencyScopeEnforcer#setTestDependencies(String)}. */
+  private String testDependencies;
+
+  /** See {@link PedanticDependencyScopeEnforcer#setImportDependencies(String)}. */
+  private String importDependencies;
+
+  /** See {@link PedanticDependencyScopeEnforcer#setCheckResolvedDependencies(boolean)}. */
+  private Boolean checkResolvedDependencyScopes;
+
   /** See {@link PedanticPluginManagementOrderEnforcer#setOrderBy(String)}.*/
   private String pluginManagementOrderBy;
 
@@ -192,6 +213,31 @@ public class CompoundPedanticEnforcer extends AbstractPedanticEnforcer {
       }
       if (CompoundPedanticEnforcer.this.manageDependencyExclusions != null) {
         dependencyConfigurationEnforcer.setManageExclusions(CompoundPedanticEnforcer.this.manageDependencyExclusions);
+      }
+    }
+
+    @Override
+    public void visit(PedanticDependencyScopeEnforcer dependencyScopeEnforcer) {
+      if (CompoundPedanticEnforcer.this.compileDependencies != null) {
+        dependencyScopeEnforcer.setCompileDependencies(CompoundPedanticEnforcer.this.compileDependencies);
+      }
+      if (CompoundPedanticEnforcer.this.providedDependencies != null) {
+        dependencyScopeEnforcer.setProvidedDependencies(CompoundPedanticEnforcer.this.providedDependencies);
+      }
+      if (CompoundPedanticEnforcer.this.runtimeDependencies != null) {
+        dependencyScopeEnforcer.setRuntimeDependencies(CompoundPedanticEnforcer.this.runtimeDependencies);
+      }
+      if (CompoundPedanticEnforcer.this.systemDependencies != null) {
+        dependencyScopeEnforcer.setSystemDependencies(CompoundPedanticEnforcer.this.systemDependencies);
+      }
+      if (CompoundPedanticEnforcer.this.testDependencies != null) {
+        dependencyScopeEnforcer.setTestDependencies(CompoundPedanticEnforcer.this.testDependencies);
+      }
+      if (CompoundPedanticEnforcer.this.importDependencies != null) {
+        dependencyScopeEnforcer.setImportDependencies(CompoundPedanticEnforcer.this.importDependencies);
+      }
+      if (CompoundPedanticEnforcer.this.checkResolvedDependencyScopes != null) {
+        dependencyScopeEnforcer.setCheckResolvedDependencies(CompoundPedanticEnforcer.this.checkResolvedDependencyScopes);
       }
     }
 
