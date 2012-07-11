@@ -25,6 +25,8 @@ import com.google.common.base.Function;
 import com.google.common.base.Objects;
 import com.google.common.collect.Collections2;
 
+import static com.github.ferstl.maven.pomenforcers.DependencyScope.COMPILE;
+
 
 public class DependencyMatcher {
 
@@ -56,7 +58,7 @@ public class DependencyMatcher {
         if (supersetDependency.getGroupId().equals(groupId)
          && supersetDependency.getArtifactId().equals(artifactId)) {
           Dependency matchedDependency = supersetDependency.clone();
-          matchedDependency.setScope(Objects.firstNonNull(supersetDependency.getScope(), "compile"));
+          matchedDependency.setScope(Objects.firstNonNull(supersetDependency.getScope(), COMPILE.getScopeName()));
           return matchedDependency;
         }
       }
