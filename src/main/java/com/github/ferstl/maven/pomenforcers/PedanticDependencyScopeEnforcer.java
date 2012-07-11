@@ -11,9 +11,6 @@ import org.w3c.dom.Document;
 
 import com.github.ferstl.maven.pomenforcers.artifact.ArtifactInfo;
 import com.github.ferstl.maven.pomenforcers.artifact.ArtifactInfoTransformer;
-import com.github.ferstl.maven.pomenforcers.artifact.DependencyMatcher;
-import com.github.ferstl.maven.pomenforcers.reader.DeclaredDependenciesReader;
-import com.github.ferstl.maven.pomenforcers.reader.XPathExpressions;
 import com.github.ferstl.maven.pomenforcers.util.CommaSeparatorUtils;
 import com.github.ferstl.maven.pomenforcers.util.EnforcerRuleUtils;
 import com.google.common.base.Function;
@@ -70,7 +67,7 @@ public class PedanticDependencyScopeEnforcer extends AbstractPedanticEnforcer {
     Log log = helper.getLog();
     log.info("Enforcing dependency scopes.");
 
-    Collection<Dependency> dependencies = getDeclaredDependencies(pom, helper);
+    Collection<Dependency> dependencies = EnforcerRuleUtils.getMavenProject(helper).getDependencies();
 
     for (Dependency dependency : dependencies) {
       ArtifactInfo artifactInfo = this.dependencyToArtifactInfoTransformer.apply(dependency);
@@ -89,18 +86,6 @@ public class PedanticDependencyScopeEnforcer extends AbstractPedanticEnforcer {
   @Override
   protected void accept(PedanticEnforcerVisitor visitor) {
     visitor.visit(this);
-  }
-
-  private Collection<Dependency> getResolvedDependencies(EnforcerRuleHelper helper) {
-    return EnforcerRuleUtils.getMavenProject(helper).getDependencies();
-  }
-
-  private Collection<Dependency> getDeclaredDependencies(Document pom, EnforcerRuleHelper helper) {
-    Collection<Dependency> declaredDependencies =
-        new DeclaredDependenciesReader(pom).read(XPathExpressions.POM_DEPENENCIES);
-    Collection<Dependency> resolvedDependencies = getResolvedDependencies(helper);
-    DependencyMatcher dependencyMatcher = new DependencyMatcher(resolvedDependencies, helper);
-    return dependencyMatcher.match(declaredDependencies);
   }
 
   private Set<ArtifactInfo> createDependencyInfo(String dependencies) {
