@@ -89,9 +89,6 @@ public class CompoundPedanticEnforcer extends AbstractPedanticEnforcer {
   /** See {@link PedanticDependencyScopeEnforcer#setImportDependencies(String)}. */
   private String importDependencies;
 
-  /** See {@link PedanticDependencyScopeEnforcer#setCheckResolvedDependencies(boolean)}. */
-  private Boolean checkResolvedDependencyScopes;
-
   /** See {@link PedanticPluginManagementOrderEnforcer#setOrderBy(String)}.*/
   private String pluginManagementOrderBy;
 
@@ -235,9 +232,6 @@ public class CompoundPedanticEnforcer extends AbstractPedanticEnforcer {
       }
       if (CompoundPedanticEnforcer.this.importDependencies != null) {
         dependencyScopeEnforcer.setImportDependencies(CompoundPedanticEnforcer.this.importDependencies);
-      }
-      if (CompoundPedanticEnforcer.this.checkResolvedDependencyScopes != null) {
-        dependencyScopeEnforcer.setCheckResolvedDependencies(CompoundPedanticEnforcer.this.checkResolvedDependencyScopes);
       }
     }
 

@@ -35,7 +35,6 @@ public class PedanticDependencyScopeEnforcer extends AbstractPedanticEnforcer {
 
   private final Multimap<ArtifactInfo, DependencyScope> scopedDependencies;
   private final DependencyToArtifactInfoTransformer dependencyToArtifactInfoTransformer;
-  private boolean checkResolvedDependencies;
 
   public PedanticDependencyScopeEnforcer() {
     this.scopedDependencies = HashMultimap.create();
@@ -66,21 +65,12 @@ public class PedanticDependencyScopeEnforcer extends AbstractPedanticEnforcer {
     addToArtifactinfoMap(createDependencyInfo(importDependencies), IMPORT);
   }
 
-  public void setCheckResolvedDependencies(boolean check) {
-    this.checkResolvedDependencies = check;
-  }
-
   @Override
   protected void doEnforce(EnforcerRuleHelper helper, Document pom) throws EnforcerRuleException {
     Log log = helper.getLog();
     log.info("Enforcing dependency scopes.");
 
-    Collection<Dependency> dependencies;
-    if (this.checkResolvedDependencies) {
-      dependencies = getResolvedDependencies(helper);
-    } else {
-      dependencies = getDeclaredDependencies(pom, helper);
-    }
+    Collection<Dependency> dependencies = getDeclaredDependencies(pom, helper);
 
     for (Dependency dependency : dependencies) {
       ArtifactInfo artifactInfo = this.dependencyToArtifactInfoTransformer.apply(dependency);
