@@ -8,9 +8,8 @@ If so, the *Pedantic POM Enforcers* are absolutely the thing you need!
 
 
 ### What are the Pedantic POM Enforcers?
-The *Pedantic POM Enforcers* consist of serveral Maven enforcer rules that help you keep your project setup consistent and organized. At the current state, the available enforcer rules ensure that your POM files are organized in a well-defined manner and that your `<modules>`/`<dependencyManagement>`/`<dependencies>`/`<pluginManagement>` sections are sorted in a reasonable way.
+The *Pedantic POM Enforcers* consist of serveral Maven enforcer rules that help you keep your project setup consistent and organized. For example, the enforcer rules ensure that your POM files are organized in a well-defined manner, that your `<modules>`/`<dependencyManagement>`/`<dependencies>`/`<pluginManagement>` sections are sorted in a reasonable way and that version numbers, plugin configurations, etc. are defined only on places where it makes sense.
 
-Rules that take care of where to put version numbers, plugin configurations and so on will follow in the next releases.
 
 ### How to use the Pedantic POM Enforcers
 To activate the *Pedantic POM enforcers*, just declare them in the configuration of the `maven-enforcer-plugin`. The simplest way of doing this is by using the `CompoundPedanticEnforcer`, which is able to aggregate all choosen enforcer rules. The compound enforcer is also more efficient than using the single enforcer rules separately.
@@ -49,7 +48,7 @@ To activate the *Pedantic POM enforcers*, just declare them in the configuration
 #### Why comma-separated Strings?
 You may wonder why comma-separated strings are used to configure the enforcer rules although the maven-enforcer-plugin supports structured configurations like
 
-    <!-- Note: This configuration is not valid for the Pedantic Enforcer Rules! -->
+    <!-- Note: This configuration is not valid for the Pedantic POM Enforcers! -->
     <enforcers>
       <enforcer>POM_SECTION_ORDER</enforcer>
       <enforcer>MODULE_ORDER</enforcer>
