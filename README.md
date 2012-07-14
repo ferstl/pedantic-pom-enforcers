@@ -12,7 +12,9 @@ The *Pedantic POM Enforcers* consist of serveral Maven enforcer rules that help 
 
 
 ### How to use the Pedantic POM Enforcers
-To activate the *Pedantic POM enforcers*, just declare them in the configuration of the `maven-enforcer-plugin`. The simplest way of doing this is by using the `CompoundPedanticEnforcer`, which is able to aggregate all choosen enforcer rules. The compound enforcer is also more efficient than using the single enforcer rules separately.
+The *Pedantic POM Enforcers* are available on [Maven Central](http://central.maven.org/maven2/com/github/ferstl/pedantic-pom-enforcers/). So no further repository configuration is required.
+
+To activate the enforcer rules, just declare them in the configuration of the `maven-enforcer-plugin`. The simplest way of doing this is using the `CompoundPedanticEnforcer`, which is able to aggregate all choosen enforcer rules. The compound enforcer is also more efficient than using the single enforcer rules separately.
 
     <build>
       <plugins>
