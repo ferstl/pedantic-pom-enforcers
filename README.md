@@ -66,7 +66,9 @@ These are the currently available *Pedantic POM Enforcers*. The ID in parenthese
 | `PedanticModuleOrderEnforcer` | `MODULE_ORDER` | Enforces that the declared `<modules>` are ordered alphabetically.
 | `PedanticDependencyManagementOrderEnforcer` | `DEPENDENCY_MANAGEMENT_ORDER` | Enforces that the dependencies in your `<dependencyManagement>` are ordered.
 | `PedanticDependencyOrderEnforcer` | `DEPENDENCY_ORDER` | Enforces that your `<dependencies>` are ordered.
+| `PedanticDependencyConfigurationEnforcer` | `DEPENDENCY_CONFIGURATION` | Enforces that dependency versions and exclusions are defined in `<dependencyManagement>` but not in the `<dependencies>` section.
+| `PedanticDependencyScopeEnforcer` | `DEPENDENCY_SCOPE` | Enforces some dependencies to be defined within a specific `<scope>`.
 | `PedanticPluginManagementOrderEnforcer` | `PLUGIN_MANAGEMENT_ORDER` | Enforces that the plugins in your `<pluginManagement>` are ordered.
-| `PedanticPluginConfigurationEnforcer` | `PLUGIN_CONFIGURATION` | Enforces that plugin versions and configurations may only be declared in `<pluginManagement>` but not in `<plugins>`.
+| `PedanticPluginConfigurationEnforcer` | `PLUGIN_CONFIGURATION` | Enforces that plugin versions, configurations and dependencies are declared in `<pluginManagement>` but not in the `<plugins>` section.
 | `PedanticPluginManagementLocationEnforcer` | `PLUGIN_MANAGEMENT_LOCATION` | Enforces that `<pluginManagement>` may only be declared in specific POMs.
 
