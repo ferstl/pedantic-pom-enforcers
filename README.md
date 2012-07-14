@@ -48,17 +48,13 @@ To activate the *Pedantic POM enforcers*, just declare them in the configuration
 ### Available Enforcer Rules
 These are the currently available *Pedantic POM Enforcers*. The ID in parentheses is required by the `CompoundPedanticEnforcer`'s configuration. For further details take a look at the [Wiki](pedantic-pom-enforcers/wiki/Pedantic-POM-Enforcers).
 
- - `PedanticPomSectionOrderEnforcer` (`POM_SECTION_ORDER`):
-  - Enforces that your POM sections are in order, e.g. 1: `<modelVersion>`, 2: `<groupId>` 3: `<artifactId>`, ...
- - `PedanticModuleOrderEnforcer` (`MODULE_ORDER`):
-  - Enforces that the declared `<modules>` are ordered alphabetically.
- - `PedanticDependencyManagementOrderEnforcer` (`DEPENDENCY_MANAGEMENT_ORDER`):
-  - Enforces that the dependencies in your `<dependencyManagement>` are ordered.
- - `PedanticDependencyOrderEnforcer` (`DEPENDENCY_ORDER`):
-  - Enforces that your `<dependencies>` are ordered.
- - `PedanticPluginManagementOrderEnforcer` (`PLUGIN_MANAGEMENT_ORDER`):
-  - Enforces that the plugins in your `<pluginManagement>` are ordered.
- - `PedanticPluginConfigurationEnforcer` (`PLUGIN_CONFIGURATION`):
-  - Enforces that plugin versions and configurations may only be declared in `<pluginManagement>` but not in `<plugins>`.
- - `PedanticPluginManagementLocationEnforcer` (`PLUGIN_MANAGEMENT_LOCATION`):
-  - Enforces that `<pluginManagement>` may only be declared in specific POMs.
+| Enforcer Rule | ID | Description |
+|:------------- |:--- |:----------- |
+| `PedanticPomSectionOrderEnforcer` | `POM_SECTION_ORDER` | Enforces that your POM sections are in order, e.g. 1: `<modelVersion>`, 2: `<groupId>` 3: `<artifactId>`, ...
+| `PedanticModuleOrderEnforcer` | `MODULE_ORDER` | Enforces that the declared `<modules>` are ordered alphabetically.
+| `PedanticDependencyManagementOrderEnforcer` | `DEPENDENCY_MANAGEMENT_ORDER` | Enforces that the dependencies in your `<dependencyManagement>` are ordered.
+| `PedanticDependencyOrderEnforcer` | `DEPENDENCY_ORDER` | Enforces that your `<dependencies>` are ordered.
+| `PedanticPluginManagementOrderEnforcer` | `PLUGIN_MANAGEMENT_ORDER` | Enforces that the plugins in your `<pluginManagement>` are ordered.
+| `PedanticPluginConfigurationEnforcer` | `PLUGIN_CONFIGURATION` | Enforces that plugin versions and configurations may only be declared in `<pluginManagement>` but not in `<plugins>`.
+| `PedanticPluginManagementLocationEnforcer` | `PLUGIN_MANAGEMENT_LOCATION` | Enforces that `<pluginManagement>` may only be declared in specific POMs.
+
