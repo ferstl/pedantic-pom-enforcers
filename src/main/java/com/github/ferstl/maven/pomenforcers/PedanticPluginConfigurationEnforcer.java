@@ -28,6 +28,14 @@ import com.github.ferstl.maven.pomenforcers.reader.DeclaredPluginsReader;
 import com.github.ferstl.maven.pomenforcers.reader.XPathExpressions;
 import com.github.ferstl.maven.pomenforcers.util.XmlUtils;
 
+/**
+ * Enforces that plugins are configured in the <code>pluginManagement</code> section.
+ * <pre>
+ * ### Example
+ *
+ * </pre>
+ * @id {@link PedanticEnforcerRule#PLUGIN_CONFIGURATION}
+ */
 public class PedanticPluginConfigurationEnforcer extends AbstractPedanticEnforcer {
 
   private boolean manageVersions = true;
@@ -36,18 +44,30 @@ public class PedanticPluginConfigurationEnforcer extends AbstractPedanticEnforce
 
   /**
    * Enforces plugin versions to be defined in `<pluginManagement>`.
+   * @param manageVersions Enforces plugin versions to be defined in `<pluginManagement>`.
    * @configParam
-   * @default `true`
-   * @param manageVersions
+   * @default <code>true</code>
    */
   public void setManageVersions(boolean manageVersions) {
     this.manageVersions = manageVersions;
   }
 
+  /**
+   * Enforces plugin <code>configuration</code> to be defined in `<pluginManagement>`.
+   * @param manageVersions Enforces plugin <code>configuration</code> to be defined in `<pluginManagement>`.
+   * @configParam
+   * @default <code>true</code>
+   */
   public void setManageConfigurations(boolean manageConfigurations) {
     this.manageConfigurations = manageConfigurations;
   }
 
+  /**
+   * Enforces plugin dependencies to be defined in `<pluginManagement>`.
+   * @param manageVersions Enforces plugin <code>configuration</code> to be defined in `<pluginManagement>`.
+   * @configParam
+   * @default <code>true</code>
+   */
   public void setManageDependencies(boolean manageDependencies) {
     this.manageDependencies = manageDependencies;
   }
