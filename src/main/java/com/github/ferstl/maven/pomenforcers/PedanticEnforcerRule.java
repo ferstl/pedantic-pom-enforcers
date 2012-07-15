@@ -15,57 +15,90 @@
  */
 package com.github.ferstl.maven.pomenforcers;
 
-
+/**
+ * IDs of the available pedantic enforcer rules. Use the
+ * {@link CompoundPedanticEnforcer} to aggregate any combination of the enforcer
+ * rules described below. The compound enforcer is more efficient because it
+ * parses the POM file of each Maven module only once and delegates it to the
+ * configured enforcer rules.
+ */
 public enum PedanticEnforcerRule {
 
+  /**
+   * @see PedanticPomSectionOrderEnforcer
+   */
   POM_SECTION_ORDER {
     @Override
     public AbstractPedanticEnforcer createEnforcerRule() {
       return new PedanticPomSectionOrderEnforcer();
     }
   },
+  /**
+   * @see PedanticModuleOrderEnforcer
+   */
   MODULE_ORDER {
     @Override
     public AbstractPedanticEnforcer createEnforcerRule() {
       return new PedanticModuleOrderEnforcer();
     }
   },
+  /**
+   * @see PedanticDependencyManagementOrderEnforcer
+   */
   DEPENDENCY_MANAGEMENT_ORDER {
     @Override
     public AbstractPedanticEnforcer createEnforcerRule() {
       return new PedanticDependencyManagementOrderEnforcer();
     }
   },
+  /**
+   * @see PedanticDependencyOrderEnforcer
+   */
   DEPENDENCY_ORDER {
     @Override
     public AbstractPedanticEnforcer createEnforcerRule() {
       return new PedanticDependencyOrderEnforcer();
     }
   },
+  /**
+   * @see PedanticDependencyConfigurationEnforcer
+   */
   DEPENDENCY_CONFIGURATION {
     @Override
     public AbstractPedanticEnforcer createEnforcerRule() {
       return new PedanticDependencyConfigurationEnforcer();
     }
   },
+  /**
+   * @see PedanticDependencyScopeEnforcer
+   */
   DEPENDENCY_SCOPE {
     @Override
     public AbstractPedanticEnforcer createEnforcerRule() {
       return new PedanticDependencyScopeEnforcer();
     }
   },
+  /**
+   * @see PedanticPluginManagementOrderEnforcer
+   */
   PLUGIN_MANAGEMENT_ORDER {
     @Override
     public AbstractPedanticEnforcer createEnforcerRule() {
       return new PedanticPluginManagementOrderEnforcer();
     }
   },
+  /**
+   * @see PedanticPluginConfigurationEnforcer
+   */
   PLUGIN_CONFIGURATION {
     @Override
     public AbstractPedanticEnforcer createEnforcerRule() {
       return new PedanticPluginConfigurationEnforcer();
     }
   },
+  /**
+   * @see PedanticPluginManagementLocationEnforcer
+   */
   PLUGIN_MANAGEMENT_LOCATION {
     @Override
     public AbstractPedanticEnforcer createEnforcerRule() {

@@ -34,6 +34,12 @@ public class PedanticPluginConfigurationEnforcer extends AbstractPedanticEnforce
   private boolean manageConfigurations = true;
   private boolean manageDependencies = true;
 
+  /**
+   * Enforces plugin versions to be defined in `<pluginManagement>`.
+   * @configParam
+   * @default `true`
+   * @param manageVersions
+   */
   public void setManageVersions(boolean manageVersions) {
     this.manageVersions = manageVersions;
   }

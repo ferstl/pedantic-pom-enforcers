@@ -37,7 +37,25 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Ordering;
 import com.google.common.collect.Sets;
 
-
+/**
+ * This enforcer makes sure that all plugins in your plugin management section
+ * are ordered. The ordering can be defined by any combination of groupId and
+ * artifactId. Each of these attributes may be given a priority.
+ * <pre>
+ * ### Example
+ *
+ *     <rules>
+ *       <pluginManagementOrder implementation="ch.sferstl.maven.pomenforcer.PedanticPluginManagementOrderEnforcer">
+ *       <!-- order by groupId and artifactId (default) -->
+ *       <orderBy>groupId,artifactId</orderBy>
+ *       <!-- all group IDs starting with com.myproject.plugins and com.myproject.testplugins should occur first -->
+ *       <groupIdPriorities>com.myproject.plugins,com.myproject.testplugins</groupIdPriorities>
+ *       <!-- all artifact IDs starting with mytest and myintegrationtest should occur first -->
+ *       <artifactIdPriorities>mytest-,myintegrationtest-</artifactIdPriorities>
+ *     </rules>
+ * </pre>
+ * @id {@link PedanticEnforcerRule#PLUGIN_MANAGEMENT_ORDER}
+ */
 public class PedanticPluginManagementOrderEnforcer extends AbstractPedanticEnforcer {
 
   private final ArtifactSorter<Plugin, PluginElement> artifactSorter;
@@ -50,6 +68,12 @@ public class PedanticPluginManagementOrderEnforcer extends AbstractPedanticEnfor
     this.artifactSorter.orderBy(orderBy);
   }
 
+  /**
+   * Comma-separated list of plugin elements that defines the ordering.
+   * @param pluginElements Comma-separated list of plugin elements that defines the ordering.
+   * @configParameter
+   * @default groupId,artifactId
+   */
   public void setOrderBy(String pluginElements) {
     Set<PluginElement> orderBy = Sets.newLinkedHashSet();
     Function<String, PluginElement> transformer = new Function<String, PluginElement>() {
@@ -63,10 +87,14 @@ public class PedanticPluginManagementOrderEnforcer extends AbstractPedanticEnfor
   }
 
   /**
-   * Sets the group IDs that should be listed first in the dependencies declaration. All group IDs
-   * that <strong>start with</strong> any of the priorized group IDs in the given list, are required
-   * to be located first in the dependencies section.
+   * Comma-separated list of group IDs that should be listed first in the
+   * plugins declaration. All group IDs that <strong>start with</strong>
+   * any of the priorized group IDs in the given list, are required to be
+   * located first in the dependencies section.
+   *
    * @param groupIds Comma separated list of group IDs.
+   * @configParam
+   * @default n/a
    */
   public void setGroupIdPriorities(String groupIds) {
     LinkedHashSet<String> groupIdPriorities = Sets.newLinkedHashSet();
@@ -75,10 +103,14 @@ public class PedanticPluginManagementOrderEnforcer extends AbstractPedanticEnfor
   }
 
   /**
-   * Sets the artifact IDs that should be listed first in the dependencies declaration. All artifact
-   * IDs that <strong>start with</strong> any of the priorized IDs in the given list, are required
-   * to be located first in the dependencies section.
+   * Comma-separated list of artifact IDs that should be listed first in the
+   * plugins declaration. All artifact IDs that <strong>start with</strong>
+   * any of the priorized IDs in the given list, are required to be located
+   * first in the dependencies section.
+   *
    * @param artifactIds Comma separated list of artifact IDs.
+   * @configParam
+   * @default n/a
    */
   public void setArtifactIdPriorities(String artifactIds) {
     LinkedHashSet<String> artifactIdPriorities = Sets.newLinkedHashSet();

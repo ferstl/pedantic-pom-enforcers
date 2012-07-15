@@ -33,7 +33,22 @@ import com.google.common.collect.Ordering;
 import com.google.common.collect.Sets;
 
 
-
+/**
+ * This enforcer makes sure that your <code>modules</code> section is sorted
+ * alphabetically. Modules that should occur at a specific position in the
+ * `<modules>` section can be ignored.
+ *
+ * <pre>
+ * ### Example
+ *     <rules>
+ *       <moduleOrder implementation="ch.sferstl.maven.pomenforcer.PedanticModuleOrderEnforcer">
+ *       <!-- These modules may occur at any place in the modules section -->
+ *       <ignoredModules>dist-deb,dist-rpm</ignoredModules>
+ *     </rules>
+ * </pre>
+ *
+ * @id {@link PedanticEnforcerRule#MODULE_ORDER}
+ */
 public class PedanticModuleOrderEnforcer extends AbstractPedanticEnforcer {
 
   /** All modules in this set won't be checked for the correct order. */
@@ -43,6 +58,13 @@ public class PedanticModuleOrderEnforcer extends AbstractPedanticEnforcer {
     this.ignoredModules = Sets.newLinkedHashSet();
   }
 
+  /**
+   * Comma-separated list of ignored modules. All modules in this list may occur at any place in the
+   * <code>modules</code> section.
+   * @param ignoredModules Comma-separated list of ignored modules.
+   * @configParameter
+   * @default n/a
+   */
   public void setIgnoredModules(String ignoredModules) {
     CommaSeparatorUtils.splitAndAddToCollection(ignoredModules, this.ignoredModules);
   }

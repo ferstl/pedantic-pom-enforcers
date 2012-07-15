@@ -31,7 +31,28 @@ import com.github.ferstl.maven.pomenforcers.util.EnforcerRuleUtils;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Ordering;
 
-
+/**
+ * This enforcer makes sure that all artifacts in your dependencies section are
+ * ordered. The ordering can be defined by any combination of `scope`, `groupId`
+ * and `artifactId`. Each of these attributes may be given a priority.
+ *
+ * <pre>
+ * ### Example
+ *     <rules>
+ *       <dependencyOrder implementation="ch.sferstl.maven.pomenforcer.PedanticDependencyOrderEnforcer">
+ *       <!-- order by scope, groupId and artifactId (default) -->
+ *       <orderBy>scope,groupId,artifactId</orderBy>
+ *       <!-- runtime scope should occur before provided scope -->
+ *       <scopePriorities>compile,runtime,provided</scopePriorities>
+ *       <!-- all group IDs starting with com.myproject and com.mylibs should occur first -->
+ *       <groupIdPriorities>com.myproject,com.mylibs</groupIdPriorities>
+ *       <!-- all artifact IDs starting with commons- and utils- should occur first -->
+ *       <artifactIdPriorities>commons-,utils-</artifactIdPriorities>
+ *     </rules>
+ * </pre>
+ *
+ * @id {@link PedanticEnforcerRule#DEPENDENCY_ORDER}
+ */
 public class PedanticDependencyOrderEnforcer extends AbstractPedanticDependencyOrderEnforcer {
 
   @Override

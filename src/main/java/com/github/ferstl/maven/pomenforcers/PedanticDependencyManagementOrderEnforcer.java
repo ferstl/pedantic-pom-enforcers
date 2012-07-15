@@ -34,9 +34,30 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Ordering;
 
-
-public class PedanticDependencyManagementOrderEnforcer
-extends AbstractPedanticDependencyOrderEnforcer {
+/**
+ * This enforcer makes sure that all artifacts in your dependency management are
+ * ordered. The ordering can be defined by any combination of <code>scope</code>,
+ * <code>groupId</code> and <code>artifactId</code>. Each of these attributes
+ * may be given a priority.
+ *
+ * <pre>
+ * ### Example
+ *     <rules>
+ *       <dependencyManagementOrder implementation="ch.sferstl.maven.pomenforcer.PedanticDependencyManagementOrderEnforcer">
+ *       <!-- order by scope, groupId and artifactId (default) -->
+ *       <orderBy>scope,groupId,artifactId</orderBy>
+ *       <!-- runtime scope should occur before provided scope -->
+ *       <scopePriorities>compile,runtime,provided</scopePriorities>
+ *       <!-- all group IDs starting with com.myproject and com.mylibs should occur first -->
+ *       <groupIdPriorities>com.myproject,com.mylibs</groupIdPriorities>
+ *       <!-- all artifact IDs starting with commons- and utils- should occur first -->
+ *       <artifactIdPriorities>commons-,utils-</artifactIdPriorities>
+ *     </rules>
+ * </pre>
+ *
+ * @id {@link PedanticEnforcerRule#DEPENDENCY_MANAGEMENT_ORDER}
+ */
+public class PedanticDependencyManagementOrderEnforcer extends AbstractPedanticDependencyOrderEnforcer {
 
   @Override
   protected void doEnforce(EnforcerRuleHelper helper, Document pom) throws EnforcerRuleException {

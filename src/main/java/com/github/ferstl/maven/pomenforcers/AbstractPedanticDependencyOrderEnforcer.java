@@ -43,6 +43,12 @@ public abstract class AbstractPedanticDependencyOrderEnforcer extends AbstractPe
     this.artifactSorter.orderBy(orderBy);
   }
 
+  /**
+   * Comma-separated list of dependency elements that defines the ordering.
+   * @param dependencyElements Comma-separated list of dependency elements that defines the ordering.
+   * @configParameter
+   * @default scope,groupId,artifactId
+   */
   public void setOrderBy(String dependencyElements) {
     Set<DependencyElement> orderBy = Sets.newLinkedHashSet();
     Function<String, DependencyElement> transformer = new Function<String, DependencyElement>() {
@@ -56,10 +62,14 @@ public abstract class AbstractPedanticDependencyOrderEnforcer extends AbstractPe
   }
 
   /**
-   * Sets the group IDs that should be listed first in the dependencies declaration. All group IDs
-   * that <strong>start with</strong> any of the priorized group IDs in the given list, are required
-   * to be located first in the dependencies section.
+   * Comma-separated list of group IDs that should be listed first in the
+   * dependencies declaration. All group IDs that <strong>start with</strong>
+   * any of the priorized group IDs in the given list, are required to be
+   * located first in the dependencies section.
+   *
    * @param groupIds Comma separated list of group IDs.
+   * @configParam
+   * @default n/a
    */
   public void setGroupIdPriorities(String groupIds) {
     LinkedHashSet<String> groupIdPriorities = Sets.newLinkedHashSet();
@@ -68,10 +78,14 @@ public abstract class AbstractPedanticDependencyOrderEnforcer extends AbstractPe
   }
 
   /**
-   * Sets the artifact IDs that should be listed first in the dependencies declaration. All artifact
-   * IDs that <strong>start with</strong> any of the priorized IDs in the given list, are required
-   * to be located first in the dependencies section.
+   * Comma-separated list of artifact IDs that should be listed first in the
+   * dependencies declaration. All artifact IDs that <strong>start with</strong>
+   * any of the priorized IDs in the given list, are required to be located
+   * first in the dependencies section.
+   *
    * @param artifactIds Comma separated list of artifact IDs.
+   * @configParam
+   * @default n/a
    */
   public void setArtifactIdPriorities(String artifactIds) {
     LinkedHashSet<String> artifactIdPriorities = Sets.newLinkedHashSet();
@@ -80,10 +94,13 @@ public abstract class AbstractPedanticDependencyOrderEnforcer extends AbstractPe
   }
 
   /**
-   * Sets the scopes that should be listed first in the dependencies declaration. All scopes that
-   * equal any of the scopes in the given list, are required to be located first in the dependencies
-   * section.
+   * Comma-separated list of scopes that should be listed first in the
+   * dependencies declaration. All scopes that equal any of the scopes in the
+   * given list, are required to be located first in the dependencies section.
+   *
    * @param scopes Comma separated list of scopes.
+   * @configParam
+   * @default n/a
    */
   public void setScopePriorities(String scopes) {
     LinkedHashSet<String> scopePriorities = Sets.newLinkedHashSet();

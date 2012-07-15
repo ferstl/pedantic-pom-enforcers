@@ -33,7 +33,18 @@ import com.google.common.collect.Ordering;
 import com.google.common.collect.Sets;
 
 
-
+/**
+ * This enforcer makes sure that the sections in your POM files are in a defined order.
+ * <pre>
+ * ### Example
+ *     <rules>
+ *       <pomSectionOrder implementation="ch.sferstl.maven.pomenforcer.PedanticPomSectionOrderEnforcer">
+ *       <!-- Use project coordinates before parent declaration -->
+ *       <sectionPriorities>groupId,artifactId,version,packaging</sectionPriorities>
+ *     </rules>
+ * </pre>
+ * @id {@link PedanticEnforcerRule#POM_SECTION_ORDER}
+ */
 public class PedanticPomSectionOrderEnforcer extends AbstractPedanticEnforcer {
 
   private final Set<PomSection> sectionPriorities;
@@ -42,6 +53,18 @@ public class PedanticPomSectionOrderEnforcer extends AbstractPedanticEnforcer {
     this.sectionPriorities = Sets.newLinkedHashSet();
   }
 
+  /**
+   * Comma separated list of section priorities.
+   *
+   * @param sectionPriorities Comma separated list of section priorities.
+   * @configParam
+   * @default modelVersion,prerequisites,parent,groupId,artifactId,version
+   *          ,packaging,name,description,url,licenses,organization
+   *          ,inceptionYear,ciManagement,mailingLists,issueManagement,
+   *          developers ,contributors,scm,repositories,pluginRepositories
+   *          ,distributionManagement ,modules,properties,dependencyManagement
+   *          ,dependencies,build,profiles,reporting,reports
+   */
   public void setSectionPriorities(String sectionPriorities) {
     Function<String, PomSection> transformer = new Function<String, PomSection>() {
       @Override
