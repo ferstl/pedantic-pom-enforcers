@@ -27,6 +27,19 @@ import static com.github.ferstl.maven.pomenforcers.DependencyScope.TEST;
 
 /**
  * Enforces that the configured dependencies have to be defined within a specific scope.
+ * <pre>
+ * ### Example
+ *     <rules>
+ *       <dependencyScope implementation="ch.sferstl.maven.pomenforcer.PedanticDependencyScopeEnforcer">
+ *       <!-- These dependencies can only be defined in test scope -->
+ *       <testDependencies>junit:junit,org.hamcrest:hamcrest-library,org.mockito:mockito-core</testDependencies>
+ *
+ *       <!-- These dependencies can only be defined in provided scope -->
+ *       <providedDependencies>javax.servlet:servlet-api</providedDependencies>
+ *     </rules>
+ * </pre>
+ *
+ * @id {@link PedanticEnforcerRule#DEPENDENCY_SCOPE}
  */
 public class PedanticDependencyScopeEnforcer extends AbstractPedanticEnforcer {
 
@@ -38,26 +51,56 @@ public class PedanticDependencyScopeEnforcer extends AbstractPedanticEnforcer {
     this.dependencyToArtifactInfoTransformer = new DependencyToArtifactInfoTransformer();
   }
 
+  /**
+   * Comma-separated list of <code>compile</code> scope dependencies in the format <code>groupId:artifactId</code>.
+   * @param compileDependencies Comma-separated list of <code>compile</code> scope dependencies.
+   * @configParam
+   */
   public void setCompileDependencies(String compileDependencies) {
     addToArtifactinfoMap(createDependencyInfo(compileDependencies), COMPILE);
   }
 
+  /**
+   * Comma-separated list of <code>provided</code> scope dependencies in the format <code>groupId:artifactId</code>.
+   * @param compileDependencies Comma-separated list of <code>provided</code> scope dependencies.
+   * @configParam
+   */
   public void setProvidedDependencies(String providedDependencies) {
     addToArtifactinfoMap(createDependencyInfo(providedDependencies), PROVIDED);
   }
 
+  /**
+   * Comma-separated list of <code>runtime</code> scope dependencies in the format <code>groupId:artifactId</code>.
+   * @param compileDependencies Comma-separated list of <code>runtime</code> scope dependencies.
+   * @configParam
+   */
   public void setRuntimeDependencies(String runtimeDependencies) {
     addToArtifactinfoMap(createDependencyInfo(runtimeDependencies), RUNTIME);
   }
 
+  /**
+   * Comma-separated list of <code>system</code> scope dependencies in the format <code>groupId:artifactId</code>.
+   * @param compileDependencies Comma-separated list of <code>system</code> scope dependencies.
+   * @configParam
+   */
   public void setSystemDependencies(String systemDependencies) {
     addToArtifactinfoMap(createDependencyInfo(systemDependencies), SYSTEM);
   }
 
+  /**
+   * Comma-separated list of <code>test</code> scope dependencies in the format <code>groupId:artifactId</code>.
+   * @param compileDependencies Comma-separated list of <code>test</code> scope dependencies.
+   * @configParam
+   */
   public void setTestDependencies(String testDependencies) {
     addToArtifactinfoMap(createDependencyInfo(testDependencies), TEST);
   }
 
+  /**
+   * Comma-separated list of <code>import</code> scope dependencies in the format <code>groupId:artifactId</code>.
+   * @param compileDependencies Comma-separated list of <code>import</code> scope dependencies.
+   * @configParam
+   */
   public void setImportDependencies(String importDependencies) {
     addToArtifactinfoMap(createDependencyInfo(importDependencies), IMPORT);
   }
