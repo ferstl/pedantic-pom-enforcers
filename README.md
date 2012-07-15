@@ -60,7 +60,7 @@ You may wonder why comma-separated strings are used to configure the enforcer ru
 The reason is simple: The comma-separated strings can be defined as `<properties>` in a POM file. In case a submodule requires a different configuration, the properties can easily be overwritten in the submodule's POM. This allows to add or remove specific enforcer rules or to alter configuration values without redefining the whole plugin configuration.
 
 ### Available Enforcer Rules
-These are the currently available *Pedantic POM Enforcers*. The ID in parentheses is required by the `CompoundPedanticEnforcer`'s configuration. For further details take a look at the [Wiki](pedantic-pom-enforcers/wiki/Pedantic-POM-Enforcers).
+These are the currently available *Pedantic POM Enforcers*. The ID in parentheses is required by the `CompoundPedanticEnforcer`'s configuration. For further details take a look at the [Wiki](pedantic-pom-enforcers/wiki/PedanticEnforcerRule).
 
 | Enforcer Rule | ID | Description |
 |:------------- |:--- |:----------- |

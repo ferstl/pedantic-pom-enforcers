@@ -62,8 +62,7 @@ public class PedanticModuleOrderEnforcer extends AbstractPedanticEnforcer {
    * Comma-separated list of ignored modules. All modules in this list may occur at any place in the
    * <code>modules</code> section.
    * @param ignoredModules Comma-separated list of ignored modules.
-   * @configParameter
-   * @default n/a
+   * @configParam
    */
   public void setIgnoredModules(String ignoredModules) {
     CommaSeparatorUtils.splitAndAddToCollection(ignoredModules, this.ignoredModules);
