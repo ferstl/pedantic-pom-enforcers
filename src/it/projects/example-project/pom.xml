@@ -106,7 +106,6 @@
                 <!-- Dependency Scopes -->
                 <testDependencies>junit:junit,org.hamcrest:hamcrest-library</testDependencies>
                 <providedDependencies>javax.servlet:servlet-api</providedDependencies>
-                <checkResolvedDependencyScopes>true</checkResolvedDependencyScopes>
                 
                 <!-- Plugin Management Order -->
                 <pluginManagementOrderBy>${plugins.orderBy}</pluginManagementOrderBy>
