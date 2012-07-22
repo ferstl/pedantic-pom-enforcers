@@ -65,6 +65,8 @@ public class PedanticPluginManagementLocationEnforcer extends AbstractPedanticEn
    * Comma separated list of POMs that may declare plugin management. Each POM has to be defined in
    * the format `groupId:artifactId`.
    * @param pluginManagingPoms Comma separated list of POMs that may declare plugin management.
+   * @configParam
+   * @default n/a
    */
   public void setPluginManagingPoms(String pluginManagingPoms) {
     ArtifactInfoTransformer artifactInfoTransformer = new ArtifactInfoTransformer();

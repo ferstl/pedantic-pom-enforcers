@@ -16,7 +16,7 @@
 package com.github.ferstl.maven.pomenforcers;
 
 /**
- * Each pedantic enforcer rule is identified by an ID. Thes IDs can be used within the
+ * Each pedantic enforcer rule is identified by an ID. These IDs can be used within the
  * {@link CompoundPedanticEnforcer} to enable specific rules. The compound enforcer is more efficient
  * because it parses the POM file of each Maven module only once and delegates it to the configured
  * enforcer rules.
