@@ -32,7 +32,14 @@ import com.github.ferstl.maven.pomenforcers.util.XmlUtils;
  * Enforces that plugins are configured in the <code>pluginManagement</code> section.
  * <pre>
  * ### Example
- *
+ *     <rules>
+ *       <pluginConfiguration implementation="com.github.ferstl.maven.pomenforcers.PedanticPluginConfigurationEnforcer">
+ *         <!-- all plugin versions have to be defined in plugin managment -->
+ *         <manageVersions>true</manageVersions>
+ *         <!-- plugin configuration (except execution configuration) has to be defined in plugin management. -->
+ *         <manageConfigurations>true</anageConfigurations>
+ *       </pluginConfiguration>
+ *     </rules>
  * </pre>
  * @id {@link PedanticEnforcerRule#PLUGIN_CONFIGURATION}
  */
@@ -54,7 +61,7 @@ public class PedanticPluginConfigurationEnforcer extends AbstractPedanticEnforce
 
   /**
    * Enforces plugin <code>configuration</code> to be defined in `<pluginManagement>`.
-   * @param manageVersions Enforces plugin <code>configuration</code> to be defined in `<pluginManagement>`.
+   * @param manageConfigurations Enforces plugin <code>configuration</code> to be defined in `<pluginManagement>`.
    * @configParam
    * @default <code>true</code>
    */

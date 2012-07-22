@@ -16,11 +16,10 @@
 package com.github.ferstl.maven.pomenforcers;
 
 /**
- * IDs of the available pedantic enforcer rules. Use the
- * {@link CompoundPedanticEnforcer} to aggregate any combination of the enforcer
- * rules described below. The compound enforcer is more efficient because it
- * parses the POM file of each Maven module only once and delegates it to the
- * configured enforcer rules.
+ * Each pedantic enforcer rule is identified by an ID. Thes IDs can be used within the
+ * {@link CompoundPedanticEnforcer} to enable specific rules. The compound enforcer is more efficient
+ * because it parses the POM file of each Maven module only once and delegates it to the configured
+ * enforcer rules.
  */
 public enum PedanticEnforcerRule {
 

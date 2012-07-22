@@ -38,28 +38,45 @@ import com.google.common.collect.Sets;
  * <pre>
  * ### Example
  *     <rules>
- *       <enforcers>POM_SECTION_ORDER,MODULE_ORDER,DEPENDENCY_MANAGEMENT_ORDER,DEPENDENCY_ORDER,PLUGIN_MANAGEMENT_ORDER,PLUGIN_VERSION,PLUGIN_MANAGEMENT_LOCATION</enforcers>
- *       <pomSectionPriorities>roupId,artifactId,version,packaging</pomSectionPriorities>
+ *       <compound implementation="com.github.ferstl.maven.pomenforcers.CompoundPedanticEnforcer">
+ *         <enforcers>POM_SECTION_ORDER,MODULE_ORDER,DEPENDENCY_MANAGEMENT_ORDER,DEPENDENCY_ORDER,DEPENDENCY_DONFIGURATION,DEPENDENCY_SCOPE,PLUGIN_MANAGEMENT_ORDER,PLUGIN_CONFIGURATION,PLUGIN_MANAGEMENT_LOCATION</enforcers>
+ *         <pomSectionPriorities>roupId,artifactId,version,packaging</pomSectionPriorities>
  *
- *       <moduleOrderIgnores>>dist-deb,dist-rpm</moduleOrderIgnores>
+ *         <moduleOrderIgnores>>dist-deb,dist-rpm</moduleOrderIgnores>
  *
- *       <dependenciesOrderBy>scope,groupId,artifactId</dependenciesOrderBy>
- *       <dependenciesScopePriorities>compile,runtime,provided</dependenciesScopePriorities>
- *       <dependenciesGroupIdPriorities>com.myproject,com.mylibs</dependenciesGroupIdPriorities>
- *       <dependenciesArtifactIdPriorities>commons-,utils-</dependenciesArtifactIdPriorities>
+ *         <dependenciesOrderBy>scope,groupId,artifactId</dependenciesOrderBy>
+ *         <dependenciesScopePriorities>compile,runtime,provided</dependenciesScopePriorities>
+ *         <dependenciesGroupIdPriorities>com.myproject,com.mylibs</dependenciesGroupIdPriorities>
+ *         <dependenciesArtifactIdPriorities>commons-,utils-</dependenciesArtifactIdPriorities>
  *
- *       <dependencyManagementOrderBy>scope,groupId,artifactId</dependencyManagementOrderBy>
- *       <dependencyManagementScopePriorities>compile,runtime,provided</dependencyManagementScopePriorities>
- *       <dependencyManagementGroupIdPriorities>com.myproject,com.mylibs</dependencyManagementGroupIdPriorities>
- *       <dependencyManagementArtifactIdPriorities>commons-,utils-</dependencyManagementArtifactIdPriorities>
+ *         <manageDependencyVersions>true</manageDependencyVersions>
+ *         <allowUnmangedProjectVersions>true</allowUnmangedProjectVersions>
+ *         <manageDependencyExclusions>true</manageDependencyExclusions>
  *
- *       <pluginManagementOrderBy>groupId,artifactId</pluginManagementOrderBy>
- *       <pluginManagementGroupIdPriorities>com.myproject.plugins,com.myproject.testplugins</pluginManagementGroupIdPriorities>
- *       <pluginManagementArtifactIdPriorities>mytest-,myintegrationtest-</pluginManagementArtifactIdPriorities>
+ *         <compileDependencies>com.example:mylib1,com.example:mylib2</compileDependencies>
+ *         <providedDependencies>javax.servlet:servlet-api</providedDependencies>
+ *         <runtimeDependencies>com.example:myruntimelib</runtimeDependencies>
+ *         <systemDependencies>com.sun:tools</systemDependencies>
+ *         <testDependencies>org.junit:junit,org.hamcrest:hamcrest-library</testDependencies>
+ *         <importDependencies>org.jboss:jboss-as-client</importDependencies>
  *
- *       <pluginManagingPoms>com.myproject:parent-pom</pluginManagingPoms>
+ *         <dependencyManagementOrderBy>scope,groupId,artifactId</dependencyManagementOrderBy>
+ *         <dependencyManagementScopePriorities>compile,runtime,provided</dependencyManagementScopePriorities>
+ *         <dependencyManagementGroupIdPriorities>com.myproject,com.mylibs</dependencyManagementGroupIdPriorities>
+ *         <dependencyManagementArtifactIdPriorities>commons-,utils-</dependencyManagementArtifactIdPriorities>
+ *
+ *         <pluginManagementOrderBy>groupId,artifactId</pluginManagementOrderBy>
+ *         <pluginManagementGroupIdPriorities>com.myproject.plugins,com.myproject.testplugins</pluginManagementGroupIdPriorities>
+ *         <pluginManagementArtifactIdPriorities>mytest-,myintegrationtest-</pluginManagementArtifactIdPriorities>
+ *
+ *         <managePluginVersions>true</managePluginVersions>
+ *         <managePluginConfigurations>true</managePluginConfigurations>
+ *         <managePluginDependencies>true</managePluginDependencies>
+ *
+ *         <pluginManagingPoms>com.myproject:parent-pom</pluginManagingPoms>
+ *       </compound>
  *     </rules>
- * </pre>
+ * @id n/a
  */
 public class CompoundPedanticEnforcer extends AbstractPedanticEnforcer {
 

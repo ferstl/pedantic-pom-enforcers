@@ -30,6 +30,27 @@ import com.github.ferstl.maven.pomenforcers.util.XmlUtils;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
 
+/**
+ * This enforcer makes sure that all artifacts in your dependencies section are
+ * ordered. The ordering can be defined by any combination of `scope`, `groupId`
+ * and `artifactId`. Each of these attributes may be given a priority.
+ *
+ * <pre>
+ * ### Example
+ *     <rules>
+ *       <dependencConfiguration implementation="com.github.ferstl.maven.pomenforcers.PedanticDependencyConfigurationEnforcer">
+ *         <!-- Manage dependency versions in dependency management -->
+ *         <manageVersions>true</manageVersions>
+ *         <!-- allow ${project.version} outside dependency management -->
+ *         <allowUnmanagedProjectVersions>true</allowUnmanagedProjectVersions>
+ *         <!-- all dependency exclusions must be defined in dependency managment -->
+ *         <manageExclusions>true</manageExclusions>
+ *       </dependencyConfiguration>
+ *     </rules>
+ * </pre>
+ *
+ * @id {@link PedanticEnforcerRule#DEPENDENCY_ORDER}
+ */
 public class PedanticDependencyConfigurationEnforcer extends AbstractPedanticEnforcer {
 
   /** If enabled, dependency versions have to be declared in <code>&lt;dependencyManagement&gt;</code>. */
@@ -41,14 +62,33 @@ public class PedanticDependencyConfigurationEnforcer extends AbstractPedanticEnf
   /** If enabled, dependency exclusions have to be declared in <code>&lt;dependencyManagement&gt;</code>. */
   private boolean manageExclusions = true;
 
+  /**
+   * If set to <code>true</code>, all dependency versions have to be defined in the dependency management.
+   * @param manageVersions Manage dependency versions in the dependency management.
+   * @configParam
+   * @default <code>true</code>
+   */
   public void setManageVersions(boolean manageVersions) {
     this.manageVersions = manageVersions;
   }
 
+  /**
+   * If set to <code>true</code>, <code><version>${project.version}</version></code> may be used within
+   * the dependencies section.
+   * @param allowUnmangedProjectVersions Allow project versions outside of the dependencies section.
+   * @configParam
+   * @default <code>true</code>
+   */
   public void setAllowUnmanagedProjectVersions(boolean allowUnmangedProjectVersions) {
     this.allowUnmangedProjectVersions = allowUnmangedProjectVersions;
   }
 
+  /**
+   * If set to <code>true</code>, all dependency exclusions must be declared in the dependency management.
+   * @param manageExclusions Manage exclusion in dependency management.
+   * @configParam
+   * @default <code>true</code>
+   */
   public void setManageExclusions(boolean manageExclusions) {
     this.manageExclusions = manageExclusions;
   }

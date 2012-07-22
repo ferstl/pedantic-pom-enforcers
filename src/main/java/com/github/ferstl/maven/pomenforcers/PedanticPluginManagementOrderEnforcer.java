@@ -46,12 +46,13 @@ import com.google.common.collect.Sets;
  *
  *     <rules>
  *       <pluginManagementOrder implementation="ch.sferstl.maven.pomenforcer.PedanticPluginManagementOrderEnforcer">
- *       <!-- order by groupId and artifactId (default) -->
- *       <orderBy>groupId,artifactId</orderBy>
- *       <!-- all group IDs starting with com.myproject.plugins and com.myproject.testplugins should occur first -->
- *       <groupIdPriorities>com.myproject.plugins,com.myproject.testplugins</groupIdPriorities>
- *       <!-- all artifact IDs starting with mytest and myintegrationtest should occur first -->
- *       <artifactIdPriorities>mytest-,myintegrationtest-</artifactIdPriorities>
+ *         <!-- order by groupId and artifactId (default) -->
+ *         <orderBy>groupId,artifactId</orderBy>
+ *         <!-- all group IDs starting with com.myproject.plugins and com.myproject.testplugins should occur first -->
+ *         <groupIdPriorities>com.myproject.plugins,com.myproject.testplugins</groupIdPriorities>
+ *         <!-- all artifact IDs starting with mytest and myintegrationtest should occur first -->
+ *         <artifactIdPriorities>mytest-,myintegrationtest-</artifactIdPriorities>
+ *       </pluginManagementOrder>
  *     </rules>
  * </pre>
  * @id {@link PedanticEnforcerRule#PLUGIN_MANAGEMENT_ORDER}

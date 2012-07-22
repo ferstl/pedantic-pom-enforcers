@@ -42,8 +42,9 @@ import com.google.common.collect.Sets;
  * ### Example
  *     <rules>
  *       <moduleOrder implementation="ch.sferstl.maven.pomenforcer.PedanticModuleOrderEnforcer">
- *       <!-- These modules may occur at any place in the modules section -->
- *       <ignoredModules>dist-deb,dist-rpm</ignoredModules>
+ *         <!-- These modules may occur at any place in the modules section -->
+ *         <ignoredModules>dist-deb,dist-rpm</ignoredModules>
+ *        </moduleOrder>
  *     </rules>
  * </pre>
  *

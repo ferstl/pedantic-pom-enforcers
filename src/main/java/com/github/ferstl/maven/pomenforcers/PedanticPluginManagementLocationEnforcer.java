@@ -31,6 +31,19 @@ import com.github.ferstl.maven.pomenforcers.util.XmlUtils;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
 
+/**
+ * Enforces that only a well-defined set of POMs may declare plugin management.
+ * <pre>
+ * ### Example
+ *     <rules>
+ *       <pluginConfiguration implementation="com.github.ferstl.maven.pomenforcers.PedanticPluginManagementLocationEnforcer">
+ *         <!-- Only these POMs may declare plugin management -->
+ *         <pluginManagingPoms>com.example.myproject:parent,com.example.myproject:subparent</pluginManagingPoms>
+ *       </pluginConfiguration>
+ *     </rules>
+ * </pre>
+ * @id {@link PedanticEnforcerRule#PLUGIN_CONFIGURATION}
+ */
 public class PedanticPluginManagementLocationEnforcer extends AbstractPedanticEnforcer {
 
   private final Set<ArtifactInfo> pluginManagingPoms;
@@ -48,6 +61,11 @@ public class PedanticPluginManagementLocationEnforcer extends AbstractPedanticEn
     }
   }
 
+  /**
+   * Comma separated list of POMs that may declare plugin management. Each POM has to be defined in
+   * the format `groupId:artifactId`.
+   * @param pluginManagingPoms Comma separated list of POMs that may declare plugin management.
+   */
   public void setPluginManagingPoms(String pluginManagingPoms) {
     ArtifactInfoTransformer artifactInfoTransformer = new ArtifactInfoTransformer();
     CommaSeparatorUtils.splitAndAddToCollection(pluginManagingPoms, this.pluginManagingPoms, artifactInfoTransformer);

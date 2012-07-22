@@ -44,14 +44,15 @@ import com.google.common.collect.Ordering;
  * ### Example
  *     <rules>
  *       <dependencyManagementOrder implementation="ch.sferstl.maven.pomenforcer.PedanticDependencyManagementOrderEnforcer">
- *       <!-- order by scope, groupId and artifactId (default) -->
- *       <orderBy>scope,groupId,artifactId</orderBy>
- *       <!-- runtime scope should occur before provided scope -->
- *       <scopePriorities>compile,runtime,provided</scopePriorities>
- *       <!-- all group IDs starting with com.myproject and com.mylibs should occur first -->
- *       <groupIdPriorities>com.myproject,com.mylibs</groupIdPriorities>
- *       <!-- all artifact IDs starting with commons- and utils- should occur first -->
- *       <artifactIdPriorities>commons-,utils-</artifactIdPriorities>
+ *         <!-- order by scope, groupId and artifactId (default) -->
+ *         <orderBy>scope,groupId,artifactId</orderBy>
+ *         <!-- runtime scope should occur before provided scope -->
+ *         <scopePriorities>compile,runtime,provided</scopePriorities>
+ *         <!-- all group IDs starting with com.myproject and com.mylibs should occur first -->
+ *         <groupIdPriorities>com.myproject,com.mylibs</groupIdPriorities>
+ *         <!-- all artifact IDs starting with commons- and utils- should occur first -->
+ *         <artifactIdPriorities>commons-,utils-</artifactIdPriorities>
+ *       </dependencyManagementOrder>
  *     </rules>
  * </pre>
  *

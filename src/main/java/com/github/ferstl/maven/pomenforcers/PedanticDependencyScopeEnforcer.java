@@ -31,11 +31,12 @@ import static com.github.ferstl.maven.pomenforcers.DependencyScope.TEST;
  * ### Example
  *     <rules>
  *       <dependencyScope implementation="ch.sferstl.maven.pomenforcer.PedanticDependencyScopeEnforcer">
- *       <!-- These dependencies can only be defined in test scope -->
- *       <testDependencies>junit:junit,org.hamcrest:hamcrest-library,org.mockito:mockito-core</testDependencies>
+ *         <!-- These dependencies can only be defined in test scope -->
+ *         <testDependencies>junit:junit,org.hamcrest:hamcrest-library,org.mockito:mockito-core</testDependencies>
  *
- *       <!-- These dependencies can only be defined in provided scope -->
- *       <providedDependencies>javax.servlet:servlet-api</providedDependencies>
+ *         <!-- These dependencies can only be defined in provided scope -->
+ *         <providedDependencies>javax.servlet:servlet-api</providedDependencies>
+ *       </dependencyScope>
  *     </rules>
  * </pre>
  *

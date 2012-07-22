@@ -39,8 +39,9 @@ import com.google.common.collect.Sets;
  * ### Example
  *     <rules>
  *       <pomSectionOrder implementation="ch.sferstl.maven.pomenforcer.PedanticPomSectionOrderEnforcer">
- *       <!-- Use project coordinates before parent declaration -->
- *       <sectionPriorities>groupId,artifactId,version,packaging</sectionPriorities>
+ *         <!-- Use project coordinates before parent declaration -->
+ *         <sectionPriorities>groupId,artifactId,version,packaging</sectionPriorities>
+ *       </pomSectionOrder>
  *     </rules>
  * </pre>
  * @id {@link PedanticEnforcerRule#POM_SECTION_ORDER}
