@@ -76,6 +76,7 @@
     <!-- Other settings. -->
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <maven.version>3.0.4</maven.version>
+    <pedantic-pom-enforcers-doclet.version>1.0.0</pedantic-pom-enforcers-doclet.version>
   </properties>
 
   <dependencies>
@@ -283,6 +284,36 @@
   </build>
   
   <profiles>
+    <profile>
+      <id>generate-wiki</id>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-javadoc-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>create-wiki</id>
+                <phase>initialize</phase>
+                <goals>
+                  <goal>javadoc</goal>
+                </goals>
+                <configuration>
+                  <doclet>com.github.ferstl.doclet.PedanticEnforcerDoclet</doclet>
+                  <useStandardDocletOptions>false</useStandardDocletOptions>
+                  <additionalparam>-outputDirectory "${project.basedir}/../${project.artifactId}.wiki"</additionalparam>
+                  <docletArtifact>
+                    <groupId>com.github.ferstl</groupId>
+                    <artifactId>pedantic-pom-enforcers-doclet</artifactId>
+                    <version>${pedantic-pom-enforcers-doclet.version}</version>
+                  </docletArtifact>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
     <profile>
       <id>deploy-to-sonatype-oss</id>
       <build>
