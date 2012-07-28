@@ -37,45 +37,45 @@ import com.google.common.collect.Sets;
  *
  * <pre>
  * ### Example
- *     <rules>
- *       <compound implementation="com.github.ferstl.maven.pomenforcers.CompoundPedanticEnforcer">
- *         <enforcers>POM_SECTION_ORDER,MODULE_ORDER,DEPENDENCY_MANAGEMENT_ORDER,DEPENDENCY_ORDER,DEPENDENCY_DONFIGURATION,DEPENDENCY_SCOPE,PLUGIN_MANAGEMENT_ORDER,PLUGIN_CONFIGURATION,PLUGIN_MANAGEMENT_LOCATION</enforcers>
- *         <pomSectionPriorities>roupId,artifactId,version,packaging</pomSectionPriorities>
+ *     &lt;rules&gt;
+ *       &lt;compound implementation=&quot;com.github.ferstl.maven.pomenforcers.CompoundPedanticEnforcer&quot;&gt;
+ *         &lt;enforcers&gt;POM_SECTION_ORDER,MODULE_ORDER,DEPENDENCY_MANAGEMENT_ORDER,DEPENDENCY_ORDER,DEPENDENCY_DONFIGURATION,DEPENDENCY_SCOPE,PLUGIN_MANAGEMENT_ORDER,PLUGIN_CONFIGURATION,PLUGIN_MANAGEMENT_LOCATION&lt;/enforcers&gt;
+ *         &lt;pomSectionPriorities&gt;roupId,artifactId,version,packaging&lt;/pomSectionPriorities&gt;
  *
- *         <moduleOrderIgnores>>dist-deb,dist-rpm</moduleOrderIgnores>
+ *         &lt;moduleOrderIgnores&gt;&gt;dist-deb,dist-rpm&lt;/moduleOrderIgnores&gt;
  *
- *         <dependenciesOrderBy>scope,groupId,artifactId</dependenciesOrderBy>
- *         <dependenciesScopePriorities>compile,runtime,provided</dependenciesScopePriorities>
- *         <dependenciesGroupIdPriorities>com.myproject,com.mylibs</dependenciesGroupIdPriorities>
- *         <dependenciesArtifactIdPriorities>commons-,utils-</dependenciesArtifactIdPriorities>
+ *         &lt;dependenciesOrderBy&gt;scope,groupId,artifactId&lt;/dependenciesOrderBy&gt;
+ *         &lt;dependenciesScopePriorities&gt;compile,runtime,provided&lt;/dependenciesScopePriorities&gt;
+ *         &lt;dependenciesGroupIdPriorities&gt;com.myproject,com.mylibs&lt;/dependenciesGroupIdPriorities&gt;
+ *         &lt;dependenciesArtifactIdPriorities&gt;commons-,utils-&lt;/dependenciesArtifactIdPriorities&gt;
  *
- *         <manageDependencyVersions>true</manageDependencyVersions>
- *         <allowUnmangedProjectVersions>true</allowUnmangedProjectVersions>
- *         <manageDependencyExclusions>true</manageDependencyExclusions>
+ *         &lt;manageDependencyVersions&gt;true&lt;/manageDependencyVersions&gt;
+ *         &lt;allowUnmangedProjectVersions&gt;true&lt;/allowUnmangedProjectVersions&gt;
+ *         &lt;manageDependencyExclusions&gt;true&lt;/manageDependencyExclusions&gt;
  *
- *         <compileDependencies>com.example:mylib1,com.example:mylib2</compileDependencies>
- *         <providedDependencies>javax.servlet:servlet-api</providedDependencies>
- *         <runtimeDependencies>com.example:myruntimelib</runtimeDependencies>
- *         <systemDependencies>com.sun:tools</systemDependencies>
- *         <testDependencies>org.junit:junit,org.hamcrest:hamcrest-library</testDependencies>
- *         <importDependencies>org.jboss:jboss-as-client</importDependencies>
+ *         &lt;compileDependencies&gt;com.example:mylib1,com.example:mylib2&lt;/compileDependencies&gt;
+ *         &lt;providedDependencies&gt;javax.servlet:servlet-api&lt;/providedDependencies&gt;
+ *         &lt;runtimeDependencies&gt;com.example:myruntimelib&lt;/runtimeDependencies&gt;
+ *         &lt;systemDependencies&gt;com.sun:tools&lt;/systemDependencies&gt;
+ *         &lt;testDependencies&gt;org.junit:junit,org.hamcrest:hamcrest-library&lt;/testDependencies&gt;
+ *         &lt;importDependencies&gt;org.jboss:jboss-as-client&lt;/importDependencies&gt;
  *
- *         <dependencyManagementOrderBy>scope,groupId,artifactId</dependencyManagementOrderBy>
- *         <dependencyManagementScopePriorities>compile,runtime,provided</dependencyManagementScopePriorities>
- *         <dependencyManagementGroupIdPriorities>com.myproject,com.mylibs</dependencyManagementGroupIdPriorities>
- *         <dependencyManagementArtifactIdPriorities>commons-,utils-</dependencyManagementArtifactIdPriorities>
+ *         &lt;dependencyManagementOrderBy&gt;scope,groupId,artifactId&lt;/dependencyManagementOrderBy&gt;
+ *         &lt;dependencyManagementScopePriorities&gt;compile,runtime,provided&lt;/dependencyManagementScopePriorities&gt;
+ *         &lt;dependencyManagementGroupIdPriorities&gt;com.myproject,com.mylibs&lt;/dependencyManagementGroupIdPriorities&gt;
+ *         &lt;dependencyManagementArtifactIdPriorities&gt;commons-,utils-&lt;/dependencyManagementArtifactIdPriorities&gt;
  *
- *         <pluginManagementOrderBy>groupId,artifactId</pluginManagementOrderBy>
- *         <pluginManagementGroupIdPriorities>com.myproject.plugins,com.myproject.testplugins</pluginManagementGroupIdPriorities>
- *         <pluginManagementArtifactIdPriorities>mytest-,myintegrationtest-</pluginManagementArtifactIdPriorities>
+ *         &lt;pluginManagementOrderBy&gt;groupId,artifactId&lt;/pluginManagementOrderBy&gt;
+ *         &lt;pluginManagementGroupIdPriorities&gt;com.myproject.plugins,com.myproject.testplugins&lt;/pluginManagementGroupIdPriorities&gt;
+ *         &lt;pluginManagementArtifactIdPriorities&gt;mytest-,myintegrationtest-&lt;/pluginManagementArtifactIdPriorities&gt;
  *
- *         <managePluginVersions>true</managePluginVersions>
- *         <managePluginConfigurations>true</managePluginConfigurations>
- *         <managePluginDependencies>true</managePluginDependencies>
+ *         &lt;managePluginVersions&gt;true&lt;/managePluginVersions&gt;
+ *         &lt;managePluginConfigurations&gt;true&lt;/managePluginConfigurations&gt;
+ *         &lt;managePluginDependencies&gt;true&lt;/managePluginDependencies&gt;
  *
- *         <pluginManagingPoms>com.myproject:parent-pom</pluginManagingPoms>
- *       </compound>
- *     </rules>
+ *         &lt;pluginManagingPoms&gt;com.myproject:parent-pom&lt;/pluginManagingPoms&gt;
+ *       &lt;/compound&gt;
+ *     &lt;/rules&gt;
  * @id n/a
  */
 public class CompoundPedanticEnforcer extends AbstractPedanticEnforcer {

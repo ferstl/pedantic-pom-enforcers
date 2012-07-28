@@ -43,17 +43,16 @@ import com.google.common.collect.Sets;
  * artifactId. Each of these attributes may be given a priority.
  * <pre>
  * ### Example
- *
- *     <rules>
- *       <pluginManagementOrder implementation="ch.sferstl.maven.pomenforcer.PedanticPluginManagementOrderEnforcer">
- *         <!-- order by groupId and artifactId (default) -->
- *         <orderBy>groupId,artifactId</orderBy>
- *         <!-- all group IDs starting with com.myproject.plugins and com.myproject.testplugins should occur first -->
- *         <groupIdPriorities>com.myproject.plugins,com.myproject.testplugins</groupIdPriorities>
- *         <!-- all artifact IDs starting with mytest and myintegrationtest should occur first -->
- *         <artifactIdPriorities>mytest-,myintegrationtest-</artifactIdPriorities>
- *       </pluginManagementOrder>
- *     </rules>
+ *     &lt;rules&gt;
+ *       &lt;pluginManagementOrder implementation=&quot;ch.sferstl.maven.pomenforcer.PedanticPluginManagementOrderEnforcer&quot;&gt;
+ *         &lt;!-- order by groupId and artifactId (default) --&gt;
+ *         &lt;orderBy&gt;groupId,artifactId&lt;/orderBy&gt;
+ *         &lt;!-- all group IDs starting with com.myproject.plugins and com.myproject.testplugins should occur first --&gt;
+ *         &lt;groupIdPriorities&gt;com.myproject.plugins,com.myproject.testplugins&lt;/groupIdPriorities&gt;
+ *         &lt;!-- all artifact IDs starting with mytest and myintegrationtest should occur first --&gt;
+ *         &lt;artifactIdPriorities&gt;mytest-,myintegrationtest-&lt;/artifactIdPriorities&gt;
+ *       &lt;/pluginManagementOrder&gt;
+ *     &lt;/rules&gt;
  * </pre>
  * @id {@link PedanticEnforcerRule#PLUGIN_MANAGEMENT_ORDER}
  */
@@ -72,7 +71,7 @@ public class PedanticPluginManagementOrderEnforcer extends AbstractPedanticEnfor
   /**
    * Comma-separated list of plugin elements that defines the ordering.
    * @param pluginElements Comma-separated list of plugin elements that defines the ordering.
-   * @configParameter
+   * @configParam
    * @default groupId,artifactId
    */
   public void setOrderBy(String pluginElements) {

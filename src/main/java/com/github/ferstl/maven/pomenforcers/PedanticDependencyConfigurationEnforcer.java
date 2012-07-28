@@ -31,22 +31,21 @@ import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
 
 /**
- * This enforcer makes sure that all artifacts in your dependencies section are
- * ordered. The ordering can be defined by any combination of `scope`, `groupId`
- * and `artifactId`. Each of these attributes may be given a priority.
+ * This enforcer makes sure that dependency versions and exclusions are declared in the
+ * <code>&lt;dependencyManagement&gt;</code> section.
  *
  * <pre>
  * ### Example
- *     <rules>
- *       <dependencConfiguration implementation="com.github.ferstl.maven.pomenforcers.PedanticDependencyConfigurationEnforcer">
- *         <!-- Manage dependency versions in dependency management -->
- *         <manageVersions>true</manageVersions>
- *         <!-- allow ${project.version} outside dependency management -->
- *         <allowUnmanagedProjectVersions>true</allowUnmanagedProjectVersions>
- *         <!-- all dependency exclusions must be defined in dependency managment -->
- *         <manageExclusions>true</manageExclusions>
- *       </dependencyConfiguration>
- *     </rules>
+ *     &lt;rules&gt;
+ *       &lt;dependencConfiguration implementation=&quot;com.github.ferstl.maven.pomenforcers.PedanticDependencyConfigurationEnforcer&quot;&gt;
+ *         &lt;!-- Manage dependency versions in dependency management --&gt;
+ *         &lt;manageVersions&gt;true&lt;/manageVersions&gt;
+ *         &lt;!-- allow ${project.version} outside dependency management --&gt;
+ *         &lt;allowUnmanagedProjectVersions&gt;true&lt;/allowUnmanagedProjectVersions&gt;
+ *         &lt;!-- all dependency exclusions must be defined in dependency managment --&gt;
+ *         &lt;manageExclusions&gt;true&lt;/manageExclusions&gt;
+ *       &lt;/dependencyConfiguration&gt;
+ *     &lt;/rules&gt;
  * </pre>
  *
  * @id {@link PedanticEnforcerRule#DEPENDENCY_ORDER}

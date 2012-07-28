@@ -42,18 +42,18 @@ import com.google.common.collect.Ordering;
  *
  * <pre>
  * ### Example
- *     <rules>
- *       <dependencyManagementOrder implementation="ch.sferstl.maven.pomenforcer.PedanticDependencyManagementOrderEnforcer">
- *         <!-- order by scope, groupId and artifactId (default) -->
- *         <orderBy>scope,groupId,artifactId</orderBy>
- *         <!-- runtime scope should occur before provided scope -->
- *         <scopePriorities>compile,runtime,provided</scopePriorities>
- *         <!-- all group IDs starting with com.myproject and com.mylibs should occur first -->
- *         <groupIdPriorities>com.myproject,com.mylibs</groupIdPriorities>
- *         <!-- all artifact IDs starting with commons- and utils- should occur first -->
- *         <artifactIdPriorities>commons-,utils-</artifactIdPriorities>
- *       </dependencyManagementOrder>
- *     </rules>
+ *     &lt;rules&gt;
+ *       &lt;dependencyManagementOrder implementation=&quot;ch.sferstl.maven.pomenforcer.PedanticDependencyManagementOrderEnforcer&quot;&gt;
+ *         &lt;!-- order by scope, groupId and artifactId (default) --&gt;
+ *         &lt;orderBy&gt;scope,groupId,artifactId&lt;/orderBy&gt;
+ *         &lt;!-- runtime scope should occur before provided scope --&gt;
+ *         &lt;scopePriorities&gt;compile,runtime,provided&lt;/scopePriorities&gt;
+ *         &lt;!-- all group IDs starting with com.myproject and com.mylibs should occur first --&gt;
+ *         &lt;groupIdPriorities&gt;com.myproject,com.mylibs&lt;/groupIdPriorities&gt;
+ *         &lt;!-- all artifact IDs starting with commons- and utils- should occur first --&gt;
+ *         &lt;artifactIdPriorities&gt;commons-,utils-&lt;/artifactIdPriorities&gt;
+ *       &lt;/dependencyManagementOrder&gt;
+ *     &lt;/rules&gt;
  * </pre>
  *
  * @id {@link PedanticEnforcerRule#DEPENDENCY_MANAGEMENT_ORDER}

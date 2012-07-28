@@ -36,16 +36,16 @@ import com.google.common.collect.Sets;
 /**
  * This enforcer makes sure that your <code>modules</code> section is sorted
  * alphabetically. Modules that should occur at a specific position in the
- * `<modules>` section can be ignored.
+ * <code>&lt;modules&gt;</code> section can be ignored.
  *
  * <pre>
  * ### Example
- *     <rules>
- *       <moduleOrder implementation="ch.sferstl.maven.pomenforcer.PedanticModuleOrderEnforcer">
- *         <!-- These modules may occur at any place in the modules section -->
- *         <ignoredModules>dist-deb,dist-rpm</ignoredModules>
- *        </moduleOrder>
- *     </rules>
+ *     &lt;rules&gt;
+ *       &lt;moduleOrder implementation=&quot;ch.sferstl.maven.pomenforcer.PedanticModuleOrderEnforcer&quot;&gt;
+ *         &lt;!-- These modules may occur at any place in the modules section --&gt;
+ *         &lt;ignoredModules&gt;dist-deb,dist-rpm&lt;/ignoredModules&gt;
+ *        &lt;/moduleOrder&gt;
+ *     &lt;/rules&gt;
  * </pre>
  *
  * @id {@link PedanticEnforcerRule#MODULE_ORDER}

@@ -37,12 +37,12 @@ import com.google.common.collect.Sets;
  * This enforcer makes sure that the sections in your POM files are in a defined order.
  * <pre>
  * ### Example
- *     <rules>
- *       <pomSectionOrder implementation="ch.sferstl.maven.pomenforcer.PedanticPomSectionOrderEnforcer">
- *         <!-- Use project coordinates before parent declaration -->
- *         <sectionPriorities>groupId,artifactId,version,packaging</sectionPriorities>
- *       </pomSectionOrder>
- *     </rules>
+ *     &lt;rules&gt;
+ *       &lt;pomSectionOrder implementation=&quot;ch.sferstl.maven.pomenforcer.PedanticPomSectionOrderEnforcer&quot;&gt;
+ *         &lt;!-- Use project coordinates before parent declaration --&gt;
+ *         &lt;sectionPriorities&gt;groupId,artifactId,version,packaging&lt;/sectionPriorities&gt;
+ *       &lt;/pomSectionOrder&gt;
+ *     &lt;/rules&gt;
  * </pre>
  * @id {@link PedanticEnforcerRule#POM_SECTION_ORDER}
  */

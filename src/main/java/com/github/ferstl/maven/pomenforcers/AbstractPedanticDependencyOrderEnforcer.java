@@ -46,7 +46,7 @@ public abstract class AbstractPedanticDependencyOrderEnforcer extends AbstractPe
   /**
    * Comma-separated list of dependency elements that defines the ordering.
    * @param dependencyElements Comma-separated list of dependency elements that defines the ordering.
-   * @configParameter
+   * @configParam
    * @default scope,groupId,artifactId
    */
   public void setOrderBy(String dependencyElements) {

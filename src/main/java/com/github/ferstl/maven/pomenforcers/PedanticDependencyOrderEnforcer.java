@@ -33,23 +33,23 @@ import com.google.common.collect.Ordering;
 
 /**
  * This enforcer makes sure that all artifacts in your dependencies section are
- * ordered. The ordering can be defined by any combination of `scope`, `groupId`
- * and `artifactId`. Each of these attributes may be given a priority.
+ * ordered. The ordering can be defined by any combination of <code>scope</code>, <code>groupId</code>
+ * and <code>artifactId</code>. Each of these attributes may be given a priority.
  *
  * <pre>
  * ### Example
- *     <rules>
- *       <dependencyOrder implementation="ch.sferstl.maven.pomenforcer.PedanticDependencyOrderEnforcer">
- *         <!-- order by scope, groupId and artifactId (default) -->
- *         <orderBy>scope,groupId,artifactId</orderBy>
- *         <!-- runtime scope should occur before provided scope -->
- *         <scopePriorities>compile,runtime,provided</scopePriorities>
- *         <!-- all group IDs starting with com.myproject and com.mylibs should occur first -->
- *         <groupIdPriorities>com.myproject,com.mylibs</groupIdPriorities>
- *         <!-- all artifact IDs starting with commons- and utils- should occur first -->
- *         <artifactIdPriorities>commons-,utils-</artifactIdPriorities>
- *       </dependencyOrder>
- *     </rules>
+ *     &lt;rules&gt;
+ *       &lt;dependencyOrder implementation=&quot;ch.sferstl.maven.pomenforcer.PedanticDependencyOrderEnforcer&quot;&gt;
+ *         &lt;!-- order by scope, groupId and artifactId (default) --&gt;
+ *         &lt;orderBy&gt;scope,groupId,artifactId&lt;/orderBy&gt;
+ *         &lt;!-- runtime scope should occur before provided scope --&gt;
+ *         &lt;scopePriorities&gt;compile,runtime,provided&lt;/scopePriorities&gt;
+ *         &lt;!-- all group IDs starting with com.myproject and com.mylibs should occur first --&gt;
+ *         &lt;groupIdPriorities&gt;com.myproject,com.mylibs&lt;/groupIdPriorities&gt;
+ *         &lt;!-- all artifact IDs starting with commons- and utils- should occur first --&gt;
+ *         &lt;artifactIdPriorities&gt;commons-,utils-&lt;/artifactIdPriorities&gt;
+ *       &lt;/dependencyOrder&gt;
+ *     &lt;/rules&gt;
  * </pre>
  *
  * @id {@link PedanticEnforcerRule#DEPENDENCY_ORDER}

@@ -35,12 +35,12 @@ import com.google.common.collect.Collections2;
  * Enforces that only a well-defined set of POMs may declare plugin management.
  * <pre>
  * ### Example
- *     <rules>
- *       <pluginConfiguration implementation="com.github.ferstl.maven.pomenforcers.PedanticPluginManagementLocationEnforcer">
- *         <!-- Only these POMs may declare plugin management -->
- *         <pluginManagingPoms>com.example.myproject:parent,com.example.myproject:subparent</pluginManagingPoms>
- *       </pluginConfiguration>
- *     </rules>
+ *     &lt;rules&gt;
+ *       &lt;pluginConfiguration implementation=&quot;com.github.ferstl.maven.pomenforcers.PedanticPluginManagementLocationEnforcer&quot;&gt;
+ *         &lt;!-- Only these POMs may declare plugin management --&gt;
+ *         &lt;pluginManagingPoms&gt;com.example.myproject:parent,com.example.myproject:subparent&lt;/pluginManagingPoms&gt;
+ *       &lt;/pluginConfiguration&gt;
+ *     &lt;/rules&gt;
  * </pre>
  * @id {@link PedanticEnforcerRule#PLUGIN_CONFIGURATION}
  */

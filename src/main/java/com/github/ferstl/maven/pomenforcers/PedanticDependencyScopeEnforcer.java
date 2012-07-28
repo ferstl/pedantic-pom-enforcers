@@ -29,15 +29,15 @@ import static com.github.ferstl.maven.pomenforcers.DependencyScope.TEST;
  * Enforces that the configured dependencies have to be defined within a specific scope.
  * <pre>
  * ### Example
- *     <rules>
- *       <dependencyScope implementation="ch.sferstl.maven.pomenforcer.PedanticDependencyScopeEnforcer">
- *         <!-- These dependencies can only be defined in test scope -->
- *         <testDependencies>junit:junit,org.hamcrest:hamcrest-library,org.mockito:mockito-core</testDependencies>
+ *     &lt;rules&gt;
+ *       &lt;dependencyScope implementation=&quot;ch.sferstl.maven.pomenforcer.PedanticDependencyScopeEnforcer&quot;&gt;
+ *         &lt;!-- These dependencies can only be defined in test scope --&gt;
+ *         &lt;testDependencies&gt;junit:junit,org.hamcrest:hamcrest-library,org.mockito:mockito-core&lt;/testDependencies&gt;
  *
- *         <!-- These dependencies can only be defined in provided scope -->
- *         <providedDependencies>javax.servlet:servlet-api</providedDependencies>
- *       </dependencyScope>
- *     </rules>
+ *         &lt;!-- These dependencies can only be defined in provided scope --&gt;
+ *         &lt;providedDependencies&gt;javax.servlet:servlet-api&lt;/providedDependencies&gt;
+ *       &lt;/dependencyScope&gt;
+ *     &lt;/rules&gt;
  * </pre>
  *
  * @id {@link PedanticEnforcerRule#DEPENDENCY_SCOPE}

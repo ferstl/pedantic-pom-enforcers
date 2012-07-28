@@ -29,17 +29,21 @@ import com.github.ferstl.maven.pomenforcers.reader.XPathExpressions;
 import com.github.ferstl.maven.pomenforcers.util.XmlUtils;
 
 /**
- * Enforces that plugins are configured in the <code>pluginManagement</code> section.
+ * Enforces that plugin versions, configurations and dependencies are defined in the
+ * <code>&lt;pluginManagement&gt;</code> section. Plugin <code>&lt;executions&gt;</code> can still
+ * be configured in the <code>&lt;plugins&gt;</code> section if this enforcer is active.
  * <pre>
  * ### Example
- *     <rules>
- *       <pluginConfiguration implementation="com.github.ferstl.maven.pomenforcers.PedanticPluginConfigurationEnforcer">
- *         <!-- all plugin versions have to be defined in plugin managment -->
- *         <manageVersions>true</manageVersions>
- *         <!-- plugin configuration (except execution configuration) has to be defined in plugin management. -->
- *         <manageConfigurations>true</anageConfigurations>
- *       </pluginConfiguration>
- *     </rules>
+ *     &lt;rules&gt;
+ *       &lt;pluginConfiguration implementation=&quot;com.github.ferstl.maven.pomenforcers.PedanticPluginConfigurationEnforcer&quot;&gt;
+ *         &lt;!-- all plugin versions have to be defined in plugin managment --&gt;
+ *         &lt;manageVersions&gt;true&lt;/manageVersions&gt;
+ *         &lt;!-- plugin configuration (except execution configuration) has to be defined in plugin management. --&gt;
+ *         &lt;manageConfigurations&gt;true&lt;/anageConfigurations&gt;
+ *         &lt;!-- plugin dependencies may be defined in the &lt;plugins&gt; section. --&gt;
+ *         &lt;manageDependencies&gt;false&lt;/manageDependencies&gt;
+ *       &lt;/pluginConfiguration&gt;
+ *     &lt;/rules&gt;
  * </pre>
  * @id {@link PedanticEnforcerRule#PLUGIN_CONFIGURATION}
  */
