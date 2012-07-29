@@ -51,6 +51,15 @@ public enum PedanticEnforcerRule {
     }
   },
   /**
+   * @see PedanticDependencyManagementLocationEnforcer
+   */
+  DEPENDENCY_MANAGEMENT_LOCATION {
+    @Override
+    public AbstractPedanticEnforcer createEnforcerRule() {
+      return new PedanticDependencyManagementLocationEnforcer();
+    }
+  },
+  /**
    * @see PedanticDependencyOrderEnforcer
    */
   DEPENDENCY_ORDER {

@@ -20,6 +20,7 @@ public interface PedanticEnforcerVisitor {
   void visit(PedanticPomSectionOrderEnforcer sectionOrderEnforcer);
   void visit(PedanticModuleOrderEnforcer moduleOrderEnforcer);
   void visit(PedanticDependencyManagementOrderEnforcer dependencyManagementOrderEnforcer);
+  void visit(PedanticDependencyManagementLocationEnforcer pedanticDependencyManagementLocationEnforcer);
   void visit(PedanticDependencyOrderEnforcer dependencyOrderEnforcer);
   void visit(PedanticDependencyConfigurationEnforcer pedanticDependencyConfigurationEnforcer);
   void visit(PedanticDependencyScopeEnforcer pedanticDependencyScopeEnforcer);

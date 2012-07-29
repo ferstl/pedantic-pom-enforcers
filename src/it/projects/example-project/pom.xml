@@ -85,7 +85,7 @@
             <rules>
               <compound implementation="com.github.ferstl.maven.pomenforcers.CompoundPedanticEnforcer">
                 <!-- Enforcers -->
-                <enforcers>POM_SECTION_ORDER,MODULE_ORDER,DEPENDENCY_MANAGEMENT_ORDER,DEPENDENCY_ORDER,DEPENDENCY_CONFIGURATION,DEPENDENCY_SCOPE,PLUGIN_MANAGEMENT_ORDER,PLUGIN_CONFIGURATION,PLUGIN_MANAGEMENT_LOCATION</enforcers>
+                <enforcers>POM_SECTION_ORDER,MODULE_ORDER,DEPENDENCY_MANAGEMENT_ORDER,DEPENDENCY_ORDER,DEPENDENCY_CONFIGURATION,DEPENDENCY_SCOPE,DEPENDENCY_MANAGEMENT_LOCATION,PLUGIN_MANAGEMENT_ORDER,PLUGIN_CONFIGURATION,PLUGIN_MANAGEMENT_LOCATION</enforcers>
               
                 <!-- Module order -->
                 <moduleOrderIgnores>module3,module4</moduleOrderIgnores>
@@ -102,6 +102,9 @@
                 <manageDependencyVersions>true</manageDependencyVersions>
                 <manageDependencyExclusions>true</manageDependencyExclusions>
                 <allowUnmangedProjectVersions>true</allowUnmangedProjectVersions>
+                
+                <!-- Dependency Management Location -->
+                <dependencyManagingPoms>com.github.ferstl:example-settings-it</dependencyManagingPoms>
                 
                 <!-- Dependency Scopes -->
                 <testDependencies>junit:junit,org.hamcrest:hamcrest-library</testDependencies>

@@ -39,20 +39,32 @@ import com.google.common.collect.Sets;
  * ### Example
  *     &lt;rules&gt;
  *       &lt;compound implementation=&quot;com.github.ferstl.maven.pomenforcers.CompoundPedanticEnforcer&quot;&gt;
- *         &lt;enforcers&gt;POM_SECTION_ORDER,MODULE_ORDER,DEPENDENCY_MANAGEMENT_ORDER,DEPENDENCY_ORDER,DEPENDENCY_DONFIGURATION,DEPENDENCY_SCOPE,PLUGIN_MANAGEMENT_ORDER,PLUGIN_CONFIGURATION,PLUGIN_MANAGEMENT_LOCATION&lt;/enforcers&gt;
+ *         &lt;enforcers&gt;POM_SECTION_ORDER,MODULE_ORDER,DEPENDENCY_MANAGEMENT_ORDER,DEPENDENCY_ORDER,DEPENDENCY_CONFIGURATION,DEPENDENCY_SCOPE,DEPENDENCY_MANAGEMENT_LOCATION,PLUGIN_MANAGEMENT_ORDER,PLUGIN_CONFIGURATION,PLUGIN_MANAGEMENT_LOCATION&lt;/enforcers&gt;
+ *
+ *         &lt;!-- POM_SECTION configuration --&gt;
  *         &lt;pomSectionPriorities&gt;roupId,artifactId,version,packaging&lt;/pomSectionPriorities&gt;
  *
+ *         &lt;!-- MODULE_ORDER configuration --&gt;
  *         &lt;moduleOrderIgnores&gt;&gt;dist-deb,dist-rpm&lt;/moduleOrderIgnores&gt;
  *
+ *         &lt;!-- DEPENDENCY_ORDER configuration --&gt;
  *         &lt;dependenciesOrderBy&gt;scope,groupId,artifactId&lt;/dependenciesOrderBy&gt;
  *         &lt;dependenciesScopePriorities&gt;compile,runtime,provided&lt;/dependenciesScopePriorities&gt;
  *         &lt;dependenciesGroupIdPriorities&gt;com.myproject,com.mylibs&lt;/dependenciesGroupIdPriorities&gt;
  *         &lt;dependenciesArtifactIdPriorities&gt;commons-,utils-&lt;/dependenciesArtifactIdPriorities&gt;
  *
+ *         &lt;!-- DEPENDENCY_MANAGEMENT_ORDER configuration --&gt;
+ *         &lt;dependencyManagementOrderBy&gt;scope,groupId,artifactId&lt;/dependencyManagementOrderBy&gt;
+ *         &lt;dependencyManagementScopePriorities&gt;compile,runtime,provided&lt;/dependencyManagementScopePriorities&gt;
+ *         &lt;dependencyManagementGroupIdPriorities&gt;com.myproject,com.mylibs&lt;/dependencyManagementGroupIdPriorities&gt;
+ *         &lt;dependencyManagementArtifactIdPriorities&gt;commons-,utils-&lt;/dependencyManagementArtifactIdPriorities&gt;
+ *
+ *         &lt;!-- DEPENDENCY_CONFIGURATION configuration --&gt;
  *         &lt;manageDependencyVersions&gt;true&lt;/manageDependencyVersions&gt;
  *         &lt;allowUnmangedProjectVersions&gt;true&lt;/allowUnmangedProjectVersions&gt;
  *         &lt;manageDependencyExclusions&gt;true&lt;/manageDependencyExclusions&gt;
  *
+ *         &lt;!-- DEPENDENCY_SCOPE configuration --&gt;
  *         &lt;compileDependencies&gt;com.example:mylib1,com.example:mylib2&lt;/compileDependencies&gt;
  *         &lt;providedDependencies&gt;javax.servlet:servlet-api&lt;/providedDependencies&gt;
  *         &lt;runtimeDependencies&gt;com.example:myruntimelib&lt;/runtimeDependencies&gt;
@@ -60,19 +72,20 @@ import com.google.common.collect.Sets;
  *         &lt;testDependencies&gt;org.junit:junit,org.hamcrest:hamcrest-library&lt;/testDependencies&gt;
  *         &lt;importDependencies&gt;org.jboss:jboss-as-client&lt;/importDependencies&gt;
  *
- *         &lt;dependencyManagementOrderBy&gt;scope,groupId,artifactId&lt;/dependencyManagementOrderBy&gt;
- *         &lt;dependencyManagementScopePriorities&gt;compile,runtime,provided&lt;/dependencyManagementScopePriorities&gt;
- *         &lt;dependencyManagementGroupIdPriorities&gt;com.myproject,com.mylibs&lt;/dependencyManagementGroupIdPriorities&gt;
- *         &lt;dependencyManagementArtifactIdPriorities&gt;commons-,utils-&lt;/dependencyManagementArtifactIdPriorities&gt;
+ *         &lt;!-- DEPENDENCY_MANAGEMENT_LOCATION configuration --&gt;
+ *         &lt;dependencyManagingPoms&gt;com.example.myproject:parent,com.example.myproject:subparent&lt;/dependencyManagingPoms&gt;
  *
+ *         &lt;!-- PLUGIN_MANAGEMENT_ORDER configuration --&gt;
  *         &lt;pluginManagementOrderBy&gt;groupId,artifactId&lt;/pluginManagementOrderBy&gt;
  *         &lt;pluginManagementGroupIdPriorities&gt;com.myproject.plugins,com.myproject.testplugins&lt;/pluginManagementGroupIdPriorities&gt;
  *         &lt;pluginManagementArtifactIdPriorities&gt;mytest-,myintegrationtest-&lt;/pluginManagementArtifactIdPriorities&gt;
  *
+ *         &lt;!-- PLUGIN_CONFIGURATION configuration --&gt;
  *         &lt;managePluginVersions&gt;true&lt;/managePluginVersions&gt;
  *         &lt;managePluginConfigurations&gt;true&lt;/managePluginConfigurations&gt;
  *         &lt;managePluginDependencies&gt;true&lt;/managePluginDependencies&gt;
  *
+ *         &lt;!-- PLUGIN_MANAGEMENT_LOCATION configuration --&gt;
  *         &lt;pluginManagingPoms&gt;com.myproject:parent-pom&lt;/pluginManagingPoms&gt;
  *       &lt;/compound&gt;
  *     &lt;/rules&gt;
@@ -142,6 +155,12 @@ public class CompoundPedanticEnforcer extends AbstractPedanticEnforcer {
    * @configParam
    */
   private String dependencyManagementScopePriorities;
+
+  /**
+   * See {@link PedanticDependencyManagementLocationEnforcer#setDependencyManagingPoms(String)}.
+   * @configParam
+   */
+  private String dependencyManagingPoms;
 
   /**
    * See
@@ -315,6 +334,13 @@ public class CompoundPedanticEnforcer extends AbstractPedanticEnforcer {
       }
       if (!Strings.isNullOrEmpty(CompoundPedanticEnforcer.this.dependencyManagementScopePriorities)) {
         enforcer.setScopePriorities(CompoundPedanticEnforcer.this.dependencyManagementScopePriorities);
+      }
+    }
+
+    @Override
+    public void visit(PedanticDependencyManagementLocationEnforcer enforcer) {
+      if (!Strings.isNullOrEmpty(CompoundPedanticEnforcer.this.dependencyManagingPoms)) {
+        enforcer.setDependencyManagingPoms(CompoundPedanticEnforcer.this.dependencyManagingPoms);
       }
     }
 
