@@ -28,21 +28,19 @@ import com.github.ferstl.maven.pomenforcers.artifact.ArtifactInfoTransformer;
 import com.github.ferstl.maven.pomenforcers.util.CommaSeparatorUtils;
 import com.github.ferstl.maven.pomenforcers.util.EnforcerRuleUtils;
 import com.github.ferstl.maven.pomenforcers.util.XmlUtils;
-import com.google.common.base.Predicate;
-import com.google.common.collect.Collections2;
 
 /**
  * Enforces that only a well-defined set of POMs may declare plugin management.
  * <pre>
  * ### Example
  *     &lt;rules&gt;
- *       &lt;pluginConfiguration implementation=&quot;com.github.ferstl.maven.pomenforcers.PedanticPluginManagementLocationEnforcer&quot;&gt;
+ *       &lt;pluginManagemenLocation implementation=&quot;com.github.ferstl.maven.pomenforcers.PedanticPluginManagementLocationEnforcer&quot;&gt;
  *         &lt;!-- Only these POMs may declare plugin management --&gt;
  *         &lt;pluginManagingPoms&gt;com.example.myproject:parent,com.example.myproject:subparent&lt;/pluginManagingPoms&gt;
- *       &lt;/pluginConfiguration&gt;
+ *       &lt;/pluginManagemenLocation&gt;
  *     &lt;/rules&gt;
  * </pre>
- * @id {@link PedanticEnforcerRule#PLUGIN_CONFIGURATION}
+ * @id {@link PedanticEnforcerRule#PLUGIN_MANAGEMENT_LOCATION}
  */
 public class PedanticPluginManagementLocationEnforcer extends AbstractPedanticEnforcer {
 
@@ -62,8 +60,8 @@ public class PedanticPluginManagementLocationEnforcer extends AbstractPedanticEn
   }
 
   /**
-   * Comma separated list of POMs that may declare plugin management. Each POM has to be defined in
-   * the format `groupId:artifactId`.
+   * Comma separated list of POMs that may declare <code>&lt;pluginManagement&gt;</code>. Each POM has
+   * to be defined in the format <code>groupId:artifactId</code>.
    * @param pluginManagingPoms Comma separated list of POMs that may declare plugin management.
    * @configParam
    * @default n/a
@@ -77,22 +75,13 @@ public class PedanticPluginManagementLocationEnforcer extends AbstractPedanticEn
     return XmlUtils.evaluateXPathAsElement("/project/build/pluginManagement", pom) != null;
   }
 
-  private boolean isPluginManagementAllowed(final MavenProject project) {
-    Predicate<ArtifactInfo> pomInfoFilter = new Predicate<ArtifactInfo>() {
-      @Override
-      public boolean apply(ArtifactInfo input) {
-        return project.getGroupId().equals(input.getGroupId())
-            && project.getArtifactId().equals(input.getArtifactId());
-      }
-    };
-    return this.pluginManagingPoms.isEmpty() ||
-           Collections2.filter(this.pluginManagingPoms, pomInfoFilter).size() != 0;
+  private boolean isPluginManagementAllowed(MavenProject project) {
+    ArtifactInfo projectInfo = new ArtifactInfo(project.getGroupId(), project.getArtifactId());
+    return this.pluginManagingPoms.contains(projectInfo);
   }
-
 
   @Override
   protected void accept(PedanticEnforcerVisitor visitor) {
     visitor.visit(this);
   }
-
 }

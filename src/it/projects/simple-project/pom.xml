@@ -22,6 +22,9 @@
               <compound implementation="com.github.ferstl.maven.pomenforcers.CompoundPedanticEnforcer">
                 <!-- Enforcers -->
                 <enforcers>POM_SECTION_ORDER,MODULE_ORDER,DEPENDENCY_MANAGEMENT_ORDER,DEPENDENCY_ORDER,DEPENDENCY_CONFIGURATION,PLUGIN_MANAGEMENT_ORDER,PLUGIN_CONFIGURATION,PLUGIN_MANAGEMENT_LOCATION</enforcers>
+                
+                <!-- PLUGIN_MANAGEMENT_LOCATION requires the definition of POMs where pluginManagement is allowed -->
+                <pluginManagingPoms>com.github.ferstl:simple-project-it</pluginManagingPoms>
               </compound>
             </rules>
             <fail>true</fail>
