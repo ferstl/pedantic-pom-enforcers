@@ -65,15 +65,15 @@ These are the currently available *Pedantic POM Enforcers*. The ID in parenthese
 | Enforcer Rule | ID | Description |
 |:------------- |:--- |:----------- |
 | [CompoundPedanticEnforcer](pedantic-pom-enforcers/wiki/CompoundPedanticEnforcer) | n/a | Used to aggregate several pedantic enforcer rules. |
-| [PedanticPomSectionOrderEnforcer](pedantic-pom-enforcers/wiki/PedanticPomSectionOrderEnforcer) | POM_SECTION_ORDER | This enforcer makes sure that the sections in your POM files are in a defined order. |
-| [PedanticModuleOrderEnforcer](pedantic-pom-enforcers/wiki/PedanticModuleOrderEnforcer) | MODULE_ORDER | This enforcer makes sure that your `modules` section is sorted alphabetically. |
-| [PedanticDependencyManagementOrderEnforcer](pedantic-pom-enforcers/wiki/PedanticDependencyManagementOrderEnforcer) | DEPENDENCY_MANAGEMENT_ORDER | This enforcer makes sure that all artifacts in your dependency management are ordered. |
-| [PedanticDependencyManagementLocationEnforcer](pedantic-pom-enforcers/wiki/PedanticDependencyManagementLocationEnforcer) | DEPENDENCY_MANAGEMENT_LOCATION | Enforces that only a well-defined set of POMs may declare plugin management. |
-| [PedanticDependencyOrderEnforcer](pedantic-pom-enforcers/wiki/PedanticDependencyOrderEnforcer) | DEPENDENCY_ORDER | This enforcer makes sure that all artifacts in your dependencies section are ordered. |
-| [PedanticDependencyConfigurationEnforcer](pedantic-pom-enforcers/wiki/PedanticDependencyConfigurationEnforcer) | DEPENDENCY_CONFIGURATION | This enforcer makes sure that dependency versions and exclusions are declared in the `<dependencyManagement>` section. |
-| [PedanticDependencyScopeEnforcer](pedantic-pom-enforcers/wiki/PedanticDependencyScopeEnforcer) | DEPENDENCY_SCOPE | Enforces that the configured dependencies have to be defined within a specific scope. |
-| [PedanticPluginManagementOrderEnforcer](pedantic-pom-enforcers/wiki/PedanticPluginManagementOrderEnforcer) | PLUGIN_MANAGEMENT_ORDER | This enforcer makes sure that all plugins in your plugin management section are ordered. |
-| [PedanticPluginConfigurationEnforcer](pedantic-pom-enforcers/wiki/PedanticPluginConfigurationEnforcer) | PLUGIN_CONFIGURATION | Enforces that plugin versions, configurations and dependencies are defined in the `<pluginManagement>` section. |
-| [PedanticPluginManagementLocationEnforcer](pedantic-pom-enforcers/wiki/PedanticPluginManagementLocationEnforcer) | PLUGIN_MANAGEMENT_LOCATION | Enforces that only a well-defined set of POMs may declare plugin management. |
+| [PedanticPomSectionOrderEnforcer](pedantic-pom-enforcers/wiki/PedanticPomSectionOrderEnforcer) | `POM_SECTION_ORDER` | This enforcer makes sure that the sections in your POM files are in a defined order. |
+| [PedanticModuleOrderEnforcer](pedantic-pom-enforcers/wiki/PedanticModuleOrderEnforcer) | `MODULE_ORDER` | This enforcer makes sure that your `modules` section is sorted alphabetically. |
+| [PedanticDependencyManagementOrderEnforcer](pedantic-pom-enforcers/wiki/PedanticDependencyManagementOrderEnforcer) | `DEPENDENCY_MANAGEMENT_ORDER` | This enforcer makes sure that all artifacts in your dependency management are ordered. |
+| [PedanticDependencyManagementLocationEnforcer](pedantic-pom-enforcers/wiki/PedanticDependencyManagementLocationEnforcer) | `DEPENDENCY_MANAGEMENT_LOCATION` | Enforces that only a well-defined set of POMs may declare plugin management. |
+| [PedanticDependencyOrderEnforcer](pedantic-pom-enforcers/wiki/PedanticDependencyOrderEnforcer) | `DEPENDENCY_ORDER` | This enforcer makes sure that all artifacts in your dependencies section are ordered. |
+| [PedanticDependencyConfigurationEnforcer](pedantic-pom-enforcers/wiki/PedanticDependencyConfigurationEnforcer) | `DEPENDENCY_CONFIGURATION` | This enforcer makes sure that dependency versions and exclusions are declared in the `<dependencyManagement>` section. |
+| [PedanticDependencyScopeEnforcer](pedantic-pom-enforcers/wiki/PedanticDependencyScopeEnforcer) | `DEPENDENCY_SCOPE` | Enforces that the configured dependencies have to be defined within a specific scope. |
+| [PedanticPluginManagementOrderEnforcer](pedantic-pom-enforcers/wiki/PedanticPluginManagementOrderEnforcer) | `PLUGIN_MANAGEMENT_ORDER` | This enforcer makes sure that all plugins in your plugin management section are ordered. |
+| [PedanticPluginConfigurationEnforcer](pedantic-pom-enforcers/wiki/PedanticPluginConfigurationEnforcer) | `PLUGIN_CONFIGURATION` | Enforces that plugin versions, configurations and dependencies are defined in the `<pluginManagement>` section. |
+| [PedanticPluginManagementLocationEnforcer](pedantic-pom-enforcers/wiki/PedanticPluginManagementLocationEnforcer) | `PLUGIN_MANAGEMENT_LOCATION` | Enforces that only a well-defined set of POMs may declare plugin management. |
 
 
