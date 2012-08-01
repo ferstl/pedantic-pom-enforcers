@@ -14,9 +14,10 @@
   See the License for the specific language governing permissions and
   limitations under the License.
 -->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
-  
+
   <groupId>com.github.ferstl</groupId>
   <artifactId>pedantic-pom-enforcers</artifactId>
   <version>1.0-SNAPSHOT</version>
@@ -34,7 +35,7 @@
       <distribution>repo</distribution>
     </license>
   </licenses>
-  
+
   <developers>
     <developer>
       <id>ferstl</id>
@@ -50,7 +51,7 @@
     <url>${project.url}</url>
     <tag>HEAD</tag>
   </scm>
-  
+
   <distributionManagement>
     <repository>
       <id>${distribution.release.id}</id>
@@ -72,7 +73,7 @@
     <maven-javadoc-plugin.version>2.8.1</maven-javadoc-plugin.version>
     <maven-release-plugin.version>2.3</maven-release-plugin.version>
     <maven-source-plugin.version>2.1.2</maven-source-plugin.version>
-    
+
     <!-- Other settings. -->
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <maven.version>3.0.4</maven.version>
@@ -165,7 +166,7 @@
             </includes>
           </configuration>
         </plugin>
-        
+
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-compiler-plugin</artifactId>
@@ -175,6 +176,7 @@
             <target>1.7</target>
           </configuration>
         </plugin>
+
         
         <!-- Obey the own rules!
              (Has to be disabled because the maven-release-plugin doesn't like depending on the
@@ -200,13 +202,12 @@
             </dependency>
           </dependencies>
         </plugin-->
-        
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-gpg-plugin</artifactId>
           <version>${maven-gpg-plugin.version}</version>
         </plugin>
-        
+
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-invoker-plugin</artifactId>
@@ -228,13 +229,32 @@
             </goals>
           </configuration>
         </plugin>
-        
+
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-javadoc-plugin</artifactId>
           <version>${maven-javadoc-plugin.version}</version>
+          <configuration>
+            <tags>
+              <tag>
+                <name>id</name>
+                <placement>a</placement>
+                <head>Enforcer Rule ID:</head>
+              </tag>
+              <tag>
+                <name>configParam</name>
+                <placement>a</placement>
+                <head>Enforcer Configuration Parameter</head>
+              </tag>
+              <tag>
+                <name>default</name>
+                <placement>a</placement>
+                <head>Default Value:</head>
+              </tag>
+            </tags>
+          </configuration>
         </plugin>
-        
+
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-release-plugin</artifactId>
@@ -245,7 +265,7 @@
             <arguments>-Pdeploy-to-sonatype-oss</arguments>
           </configuration>
         </plugin>
-        
+
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-source-plugin</artifactId>
@@ -253,7 +273,7 @@
         </plugin>
       </plugins>
     </pluginManagement>
-    
+
     <plugins>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
@@ -282,7 +302,7 @@
       </plugin>
     </plugins>
   </build>
-  
+
   <profiles>
     <profile>
       <id>generate-wiki</id>
