@@ -54,8 +54,8 @@ public class PedanticPluginConfigurationEnforcer extends AbstractPedanticEnforce
   private boolean manageDependencies = true;
 
   /**
-   * Enforces plugin versions to be defined in `<pluginManagement>`.
-   * @param manageVersions Enforces plugin versions to be defined in `<pluginManagement>`.
+   * Enforces plugin versions to be defined in <code>&lt;pluginManagement&gt;</code>.
+   * @param manageVersions Enforces plugin versions to be defined in <code>&lt;pluginManagement&gt;</code>.
    * @configParam
    * @default <code>true</code>
    */
@@ -64,8 +64,8 @@ public class PedanticPluginConfigurationEnforcer extends AbstractPedanticEnforce
   }
 
   /**
-   * Enforces plugin <code>configuration</code> to be defined in `<pluginManagement>`.
-   * @param manageConfigurations Enforces plugin <code>configuration</code> to be defined in `<pluginManagement>`.
+   * Enforces plugin <code>configuration</code> to be defined in <code>&lt;pluginManagement&gt;</code>.
+   * @param manageConfigurations Enforces plugin <code>configuration</code> to be defined in <code>&lt;pluginManagement&gt;</code>.
    * @configParam
    * @default <code>true</code>
    */
@@ -74,8 +74,9 @@ public class PedanticPluginConfigurationEnforcer extends AbstractPedanticEnforce
   }
 
   /**
-   * Enforces plugin dependencies to be defined in `<pluginManagement>`.
-   * @param manageVersions Enforces plugin <code>configuration</code> to be defined in `<pluginManagement>`.
+   * Enforces plugin dependencies to be defined in <code>&lt;pluginManagement&gt;</code>.
+   * @param manageDependencies Enforces plugin <code>&lt;dependencies&gt;</code> to be defined in
+   *        <code>&lt;pluginManagement&gt;</code>.
    * @configParam
    * @default <code>true</code>
    */

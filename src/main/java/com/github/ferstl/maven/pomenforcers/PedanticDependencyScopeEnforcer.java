@@ -63,7 +63,7 @@ public class PedanticDependencyScopeEnforcer extends AbstractPedanticEnforcer {
 
   /**
    * Comma-separated list of <code>provided</code> scope dependencies in the format <code>groupId:artifactId</code>.
-   * @param compileDependencies Comma-separated list of <code>provided</code> scope dependencies.
+   * @param providedDependencies Comma-separated list of <code>provided</code> scope dependencies.
    * @configParam
    */
   public void setProvidedDependencies(String providedDependencies) {
@@ -72,7 +72,7 @@ public class PedanticDependencyScopeEnforcer extends AbstractPedanticEnforcer {
 
   /**
    * Comma-separated list of <code>runtime</code> scope dependencies in the format <code>groupId:artifactId</code>.
-   * @param compileDependencies Comma-separated list of <code>runtime</code> scope dependencies.
+   * @param runtimeDependencies Comma-separated list of <code>runtime</code> scope dependencies.
    * @configParam
    */
   public void setRuntimeDependencies(String runtimeDependencies) {
@@ -81,7 +81,7 @@ public class PedanticDependencyScopeEnforcer extends AbstractPedanticEnforcer {
 
   /**
    * Comma-separated list of <code>system</code> scope dependencies in the format <code>groupId:artifactId</code>.
-   * @param compileDependencies Comma-separated list of <code>system</code> scope dependencies.
+   * @param systemDependencies Comma-separated list of <code>system</code> scope dependencies.
    * @configParam
    */
   public void setSystemDependencies(String systemDependencies) {
@@ -90,7 +90,7 @@ public class PedanticDependencyScopeEnforcer extends AbstractPedanticEnforcer {
 
   /**
    * Comma-separated list of <code>test</code> scope dependencies in the format <code>groupId:artifactId</code>.
-   * @param compileDependencies Comma-separated list of <code>test</code> scope dependencies.
+   * @param testDependencies Comma-separated list of <code>test</code> scope dependencies.
    * @configParam
    */
   public void setTestDependencies(String testDependencies) {
@@ -99,7 +99,7 @@ public class PedanticDependencyScopeEnforcer extends AbstractPedanticEnforcer {
 
   /**
    * Comma-separated list of <code>import</code> scope dependencies in the format <code>groupId:artifactId</code>.
-   * @param compileDependencies Comma-separated list of <code>import</code> scope dependencies.
+   * @param importDependencies Comma-separated list of <code>import</code> scope dependencies.
    * @configParam
    */
   public void setImportDependencies(String importDependencies) {
