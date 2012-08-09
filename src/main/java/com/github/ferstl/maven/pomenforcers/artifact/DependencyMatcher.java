@@ -53,8 +53,8 @@ public class DependencyMatcher {
     @Override
     public Dependency apply(Dependency dependency) {
       for (Dependency supersetDependency : this.superset) {
-        String groupId = EnforcerRuleUtils.evaluateStringProperty(dependency.getGroupId(), this.helper);
-        String artifactId = EnforcerRuleUtils.evaluateStringProperty(dependency.getArtifactId(), this.helper);
+        String groupId = EnforcerRuleUtils.evaluateProperties(dependency.getGroupId(), this.helper);
+        String artifactId = EnforcerRuleUtils.evaluateProperties(dependency.getArtifactId(), this.helper);
         if (supersetDependency.getGroupId().equals(groupId)
          && supersetDependency.getArtifactId().equals(artifactId)) {
           Dependency matchedDependency = supersetDependency.clone();

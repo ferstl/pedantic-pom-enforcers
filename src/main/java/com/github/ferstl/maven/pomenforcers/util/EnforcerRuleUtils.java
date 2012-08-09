@@ -15,6 +15,9 @@
  */
 package com.github.ferstl.maven.pomenforcers.util;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import org.apache.maven.enforcer.rule.api.EnforcerRuleHelper;
 import org.apache.maven.project.MavenProject;
 import org.codehaus.plexus.component.configurator.expression.ExpressionEvaluationException;
@@ -22,6 +25,8 @@ import org.codehaus.plexus.component.configurator.expression.ExpressionEvaluatio
 import com.google.common.base.Strings;
 
 public final class EnforcerRuleUtils {
+
+  private static final Pattern PROPERTY_PATTERN = Pattern.compile("\\$\\{.*?\\}");
 
   public static MavenProject getMavenProject(EnforcerRuleHelper helper) {
     try {
@@ -31,18 +36,28 @@ public final class EnforcerRuleUtils {
     }
   }
 
-  public static String evaluateStringProperty(String property, EnforcerRuleHelper helper) {
-    // That's exactly the way properties are detected within the maven evaluators
-    if (!Strings.isNullOrEmpty(property) && property.startsWith("${") && property.endsWith("}")) {
-      try {
-        return (String) helper.evaluate(property);
-      } catch (ExpressionEvaluationException e) {
-        throw new IllegalArgumentException("Unable to resolve property " + property);
-      } catch (ClassCastException e) {
-        throw new IllegalArgumentException("Property " + property + " does not evaluate to a String");
+  public static String evaluateProperties(String input, EnforcerRuleHelper helper) {
+    if (!Strings.isNullOrEmpty(input)) {
+      Matcher matcher = PROPERTY_PATTERN.matcher(input);
+      StringBuffer substituted = new StringBuffer();
+      while(matcher.find()) {
+        String property = matcher.group();
+        matcher.appendReplacement(substituted, evaluateStringProperty(property, helper));
       }
+      matcher.appendTail(substituted);
+      return substituted.toString();
     }
-    return property;
+    return input;
+  }
+
+  private static String evaluateStringProperty(String property, EnforcerRuleHelper helper) {
+    try {
+      return (String) helper.evaluate(property);
+    } catch (ExpressionEvaluationException e) {
+      throw new IllegalArgumentException("Unable to resolve property " + property);
+    } catch (ClassCastException e) {
+      throw new IllegalArgumentException("Property " + property + " does not evaluate to a String");
+    }
   }
 
   private EnforcerRuleUtils() {}
