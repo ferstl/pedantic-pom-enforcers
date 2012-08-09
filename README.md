@@ -38,7 +38,7 @@ To activate the enforcer rules, just declare them in the configuration of the `m
             <dependency>
               <groupId>com.github.ferstl</groupId>
               <artifactId>pedantic-pom-enforcers</artifactId>
-              <version>1.0-alpha-4</version>
+              <version>1.0-beta-1</version>
             </dependency>
           </dependencies>
         </plugin>
