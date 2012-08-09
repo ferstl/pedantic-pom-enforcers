@@ -17,37 +17,45 @@ package com.github.ferstl.maven.pomenforcers.artifact;
 
 import java.util.Collection;
 
+import org.apache.maven.enforcer.rule.api.EnforcerRuleHelper;
 import org.apache.maven.model.Plugin;
 
 import com.google.common.base.Function;
-import com.google.common.collect.Collections2;
+
+import static com.github.ferstl.maven.pomenforcers.util.EnforcerRuleUtils.evaluateProperties;
+import static com.google.common.base.Objects.equal;
+import static com.google.common.collect.Collections2.transform;
 
 public class PluginMatcher {
 
   private final MatchFunction matchFunction;
 
-  public PluginMatcher(Collection<Plugin> superset) {
-    this.matchFunction = new MatchFunction(superset);
+  public PluginMatcher(Collection<Plugin> superset, EnforcerRuleHelper helper) {
+    this.matchFunction = new MatchFunction(superset, helper);
   }
 
   public Collection<Plugin> match(Collection<Plugin> subset) {
-    return Collections2.transform(subset, this.matchFunction);
+    return transform(subset, this.matchFunction);
   }
 
 
   private static class MatchFunction implements Function<Plugin, Plugin> {
 
     private final Collection<Plugin> superset;
+    private final EnforcerRuleHelper helper;
 
-    public MatchFunction(Collection<Plugin> superset) {
+    public MatchFunction(Collection<Plugin> superset, EnforcerRuleHelper helper) {
       this.superset = superset;
+      this.helper = helper;
     }
 
     @Override
     public Plugin apply(Plugin plugin) {
+      String groupId = evaluateProperties(plugin.getGroupId(), this.helper);
+      String artifactId = evaluateProperties(plugin.getArtifactId(), this.helper);
       for (Plugin supdersetDependency : this.superset) {
-        if (supdersetDependency.getGroupId().equals(plugin.getGroupId())
-         && supdersetDependency.getArtifactId().equals(plugin.getArtifactId())) {
+        if (equal(supdersetDependency.getGroupId(), groupId)
+         && equal(supdersetDependency.getArtifactId(), artifactId)) {
           return supdersetDependency;
         }
       }
