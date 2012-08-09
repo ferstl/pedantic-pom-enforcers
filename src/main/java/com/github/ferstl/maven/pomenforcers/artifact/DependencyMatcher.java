@@ -20,12 +20,13 @@ import java.util.Collection;
 import org.apache.maven.enforcer.rule.api.EnforcerRuleHelper;
 import org.apache.maven.model.Dependency;
 
-import com.github.ferstl.maven.pomenforcers.util.EnforcerRuleUtils;
 import com.google.common.base.Function;
-import com.google.common.base.Objects;
-import com.google.common.collect.Collections2;
 
 import static com.github.ferstl.maven.pomenforcers.DependencyScope.COMPILE;
+import static com.github.ferstl.maven.pomenforcers.util.EnforcerRuleUtils.evaluateProperties;
+import static com.google.common.base.Objects.equal;
+import static com.google.common.base.Objects.firstNonNull;
+import static com.google.common.collect.Collections2.transform;
 
 
 public class DependencyMatcher {
@@ -37,7 +38,7 @@ public class DependencyMatcher {
   }
 
   public Collection<Dependency> match(Collection<Dependency> subset) {
-    return Collections2.transform(subset, this.matchFunction);
+    return transform(subset, this.matchFunction);
   }
 
   private static class MatchFunction implements Function<Dependency, Dependency> {
@@ -53,12 +54,14 @@ public class DependencyMatcher {
     @Override
     public Dependency apply(Dependency dependency) {
       for (Dependency supersetDependency : this.superset) {
-        String groupId = EnforcerRuleUtils.evaluateProperties(dependency.getGroupId(), this.helper);
-        String artifactId = EnforcerRuleUtils.evaluateProperties(dependency.getArtifactId(), this.helper);
-        if (supersetDependency.getGroupId().equals(groupId)
-         && supersetDependency.getArtifactId().equals(artifactId)) {
+        String groupId = evaluateProperties(dependency.getGroupId(), this.helper);
+        String artifactId = evaluateProperties(dependency.getArtifactId(), this.helper);
+        String classifier = evaluateProperties(dependency.getClassifier(), this.helper);
+        if (equal(supersetDependency.getGroupId(), groupId)
+         && equal(supersetDependency.getArtifactId(), artifactId)
+         && equal(supersetDependency.getClassifier(), classifier)) {
           Dependency matchedDependency = supersetDependency.clone();
-          matchedDependency.setScope(Objects.firstNonNull(supersetDependency.getScope(), COMPILE.getScopeName()));
+          matchedDependency.setScope(firstNonNull(supersetDependency.getScope(), COMPILE.getScopeName()));
           return matchedDependency;
         }
       }

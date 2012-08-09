@@ -16,6 +16,7 @@
 package com.github.ferstl.maven.pomenforcers;
 import java.util.Collection;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Set;
 
 import org.apache.maven.enforcer.rule.api.EnforcerRuleException;
@@ -133,12 +134,13 @@ public class PedanticPluginManagementOrderEnforcer extends AbstractPedanticEnfor
     Collection<Plugin> declaredPluginManagement =
         new DeclaredPluginsReader(pom).read(XPathExpressions.POM_MANAGED_PLUGINS);
 
-    Collection<Plugin> managedPlugins = matchPlugins(declaredPluginManagement, project.getPluginManagement().getPlugins());
+    List<Plugin> managedPlugins = project.getPluginManagement().getPlugins();
+    Collection<Plugin> declaredManagedPlugins = matchPlugins(declaredPluginManagement, managedPlugins, helper);
 
     Ordering<Plugin> pluginOrdering = this.artifactSorter.createOrdering();
 
-    if (!pluginOrdering.isOrdered(managedPlugins)) {
-      ImmutableList<Plugin> sortedDependencies = pluginOrdering.immutableSortedCopy(managedPlugins);
+    if (!pluginOrdering.isOrdered(declaredManagedPlugins)) {
+      ImmutableList<Plugin> sortedDependencies = pluginOrdering.immutableSortedCopy(declaredManagedPlugins);
       throw new EnforcerRuleException("One does not simply declare plugin management! "
           + "Your plugin management has to be ordered this way:" + sortedDependencies);
     }
@@ -149,7 +151,8 @@ public class PedanticPluginManagementOrderEnforcer extends AbstractPedanticEnfor
     visitor.visit(this);
   }
 
-  private Collection<Plugin> matchPlugins(Collection<Plugin> subset, Collection<Plugin> superset) {
-    return new PluginMatcher(superset).match(subset);
+  private Collection<Plugin> matchPlugins(
+      Collection<Plugin> subset, Collection<Plugin> superset, EnforcerRuleHelper helper) {
+    return new PluginMatcher(superset, helper).match(subset);
   }
 }
