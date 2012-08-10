@@ -36,24 +36,13 @@ import org.xml.sax.SAXException;
 
 public final class XmlUtils {
 
-  private static final DocumentBuilder DOC_BUILDER;
-  private static final XPath XPATH;
-
-  static {
-    XPATH = XPathFactory.newInstance().newXPath();
-    try {
-      DOC_BUILDER = DocumentBuilderFactory.newInstance().newDocumentBuilder();
-    } catch (ParserConfigurationException e) {
-      throw new IllegalStateException("Cannot create document builder", e);
-    }
-  }
-
   public static Document parseXml(File file) {
     if (!file.exists()) {
       throw new IllegalArgumentException("File " + file + " does not exist.");
     }
     try {
-      return DOC_BUILDER.parse(file);
+      DocumentBuilder docBuilder = createDocumentBuilder();
+      return docBuilder.parse(file);
     } catch (SAXException | IOException e) {
       throw new IllegalStateException("Unable to parse XML file " + file, e);
     }
@@ -68,7 +57,8 @@ public final class XmlUtils {
   }
 
   public static Document createDocument(String root, NodeList content) {
-    Document document = DOC_BUILDER.newDocument();
+    DocumentBuilder docBuilder = createDocumentBuilder();
+    Document document = docBuilder.newDocument();
     Element rootElement = document.createElement(root);
     document.appendChild(rootElement);
 
@@ -80,10 +70,23 @@ public final class XmlUtils {
     return document;
   }
 
+  private static XPath createXPath() {
+    return XPathFactory.newInstance().newXPath();
+  }
+
+  private static DocumentBuilder createDocumentBuilder() {
+    try {
+      return DocumentBuilderFactory.newInstance().newDocumentBuilder();
+    } catch (ParserConfigurationException e) {
+      throw new IllegalStateException("Cannot create document builder", e);
+    }
+  }
+
   @SuppressWarnings("unchecked")
   private static <T> T evaluateXpath(String expression, Document document, QName dataType) {
     try {
-      XPathExpression compiledExpression = XPATH.compile(expression);
+      XPath xpath = createXPath();
+      XPathExpression compiledExpression = xpath.compile(expression);
       return (T) compiledExpression.evaluate(document, dataType);
     } catch (XPathExpressionException e) {
       throw new IllegalArgumentException("Cannot evaluate XPath expression '" + expression + "'");
