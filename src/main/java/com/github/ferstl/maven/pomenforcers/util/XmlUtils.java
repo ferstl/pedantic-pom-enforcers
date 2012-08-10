@@ -36,6 +36,11 @@ import org.xml.sax.SAXException;
 
 public final class XmlUtils {
 
+  /**
+   * Parses the given file into an XML {@link Document}.
+   * @param file The file to parse.
+   * @return The created XML {@link Document}.
+   */
   public static Document parseXml(File file) {
     if (!file.exists()) {
       throw new IllegalArgumentException("File " + file + " does not exist.");
@@ -48,14 +53,32 @@ public final class XmlUtils {
     }
   }
 
+  /**
+   * Returns the XML {@link Element} matching the given XPath expression.
+   * @param expression XPath expression.
+   * @param document XML document to search for the element.
+   * @return The matching XML {@link Element}.
+   */
   public static Element evaluateXPathAsElement(String expression, Document document) {
     return evaluateXpath(expression, document, XPathConstants.NODE);
   }
 
+  /**
+   * Returns the XML {@link NodeList} matching the given XPath expression.
+   * @param expression XPath expression.
+   * @param document XML document to search for the node list.
+   * @return The matching XML {@link NodeList}.
+   */
   public static NodeList evaluateXPathAsNodeList(String expression, Document document) {
     return evaluateXpath(expression, document, XPathConstants.NODESET);
   }
 
+  /**
+   * Creates a XML document with the given root element and the given {@link NodeList} as content.
+   * @param root The root element of the XML document.
+   * @param content Content of the XML document.
+   * @return The created XML document.
+   */
   public static Document createDocument(String root, NodeList content) {
     DocumentBuilder docBuilder = createDocumentBuilder();
     Document document = docBuilder.newDocument();
@@ -70,6 +93,17 @@ public final class XmlUtils {
     return document;
   }
 
+  @SuppressWarnings("unchecked")
+  private static <T> T evaluateXpath(String expression, Document document, QName dataType) {
+    try {
+      XPath xpath = createXPath();
+      XPathExpression compiledExpression = xpath.compile(expression);
+      return (T) compiledExpression.evaluate(document, dataType);
+    } catch (XPathExpressionException e) {
+      throw new IllegalArgumentException("Cannot evaluate XPath expression '" + expression + "'");
+    }
+  }
+
   private static XPath createXPath() {
     return XPathFactory.newInstance().newXPath();
   }
@@ -79,17 +113,6 @@ public final class XmlUtils {
       return DocumentBuilderFactory.newInstance().newDocumentBuilder();
     } catch (ParserConfigurationException e) {
       throw new IllegalStateException("Cannot create document builder", e);
-    }
-  }
-
-  @SuppressWarnings("unchecked")
-  private static <T> T evaluateXpath(String expression, Document document, QName dataType) {
-    try {
-      XPath xpath = createXPath();
-      XPathExpression compiledExpression = xpath.compile(expression);
-      return (T) compiledExpression.evaluate(document, dataType);
-    } catch (XPathExpressionException e) {
-      throw new IllegalArgumentException("Cannot evaluate XPath expression '" + expression + "'");
     }
   }
 
