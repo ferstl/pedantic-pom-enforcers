@@ -7,7 +7,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlRootElement(name = "dependency")
-public class Dependency extends Artifact {
+public class DependencyInfo extends Artifact {
 
   @XmlElement(name = "scope")
   private String scope;
