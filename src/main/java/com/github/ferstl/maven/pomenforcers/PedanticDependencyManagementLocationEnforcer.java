@@ -8,8 +8,8 @@ import org.apache.maven.enforcer.rule.api.EnforcerRuleHelper;
 import org.apache.maven.project.MavenProject;
 import org.w3c.dom.Document;
 
-import com.github.ferstl.maven.pomenforcers.artifact.ArtifactInfo;
-import com.github.ferstl.maven.pomenforcers.artifact.ArtifactInfoTransformer;
+import com.github.ferstl.maven.pomenforcers.artifact.Artifact;
+import com.github.ferstl.maven.pomenforcers.artifact.StringToArtifactTransformer;
 import com.github.ferstl.maven.pomenforcers.util.EnforcerRuleUtils;
 import com.github.ferstl.maven.pomenforcers.util.XmlUtils;
 
@@ -30,7 +30,7 @@ import static com.github.ferstl.maven.pomenforcers.util.CommaSeparatorUtils.spli
  */
 public class PedanticDependencyManagementLocationEnforcer extends AbstractPedanticEnforcer {
 
-  private final Set<ArtifactInfo> dependencyManagingPoms;
+  private final Set<Artifact> dependencyManagingPoms;
 
   public PedanticDependencyManagementLocationEnforcer() {
     this.dependencyManagingPoms = new HashSet<>();
@@ -53,8 +53,8 @@ public class PedanticDependencyManagementLocationEnforcer extends AbstractPedant
    * @default n/a
    */
   public void setDependencyManagingPoms(String dependencyManagingPoms) {
-    ArtifactInfoTransformer artifactInfoTransformer = new ArtifactInfoTransformer();
-    splitAndAddToCollection(dependencyManagingPoms, this.dependencyManagingPoms, artifactInfoTransformer);
+    StringToArtifactTransformer stringToArtifactTransformer = new StringToArtifactTransformer();
+    splitAndAddToCollection(dependencyManagingPoms, this.dependencyManagingPoms, stringToArtifactTransformer);
   }
 
   private boolean containsDependencyManagement(Document pom) {
@@ -62,7 +62,7 @@ public class PedanticDependencyManagementLocationEnforcer extends AbstractPedant
   }
 
   private boolean isDependencyManagementAllowed(MavenProject project) {
-    ArtifactInfo projectInfo = new ArtifactInfo(project.getGroupId(), project.getArtifactId());
+    Artifact projectInfo = new Artifact(project.getGroupId(), project.getArtifactId());
     return this.dependencyManagingPoms.contains(projectInfo);
   }
 

@@ -23,8 +23,8 @@ import org.apache.maven.enforcer.rule.api.EnforcerRuleHelper;
 import org.apache.maven.project.MavenProject;
 import org.w3c.dom.Document;
 
-import com.github.ferstl.maven.pomenforcers.artifact.ArtifactInfo;
-import com.github.ferstl.maven.pomenforcers.artifact.ArtifactInfoTransformer;
+import com.github.ferstl.maven.pomenforcers.artifact.Artifact;
+import com.github.ferstl.maven.pomenforcers.artifact.StringToArtifactTransformer;
 import com.github.ferstl.maven.pomenforcers.util.CommaSeparatorUtils;
 import com.github.ferstl.maven.pomenforcers.util.EnforcerRuleUtils;
 import com.github.ferstl.maven.pomenforcers.util.XmlUtils;
@@ -44,7 +44,7 @@ import com.github.ferstl.maven.pomenforcers.util.XmlUtils;
  */
 public class PedanticPluginManagementLocationEnforcer extends AbstractPedanticEnforcer {
 
-  private final Set<ArtifactInfo> pluginManagingPoms;
+  private final Set<Artifact> pluginManagingPoms;
 
   public PedanticPluginManagementLocationEnforcer() {
     this.pluginManagingPoms = new HashSet<>();
@@ -67,8 +67,8 @@ public class PedanticPluginManagementLocationEnforcer extends AbstractPedanticEn
    * @default n/a
    */
   public void setPluginManagingPoms(String pluginManagingPoms) {
-    ArtifactInfoTransformer artifactInfoTransformer = new ArtifactInfoTransformer();
-    CommaSeparatorUtils.splitAndAddToCollection(pluginManagingPoms, this.pluginManagingPoms, artifactInfoTransformer);
+    StringToArtifactTransformer stringToArtifactTransformer = new StringToArtifactTransformer();
+    CommaSeparatorUtils.splitAndAddToCollection(pluginManagingPoms, this.pluginManagingPoms, stringToArtifactTransformer);
   }
 
   private boolean containsPluginManagement(Document pom) {
@@ -76,7 +76,7 @@ public class PedanticPluginManagementLocationEnforcer extends AbstractPedanticEn
   }
 
   private boolean isPluginManagementAllowed(MavenProject project) {
-    ArtifactInfo projectInfo = new ArtifactInfo(project.getGroupId(), project.getArtifactId());
+    Artifact projectInfo = new Artifact(project.getGroupId(), project.getArtifactId());
     return this.pluginManagingPoms.contains(projectInfo);
   }
 
