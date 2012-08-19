@@ -74,7 +74,7 @@ public class PedanticDependencyOrderEnforcer extends AbstractPedanticDependencyO
     log.info("  -> Artifact ID priorities: "
            + CommaSeparatorUtils.join(getArtifactSorter().getPriorities(DependencyElement.ARTIFACT_ID)));
 
-    Collection<DependencyInfo> declaredDependencies = new DeclaredDependenciesReader(pom).read(XPathExpressions.POM_DEPENENCIES);
+    Collection<DependencyInfo> declaredDependencies = new DeclaredDependenciesReader(pom).read2(XPathExpressions.POM_DEPENENCIES);
     Collection<DependencyInfo> projectDependencies = Collections2.transform(project.getDependencies(), new Function<Dependency, DependencyInfo>() {
       @Override
       public DependencyInfo apply(Dependency input) {

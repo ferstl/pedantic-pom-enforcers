@@ -134,7 +134,7 @@ public class PedanticDependencyConfigurationEnforcer extends AbstractPedanticEnf
   private Collection<DependencyInfo> searchForDependencies(Document pom, String xpath) {
     NodeList dependencies = XmlUtils.evaluateXPathAsNodeList(xpath, pom);
     Document dependenciesDoc = XmlUtils.createDocument("dependencies", dependencies);
-    return new DeclaredDependenciesReader(dependenciesDoc).read(XPathExpressions.STANDALONE_DEPENDENCIES);
+    return new DeclaredDependenciesReader(dependenciesDoc).read2(XPathExpressions.STANDALONE_DEPENDENCIES);
   }
 
   @Override

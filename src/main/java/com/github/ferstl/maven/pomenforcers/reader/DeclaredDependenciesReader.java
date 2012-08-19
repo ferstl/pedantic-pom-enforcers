@@ -15,7 +15,6 @@
  */
 package com.github.ferstl.maven.pomenforcers.reader;
 
-import java.util.Collections;
 import java.util.List;
 
 import org.apache.maven.model.Dependency;
@@ -25,13 +24,13 @@ import com.github.ferstl.maven.pomenforcers.artifact.DependencyInfo;
 import com.thoughtworks.xstream.XStream;
 
 
-public class DeclaredDependenciesReader extends AbstractPomSectionReader<List<DependencyInfo>> {
+public class DeclaredDependenciesReader extends AbstractPomSectionReader<DependencyInfo> {
 
   private static final String DEPENDENCIES_ALIAS = "dependencies";
   private static final String DEPENDENCY_ALIAS = "dependency";
 
   public DeclaredDependenciesReader(Document pom) {
-    super(pom);
+    super(pom, DependencyInfo.class);
   }
 
   @Override
@@ -39,11 +38,6 @@ public class DeclaredDependenciesReader extends AbstractPomSectionReader<List<De
     xstream.alias(DEPENDENCIES_ALIAS, List.class);
     xstream.alias(DEPENDENCY_ALIAS, DependencyInfo.class);
     xstream.omitField(Dependency.class, "exclusions");
-  }
-
-  @Override
-  protected List<DependencyInfo> getUndeclaredSection() {
-    return Collections.emptyList();
   }
 
 }

@@ -79,7 +79,7 @@ public class PedanticDependencyManagementOrderEnforcer extends AbstractPedanticD
            + CommaSeparatorUtils.join(getArtifactSorter().getPriorities(DependencyElement.ARTIFACT_ID)));
 
     Collection<DependencyInfo> declaredDependencyManagement =
-        new DeclaredDependenciesReader(pom).read(XPathExpressions.POM_MANAGED_DEPENDENCIES);
+        new DeclaredDependenciesReader(pom).read2(XPathExpressions.POM_MANAGED_DEPENDENCIES);
 
     Collection<DependencyInfo> managedDependencyArtifacts =
         matchDependencies(declaredDependencyManagement, getManagedDependencies(project), helper);

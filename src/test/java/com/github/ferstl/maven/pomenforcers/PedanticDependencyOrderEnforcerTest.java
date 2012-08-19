@@ -53,7 +53,7 @@ public class PedanticDependencyOrderEnforcerTest {
     Document allDepsPom = XmlUtils.parseXml(ALL_DEPENDENCIES_FILE);
 
     // Read all dependencies and convert them to artifacts (classifier = "", ArtifactHandler = null)
-    List<DependencyInfo> allDeps = new DeclaredDependenciesReader(allDepsPom).read(XPathExpressions.POM_DEPENENCIES);
+    List<DependencyInfo> allDeps = new DeclaredDependenciesReader(allDepsPom).read2(XPathExpressions.POM_DEPENENCIES);
 
     this.mockHelper = mock(EnforcerRuleHelper.class);
     this.mockProject = mock(MavenProject.class);
