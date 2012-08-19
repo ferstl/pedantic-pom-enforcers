@@ -16,6 +16,7 @@
 package com.github.ferstl.maven.pomenforcers;
 
 import java.util.Collection;
+import java.util.Collections;
 
 import org.apache.maven.enforcer.rule.api.EnforcerRuleException;
 import org.apache.maven.enforcer.rule.api.EnforcerRuleHelper;
@@ -26,12 +27,14 @@ import org.apache.maven.project.MavenProject;
 import org.w3c.dom.Document;
 
 import com.github.ferstl.maven.pomenforcers.artifact.DependencyElement;
+import com.github.ferstl.maven.pomenforcers.artifact.DependencyInfo;
 import com.github.ferstl.maven.pomenforcers.reader.DeclaredDependenciesReader;
 import com.github.ferstl.maven.pomenforcers.reader.XPathExpressions;
 import com.github.ferstl.maven.pomenforcers.util.CommaSeparatorUtils;
 import com.github.ferstl.maven.pomenforcers.util.EnforcerRuleUtils;
+import com.google.common.base.Function;
+import com.google.common.collect.Collections2;
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Lists;
 import com.google.common.collect.Ordering;
 
 /**
@@ -75,16 +78,16 @@ public class PedanticDependencyManagementOrderEnforcer extends AbstractPedanticD
     log.info("  -> Artifact ID priorities: "
            + CommaSeparatorUtils.join(getArtifactSorter().getPriorities(DependencyElement.ARTIFACT_ID)));
 
-    Collection<Dependency> declaredDependencyManagement =
+    Collection<DependencyInfo> declaredDependencyManagement =
         new DeclaredDependenciesReader(pom).read(XPathExpressions.POM_MANAGED_DEPENDENCIES);
 
-    Collection<Dependency> managedDependencyArtifacts =
+    Collection<DependencyInfo> managedDependencyArtifacts =
         matchDependencies(declaredDependencyManagement, getManagedDependencies(project), helper);
 
-    Ordering<Dependency> dependencyOrdering = getArtifactSorter().createOrdering();
+    Ordering<DependencyInfo> dependencyOrdering = getArtifactSorter().createOrdering();
 
     if (!dependencyOrdering.isOrdered(managedDependencyArtifacts)) {
-      ImmutableList<Dependency> sortedDependencies =
+      ImmutableList<DependencyInfo> sortedDependencies =
           dependencyOrdering.immutableSortedCopy(managedDependencyArtifacts);
       throw new EnforcerRuleException("One does not simply declare dependency management! "
           + "Your dependency management has to be ordered this way:" + sortedDependencies);
@@ -96,14 +99,21 @@ public class PedanticDependencyManagementOrderEnforcer extends AbstractPedanticD
     visitor.visit(this);
   }
 
-  private Collection<Dependency> getManagedDependencies(MavenProject project) {
+  private Collection<DependencyInfo> getManagedDependencies(MavenProject project) {
     DependencyManagement dependencyManagement = project.getDependencyManagement();
     Collection<Dependency> managedDependencies;
     if (dependencyManagement != null) {
       managedDependencies = dependencyManagement.getDependencies();
     } else {
-      managedDependencies = Lists.newArrayList();
+      managedDependencies = Collections.emptyList();
     }
-    return managedDependencies;
+    return Collections2.transform(managedDependencies, new Function<Dependency, DependencyInfo>() {
+      @Override
+      public DependencyInfo apply(Dependency input) {
+        return new DependencyInfo(
+            input.getGroupId(), input.getArtifactId(), input.getVersion(), input.getScope(), input.getClassifier());
+      }
+
+    });
   }
 }

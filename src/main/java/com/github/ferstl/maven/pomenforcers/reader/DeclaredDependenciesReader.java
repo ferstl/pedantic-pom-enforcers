@@ -15,16 +15,17 @@
  */
 package com.github.ferstl.maven.pomenforcers.reader;
 
+import java.util.Collections;
 import java.util.List;
 
 import org.apache.maven.model.Dependency;
 import org.w3c.dom.Document;
 
-import com.google.common.collect.Lists;
+import com.github.ferstl.maven.pomenforcers.artifact.DependencyInfo;
 import com.thoughtworks.xstream.XStream;
 
 
-public class DeclaredDependenciesReader extends AbstractPomSectionReader<List<Dependency>> {
+public class DeclaredDependenciesReader extends AbstractPomSectionReader<List<DependencyInfo>> {
 
   private static final String DEPENDENCIES_ALIAS = "dependencies";
   private static final String DEPENDENCY_ALIAS = "dependency";
@@ -36,13 +37,13 @@ public class DeclaredDependenciesReader extends AbstractPomSectionReader<List<De
   @Override
   protected void configureXStream(XStream xstream) {
     xstream.alias(DEPENDENCIES_ALIAS, List.class);
-    xstream.alias(DEPENDENCY_ALIAS, Dependency.class);
+    xstream.alias(DEPENDENCY_ALIAS, DependencyInfo.class);
     xstream.omitField(Dependency.class, "exclusions");
   }
 
   @Override
-  protected List<Dependency> getUndeclaredSection() {
-    return Lists.newArrayListWithCapacity(0);
+  protected List<DependencyInfo> getUndeclaredSection() {
+    return Collections.emptyList();
   }
 
 }

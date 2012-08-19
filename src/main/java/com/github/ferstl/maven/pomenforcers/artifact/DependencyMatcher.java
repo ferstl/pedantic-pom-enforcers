@@ -18,14 +18,11 @@ package com.github.ferstl.maven.pomenforcers.artifact;
 import java.util.Collection;
 
 import org.apache.maven.enforcer.rule.api.EnforcerRuleHelper;
-import org.apache.maven.model.Dependency;
 
 import com.google.common.base.Function;
 
-import static com.github.ferstl.maven.pomenforcers.DependencyScope.COMPILE;
 import static com.github.ferstl.maven.pomenforcers.util.EnforcerRuleUtils.evaluateProperties;
 import static com.google.common.base.Objects.equal;
-import static com.google.common.base.Objects.firstNonNull;
 import static com.google.common.collect.Collections2.transform;
 
 
@@ -33,36 +30,39 @@ public class DependencyMatcher {
 
   private final MatchFunction matchFunction;
 
-  public DependencyMatcher(Collection<Dependency> superset, EnforcerRuleHelper helper) {
+  public DependencyMatcher(Collection<DependencyInfo> superset, EnforcerRuleHelper helper) {
     this.matchFunction = new MatchFunction(superset, helper);
   }
 
-  public Collection<Dependency> match(Collection<Dependency> subset) {
+  public Collection<DependencyInfo> match(Collection<DependencyInfo> subset) {
     return transform(subset, this.matchFunction);
   }
 
-  private static class MatchFunction implements Function<Dependency, Dependency> {
+  private static class MatchFunction implements Function<DependencyInfo, DependencyInfo> {
 
-    private final Collection<Dependency> superset;
+    private final Collection<DependencyInfo> superset;
     private final EnforcerRuleHelper helper;
 
-    public MatchFunction(Collection<Dependency> superset, EnforcerRuleHelper helper) {
+    public MatchFunction(Collection<DependencyInfo> superset, EnforcerRuleHelper helper) {
       this.superset = superset;
       this.helper = helper;
     }
 
     @Override
-    public Dependency apply(Dependency dependency) {
-      for (Dependency supersetDependency : this.superset) {
-        String groupId = evaluateProperties(dependency.getGroupId(), this.helper);
-        String artifactId = evaluateProperties(dependency.getArtifactId(), this.helper);
-        String classifier = evaluateProperties(dependency.getClassifier(), this.helper);
+    public DependencyInfo apply(DependencyInfo dependency) {
+      String groupId = evaluateProperties(dependency.getGroupId(), this.helper);
+      String artifactId = evaluateProperties(dependency.getArtifactId(), this.helper);
+      String classifier = evaluateProperties(dependency.getClassifier(), this.helper);
+      for (DependencyInfo supersetDependency : this.superset) {
         if (equal(supersetDependency.getGroupId(), groupId)
          && equal(supersetDependency.getArtifactId(), artifactId)
          && equal(supersetDependency.getClassifier(), classifier)) {
-          Dependency matchedDependency = supersetDependency.clone();
-          matchedDependency.setScope(firstNonNull(supersetDependency.getScope(), COMPILE.getScopeName()));
-          return matchedDependency;
+          return new DependencyInfo(
+              supersetDependency.getGroupId(),
+              supersetDependency.getArtifactId(),
+              supersetDependency.getVersion(),
+              supersetDependency.getScope(),
+              supersetDependency.getClassifier());
         }
       }
       throw new IllegalStateException(

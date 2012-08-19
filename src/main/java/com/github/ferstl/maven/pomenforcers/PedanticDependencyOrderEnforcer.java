@@ -24,10 +24,13 @@ import org.apache.maven.project.MavenProject;
 import org.w3c.dom.Document;
 
 import com.github.ferstl.maven.pomenforcers.artifact.DependencyElement;
+import com.github.ferstl.maven.pomenforcers.artifact.DependencyInfo;
 import com.github.ferstl.maven.pomenforcers.reader.DeclaredDependenciesReader;
 import com.github.ferstl.maven.pomenforcers.reader.XPathExpressions;
 import com.github.ferstl.maven.pomenforcers.util.CommaSeparatorUtils;
 import com.github.ferstl.maven.pomenforcers.util.EnforcerRuleUtils;
+import com.google.common.base.Function;
+import com.google.common.collect.Collections2;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Ordering;
 
@@ -71,15 +74,21 @@ public class PedanticDependencyOrderEnforcer extends AbstractPedanticDependencyO
     log.info("  -> Artifact ID priorities: "
            + CommaSeparatorUtils.join(getArtifactSorter().getPriorities(DependencyElement.ARTIFACT_ID)));
 
-    Collection<Dependency> declaredDependencies = new DeclaredDependenciesReader(pom).read(XPathExpressions.POM_DEPENENCIES);
-    Collection<Dependency> projectDependencies = project.getDependencies();
+    Collection<DependencyInfo> declaredDependencies = new DeclaredDependenciesReader(pom).read(XPathExpressions.POM_DEPENENCIES);
+    Collection<DependencyInfo> projectDependencies = Collections2.transform(project.getDependencies(), new Function<Dependency, DependencyInfo>() {
+      @Override
+      public DependencyInfo apply(Dependency input) {
+        return new DependencyInfo(
+            input.getGroupId(), input.getArtifactId(), input.getVersion(), input.getScope(), input.getClassifier());
+      }
+    });
 
-    Collection<Dependency> dependencyArtifacts =
+    Collection<DependencyInfo> dependencyArtifacts =
         matchDependencies(declaredDependencies, projectDependencies, helper);
-    Ordering<Dependency> dependencyOrdering = getArtifactSorter().createOrdering();
+    Ordering<DependencyInfo> dependencyOrdering = getArtifactSorter().createOrdering();
 
     if (!dependencyOrdering.isOrdered(dependencyArtifacts)) {
-      ImmutableList<Dependency> sortedDependencies =
+      ImmutableList<DependencyInfo> sortedDependencies =
           dependencyOrdering.immutableSortedCopy(dependencyArtifacts);
       throw new EnforcerRuleException("One does not simply declare dependencies! "
         + "Your dependencies have to be sorted this way: " + sortedDependencies);

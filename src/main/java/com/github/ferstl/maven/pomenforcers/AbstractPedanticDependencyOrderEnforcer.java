@@ -20,10 +20,10 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 
 import org.apache.maven.enforcer.rule.api.EnforcerRuleHelper;
-import org.apache.maven.model.Dependency;
 
 import com.github.ferstl.maven.pomenforcers.artifact.ArtifactSorter;
 import com.github.ferstl.maven.pomenforcers.artifact.DependencyElement;
+import com.github.ferstl.maven.pomenforcers.artifact.DependencyInfo;
 import com.github.ferstl.maven.pomenforcers.artifact.DependencyMatcher;
 import com.github.ferstl.maven.pomenforcers.util.CommaSeparatorUtils;
 import com.google.common.base.Function;
@@ -32,7 +32,7 @@ import com.google.common.collect.Sets;
 
 public abstract class AbstractPedanticDependencyOrderEnforcer extends AbstractPedanticEnforcer {
 
-  private final ArtifactSorter<Dependency, DependencyElement> artifactSorter;
+  private final ArtifactSorter<DependencyInfo, DependencyElement> artifactSorter;
 
   public AbstractPedanticDependencyOrderEnforcer() {
     Set<DependencyElement> orderBy = Sets.newLinkedHashSet();
@@ -108,13 +108,13 @@ public abstract class AbstractPedanticDependencyOrderEnforcer extends AbstractPe
     this.artifactSorter.setPriorities(DependencyElement.SCOPE, scopePriorities);
   }
 
-  public ArtifactSorter<Dependency, DependencyElement> getArtifactSorter() {
+  public ArtifactSorter<DependencyInfo, DependencyElement> getArtifactSorter() {
     return this.artifactSorter;
   }
 
-  protected Collection<Dependency> matchDependencies(
-      final Collection<Dependency> subset,
-      final Collection<Dependency> superset,
+  protected Collection<DependencyInfo> matchDependencies(
+      final Collection<DependencyInfo> subset,
+      final Collection<DependencyInfo> superset,
       final EnforcerRuleHelper helper) {
     return new DependencyMatcher(superset, helper).match(subset);
   }

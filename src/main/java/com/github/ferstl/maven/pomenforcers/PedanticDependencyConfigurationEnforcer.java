@@ -19,11 +19,11 @@ import java.util.Collection;
 
 import org.apache.maven.enforcer.rule.api.EnforcerRuleException;
 import org.apache.maven.enforcer.rule.api.EnforcerRuleHelper;
-import org.apache.maven.model.Dependency;
 import org.apache.maven.plugin.logging.Log;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 
+import com.github.ferstl.maven.pomenforcers.artifact.DependencyInfo;
 import com.github.ferstl.maven.pomenforcers.reader.DeclaredDependenciesReader;
 import com.github.ferstl.maven.pomenforcers.reader.XPathExpressions;
 import com.github.ferstl.maven.pomenforcers.util.XmlUtils;
@@ -107,7 +107,7 @@ public class PedanticDependencyConfigurationEnforcer extends AbstractPedanticEnf
   }
 
   private void enforceManagedVersions(Document pom) throws EnforcerRuleException {
-    Collection<Dependency> versionedDependencies =
+    Collection<DependencyInfo> versionedDependencies =
         searchForDependencies(pom, XPathExpressions.POM_VERSIONED_DEPENDENCIES);
 
     // Filter all project versions if allowed
@@ -122,7 +122,7 @@ public class PedanticDependencyConfigurationEnforcer extends AbstractPedanticEnf
   }
 
   private void enforceManagedExclusion(Document pom) throws EnforcerRuleException {
-    Collection<Dependency> depsWithExclusions =
+    Collection<DependencyInfo> depsWithExclusions =
         searchForDependencies(pom, XPathExpressions.POM_DEPENDENCIES_WITH_EXCLUSIONS);
 
     if (depsWithExclusions.size() > 0) {
@@ -131,7 +131,7 @@ public class PedanticDependencyConfigurationEnforcer extends AbstractPedanticEnf
     }
   }
 
-  private Collection<Dependency> searchForDependencies(Document pom, String xpath) {
+  private Collection<DependencyInfo> searchForDependencies(Document pom, String xpath) {
     NodeList dependencies = XmlUtils.evaluateXPathAsNodeList(xpath, pom);
     Document dependenciesDoc = XmlUtils.createDocument("dependencies", dependencies);
     return new DeclaredDependenciesReader(dependenciesDoc).read(XPathExpressions.STANDALONE_DEPENDENCIES);
@@ -142,9 +142,9 @@ public class PedanticDependencyConfigurationEnforcer extends AbstractPedanticEnf
     visitor.visit(this);
   }
 
-  private static class ProjectVersionPredicate implements Predicate<Dependency> {
+  private static class ProjectVersionPredicate implements Predicate<DependencyInfo> {
     @Override
-    public boolean apply(Dependency input) {
+    public boolean apply(DependencyInfo input) {
       if ("${project.version}".equals(input.getVersion()) || "${version}".equals(input.getVersion())) {
         return false;
       }
