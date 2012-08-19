@@ -1,8 +1,12 @@
 package com.github.ferstl.maven.pomenforcers.artifact;
 
+import java.util.Objects;
+
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
+
+import static com.google.common.base.Objects.equal;
 
 
 @XmlAccessorType(XmlAccessType.FIELD)
@@ -27,6 +31,30 @@ public class Artifact {
 
   public String getArtifactId() {
     return this.artifactId;
+  }
+
+  @Override
+  public String toString() {
+    return this.groupId + ":" + this.artifactId;
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj) {
+      return true;
+    }
+    if (!(obj instanceof Artifact)) {
+      return false;
+    }
+
+    Artifact other = (Artifact) obj;
+    return equal(this.groupId, other.groupId)
+        && equal(this.artifactId, other.artifactId);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(this.groupId, this.artifactId);
   }
 
 //  public static void main(String[] args) throws Exception {
