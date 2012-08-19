@@ -16,7 +16,6 @@
 package com.github.ferstl.maven.pomenforcers;
 import java.util.Collection;
 import java.util.LinkedHashSet;
-import java.util.List;
 import java.util.Set;
 
 import org.apache.maven.enforcer.rule.api.EnforcerRuleException;
@@ -26,6 +25,7 @@ import org.apache.maven.plugin.logging.Log;
 import org.apache.maven.project.MavenProject;
 import org.w3c.dom.Document;
 
+import com.github.ferstl.maven.pomenforcers.artifact.Artifact;
 import com.github.ferstl.maven.pomenforcers.artifact.ArtifactSorter;
 import com.github.ferstl.maven.pomenforcers.artifact.PluginElement;
 import com.github.ferstl.maven.pomenforcers.artifact.PluginMatcher;
@@ -34,6 +34,7 @@ import com.github.ferstl.maven.pomenforcers.reader.XPathExpressions;
 import com.github.ferstl.maven.pomenforcers.util.CommaSeparatorUtils;
 import com.github.ferstl.maven.pomenforcers.util.EnforcerRuleUtils;
 import com.google.common.base.Function;
+import com.google.common.collect.Collections2;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Ordering;
 import com.google.common.collect.Sets;
@@ -59,7 +60,7 @@ import com.google.common.collect.Sets;
  */
 public class PedanticPluginManagementOrderEnforcer extends AbstractPedanticEnforcer {
 
-  private final ArtifactSorter<Plugin, PluginElement> artifactSorter;
+  private final ArtifactSorter<Artifact, PluginElement> artifactSorter;
 
   public PedanticPluginManagementOrderEnforcer() {
     Set<PluginElement> orderBy = Sets.newLinkedHashSet();
@@ -131,16 +132,21 @@ public class PedanticPluginManagementOrderEnforcer extends AbstractPedanticEnfor
     log.info("  -> Artifact ID priorities: "
            + CommaSeparatorUtils.join(this.artifactSorter.getPriorities(PluginElement.ARTIFACT_ID)));
 
-    Collection<Plugin> declaredPluginManagement =
+    Collection<Artifact> declaredPluginManagement =
         new DeclaredPluginsReader(pom).read(XPathExpressions.POM_MANAGED_PLUGINS);
 
-    List<Plugin> managedPlugins = project.getPluginManagement().getPlugins();
-    Collection<Plugin> declaredManagedPlugins = matchPlugins(declaredPluginManagement, managedPlugins, helper);
+    Collection<Artifact> managedPlugins = Collections2.transform(project.getPluginManagement().getPlugins(), new Function<Plugin, Artifact>() {
+      @Override
+      public Artifact apply(Plugin input) {
+        return new Artifact(input.getGroupId(), input.getArtifactId());
+      }
+    });
+    Collection<Artifact> declaredManagedPlugins = matchPlugins(declaredPluginManagement, managedPlugins, helper);
 
-    Ordering<Plugin> pluginOrdering = this.artifactSorter.createOrdering();
+    Ordering<Artifact> pluginOrdering = this.artifactSorter.createOrdering();
 
     if (!pluginOrdering.isOrdered(declaredManagedPlugins)) {
-      ImmutableList<Plugin> sortedDependencies = pluginOrdering.immutableSortedCopy(declaredManagedPlugins);
+      ImmutableList<Artifact> sortedDependencies = pluginOrdering.immutableSortedCopy(declaredManagedPlugins);
       throw new EnforcerRuleException("One does not simply declare plugin management! "
           + "Your plugin management has to be ordered this way:" + sortedDependencies);
     }
@@ -151,8 +157,8 @@ public class PedanticPluginManagementOrderEnforcer extends AbstractPedanticEnfor
     visitor.visit(this);
   }
 
-  private Collection<Plugin> matchPlugins(
-      Collection<Plugin> subset, Collection<Plugin> superset, EnforcerRuleHelper helper) {
+  private Collection<Artifact> matchPlugins(
+      Collection<Artifact> subset, Collection<Artifact> superset, EnforcerRuleHelper helper) {
     return new PluginMatcher(superset, helper).match(subset);
   }
 }

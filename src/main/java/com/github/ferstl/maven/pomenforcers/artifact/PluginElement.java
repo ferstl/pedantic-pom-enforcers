@@ -19,8 +19,6 @@ import java.util.Collection;
 import java.util.Comparator;
 import java.util.Map;
 
-import org.apache.maven.model.Plugin;
-
 import com.github.ferstl.maven.pomenforcers.priority.PriorityComparator;
 import com.github.ferstl.maven.pomenforcers.priority.PriorityComparatorFactory;
 import com.github.ferstl.maven.pomenforcers.priority.StringStartsWithEquivalence;
@@ -28,15 +26,15 @@ import com.google.common.base.Function;
 import com.google.common.collect.Maps;
 
 
-public enum PluginElement implements PriorityComparatorFactory<String, Plugin> {
+public enum PluginElement implements PriorityComparatorFactory<String, Artifact> {
 
   GROUP_ID("groupId") {
     @Override
-    public Comparator<Plugin> createPriorityComparator(Collection<String> priorityCollection) {
+    public Comparator<Artifact> createPriorityComparator(Collection<String> priorityCollection) {
       StringStartsWithEquivalence priorityMatcher = new StringStartsWithEquivalence();
-      Function<Plugin, String> transformer = new Function<Plugin, String>() {
+      Function<Artifact, String> transformer = new Function<Artifact, String>() {
         @Override
-        public String apply(Plugin input) {
+        public String apply(Artifact input) {
           return input.getGroupId();
         }
       };
@@ -46,11 +44,11 @@ public enum PluginElement implements PriorityComparatorFactory<String, Plugin> {
 
   ARTIFACT_ID("artifactId") {
     @Override
-    public Comparator<Plugin> createPriorityComparator(Collection<String> priorityCollection) {
+    public Comparator<Artifact> createPriorityComparator(Collection<String> priorityCollection) {
       StringStartsWithEquivalence priorityMatcher = new StringStartsWithEquivalence();
-      Function<Plugin, String> transformer = new Function<Plugin, String>() {
+      Function<Artifact, String> transformer = new Function<Artifact, String>() {
         @Override
-        public String apply(Plugin input) {
+        public String apply(Artifact input) {
           return input.getArtifactId();
         }
       };

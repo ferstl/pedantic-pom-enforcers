@@ -19,11 +19,11 @@ import java.util.Collection;
 
 import org.apache.maven.enforcer.rule.api.EnforcerRuleException;
 import org.apache.maven.enforcer.rule.api.EnforcerRuleHelper;
-import org.apache.maven.model.Plugin;
 import org.apache.maven.plugin.logging.Log;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 
+import com.github.ferstl.maven.pomenforcers.artifact.Artifact;
 import com.github.ferstl.maven.pomenforcers.reader.DeclaredPluginsReader;
 import com.github.ferstl.maven.pomenforcers.reader.XPathExpressions;
 import com.github.ferstl.maven.pomenforcers.util.XmlUtils;
@@ -104,7 +104,7 @@ public class PedanticPluginConfigurationEnforcer extends AbstractPedanticEnforce
   }
 
   private void enforceManagedVersions(Document pom) throws EnforcerRuleException {
-    Collection<Plugin> versionedPlugins = searchForPlugins(pom, XPathExpressions.POM_VERSIONED_PLUGINS);
+    Collection<Artifact> versionedPlugins = searchForPlugins(pom, XPathExpressions.POM_VERSIONED_PLUGINS);
     if (versionedPlugins.size() > 0) {
       throw new EnforcerRuleException("One does not simply set versions on plugins. Plugin versions have to " +
       		"be declared in <pluginManagement>: " + versionedPlugins);
@@ -113,7 +113,7 @@ public class PedanticPluginConfigurationEnforcer extends AbstractPedanticEnforce
   }
 
   private void enforceManagedConfiguration(Document pom) throws EnforcerRuleException {
-    Collection<Plugin> configuredPlugins = searchForPlugins(pom, XPathExpressions.POM_CONFIGURED_PLUGINS);
+    Collection<Artifact> configuredPlugins = searchForPlugins(pom, XPathExpressions.POM_CONFIGURED_PLUGINS);
     if (configuredPlugins.size() > 0) {
       throw new EnforcerRuleException("One does not simply configure plugins. Use <pluginManagement> to configure "
           +	"these plugins or configure them for a specific <execution>: " + configuredPlugins);
@@ -121,7 +121,7 @@ public class PedanticPluginConfigurationEnforcer extends AbstractPedanticEnforce
   }
 
   private void enforceManagedDependencies(Document pom) throws EnforcerRuleException {
-    Collection<Plugin> configuredPluginDependencies =
+    Collection<Artifact> configuredPluginDependencies =
         searchForPlugins(pom, XPathExpressions.POM_CONFIGURED_PLUGIN_DEPENDENCIES);
     if (configuredPluginDependencies.size() > 0) {
       throw new EnforcerRuleException("One does not simply configure plugin dependencies. Use <pluginManagement> "
@@ -129,7 +129,7 @@ public class PedanticPluginConfigurationEnforcer extends AbstractPedanticEnforce
     }
   }
 
-  private Collection<Plugin> searchForPlugins(Document pom, String xpath) {
+  private Collection<Artifact> searchForPlugins(Document pom, String xpath) {
     NodeList plugins = XmlUtils.evaluateXPathAsNodeList(xpath, pom);
     Document pluginsDoc = XmlUtils.createDocument("plugins", plugins);
     return new DeclaredPluginsReader(pluginsDoc).read(XPathExpressions.STANDALONE_PLUGINS);

@@ -16,15 +16,14 @@ import static com.google.common.base.Objects.equal;
 @XmlRootElement(name = "dependency")
 public class DependencyInfo extends Artifact {
 
+  @XmlElement(name = "version")
+  private String version;
+
   @XmlElement(name = "scope")
   private String scope;
 
   @XmlElement(name = "classifier")
   private String classifier;
-
-  @XmlElement(name = "version")
-  private String version;
-
 
   // Constructor used by JAXB
   DependencyInfo() {}
@@ -53,7 +52,7 @@ public class DependencyInfo extends Artifact {
 
   @Override
   public String toString() {
-    return super.toString() + ":" + this.version + ":" + this.classifier + ":" + this.scope;
+    return super.toString() + ":" + this.classifier + ":" + this.scope;
   }
 
   // Note that this equals() implementation breaks the symmetry contract!
@@ -75,7 +74,7 @@ public class DependencyInfo extends Artifact {
 
   @Override
   public int hashCode() {
-   return Objects.hash(super.hashCode(), this.version, this.classifier, this.scope);
+   return Objects.hash(super.hashCode(), this.classifier, this.scope);
   }
 
 }

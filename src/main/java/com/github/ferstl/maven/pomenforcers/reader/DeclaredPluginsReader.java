@@ -17,13 +17,13 @@ package com.github.ferstl.maven.pomenforcers.reader;
 
 import java.util.List;
 
-import org.apache.maven.model.Plugin;
 import org.w3c.dom.Document;
 
+import com.github.ferstl.maven.pomenforcers.artifact.Artifact;
 import com.google.common.collect.Lists;
 import com.thoughtworks.xstream.XStream;
 
-public class DeclaredPluginsReader extends AbstractPomSectionReader<List<Plugin>> {
+public class DeclaredPluginsReader extends AbstractPomSectionReader<List<Artifact>> {
 
   private static final String PLUGINS_ALIAS = "plugins";
   private static final String PLUGIN_ALIAS = "plugin";
@@ -35,16 +35,17 @@ public class DeclaredPluginsReader extends AbstractPomSectionReader<List<Plugin>
   @Override
   protected void configureXStream(XStream xstream) {
     xstream.alias(PLUGINS_ALIAS, List.class);
-    xstream.alias(PLUGIN_ALIAS, Plugin.class);
-    xstream.omitField(Plugin.class, "configuration");
-    xstream.omitField(Plugin.class, "extensions");
-    xstream.omitField(Plugin.class, "goals");
-    xstream.omitField(Plugin.class, "executions");
-    xstream.omitField(Plugin.class, "dependencies");
+    xstream.alias(PLUGIN_ALIAS, Artifact.class);
+    xstream.omitField(Artifact.class, "version");
+    xstream.omitField(Artifact.class, "configuration");
+    xstream.omitField(Artifact.class, "extensions");
+    xstream.omitField(Artifact.class, "goals");
+    xstream.omitField(Artifact.class, "executions");
+    xstream.omitField(Artifact.class, "dependencies");
   }
 
   @Override
-  protected List<Plugin> getUndeclaredSection() {
+  protected List<Artifact> getUndeclaredSection() {
     return Lists.newArrayListWithCapacity(0);
   }
 }
