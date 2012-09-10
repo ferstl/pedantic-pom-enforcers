@@ -20,7 +20,6 @@ import java.util.List;
 import java.util.Set;
 
 import org.apache.maven.enforcer.rule.api.EnforcerRuleException;
-import org.apache.maven.enforcer.rule.api.EnforcerRuleHelper;
 import org.apache.maven.plugin.logging.Log;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -76,8 +75,8 @@ public class PedanticPomSectionOrderEnforcer extends AbstractPedanticEnforcer {
   }
 
   @Override
-  protected void doEnforce(EnforcerRuleHelper helper) throws EnforcerRuleException {
-    Log log = helper.getLog();
+  protected void doEnforce() throws EnforcerRuleException {
+    Log log = getLog();
     log.info("Enforcing correct POM section order.");
     log.info("  -> Section priorities: " + CommaSeparatorUtils.join(this.sectionPriorities));
 

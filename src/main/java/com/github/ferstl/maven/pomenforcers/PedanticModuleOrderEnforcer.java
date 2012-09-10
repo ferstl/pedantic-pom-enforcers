@@ -19,7 +19,6 @@ import java.util.List;
 import java.util.Set;
 
 import org.apache.maven.enforcer.rule.api.EnforcerRuleException;
-import org.apache.maven.enforcer.rule.api.EnforcerRuleHelper;
 import org.apache.maven.plugin.logging.Log;
 import org.apache.maven.project.MavenProject;
 
@@ -67,14 +66,14 @@ public class PedanticModuleOrderEnforcer extends AbstractPedanticEnforcer {
   }
 
   @Override
-  protected void doEnforce(EnforcerRuleHelper helper) throws EnforcerRuleException {
-    MavenProject project = EnforcerRuleUtils.getMavenProject(helper);
+  protected void doEnforce() throws EnforcerRuleException {
+    MavenProject project = EnforcerRuleUtils.getMavenProject(getHelper());
     // Do nothing if the project is not a parent project
     if (!isPomProject(project)) {
       return;
     }
 
-    Log log = helper.getLog();
+    Log log = getLog();
     log.info("Enforcing alphabetical module order.");
     log.info("  -> These modules are ignored: " + CommaSeparatorUtils.join(this.ignoredModules));
 

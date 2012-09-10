@@ -19,7 +19,6 @@ import java.util.Collection;
 import java.util.Collections;
 
 import org.apache.maven.enforcer.rule.api.EnforcerRuleException;
-import org.apache.maven.enforcer.rule.api.EnforcerRuleHelper;
 import org.apache.maven.model.Dependency;
 import org.apache.maven.model.DependencyManagement;
 import org.apache.maven.plugin.logging.Log;
@@ -62,10 +61,10 @@ import com.google.common.collect.Ordering;
 public class PedanticDependencyManagementOrderEnforcer extends AbstractPedanticDependencyOrderEnforcer {
 
   @Override
-  protected void doEnforce(EnforcerRuleHelper helper) throws EnforcerRuleException {
-    MavenProject project = EnforcerRuleUtils.getMavenProject(helper);
+  protected void doEnforce() throws EnforcerRuleException {
+    MavenProject project = EnforcerRuleUtils.getMavenProject(getHelper());
 
-    Log log = helper.getLog();
+    Log log = getLog();
     log.info("Enforcing dependency management order.");
     log.info("  -> Dependencies have to be ordered by: "
            + CommaSeparatorUtils.join(getArtifactSorter().getOrderBy()));
@@ -80,7 +79,7 @@ public class PedanticDependencyManagementOrderEnforcer extends AbstractPedanticD
     Collection<DependencyModel> declaredDependencyManagement = projectModel.getManagedDependencies();
 
     Collection<DependencyModel> managedDependencyArtifacts =
-        matchDependencies(declaredDependencyManagement, getManagedDependencies(project), helper);
+        matchDependencies(declaredDependencyManagement, getManagedDependencies(project), getHelper());
 
     Ordering<DependencyModel> dependencyOrdering = getArtifactSorter().createOrdering();
 

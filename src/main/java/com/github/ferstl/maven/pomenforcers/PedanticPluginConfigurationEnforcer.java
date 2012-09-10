@@ -19,7 +19,6 @@ import java.util.Collection;
 import java.util.List;
 
 import org.apache.maven.enforcer.rule.api.EnforcerRuleException;
-import org.apache.maven.enforcer.rule.api.EnforcerRuleHelper;
 import org.apache.maven.plugin.logging.Log;
 
 import com.github.ferstl.maven.pomenforcers.model.PluginModel;
@@ -83,8 +82,8 @@ public class PedanticPluginConfigurationEnforcer extends AbstractPedanticEnforce
   }
 
   @Override
-  protected void doEnforce(EnforcerRuleHelper helper) throws EnforcerRuleException {
-    Log log = helper.getLog();
+  protected void doEnforce() throws EnforcerRuleException {
+    Log log = getLog();
     if (this.manageVersions) {
       log.info("Enforcing managed plugin versions.");
       enforceManagedVersions();

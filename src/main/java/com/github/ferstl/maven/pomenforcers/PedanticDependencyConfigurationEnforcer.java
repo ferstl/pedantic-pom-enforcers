@@ -19,8 +19,6 @@ import java.util.Collection;
 import java.util.List;
 
 import org.apache.maven.enforcer.rule.api.EnforcerRuleException;
-import org.apache.maven.enforcer.rule.api.EnforcerRuleHelper;
-import org.apache.maven.plugin.logging.Log;
 
 import com.github.ferstl.maven.pomenforcers.model.DependencyModel;
 import com.google.common.base.Predicate;
@@ -89,15 +87,13 @@ public class PedanticDependencyConfigurationEnforcer extends AbstractPedanticEnf
   }
 
   @Override
-  protected void doEnforce(EnforcerRuleHelper helper) throws EnforcerRuleException {
-    Log log = helper.getLog();
-
+  protected void doEnforce() throws EnforcerRuleException {
     if (this.manageVersions) {
-      log.info("Enforcing managed dependency versions");
+      getLog().info("Enforcing managed dependency versions");
       enforceManagedVersions();
     }
     if (this.manageExclusions) {
-      log.info("Enforcing managed dependency exclusions");
+      getLog().info("Enforcing managed dependency exclusions");
       enforceManagedExclusion();
     }
   }

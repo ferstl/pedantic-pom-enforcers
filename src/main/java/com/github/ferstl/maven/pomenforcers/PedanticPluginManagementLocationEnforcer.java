@@ -19,7 +19,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.apache.maven.enforcer.rule.api.EnforcerRuleException;
-import org.apache.maven.enforcer.rule.api.EnforcerRuleHelper;
 import org.apache.maven.project.MavenProject;
 
 import com.github.ferstl.maven.pomenforcers.artifact.StringToArtifactTransformer;
@@ -49,8 +48,8 @@ public class PedanticPluginManagementLocationEnforcer extends AbstractPedanticEn
   }
 
   @Override
-  protected void doEnforce(EnforcerRuleHelper helper) throws EnforcerRuleException {
-    MavenProject mavenProject = EnforcerRuleUtils.getMavenProject(helper);
+  protected void doEnforce() throws EnforcerRuleException {
+    MavenProject mavenProject = EnforcerRuleUtils.getMavenProject(getHelper());
     if (containsPluginManagement() && !isPluginManagementAllowed(mavenProject)) {
       throw new EnforcerRuleException("One does not simply declare plugin management. " +
       		"Only these POMs are allowed to manage plugins: " + this.pluginManagingPoms);

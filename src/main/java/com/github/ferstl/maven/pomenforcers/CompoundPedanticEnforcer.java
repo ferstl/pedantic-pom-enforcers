@@ -18,7 +18,6 @@ package com.github.ferstl.maven.pomenforcers;
 import java.util.Collection;
 
 import org.apache.maven.enforcer.rule.api.EnforcerRuleException;
-import org.apache.maven.enforcer.rule.api.EnforcerRuleHelper;
 
 import com.github.ferstl.maven.pomenforcers.util.CommaSeparatorUtils;
 import com.google.common.base.Function;
@@ -281,12 +280,11 @@ public class CompoundPedanticEnforcer extends AbstractPedanticEnforcer {
   }
 
   @Override
-  protected void doEnforce(EnforcerRuleHelper helper) throws EnforcerRuleException {
+  protected void doEnforce() throws EnforcerRuleException {
     for (PedanticEnforcerRule pedanticEnforcer : this.enforcers) {
       AbstractPedanticEnforcer rule = pedanticEnforcer.createEnforcerRule();
-      rule.setPomDocument(getPom());
       rule.accept(this.propertyInitializer);
-      rule.doEnforce(helper);
+      rule.execute(getHelper());
     }
   }
 

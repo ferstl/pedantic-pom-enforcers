@@ -19,7 +19,6 @@ import java.util.Collection;
 import java.util.Set;
 
 import org.apache.maven.enforcer.rule.api.EnforcerRuleException;
-import org.apache.maven.enforcer.rule.api.EnforcerRuleHelper;
 import org.apache.maven.model.Dependency;
 import org.apache.maven.plugin.logging.Log;
 
@@ -123,11 +122,10 @@ public class PedanticDependencyScopeEnforcer extends AbstractPedanticEnforcer {
   }
 
   @Override
-  protected void doEnforce(EnforcerRuleHelper helper) throws EnforcerRuleException {
-    Log log = helper.getLog();
-    log.info("Enforcing dependency scopes.");
+  protected void doEnforce() throws EnforcerRuleException {
+    getLog().info("Enforcing dependency scopes.");
 
-    Collection<Dependency> dependencies = EnforcerRuleUtils.getMavenProject(helper).getDependencies();
+    Collection<Dependency> dependencies = EnforcerRuleUtils.getMavenProject(getHelper()).getDependencies();
 
     // TODO: use project model
     for (Dependency dependency : dependencies) {

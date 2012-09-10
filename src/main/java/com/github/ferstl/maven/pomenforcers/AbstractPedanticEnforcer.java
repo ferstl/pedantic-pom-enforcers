@@ -18,6 +18,7 @@ package com.github.ferstl.maven.pomenforcers;
 import org.apache.maven.enforcer.rule.api.EnforcerRule;
 import org.apache.maven.enforcer.rule.api.EnforcerRuleException;
 import org.apache.maven.enforcer.rule.api.EnforcerRuleHelper;
+import org.apache.maven.plugin.logging.Log;
 import org.apache.maven.project.MavenProject;
 import org.w3c.dom.Document;
 
@@ -30,27 +31,31 @@ import com.github.ferstl.maven.pomenforcers.util.XmlUtils;
 
 public abstract class AbstractPedanticEnforcer implements EnforcerRule {
 
+  private EnforcerRuleHelper helper;
+  private Log log;
   private Document pom;
   private ProjectModel projectModel;
 
   @Override
   public final void execute(EnforcerRuleHelper helper) throws EnforcerRuleException {
+    this.helper = helper;
+    this.log = helper.getLog();
+
     // Read the POM
     MavenProject project = EnforcerRuleUtils.getMavenProject(helper);
     this.pom = XmlUtils.parseXml(project.getFile());
     this.projectModel = new PomSerializer(this.pom).read();
 
     // Enforce
-    doEnforce(helper);
+    doEnforce();
   }
 
-  /**
-   * Sets the POM document for this enforcer. Use this method when the enforcer rules are not
-   * constructed within the maven ecosystem.
-   * @param pom The POM document for this enforcer.
-   */
-  void setPomDocument(Document pom) {
-    this.pom = pom;
+  protected EnforcerRuleHelper getHelper() {
+    return this.helper;
+  }
+
+  protected Log getLog() {
+    return this.log;
   }
 
   protected Document getPom() {
@@ -61,7 +66,7 @@ public abstract class AbstractPedanticEnforcer implements EnforcerRule {
     return this.projectModel;
   }
 
-  protected abstract void doEnforce(EnforcerRuleHelper helper) throws EnforcerRuleException;
+  protected abstract void doEnforce() throws EnforcerRuleException;
 
   protected abstract void accept(PedanticEnforcerVisitor visitor);
 
