@@ -27,8 +27,6 @@ import com.github.ferstl.maven.pomenforcers.serializer.PomSerializer;
 import com.github.ferstl.maven.pomenforcers.util.EnforcerRuleUtils;
 import com.github.ferstl.maven.pomenforcers.util.XmlUtils;
 
-
-
 public abstract class AbstractPedanticEnforcer implements EnforcerRule {
 
   private EnforcerRuleHelper helper;
@@ -38,13 +36,13 @@ public abstract class AbstractPedanticEnforcer implements EnforcerRule {
 
   @Override
   public final void execute(EnforcerRuleHelper helper) throws EnforcerRuleException {
-    this.helper = helper;
-    this.log = helper.getLog();
-
     // Read the POM
     MavenProject project = EnforcerRuleUtils.getMavenProject(helper);
     this.pom = XmlUtils.parseXml(project.getFile());
     this.projectModel = new PomSerializer(this.pom).read();
+
+    // Initialize
+    initialize(helper, this.pom, this.projectModel);
 
     // Enforce
     doEnforce();
