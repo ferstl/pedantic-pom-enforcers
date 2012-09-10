@@ -19,12 +19,8 @@ import java.util.Collection;
 
 import org.apache.maven.enforcer.rule.api.EnforcerRuleException;
 import org.apache.maven.enforcer.rule.api.EnforcerRuleHelper;
-import org.apache.maven.project.MavenProject;
-import org.w3c.dom.Document;
 
 import com.github.ferstl.maven.pomenforcers.util.CommaSeparatorUtils;
-import com.github.ferstl.maven.pomenforcers.util.EnforcerRuleUtils;
-import com.github.ferstl.maven.pomenforcers.util.XmlUtils;
 import com.google.common.base.Function;
 import com.google.common.base.Strings;
 import com.google.common.collect.Sets;
@@ -285,18 +281,12 @@ public class CompoundPedanticEnforcer extends AbstractPedanticEnforcer {
   }
 
   @Override
-  public void execute(EnforcerRuleHelper helper) throws EnforcerRuleException {
-    MavenProject project = EnforcerRuleUtils.getMavenProject(helper);
-    Document pom = XmlUtils.parseXml(project.getFile());
-    doEnforce(helper, pom);
-  }
-
-  @Override
-  protected void doEnforce(EnforcerRuleHelper helper, Document pom) throws EnforcerRuleException {
+  protected void doEnforce(EnforcerRuleHelper helper) throws EnforcerRuleException {
     for (PedanticEnforcerRule pedanticEnforcer : this.enforcers) {
       AbstractPedanticEnforcer rule = pedanticEnforcer.createEnforcerRule();
+      rule.setPomDocument(getPom());
       rule.accept(this.propertyInitializer);
-      rule.doEnforce(helper, pom);
+      rule.doEnforce(helper);
     }
   }
 

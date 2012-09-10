@@ -22,7 +22,6 @@ import java.util.Set;
 import org.apache.maven.enforcer.rule.api.EnforcerRuleException;
 import org.apache.maven.enforcer.rule.api.EnforcerRuleHelper;
 import org.apache.maven.plugin.logging.Log;
-import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
@@ -77,12 +76,12 @@ public class PedanticPomSectionOrderEnforcer extends AbstractPedanticEnforcer {
   }
 
   @Override
-  protected void doEnforce(EnforcerRuleHelper helper, Document pom) throws EnforcerRuleException {
+  protected void doEnforce(EnforcerRuleHelper helper) throws EnforcerRuleException {
     Log log = helper.getLog();
     log.info("Enforcing correct POM section order.");
     log.info("  -> Section priorities: " + CommaSeparatorUtils.join(this.sectionPriorities));
 
-    Node firstChild = getProjectRoot(pom);
+    Node firstChild = getProjectRoot();
     NodeList childNodes = firstChild.getChildNodes();
     ArrayList<PomSection> pomSections = Lists.newArrayList();
     for (int i = 0; i < childNodes.getLength(); i++) {
@@ -113,8 +112,8 @@ public class PedanticPomSectionOrderEnforcer extends AbstractPedanticEnforcer {
    * @param pom POM document.
    * @return The <code>&lt;project&gt;</code> node or <code>null</code> if not found.
    */
-  private Node getProjectRoot(Document pom) {
-    Node node = pom.getFirstChild();
+  private Node getProjectRoot() {
+    Node node = getPom().getFirstChild();
     do {
       if ("project".equals(node.getNodeName())) {
         break;

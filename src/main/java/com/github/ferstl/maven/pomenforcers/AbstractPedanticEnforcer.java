@@ -21,6 +21,8 @@ import org.apache.maven.enforcer.rule.api.EnforcerRuleHelper;
 import org.apache.maven.project.MavenProject;
 import org.w3c.dom.Document;
 
+import com.github.ferstl.maven.pomenforcers.model.ProjectModel;
+import com.github.ferstl.maven.pomenforcers.reader.PomSerializer;
 import com.github.ferstl.maven.pomenforcers.util.EnforcerRuleUtils;
 import com.github.ferstl.maven.pomenforcers.util.XmlUtils;
 
@@ -28,15 +30,42 @@ import com.github.ferstl.maven.pomenforcers.util.XmlUtils;
 
 public abstract class AbstractPedanticEnforcer implements EnforcerRule {
 
+  private Document pom;
+  private ProjectModel projectModel;
+
   @Override
   public void execute(EnforcerRuleHelper helper) throws EnforcerRuleException {
     // Read the POM
     MavenProject project = EnforcerRuleUtils.getMavenProject(helper);
-    Document pom = XmlUtils.parseXml(project.getFile());
+    this.pom = XmlUtils.parseXml(project.getFile());
 
     // Enforce
-    doEnforce(helper, pom);
+    doEnforce(helper);
   }
+
+  /**
+   * Sets the POM document for this enforcer. Use this method when the enforcer rules are not
+   * constructed within the maven ecosystem.
+   * @param pom The POM document for this enforcer.
+   */
+  void setPomDocument(Document pom) {
+    this.pom = pom;
+  }
+
+  protected Document getPom() {
+    return this.pom;
+  }
+
+  protected ProjectModel getProjectModel() {
+    if (this.projectModel == null) {
+      this.projectModel = new PomSerializer(this.pom).read();
+    }
+    return this.projectModel;
+  }
+
+  protected abstract void doEnforce(EnforcerRuleHelper helper) throws EnforcerRuleException;
+
+  protected abstract void accept(PedanticEnforcerVisitor visitor);
 
   @Override
   public boolean isCacheable() {
@@ -52,8 +81,4 @@ public abstract class AbstractPedanticEnforcer implements EnforcerRule {
   public String getCacheId() {
     return getClass() + "-uncachable";
   }
-
-  protected abstract void doEnforce(EnforcerRuleHelper helper, Document pom) throws EnforcerRuleException;
-
-  protected abstract void accept(PedanticEnforcerVisitor visitor);
 }

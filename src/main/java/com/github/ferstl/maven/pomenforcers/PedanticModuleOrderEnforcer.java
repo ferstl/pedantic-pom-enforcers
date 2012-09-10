@@ -22,9 +22,7 @@ import org.apache.maven.enforcer.rule.api.EnforcerRuleException;
 import org.apache.maven.enforcer.rule.api.EnforcerRuleHelper;
 import org.apache.maven.plugin.logging.Log;
 import org.apache.maven.project.MavenProject;
-import org.w3c.dom.Document;
 
-import com.github.ferstl.maven.pomenforcers.reader.PomSerializer;
 import com.github.ferstl.maven.pomenforcers.util.CommaSeparatorUtils;
 import com.github.ferstl.maven.pomenforcers.util.EnforcerRuleUtils;
 import com.google.common.collect.ImmutableList;
@@ -69,7 +67,7 @@ public class PedanticModuleOrderEnforcer extends AbstractPedanticEnforcer {
   }
 
   @Override
-  protected void doEnforce(EnforcerRuleHelper helper, Document pom) throws EnforcerRuleException {
+  protected void doEnforce(EnforcerRuleHelper helper) throws EnforcerRuleException {
     MavenProject project = EnforcerRuleUtils.getMavenProject(helper);
     // Do nothing if the project is not a parent project
     if (!isPomProject(project)) {
@@ -81,7 +79,7 @@ public class PedanticModuleOrderEnforcer extends AbstractPedanticEnforcer {
     log.info("  -> These modules are ignored: " + CommaSeparatorUtils.join(this.ignoredModules));
 
     // Remove all modules to be ignored.
-    List<String> declaredModules = new PomSerializer(pom).read().getModules();
+    List<String> declaredModules = getProjectModel().getModules();
     declaredModules.removeAll(this.ignoredModules);
 
     // Enforce the module order

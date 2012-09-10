@@ -21,11 +21,9 @@ import org.apache.maven.enforcer.rule.api.EnforcerRuleHelper;
 import org.apache.maven.model.Dependency;
 import org.apache.maven.plugin.logging.Log;
 import org.apache.maven.project.MavenProject;
-import org.w3c.dom.Document;
 
 import com.github.ferstl.maven.pomenforcers.artifact.DependencyElement;
 import com.github.ferstl.maven.pomenforcers.model.DependencyModel;
-import com.github.ferstl.maven.pomenforcers.reader.PomSerializer;
 import com.github.ferstl.maven.pomenforcers.util.CommaSeparatorUtils;
 import com.github.ferstl.maven.pomenforcers.util.EnforcerRuleUtils;
 import com.google.common.base.Function;
@@ -59,7 +57,7 @@ import com.google.common.collect.Ordering;
 public class PedanticDependencyOrderEnforcer extends AbstractPedanticDependencyOrderEnforcer {
 
   @Override
-  protected void doEnforce(EnforcerRuleHelper helper, Document pom) throws EnforcerRuleException {
+  protected void doEnforce(EnforcerRuleHelper helper) throws EnforcerRuleException {
     MavenProject project = EnforcerRuleUtils.getMavenProject(helper);
 
     Log log = helper.getLog();
@@ -73,8 +71,9 @@ public class PedanticDependencyOrderEnforcer extends AbstractPedanticDependencyO
     log.info("  -> Artifact ID priorities: "
            + CommaSeparatorUtils.join(getArtifactSorter().getPriorities(DependencyElement.ARTIFACT_ID)));
 
-    Collection<DependencyModel> declaredDependencies = new PomSerializer(pom).read().getDependencies();
-    Collection<DependencyModel> projectDependencies = Collections2.transform(project.getDependencies(), new Function<Dependency, DependencyModel>() {
+    Collection<DependencyModel> declaredDependencies = getProjectModel().getDependencies();
+    Collection<DependencyModel> projectDependencies =
+        Collections2.transform(project.getDependencies(), new Function<Dependency, DependencyModel>() {
       @Override
       public DependencyModel apply(Dependency input) {
         return new DependencyModel(

@@ -21,10 +21,8 @@ import java.util.List;
 import org.apache.maven.enforcer.rule.api.EnforcerRuleException;
 import org.apache.maven.enforcer.rule.api.EnforcerRuleHelper;
 import org.apache.maven.plugin.logging.Log;
-import org.w3c.dom.Document;
 
 import com.github.ferstl.maven.pomenforcers.model.PluginModel;
-import com.github.ferstl.maven.pomenforcers.reader.PomSerializer;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
 
@@ -85,26 +83,26 @@ public class PedanticPluginConfigurationEnforcer extends AbstractPedanticEnforce
   }
 
   @Override
-  protected void doEnforce(EnforcerRuleHelper helper, Document pom) throws EnforcerRuleException {
+  protected void doEnforce(EnforcerRuleHelper helper) throws EnforcerRuleException {
     Log log = helper.getLog();
     if (this.manageVersions) {
       log.info("Enforcing managed plugin versions.");
-      enforceManagedVersions(pom);
+      enforceManagedVersions();
     }
 
     if (this.manageConfigurations) {
       log.info("Enforcing managed plugin configurations.");
-      enforceManagedConfiguration(pom);
+      enforceManagedConfiguration();
     }
 
     if (this.manageDependencies) {
       log.info("Enforcing managed plugin dependencies.");
-      enforceManagedDependencies(pom);
+      enforceManagedDependencies();
     }
   }
 
-  private void enforceManagedVersions(Document pom) throws EnforcerRuleException {
-    Collection<PluginModel> versionedPlugins = searchForPlugins(pom, new PluginWithVersionPredicate());
+  private void enforceManagedVersions() throws EnforcerRuleException {
+    Collection<PluginModel> versionedPlugins = searchForPlugins(new PluginWithVersionPredicate());
     if (versionedPlugins.size() > 0) {
       throw new EnforcerRuleException("One does not simply set versions on plugins. Plugins versions have to " +
       		"be declared in <pluginManagement>: " + versionedPlugins);
@@ -112,25 +110,25 @@ public class PedanticPluginConfigurationEnforcer extends AbstractPedanticEnforce
 
   }
 
-  private void enforceManagedConfiguration(Document pom) throws EnforcerRuleException {
-    Collection<PluginModel> configuredPlugins = searchForPlugins(pom, new PluginWithConfigurationPredicate());
+  private void enforceManagedConfiguration() throws EnforcerRuleException {
+    Collection<PluginModel> configuredPlugins = searchForPlugins(new PluginWithConfigurationPredicate());
     if (configuredPlugins.size() > 0) {
       throw new EnforcerRuleException("One does not simply configure plugins. Use <pluginManagement> to configure "
           +	"these plugins or configure them for a specific <execution>: " + configuredPlugins);
     }
   }
 
-  private void enforceManagedDependencies(Document pom) throws EnforcerRuleException {
+  private void enforceManagedDependencies() throws EnforcerRuleException {
     Collection<PluginModel> configuredPluginDependencies =
-        searchForPlugins(pom, new PluginWithDependenciesPredicate());
+        searchForPlugins(new PluginWithDependenciesPredicate());
     if (configuredPluginDependencies.size() > 0) {
       throw new EnforcerRuleException("One does not simply configure plugin dependencies. Use <pluginManagement> "
       	+ "to configure plugin dependencies: " + configuredPluginDependencies);
     }
   }
 
-  private Collection<PluginModel> searchForPlugins(Document pom, Predicate<PluginModel> predicate) {
-    List<PluginModel> plugins = new PomSerializer(pom).read().getPlugins();
+  private Collection<PluginModel> searchForPlugins(Predicate<PluginModel> predicate) {
+    List<PluginModel> plugins = getProjectModel().getPlugins();
     return Collections2.filter(plugins, predicate);
   }
 

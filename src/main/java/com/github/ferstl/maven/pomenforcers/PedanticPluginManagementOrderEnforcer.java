@@ -23,13 +23,11 @@ import org.apache.maven.enforcer.rule.api.EnforcerRuleHelper;
 import org.apache.maven.model.Plugin;
 import org.apache.maven.plugin.logging.Log;
 import org.apache.maven.project.MavenProject;
-import org.w3c.dom.Document;
 
 import com.github.ferstl.maven.pomenforcers.artifact.ArtifactSorter;
 import com.github.ferstl.maven.pomenforcers.artifact.PluginElement;
 import com.github.ferstl.maven.pomenforcers.artifact.PluginMatcher;
 import com.github.ferstl.maven.pomenforcers.model.PluginModel;
-import com.github.ferstl.maven.pomenforcers.reader.PomSerializer;
 import com.github.ferstl.maven.pomenforcers.util.CommaSeparatorUtils;
 import com.github.ferstl.maven.pomenforcers.util.EnforcerRuleUtils;
 import com.google.common.base.Function;
@@ -120,7 +118,7 @@ public class PedanticPluginManagementOrderEnforcer extends AbstractPedanticEnfor
   }
 
   @Override
-  protected void doEnforce(EnforcerRuleHelper helper, Document pom) throws EnforcerRuleException {
+  protected void doEnforce(EnforcerRuleHelper helper) throws EnforcerRuleException {
     MavenProject project = EnforcerRuleUtils.getMavenProject(helper);
     Log log = helper.getLog();
     log.info("Enforcing plugin management order.");
@@ -131,9 +129,11 @@ public class PedanticPluginManagementOrderEnforcer extends AbstractPedanticEnfor
     log.info("  -> ArtifactModel ID priorities: "
            + CommaSeparatorUtils.join(this.artifactSorter.getPriorities(PluginElement.ARTIFACT_ID)));
 
-    Collection<PluginModel> declaredPluginManagement = new PomSerializer(pom).read().getManagedPlugins();
+    Collection<PluginModel> declaredPluginManagement = getProjectModel().getManagedPlugins();
 
-    Collection<PluginModel> managedPlugins = Collections2.transform(project.getPluginManagement().getPlugins(), new Function<Plugin, PluginModel>() {
+    // TODO use project model directly
+    Collection<PluginModel> managedPlugins =
+        Collections2.transform(project.getPluginManagement().getPlugins(), new Function<Plugin, PluginModel>() {
       @Override
       public PluginModel apply(Plugin input) {
         return new PluginModel(input.getGroupId(), input.getArtifactId(), input.getVersion());

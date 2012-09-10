@@ -24,12 +24,10 @@ import org.apache.maven.model.Dependency;
 import org.apache.maven.model.DependencyManagement;
 import org.apache.maven.plugin.logging.Log;
 import org.apache.maven.project.MavenProject;
-import org.w3c.dom.Document;
 
 import com.github.ferstl.maven.pomenforcers.artifact.DependencyElement;
 import com.github.ferstl.maven.pomenforcers.model.DependencyModel;
 import com.github.ferstl.maven.pomenforcers.model.ProjectModel;
-import com.github.ferstl.maven.pomenforcers.reader.PomSerializer;
 import com.github.ferstl.maven.pomenforcers.util.CommaSeparatorUtils;
 import com.github.ferstl.maven.pomenforcers.util.EnforcerRuleUtils;
 import com.google.common.base.Function;
@@ -64,7 +62,7 @@ import com.google.common.collect.Ordering;
 public class PedanticDependencyManagementOrderEnforcer extends AbstractPedanticDependencyOrderEnforcer {
 
   @Override
-  protected void doEnforce(EnforcerRuleHelper helper, Document pom) throws EnforcerRuleException {
+  protected void doEnforce(EnforcerRuleHelper helper) throws EnforcerRuleException {
     MavenProject project = EnforcerRuleUtils.getMavenProject(helper);
 
     Log log = helper.getLog();
@@ -78,7 +76,7 @@ public class PedanticDependencyManagementOrderEnforcer extends AbstractPedanticD
     log.info("  -> Artifact ID priorities: "
            + CommaSeparatorUtils.join(getArtifactSorter().getPriorities(DependencyElement.ARTIFACT_ID)));
 
-    ProjectModel projectModel = new PomSerializer(pom).read();
+    ProjectModel projectModel = getProjectModel();
     Collection<DependencyModel> declaredDependencyManagement = projectModel.getManagedDependencies();
 
     Collection<DependencyModel> managedDependencyArtifacts =

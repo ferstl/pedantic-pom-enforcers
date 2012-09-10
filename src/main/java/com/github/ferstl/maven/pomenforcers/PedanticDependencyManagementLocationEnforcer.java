@@ -37,9 +37,9 @@ public class PedanticDependencyManagementLocationEnforcer extends AbstractPedant
   }
 
   @Override
-  protected void doEnforce(EnforcerRuleHelper helper, Document pom) throws EnforcerRuleException {
+  protected void doEnforce(EnforcerRuleHelper helper) throws EnforcerRuleException {
     MavenProject mavenProject = EnforcerRuleUtils.getMavenProject(helper);
-    if (containsDependencyManagement(pom) && !isDependencyManagementAllowed(mavenProject)) {
+    if (containsDependencyManagement(getPom()) && !isDependencyManagementAllowed(mavenProject)) {
       throw new EnforcerRuleException("One does not simply declare dependency management. " +
           "Only these POMs are allowed to manage dependencies: " + this.dependencyManagingPoms);
     }

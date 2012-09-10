@@ -21,7 +21,6 @@ import java.util.Set;
 import org.apache.maven.enforcer.rule.api.EnforcerRuleException;
 import org.apache.maven.enforcer.rule.api.EnforcerRuleHelper;
 import org.apache.maven.project.MavenProject;
-import org.w3c.dom.Document;
 
 import com.github.ferstl.maven.pomenforcers.artifact.StringToArtifactTransformer;
 import com.github.ferstl.maven.pomenforcers.model.ArtifactModel;
@@ -51,9 +50,9 @@ public class PedanticPluginManagementLocationEnforcer extends AbstractPedanticEn
   }
 
   @Override
-  protected void doEnforce(EnforcerRuleHelper helper, Document pom) throws EnforcerRuleException {
+  protected void doEnforce(EnforcerRuleHelper helper) throws EnforcerRuleException {
     MavenProject mavenProject = EnforcerRuleUtils.getMavenProject(helper);
-    if (containsPluginManagement(pom) && !isPluginManagementAllowed(mavenProject)) {
+    if (containsPluginManagement() && !isPluginManagementAllowed(mavenProject)) {
       throw new EnforcerRuleException("One does not simply declare plugin management. " +
       		"Only these POMs are allowed to manage plugins: " + this.pluginManagingPoms);
     }
@@ -71,8 +70,8 @@ public class PedanticPluginManagementLocationEnforcer extends AbstractPedanticEn
     CommaSeparatorUtils.splitAndAddToCollection(pluginManagingPoms, this.pluginManagingPoms, stringToArtifactTransformer);
   }
 
-  private boolean containsPluginManagement(Document pom) {
-    return XmlUtils.evaluateXPathAsElement("/project/build/pluginManagement", pom) != null;
+  private boolean containsPluginManagement() {
+    return XmlUtils.evaluateXPathAsElement("/project/build/pluginManagement", getPom()) != null;
   }
 
   private boolean isPluginManagementAllowed(MavenProject project) {

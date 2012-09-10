@@ -91,16 +91,16 @@ public class PedanticDependencyConfigurationEnforcer extends AbstractPedanticEnf
   }
 
   @Override
-  protected void doEnforce(EnforcerRuleHelper helper, Document pom) throws EnforcerRuleException {
+  protected void doEnforce(EnforcerRuleHelper helper) throws EnforcerRuleException {
     Log log = helper.getLog();
 
     if (this.manageVersions) {
       log.info("Enforcing managed dependency versions");
-      enforceManagedVersions(pom);
+      enforceManagedVersions(getPom());
     }
     if (this.manageExclusions) {
       log.info("Enforcing managed dependency exclusions");
-      enforceManagedExclusion(pom);
+      enforceManagedExclusion(getPom());
     }
   }
 
