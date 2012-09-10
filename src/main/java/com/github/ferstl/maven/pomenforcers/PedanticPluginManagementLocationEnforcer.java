@@ -26,7 +26,6 @@ import com.github.ferstl.maven.pomenforcers.artifact.StringToArtifactTransformer
 import com.github.ferstl.maven.pomenforcers.model.ArtifactModel;
 import com.github.ferstl.maven.pomenforcers.util.CommaSeparatorUtils;
 import com.github.ferstl.maven.pomenforcers.util.EnforcerRuleUtils;
-import com.github.ferstl.maven.pomenforcers.util.XmlUtils;
 
 /**
  * Enforces that only a well-defined set of POMs may declare plugin management.
@@ -71,7 +70,7 @@ public class PedanticPluginManagementLocationEnforcer extends AbstractPedanticEn
   }
 
   private boolean containsPluginManagement() {
-    return XmlUtils.evaluateXPathAsElement("/project/build/pluginManagement", getPom()) != null;
+    return !getProjectModel().getManagedPlugins().isEmpty();
   }
 
   private boolean isPluginManagementAllowed(MavenProject project) {

@@ -21,10 +21,8 @@ import java.util.List;
 import org.apache.maven.enforcer.rule.api.EnforcerRuleException;
 import org.apache.maven.enforcer.rule.api.EnforcerRuleHelper;
 import org.apache.maven.plugin.logging.Log;
-import org.w3c.dom.Document;
 
 import com.github.ferstl.maven.pomenforcers.model.DependencyModel;
-import com.github.ferstl.maven.pomenforcers.serializer.PomSerializer;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
 
@@ -53,7 +51,7 @@ public class PedanticDependencyConfigurationEnforcer extends AbstractPedanticEnf
   /** If enabled, dependency versions have to be declared in <code>&lt;dependencyManagement&gt;</code>. */
   private boolean manageVersions = true;
 
-  /** Allow <code>${project.version}</code> or ${version} as dependency version. */
+  /** Allow <code>${project.version}</code> or <code>${version}</code> as dependency version. */
   private boolean allowUnmangedProjectVersions = true;
 
   /** If enabled, dependency exclusions have to be declared in <code>&lt;dependencyManagement&gt;</code>. */
@@ -96,17 +94,17 @@ public class PedanticDependencyConfigurationEnforcer extends AbstractPedanticEnf
 
     if (this.manageVersions) {
       log.info("Enforcing managed dependency versions");
-      enforceManagedVersions(getPom());
+      enforceManagedVersions();
     }
     if (this.manageExclusions) {
       log.info("Enforcing managed dependency exclusions");
-      enforceManagedExclusion(getPom());
+      enforceManagedExclusion();
     }
   }
 
-  private void enforceManagedVersions(Document pom) throws EnforcerRuleException {
+  private void enforceManagedVersions() throws EnforcerRuleException {
     Collection<DependencyModel> versionedDependencies =
-        searchForDependencies(pom, new DependencyVersionPredicate());
+        searchForDependencies(new VersionedDependencyPredicate());
 
     // Filter all project versions if allowed
     if (this.allowUnmangedProjectVersions) {
@@ -119,9 +117,9 @@ public class PedanticDependencyConfigurationEnforcer extends AbstractPedanticEnf
     }
   }
 
-  private void enforceManagedExclusion(Document pom) throws EnforcerRuleException {
+  private void enforceManagedExclusion() throws EnforcerRuleException {
     Collection<DependencyModel> depsWithExclusions =
-        searchForDependencies(pom, new DependencyWithExclusionPredicate());
+        searchForDependencies(new DependencyWithExclusionPredicate());
 
     if (depsWithExclusions.size() > 0) {
       throw new EnforcerRuleException("One does not simply define exclusions on dependencies. Dependency exclusions " +
@@ -129,8 +127,8 @@ public class PedanticDependencyConfigurationEnforcer extends AbstractPedanticEnf
     }
   }
 
-  private Collection<DependencyModel> searchForDependencies(Document pom, Predicate<DependencyModel> predicate) {
-    List<DependencyModel> dependencies = new PomSerializer(pom).read().getDependencies();
+  private Collection<DependencyModel> searchForDependencies(Predicate<DependencyModel> predicate) {
+    List<DependencyModel> dependencies = getProjectModel().getDependencies();
     return Collections2.filter(dependencies, predicate);
   }
 
@@ -146,7 +144,7 @@ public class PedanticDependencyConfigurationEnforcer extends AbstractPedanticEnf
     }
   }
 
-  private static class DependencyVersionPredicate implements Predicate<DependencyModel> {
+  private static class VersionedDependencyPredicate implements Predicate<DependencyModel> {
     @Override
     public boolean apply(DependencyModel input) {
       return input.getVersion() != null;

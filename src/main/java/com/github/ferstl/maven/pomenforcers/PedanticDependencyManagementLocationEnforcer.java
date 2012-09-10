@@ -26,7 +26,6 @@ import org.w3c.dom.Document;
 import com.github.ferstl.maven.pomenforcers.artifact.StringToArtifactTransformer;
 import com.github.ferstl.maven.pomenforcers.model.ArtifactModel;
 import com.github.ferstl.maven.pomenforcers.util.EnforcerRuleUtils;
-import com.github.ferstl.maven.pomenforcers.util.XmlUtils;
 
 import static com.github.ferstl.maven.pomenforcers.util.CommaSeparatorUtils.splitAndAddToCollection;
 
@@ -73,7 +72,7 @@ public class PedanticDependencyManagementLocationEnforcer extends AbstractPedant
   }
 
   private boolean containsDependencyManagement(Document pom) {
-    return XmlUtils.evaluateXPathAsElement("/project/dependencyManagement", pom) != null;
+    return !getProjectModel().getManagedDependencies().isEmpty();
   }
 
   private boolean isDependencyManagementAllowed(MavenProject project) {
