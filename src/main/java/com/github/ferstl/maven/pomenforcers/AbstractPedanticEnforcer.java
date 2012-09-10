@@ -38,6 +38,7 @@ public abstract class AbstractPedanticEnforcer implements EnforcerRule {
     // Read the POM
     MavenProject project = EnforcerRuleUtils.getMavenProject(helper);
     this.pom = XmlUtils.parseXml(project.getFile());
+    this.projectModel = new PomSerializer(this.pom).read();
 
     // Enforce
     doEnforce(helper);
@@ -57,9 +58,6 @@ public abstract class AbstractPedanticEnforcer implements EnforcerRule {
   }
 
   protected ProjectModel getProjectModel() {
-    if (this.projectModel == null) {
-      this.projectModel = new PomSerializer(this.pom).read();
-    }
     return this.projectModel;
   }
 
