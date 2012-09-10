@@ -1,4 +1,4 @@
-package com.github.ferstl.maven.pomenforcers.reader;
+package com.github.ferstl.maven.pomenforcers.serializer;
 
 import javax.xml.bind.Binder;
 import javax.xml.bind.JAXBContext;

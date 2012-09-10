@@ -24,7 +24,7 @@ import org.apache.maven.plugin.logging.Log;
 import org.w3c.dom.Document;
 
 import com.github.ferstl.maven.pomenforcers.model.DependencyModel;
-import com.github.ferstl.maven.pomenforcers.reader.PomSerializer;
+import com.github.ferstl.maven.pomenforcers.serializer.PomSerializer;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
 

@@ -32,7 +32,7 @@ import org.w3c.dom.Document;
 
 import com.github.ferstl.maven.pomenforcers.model.ArtifactModel;
 import com.github.ferstl.maven.pomenforcers.model.DependencyModel;
-import com.github.ferstl.maven.pomenforcers.reader.PomSerializer;
+import com.github.ferstl.maven.pomenforcers.serializer.PomSerializer;
 import com.github.ferstl.maven.pomenforcers.util.XmlUtils;
 import com.google.common.base.Function;
 import com.google.common.collect.Lists;

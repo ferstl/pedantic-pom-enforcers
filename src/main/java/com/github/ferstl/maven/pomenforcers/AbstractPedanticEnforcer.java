@@ -22,7 +22,7 @@ import org.apache.maven.project.MavenProject;
 import org.w3c.dom.Document;
 
 import com.github.ferstl.maven.pomenforcers.model.ProjectModel;
-import com.github.ferstl.maven.pomenforcers.reader.PomSerializer;
+import com.github.ferstl.maven.pomenforcers.serializer.PomSerializer;
 import com.github.ferstl.maven.pomenforcers.util.EnforcerRuleUtils;
 import com.github.ferstl.maven.pomenforcers.util.XmlUtils;
 
