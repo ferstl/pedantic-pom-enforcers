@@ -20,24 +20,26 @@ import java.util.List;
 
 import org.apache.maven.enforcer.rule.api.EnforcerRuleException;
 import org.apache.maven.enforcer.rule.api.EnforcerRuleHelper;
+import org.apache.maven.model.Dependency;
+import org.apache.maven.model.Exclusion;
 import org.apache.maven.monitor.logging.DefaultLog;
 import org.apache.maven.project.MavenProject;
 import org.codehaus.plexus.logging.Logger;
 import org.codehaus.plexus.logging.console.ConsoleLogger;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.w3c.dom.Document;
 
-import com.github.ferstl.maven.pomenforcers.artifact.DependencyInfo;
-import com.github.ferstl.maven.pomenforcers.reader.DeclaredDependenciesReader;
-import com.github.ferstl.maven.pomenforcers.reader.XPathExpressions;
+import com.github.ferstl.maven.pomenforcers.model.ArtifactModel;
+import com.github.ferstl.maven.pomenforcers.model.DependencyModel;
+import com.github.ferstl.maven.pomenforcers.reader.PomSerializer;
 import com.github.ferstl.maven.pomenforcers.util.XmlUtils;
+import com.google.common.base.Function;
+import com.google.common.collect.Lists;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-@Ignore
 public class PedanticDependencyOrderEnforcerTest {
 
   private static final File ALL_DEPENDENCIES_FILE =
@@ -53,11 +55,12 @@ public class PedanticDependencyOrderEnforcerTest {
     Document allDepsPom = XmlUtils.parseXml(ALL_DEPENDENCIES_FILE);
 
     // Read all dependencies and convert them to artifacts (classifier = "", ArtifactHandler = null)
-    List<DependencyInfo> allDeps = new DeclaredDependenciesReader(allDepsPom).read2(XPathExpressions.POM_DEPENENCIES);
+    List<DependencyModel> allDeps = new PomSerializer(allDepsPom).read().getDependencies();
+    List<Dependency> dependencies = Lists.transform(allDeps, new DependencyModelTransformer());
 
     this.mockHelper = mock(EnforcerRuleHelper.class);
     this.mockProject = mock(MavenProject.class);
-//    when(this.mockProject.getDependencies()).thenReturn(Lists.newArrayList(allDeps));
+    when(this.mockProject.getDependencies()).thenReturn(dependencies);
     ConsoleLogger plexusLogger = new ConsoleLogger(Logger.LEVEL_DEBUG, "testLogger");
     when(this.mockHelper.getLog()).thenReturn(new DefaultLog(plexusLogger));
     when(this.mockHelper.evaluate("${project}")).thenReturn(this.mockProject);
@@ -93,5 +96,26 @@ public class PedanticDependencyOrderEnforcerTest {
     rule.setArtifactIdPriorities("junit,lambdaj");
     rule.setGroupIdPriorities("org.apache.commons");
     rule.execute(this.mockHelper);
+  }
+
+  private static class DependencyModelTransformer implements Function<DependencyModel, Dependency> {
+    @Override
+    public Dependency apply(DependencyModel input) {
+      Dependency dependency = new Dependency();
+      dependency.setGroupId(input.getGroupId());
+      dependency.setArtifactId(input.getArtifactId());
+      dependency.setVersion(input.getVersion());
+      dependency.setClassifier(input.getClassifier());
+      dependency.setScope(input.getScope());
+      dependency.setType("jar");
+
+      for (ArtifactModel exclusionModel : input.getExclusions()) {
+        Exclusion exclusion = new Exclusion();
+        exclusion.setGroupId(exclusionModel.getGroupId());
+        exclusion.setArtifactId(exclusionModel.getArtifactId());
+        dependency.addExclusion(exclusion);
+      }
+      return dependency;
+    }
   }
 }

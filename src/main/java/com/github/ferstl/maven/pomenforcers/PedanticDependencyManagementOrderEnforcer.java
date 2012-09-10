@@ -27,9 +27,9 @@ import org.apache.maven.project.MavenProject;
 import org.w3c.dom.Document;
 
 import com.github.ferstl.maven.pomenforcers.artifact.DependencyElement;
-import com.github.ferstl.maven.pomenforcers.artifact.DependencyInfo;
-import com.github.ferstl.maven.pomenforcers.reader.DeclaredDependenciesReader;
-import com.github.ferstl.maven.pomenforcers.reader.XPathExpressions;
+import com.github.ferstl.maven.pomenforcers.model.DependencyModel;
+import com.github.ferstl.maven.pomenforcers.model.ProjectModel;
+import com.github.ferstl.maven.pomenforcers.reader.PomSerializer;
 import com.github.ferstl.maven.pomenforcers.util.CommaSeparatorUtils;
 import com.github.ferstl.maven.pomenforcers.util.EnforcerRuleUtils;
 import com.google.common.base.Function;
@@ -78,16 +78,16 @@ public class PedanticDependencyManagementOrderEnforcer extends AbstractPedanticD
     log.info("  -> Artifact ID priorities: "
            + CommaSeparatorUtils.join(getArtifactSorter().getPriorities(DependencyElement.ARTIFACT_ID)));
 
-    Collection<DependencyInfo> declaredDependencyManagement =
-        new DeclaredDependenciesReader(pom).read2(XPathExpressions.POM_MANAGED_DEPENDENCIES);
+    ProjectModel projectModel = new PomSerializer(pom).read();
+    Collection<DependencyModel> declaredDependencyManagement = projectModel.getManagedDependencies();
 
-    Collection<DependencyInfo> managedDependencyArtifacts =
+    Collection<DependencyModel> managedDependencyArtifacts =
         matchDependencies(declaredDependencyManagement, getManagedDependencies(project), helper);
 
-    Ordering<DependencyInfo> dependencyOrdering = getArtifactSorter().createOrdering();
+    Ordering<DependencyModel> dependencyOrdering = getArtifactSorter().createOrdering();
 
     if (!dependencyOrdering.isOrdered(managedDependencyArtifacts)) {
-      ImmutableList<DependencyInfo> sortedDependencies =
+      ImmutableList<DependencyModel> sortedDependencies =
           dependencyOrdering.immutableSortedCopy(managedDependencyArtifacts);
       throw new EnforcerRuleException("One does not simply declare dependency management! "
           + "Your dependency management has to be ordered this way:" + sortedDependencies);
@@ -99,7 +99,7 @@ public class PedanticDependencyManagementOrderEnforcer extends AbstractPedanticD
     visitor.visit(this);
   }
 
-  private Collection<DependencyInfo> getManagedDependencies(MavenProject project) {
+  private Collection<DependencyModel> getManagedDependencies(MavenProject project) {
     DependencyManagement dependencyManagement = project.getDependencyManagement();
     Collection<Dependency> managedDependencies;
     if (dependencyManagement != null) {
@@ -107,10 +107,10 @@ public class PedanticDependencyManagementOrderEnforcer extends AbstractPedanticD
     } else {
       managedDependencies = Collections.emptyList();
     }
-    return Collections2.transform(managedDependencies, new Function<Dependency, DependencyInfo>() {
+    return Collections2.transform(managedDependencies, new Function<Dependency, DependencyModel>() {
       @Override
-      public DependencyInfo apply(Dependency input) {
-        return new DependencyInfo(
+      public DependencyModel apply(Dependency input) {
+        return new DependencyModel(
             input.getGroupId(), input.getArtifactId(), input.getVersion(), input.getScope(), input.getClassifier());
       }
 

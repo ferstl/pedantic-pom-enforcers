@@ -19,6 +19,7 @@ import java.util.Collection;
 
 import org.apache.maven.enforcer.rule.api.EnforcerRuleHelper;
 
+import com.github.ferstl.maven.pomenforcers.model.PluginModel;
 import com.google.common.base.Function;
 
 import static com.github.ferstl.maven.pomenforcers.util.EnforcerRuleUtils.evaluateProperties;
@@ -29,35 +30,36 @@ public class PluginMatcher {
 
   private final MatchFunction matchFunction;
 
-  public PluginMatcher(Collection<Artifact> superset, EnforcerRuleHelper helper) {
+  public PluginMatcher(Collection<PluginModel> superset, EnforcerRuleHelper helper) {
     this.matchFunction = new MatchFunction(superset, helper);
   }
 
-  public Collection<Artifact> match(Collection<Artifact> subset) {
+  public Collection<PluginModel> match(Collection<PluginModel> subset) {
     return transform(subset, this.matchFunction);
   }
 
 
-  private static class MatchFunction implements Function<Artifact, Artifact> {
+  private static class MatchFunction implements Function<PluginModel, PluginModel> {
 
-    private final Collection<Artifact> superset;
+    private final Collection<PluginModel> superset;
     private final EnforcerRuleHelper helper;
 
-    public MatchFunction(Collection<Artifact> superset, EnforcerRuleHelper helper) {
+    public MatchFunction(Collection<PluginModel> superset, EnforcerRuleHelper helper) {
       this.superset = superset;
       this.helper = helper;
     }
 
     @Override
-    public Artifact apply(Artifact plugin) {
+    public PluginModel apply(PluginModel plugin) {
       String groupId = evaluateProperties(plugin.getGroupId(), this.helper);
       String artifactId = evaluateProperties(plugin.getArtifactId(), this.helper);
-      for (Artifact supersetDependency : this.superset) {
-        if (equal(supersetDependency.getGroupId(), groupId)
-         && equal(supersetDependency.getArtifactId(), artifactId)) {
-          return new Artifact(
-              supersetDependency.getGroupId(),
-              supersetDependency.getArtifactId());
+      for (PluginModel supersetPlugin : this.superset) {
+        if (equal(supersetPlugin.getGroupId(), groupId)
+         && equal(supersetPlugin.getArtifactId(), artifactId)) {
+          return new PluginModel(
+              supersetPlugin.getGroupId(),
+              supersetPlugin.getArtifactId(),
+              supersetPlugin.getVersion());
         }
       }
       throw new IllegalStateException(

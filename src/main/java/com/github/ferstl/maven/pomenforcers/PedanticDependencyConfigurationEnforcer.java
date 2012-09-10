@@ -16,17 +16,15 @@
 package com.github.ferstl.maven.pomenforcers;
 
 import java.util.Collection;
+import java.util.List;
 
 import org.apache.maven.enforcer.rule.api.EnforcerRuleException;
 import org.apache.maven.enforcer.rule.api.EnforcerRuleHelper;
 import org.apache.maven.plugin.logging.Log;
 import org.w3c.dom.Document;
-import org.w3c.dom.NodeList;
 
-import com.github.ferstl.maven.pomenforcers.artifact.DependencyInfo;
-import com.github.ferstl.maven.pomenforcers.reader.DeclaredDependenciesReader;
-import com.github.ferstl.maven.pomenforcers.reader.XPathExpressions;
-import com.github.ferstl.maven.pomenforcers.util.XmlUtils;
+import com.github.ferstl.maven.pomenforcers.model.DependencyModel;
+import com.github.ferstl.maven.pomenforcers.reader.PomSerializer;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
 
@@ -107,12 +105,12 @@ public class PedanticDependencyConfigurationEnforcer extends AbstractPedanticEnf
   }
 
   private void enforceManagedVersions(Document pom) throws EnforcerRuleException {
-    Collection<DependencyInfo> versionedDependencies =
-        searchForDependencies(pom, XPathExpressions.POM_VERSIONED_DEPENDENCIES);
+    Collection<DependencyModel> versionedDependencies =
+        searchForDependencies(pom, new DependencyVersionPredicate());
 
     // Filter all project versions if allowed
     if (this.allowUnmangedProjectVersions) {
-      versionedDependencies = Collections2.filter(versionedDependencies, new ProjectVersionPredicate());
+      versionedDependencies = Collections2.filter(versionedDependencies, new DependencyWithProjectVersionPredicate());
     }
 
     if (versionedDependencies.size() > 0) {
@@ -122,8 +120,8 @@ public class PedanticDependencyConfigurationEnforcer extends AbstractPedanticEnf
   }
 
   private void enforceManagedExclusion(Document pom) throws EnforcerRuleException {
-    Collection<DependencyInfo> depsWithExclusions =
-        searchForDependencies(pom, XPathExpressions.POM_DEPENDENCIES_WITH_EXCLUSIONS);
+    Collection<DependencyModel> depsWithExclusions =
+        searchForDependencies(pom, new DependencyWithExclusionPredicate());
 
     if (depsWithExclusions.size() > 0) {
       throw new EnforcerRuleException("One does not simply define exclusions on dependencies. Dependency exclusions " +
@@ -131,10 +129,9 @@ public class PedanticDependencyConfigurationEnforcer extends AbstractPedanticEnf
     }
   }
 
-  private Collection<DependencyInfo> searchForDependencies(Document pom, String xpath) {
-    NodeList dependencies = XmlUtils.evaluateXPathAsNodeList(xpath, pom);
-    Document dependenciesDoc = XmlUtils.createDocument("dependencies", dependencies);
-    return new DeclaredDependenciesReader(dependenciesDoc).read2(XPathExpressions.STANDALONE_DEPENDENCIES);
+  private Collection<DependencyModel> searchForDependencies(Document pom, Predicate<DependencyModel> predicate) {
+    List<DependencyModel> dependencies = new PomSerializer(pom).read().getDependencies();
+    return Collections2.filter(dependencies, predicate);
   }
 
   @Override
@@ -142,13 +139,25 @@ public class PedanticDependencyConfigurationEnforcer extends AbstractPedanticEnf
     visitor.visit(this);
   }
 
-  private static class ProjectVersionPredicate implements Predicate<DependencyInfo> {
+  private static class DependencyWithExclusionPredicate implements Predicate<DependencyModel> {
     @Override
-    public boolean apply(DependencyInfo input) {
-      if ("${project.version}".equals(input.getVersion()) || "${version}".equals(input.getVersion())) {
-        return false;
-      }
-      return true;
+    public boolean apply(DependencyModel input) {
+      return !input.getExclusions().isEmpty();
+    }
+  }
+
+  private static class DependencyVersionPredicate implements Predicate<DependencyModel> {
+    @Override
+    public boolean apply(DependencyModel input) {
+      return input.getVersion() != null;
+    }
+  }
+
+  private static class DependencyWithProjectVersionPredicate implements Predicate<DependencyModel> {
+    @Override
+    public boolean apply(DependencyModel input) {
+      return !"${project.version}".equals(input.getVersion())
+          && !"${version}".equals(input.getVersion());
     }
   }
 }

@@ -16,21 +16,21 @@
 package com.github.ferstl.maven.pomenforcers;
 
 import java.util.Collection;
+import java.util.List;
 
 import org.apache.maven.enforcer.rule.api.EnforcerRuleException;
 import org.apache.maven.enforcer.rule.api.EnforcerRuleHelper;
 import org.apache.maven.plugin.logging.Log;
 import org.w3c.dom.Document;
-import org.w3c.dom.NodeList;
 
-import com.github.ferstl.maven.pomenforcers.artifact.Artifact;
-import com.github.ferstl.maven.pomenforcers.reader.DeclaredPluginsReader;
-import com.github.ferstl.maven.pomenforcers.reader.XPathExpressions;
-import com.github.ferstl.maven.pomenforcers.util.XmlUtils;
+import com.github.ferstl.maven.pomenforcers.model.PluginModel;
+import com.github.ferstl.maven.pomenforcers.reader.PomSerializer;
+import com.google.common.base.Predicate;
+import com.google.common.collect.Collections2;
 
 /**
  * Enforces that plugin versions, configurations and dependencies are defined in the
- * <code>&lt;pluginManagement&gt;</code> section. Plugin <code>&lt;executions&gt;</code> can still
+ * <code>&lt;pluginManagement&gt;</code> section. Plugins <code>&lt;executions&gt;</code> can still
  * be configured in the <code>&lt;plugins&gt;</code> section if this enforcer is active.
  * <pre>
  * ### Example
@@ -104,16 +104,16 @@ public class PedanticPluginConfigurationEnforcer extends AbstractPedanticEnforce
   }
 
   private void enforceManagedVersions(Document pom) throws EnforcerRuleException {
-    Collection<Artifact> versionedPlugins = searchForPlugins(pom, XPathExpressions.POM_VERSIONED_PLUGINS);
+    Collection<PluginModel> versionedPlugins = searchForPlugins(pom, new PluginWithVersionPredicate());
     if (versionedPlugins.size() > 0) {
-      throw new EnforcerRuleException("One does not simply set versions on plugins. Plugin versions have to " +
+      throw new EnforcerRuleException("One does not simply set versions on plugins. Plugins versions have to " +
       		"be declared in <pluginManagement>: " + versionedPlugins);
     }
 
   }
 
   private void enforceManagedConfiguration(Document pom) throws EnforcerRuleException {
-    Collection<Artifact> configuredPlugins = searchForPlugins(pom, XPathExpressions.POM_CONFIGURED_PLUGINS);
+    Collection<PluginModel> configuredPlugins = searchForPlugins(pom, new PluginWithConfigurationPredicate());
     if (configuredPlugins.size() > 0) {
       throw new EnforcerRuleException("One does not simply configure plugins. Use <pluginManagement> to configure "
           +	"these plugins or configure them for a specific <execution>: " + configuredPlugins);
@@ -121,23 +121,43 @@ public class PedanticPluginConfigurationEnforcer extends AbstractPedanticEnforce
   }
 
   private void enforceManagedDependencies(Document pom) throws EnforcerRuleException {
-    Collection<Artifact> configuredPluginDependencies =
-        searchForPlugins(pom, XPathExpressions.POM_CONFIGURED_PLUGIN_DEPENDENCIES);
+    Collection<PluginModel> configuredPluginDependencies =
+        searchForPlugins(pom, new PluginWithDependenciesPredicate());
     if (configuredPluginDependencies.size() > 0) {
       throw new EnforcerRuleException("One does not simply configure plugin dependencies. Use <pluginManagement> "
       	+ "to configure plugin dependencies: " + configuredPluginDependencies);
     }
   }
 
-  private Collection<Artifact> searchForPlugins(Document pom, String xpath) {
-    NodeList plugins = XmlUtils.evaluateXPathAsNodeList(xpath, pom);
-    Document pluginsDoc = XmlUtils.createDocument("plugins", plugins);
-    return new DeclaredPluginsReader(pluginsDoc).read(XPathExpressions.STANDALONE_PLUGINS);
+  private Collection<PluginModel> searchForPlugins(Document pom, Predicate<PluginModel> predicate) {
+    List<PluginModel> plugins = new PomSerializer(pom).read().getPlugins();
+    return Collections2.filter(plugins, predicate);
   }
 
   @Override
   protected void accept(PedanticEnforcerVisitor visitor) {
     visitor.visit(this);
+  }
+
+  static class PluginWithDependenciesPredicate implements Predicate<PluginModel> {
+    @Override
+    public boolean apply(PluginModel input) {
+      return !input.getDependencies().isEmpty();
+    }
+  }
+
+  static class PluginWithConfigurationPredicate implements Predicate<PluginModel> {
+    @Override
+    public boolean apply(PluginModel input) {
+      return input.isConfigured();
+    }
+  }
+
+  static class PluginWithVersionPredicate implements Predicate<PluginModel> {
+    @Override
+    public boolean apply(PluginModel input) {
+      return input.getVersion() != null;
+    }
   }
 
 }

@@ -1,23 +1,22 @@
-package com.github.ferstl.maven.pomenforcers.artifact;
+package com.github.ferstl.maven.pomenforcers.model;
 
 
+import java.util.Collections;
+import java.util.List;
 import java.util.Objects;
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import com.github.ferstl.maven.pomenforcers.DependencyScope;
+import com.google.common.base.Joiner;
 
 import static com.google.common.base.Objects.equal;
 
-@XmlAccessorType(XmlAccessType.FIELD)
 @XmlRootElement(name = "dependency")
-public class DependencyInfo extends Artifact {
+public class DependencyModel extends ArtifactModel {
 
-  @XmlElement(name = "version")
-  private String version;
+  private static final Joiner TO_STRING_JOINER = Joiner.on(":");
 
   @XmlElement(name = "scope")
   private String scope;
@@ -25,18 +24,16 @@ public class DependencyInfo extends Artifact {
   @XmlElement(name = "classifier")
   private String classifier;
 
-  // Constructor used by JAXB
-  DependencyInfo() {}
+  @XmlElement(name = "exclusions")
+  private ExclusionModel exclusions;
 
-  public DependencyInfo(String groupId, String artifactId, String version, String scope, String classifier) {
-    super(groupId, artifactId);
-    this.version = version;
+  // Constructor used by JAXB
+  DependencyModel() {}
+
+  public DependencyModel(String groupId, String artifactId, String version, String scope, String classifier) {
+    super(groupId, artifactId, version);
     this.scope = scope;
     this.classifier = classifier;
-  }
-
-  public String getVersion() {
-    return this.version;
   }
 
   public String getScope() {
@@ -50,9 +47,17 @@ public class DependencyInfo extends Artifact {
     return this.classifier;
   }
 
+  public List<ArtifactModel> getExclusions() {
+    return this.exclusions != null ? this.exclusions.getExclusions() : Collections.<ArtifactModel>emptyList();
+  }
+
   @Override
   public String toString() {
-    return super.toString() + ":" + this.classifier + ":" + this.scope;
+    return TO_STRING_JOINER.join(
+        super.toString(),
+        this.scope != null ? this.scope : "compile",
+        this.classifier != null ? this.classifier : "<no classifier>",
+        this.exclusions != null ? this.exclusions : "<no exclusions>");
   }
 
   // Note that this equals() implementation breaks the symmetry contract!
@@ -61,15 +66,15 @@ public class DependencyInfo extends Artifact {
     if (this == obj) {
       return true;
     }
-    if (!(obj instanceof DependencyInfo)) {
+    if (!(obj instanceof DependencyModel)) {
       return false;
     }
 
-    DependencyInfo other = (DependencyInfo) obj;
+    DependencyModel other = (DependencyModel) obj;
     return super.equals(other)
-        && equal(this.version, other.version)
         && equal(this.classifier, other.classifier)
-        && equal(this.scope, other.scope);
+        && equal(this.scope, other.scope)
+        && equal(this.exclusions, other.exclusions);
   }
 
   @Override

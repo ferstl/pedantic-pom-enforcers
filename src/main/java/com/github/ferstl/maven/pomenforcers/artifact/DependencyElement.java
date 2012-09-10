@@ -19,6 +19,7 @@ import java.util.Collection;
 import java.util.Comparator;
 import java.util.Map;
 
+import com.github.ferstl.maven.pomenforcers.model.DependencyModel;
 import com.github.ferstl.maven.pomenforcers.priority.PriorityComparator;
 import com.github.ferstl.maven.pomenforcers.priority.PriorityComparatorFactory;
 import com.github.ferstl.maven.pomenforcers.priority.StringStartsWithEquivalence;
@@ -26,14 +27,14 @@ import com.google.common.base.Function;
 import com.google.common.collect.Maps;
 
 
-public enum DependencyElement implements PriorityComparatorFactory<String, DependencyInfo> {
+public enum DependencyElement implements PriorityComparatorFactory<String, DependencyModel> {
   GROUP_ID("groupId") {
     @Override
-    public Comparator<DependencyInfo> createPriorityComparator(Collection<String> priorityCollection) {
+    public Comparator<DependencyModel> createPriorityComparator(Collection<String> priorityCollection) {
       StringStartsWithEquivalence priorityMatcher = new StringStartsWithEquivalence();
-      Function<DependencyInfo, String> transformer = new Function<DependencyInfo, String>() {
+      Function<DependencyModel, String> transformer = new Function<DependencyModel, String>() {
         @Override
-        public String apply(DependencyInfo input) {
+        public String apply(DependencyModel input) {
           return input.getGroupId();
         }
       };
@@ -43,11 +44,11 @@ public enum DependencyElement implements PriorityComparatorFactory<String, Depen
 
   ARTIFACT_ID("artifactId") {
     @Override
-    public Comparator<DependencyInfo> createPriorityComparator(Collection<String> priorityCollection) {
+    public Comparator<DependencyModel> createPriorityComparator(Collection<String> priorityCollection) {
       StringStartsWithEquivalence priorityMatcher = new StringStartsWithEquivalence();
-      Function<DependencyInfo, String> transformer = new Function<DependencyInfo, String>() {
+      Function<DependencyModel, String> transformer = new Function<DependencyModel, String>() {
         @Override
-        public String apply(DependencyInfo input) {
+        public String apply(DependencyModel input) {
           return input.getArtifactId();
         }
       };
@@ -57,10 +58,10 @@ public enum DependencyElement implements PriorityComparatorFactory<String, Depen
 
   SCOPE("scope") {
     @Override
-    public PriorityComparator<String, DependencyInfo> createPriorityComparator(Collection<String> priorityCollection) {
-      Function<DependencyInfo, String> transformer = new Function<DependencyInfo, String>() {
+    public PriorityComparator<String, DependencyModel> createPriorityComparator(Collection<String> priorityCollection) {
+      Function<DependencyModel, String> transformer = new Function<DependencyModel, String>() {
         @Override
-        public String apply(DependencyInfo input) {
+        public String apply(DependencyModel input) {
           return input.getScope();
         }
       };

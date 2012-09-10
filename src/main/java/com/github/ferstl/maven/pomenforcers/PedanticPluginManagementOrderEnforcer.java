@@ -25,12 +25,11 @@ import org.apache.maven.plugin.logging.Log;
 import org.apache.maven.project.MavenProject;
 import org.w3c.dom.Document;
 
-import com.github.ferstl.maven.pomenforcers.artifact.Artifact;
 import com.github.ferstl.maven.pomenforcers.artifact.ArtifactSorter;
 import com.github.ferstl.maven.pomenforcers.artifact.PluginElement;
 import com.github.ferstl.maven.pomenforcers.artifact.PluginMatcher;
-import com.github.ferstl.maven.pomenforcers.reader.DeclaredPluginsReader;
-import com.github.ferstl.maven.pomenforcers.reader.XPathExpressions;
+import com.github.ferstl.maven.pomenforcers.model.PluginModel;
+import com.github.ferstl.maven.pomenforcers.reader.PomSerializer;
 import com.github.ferstl.maven.pomenforcers.util.CommaSeparatorUtils;
 import com.github.ferstl.maven.pomenforcers.util.EnforcerRuleUtils;
 import com.google.common.base.Function;
@@ -60,7 +59,7 @@ import com.google.common.collect.Sets;
  */
 public class PedanticPluginManagementOrderEnforcer extends AbstractPedanticEnforcer {
 
-  private final ArtifactSorter<Artifact, PluginElement> artifactSorter;
+  private final ArtifactSorter<PluginModel, PluginElement> artifactSorter;
 
   public PedanticPluginManagementOrderEnforcer() {
     Set<PluginElement> orderBy = Sets.newLinkedHashSet();
@@ -129,24 +128,23 @@ public class PedanticPluginManagementOrderEnforcer extends AbstractPedanticEnfor
            + CommaSeparatorUtils.join(this.artifactSorter.getOrderBy()));
     log.info("  -> Group ID priorities: "
            + CommaSeparatorUtils.join(this.artifactSorter.getPriorities(PluginElement.GROUP_ID)));
-    log.info("  -> Artifact ID priorities: "
+    log.info("  -> ArtifactModel ID priorities: "
            + CommaSeparatorUtils.join(this.artifactSorter.getPriorities(PluginElement.ARTIFACT_ID)));
 
-    Collection<Artifact> declaredPluginManagement =
-        new DeclaredPluginsReader(pom).read(XPathExpressions.POM_MANAGED_PLUGINS);
+    Collection<PluginModel> declaredPluginManagement = new PomSerializer(pom).read().getManagedPlugins();
 
-    Collection<Artifact> managedPlugins = Collections2.transform(project.getPluginManagement().getPlugins(), new Function<Plugin, Artifact>() {
+    Collection<PluginModel> managedPlugins = Collections2.transform(project.getPluginManagement().getPlugins(), new Function<Plugin, PluginModel>() {
       @Override
-      public Artifact apply(Plugin input) {
-        return new Artifact(input.getGroupId(), input.getArtifactId());
+      public PluginModel apply(Plugin input) {
+        return new PluginModel(input.getGroupId(), input.getArtifactId(), input.getVersion());
       }
     });
-    Collection<Artifact> declaredManagedPlugins = matchPlugins(declaredPluginManagement, managedPlugins, helper);
+    Collection<PluginModel> declaredManagedPlugins = matchPlugins(declaredPluginManagement, managedPlugins, helper);
 
-    Ordering<Artifact> pluginOrdering = this.artifactSorter.createOrdering();
+    Ordering<PluginModel> pluginOrdering = this.artifactSorter.createOrdering();
 
     if (!pluginOrdering.isOrdered(declaredManagedPlugins)) {
-      ImmutableList<Artifact> sortedDependencies = pluginOrdering.immutableSortedCopy(declaredManagedPlugins);
+      ImmutableList<PluginModel> sortedDependencies = pluginOrdering.immutableSortedCopy(declaredManagedPlugins);
       throw new EnforcerRuleException("One does not simply declare plugin management! "
           + "Your plugin management has to be ordered this way:" + sortedDependencies);
     }
@@ -157,8 +155,8 @@ public class PedanticPluginManagementOrderEnforcer extends AbstractPedanticEnfor
     visitor.visit(this);
   }
 
-  private Collection<Artifact> matchPlugins(
-      Collection<Artifact> subset, Collection<Artifact> superset, EnforcerRuleHelper helper) {
+  private Collection<PluginModel> matchPlugins(
+      Collection<PluginModel> subset, Collection<PluginModel> superset, EnforcerRuleHelper helper) {
     return new PluginMatcher(superset, helper).match(subset);
   }
 }

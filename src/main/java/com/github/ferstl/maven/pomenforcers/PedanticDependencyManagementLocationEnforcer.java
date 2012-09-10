@@ -8,8 +8,8 @@ import org.apache.maven.enforcer.rule.api.EnforcerRuleHelper;
 import org.apache.maven.project.MavenProject;
 import org.w3c.dom.Document;
 
-import com.github.ferstl.maven.pomenforcers.artifact.Artifact;
 import com.github.ferstl.maven.pomenforcers.artifact.StringToArtifactTransformer;
+import com.github.ferstl.maven.pomenforcers.model.ArtifactModel;
 import com.github.ferstl.maven.pomenforcers.util.EnforcerRuleUtils;
 import com.github.ferstl.maven.pomenforcers.util.XmlUtils;
 
@@ -30,7 +30,7 @@ import static com.github.ferstl.maven.pomenforcers.util.CommaSeparatorUtils.spli
  */
 public class PedanticDependencyManagementLocationEnforcer extends AbstractPedanticEnforcer {
 
-  private final Set<Artifact> dependencyManagingPoms;
+  private final Set<ArtifactModel> dependencyManagingPoms;
 
   public PedanticDependencyManagementLocationEnforcer() {
     this.dependencyManagingPoms = new HashSet<>();
@@ -62,7 +62,7 @@ public class PedanticDependencyManagementLocationEnforcer extends AbstractPedant
   }
 
   private boolean isDependencyManagementAllowed(MavenProject project) {
-    Artifact projectInfo = new Artifact(project.getGroupId(), project.getArtifactId());
+    ArtifactModel projectInfo = new ArtifactModel(project.getGroupId(), project.getArtifactId(), project.getVersion());
     return this.dependencyManagingPoms.contains(projectInfo);
   }
 

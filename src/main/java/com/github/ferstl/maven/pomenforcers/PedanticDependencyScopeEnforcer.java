@@ -9,8 +9,8 @@ import org.apache.maven.model.Dependency;
 import org.apache.maven.plugin.logging.Log;
 import org.w3c.dom.Document;
 
-import com.github.ferstl.maven.pomenforcers.artifact.Artifact;
 import com.github.ferstl.maven.pomenforcers.artifact.StringToArtifactTransformer;
+import com.github.ferstl.maven.pomenforcers.model.ArtifactModel;
 import com.github.ferstl.maven.pomenforcers.util.CommaSeparatorUtils;
 import com.github.ferstl.maven.pomenforcers.util.EnforcerRuleUtils;
 import com.google.common.base.Function;
@@ -44,7 +44,7 @@ import static com.github.ferstl.maven.pomenforcers.DependencyScope.TEST;
  */
 public class PedanticDependencyScopeEnforcer extends AbstractPedanticEnforcer {
 
-  private final Multimap<Artifact, DependencyScope> scopedDependencies;
+  private final Multimap<ArtifactModel, DependencyScope> scopedDependencies;
   private final DependencyToArtifactTransformer dependencyToArtifactTransformer;
 
   public PedanticDependencyScopeEnforcer() {
@@ -114,8 +114,8 @@ public class PedanticDependencyScopeEnforcer extends AbstractPedanticEnforcer {
     Collection<Dependency> dependencies = EnforcerRuleUtils.getMavenProject(helper).getDependencies();
 
     for (Dependency dependency : dependencies) {
-      Artifact artifact = this.dependencyToArtifactTransformer.apply(dependency);
-      Collection<DependencyScope> allowedScopes = this.scopedDependencies.get(artifact);
+      ArtifactModel artifactModel = this.dependencyToArtifactTransformer.apply(dependency);
+      Collection<DependencyScope> allowedScopes = this.scopedDependencies.get(artifactModel);
       DependencyScope dependencyScope = getScope(dependency);
 
       if (allowedScopes.size() > 0 && !allowedScopes.contains(dependencyScope)) {
@@ -132,16 +132,16 @@ public class PedanticDependencyScopeEnforcer extends AbstractPedanticEnforcer {
     visitor.visit(this);
   }
 
-  private Set<Artifact> createDependencyInfo(String dependencies) {
-    Set<Artifact> dependencyInfoSet = Sets.newHashSet();
+  private Set<ArtifactModel> createDependencyInfo(String dependencies) {
+    Set<ArtifactModel> dependencyInfoSet = Sets.newHashSet();
     CommaSeparatorUtils.splitAndAddToCollection(dependencies, dependencyInfoSet, new StringToArtifactTransformer());
 
     return dependencyInfoSet;
   }
 
-  private void addToArtifactMap(Iterable<Artifact> artifacts, DependencyScope scope) {
-    for (Artifact artifact : artifacts) {
-      this.scopedDependencies.put(artifact, scope);
+  private void addToArtifactMap(Iterable<ArtifactModel> artifactModels, DependencyScope scope) {
+    for (ArtifactModel artifactModel : artifactModels) {
+      this.scopedDependencies.put(artifactModel, scope);
     }
   }
 
@@ -152,11 +152,11 @@ public class PedanticDependencyScopeEnforcer extends AbstractPedanticEnforcer {
     return DependencyScope.getByScopeName(dependency.getScope());
   }
 
-  private static class DependencyToArtifactTransformer implements Function<Dependency, Artifact> {
+  private static class DependencyToArtifactTransformer implements Function<Dependency, ArtifactModel> {
 
     @Override
-    public Artifact apply(Dependency input) {
-      return new Artifact(input.getGroupId(), input.getArtifactId());
+    public ArtifactModel apply(Dependency input) {
+      return new ArtifactModel(input.getGroupId(), input.getArtifactId(), input.getVersion());
     }
 
   }

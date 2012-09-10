@@ -19,6 +19,7 @@ import java.util.Collection;
 import java.util.Comparator;
 import java.util.Map;
 
+import com.github.ferstl.maven.pomenforcers.model.PluginModel;
 import com.github.ferstl.maven.pomenforcers.priority.PriorityComparator;
 import com.github.ferstl.maven.pomenforcers.priority.PriorityComparatorFactory;
 import com.github.ferstl.maven.pomenforcers.priority.StringStartsWithEquivalence;
@@ -26,15 +27,15 @@ import com.google.common.base.Function;
 import com.google.common.collect.Maps;
 
 
-public enum PluginElement implements PriorityComparatorFactory<String, Artifact> {
+public enum PluginElement implements PriorityComparatorFactory<String, PluginModel> {
 
   GROUP_ID("groupId") {
     @Override
-    public Comparator<Artifact> createPriorityComparator(Collection<String> priorityCollection) {
+    public Comparator<PluginModel> createPriorityComparator(Collection<String> priorityCollection) {
       StringStartsWithEquivalence priorityMatcher = new StringStartsWithEquivalence();
-      Function<Artifact, String> transformer = new Function<Artifact, String>() {
+      Function<PluginModel, String> transformer = new Function<PluginModel, String>() {
         @Override
-        public String apply(Artifact input) {
+        public String apply(PluginModel input) {
           return input.getGroupId();
         }
       };
@@ -44,11 +45,11 @@ public enum PluginElement implements PriorityComparatorFactory<String, Artifact>
 
   ARTIFACT_ID("artifactId") {
     @Override
-    public Comparator<Artifact> createPriorityComparator(Collection<String> priorityCollection) {
+    public Comparator<PluginModel> createPriorityComparator(Collection<String> priorityCollection) {
       StringStartsWithEquivalence priorityMatcher = new StringStartsWithEquivalence();
-      Function<Artifact, String> transformer = new Function<Artifact, String>() {
+      Function<PluginModel, String> transformer = new Function<PluginModel, String>() {
         @Override
-        public String apply(Artifact input) {
+        public String apply(PluginModel input) {
           return input.getArtifactId();
         }
       };

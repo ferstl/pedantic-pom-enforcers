@@ -24,9 +24,8 @@ import org.apache.maven.project.MavenProject;
 import org.w3c.dom.Document;
 
 import com.github.ferstl.maven.pomenforcers.artifact.DependencyElement;
-import com.github.ferstl.maven.pomenforcers.artifact.DependencyInfo;
-import com.github.ferstl.maven.pomenforcers.reader.DeclaredDependenciesReader;
-import com.github.ferstl.maven.pomenforcers.reader.XPathExpressions;
+import com.github.ferstl.maven.pomenforcers.model.DependencyModel;
+import com.github.ferstl.maven.pomenforcers.reader.PomSerializer;
 import com.github.ferstl.maven.pomenforcers.util.CommaSeparatorUtils;
 import com.github.ferstl.maven.pomenforcers.util.EnforcerRuleUtils;
 import com.google.common.base.Function;
@@ -74,21 +73,21 @@ public class PedanticDependencyOrderEnforcer extends AbstractPedanticDependencyO
     log.info("  -> Artifact ID priorities: "
            + CommaSeparatorUtils.join(getArtifactSorter().getPriorities(DependencyElement.ARTIFACT_ID)));
 
-    Collection<DependencyInfo> declaredDependencies = new DeclaredDependenciesReader(pom).read2(XPathExpressions.POM_DEPENENCIES);
-    Collection<DependencyInfo> projectDependencies = Collections2.transform(project.getDependencies(), new Function<Dependency, DependencyInfo>() {
+    Collection<DependencyModel> declaredDependencies = new PomSerializer(pom).read().getDependencies();
+    Collection<DependencyModel> projectDependencies = Collections2.transform(project.getDependencies(), new Function<Dependency, DependencyModel>() {
       @Override
-      public DependencyInfo apply(Dependency input) {
-        return new DependencyInfo(
+      public DependencyModel apply(Dependency input) {
+        return new DependencyModel(
             input.getGroupId(), input.getArtifactId(), input.getVersion(), input.getScope(), input.getClassifier());
       }
     });
 
-    Collection<DependencyInfo> dependencyArtifacts =
+    Collection<DependencyModel> dependencyArtifacts =
         matchDependencies(declaredDependencies, projectDependencies, helper);
-    Ordering<DependencyInfo> dependencyOrdering = getArtifactSorter().createOrdering();
+    Ordering<DependencyModel> dependencyOrdering = getArtifactSorter().createOrdering();
 
     if (!dependencyOrdering.isOrdered(dependencyArtifacts)) {
-      ImmutableList<DependencyInfo> sortedDependencies =
+      ImmutableList<DependencyModel> sortedDependencies =
           dependencyOrdering.immutableSortedCopy(dependencyArtifacts);
       throw new EnforcerRuleException("One does not simply declare dependencies! "
         + "Your dependencies have to be sorted this way: " + sortedDependencies);

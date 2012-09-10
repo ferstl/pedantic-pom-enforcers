@@ -19,6 +19,7 @@ import java.util.Collection;
 
 import org.apache.maven.enforcer.rule.api.EnforcerRuleHelper;
 
+import com.github.ferstl.maven.pomenforcers.model.DependencyModel;
 import com.google.common.base.Function;
 
 import static com.github.ferstl.maven.pomenforcers.util.EnforcerRuleUtils.evaluateProperties;
@@ -30,34 +31,34 @@ public class DependencyMatcher {
 
   private final MatchFunction matchFunction;
 
-  public DependencyMatcher(Collection<DependencyInfo> superset, EnforcerRuleHelper helper) {
+  public DependencyMatcher(Collection<DependencyModel> superset, EnforcerRuleHelper helper) {
     this.matchFunction = new MatchFunction(superset, helper);
   }
 
-  public Collection<DependencyInfo> match(Collection<DependencyInfo> subset) {
+  public Collection<DependencyModel> match(Collection<DependencyModel> subset) {
     return transform(subset, this.matchFunction);
   }
 
-  private static class MatchFunction implements Function<DependencyInfo, DependencyInfo> {
+  private static class MatchFunction implements Function<DependencyModel, DependencyModel> {
 
-    private final Collection<DependencyInfo> superset;
+    private final Collection<DependencyModel> superset;
     private final EnforcerRuleHelper helper;
 
-    public MatchFunction(Collection<DependencyInfo> superset, EnforcerRuleHelper helper) {
+    public MatchFunction(Collection<DependencyModel> superset, EnforcerRuleHelper helper) {
       this.superset = superset;
       this.helper = helper;
     }
 
     @Override
-    public DependencyInfo apply(DependencyInfo dependency) {
+    public DependencyModel apply(DependencyModel dependency) {
       String groupId = evaluateProperties(dependency.getGroupId(), this.helper);
       String artifactId = evaluateProperties(dependency.getArtifactId(), this.helper);
       String classifier = evaluateProperties(dependency.getClassifier(), this.helper);
-      for (DependencyInfo supersetDependency : this.superset) {
+      for (DependencyModel supersetDependency : this.superset) {
         if (equal(supersetDependency.getGroupId(), groupId)
          && equal(supersetDependency.getArtifactId(), artifactId)
          && equal(supersetDependency.getClassifier(), classifier)) {
-          return new DependencyInfo(
+          return new DependencyModel(
               supersetDependency.getGroupId(),
               supersetDependency.getArtifactId(),
               supersetDependency.getVersion(),

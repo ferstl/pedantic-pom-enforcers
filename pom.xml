@@ -220,7 +220,7 @@
             </pomIncludes>
             <cloneProjectsTo>${project.build.directory}/it</cloneProjectsTo>
             <postBuildHookScript>verify</postBuildHookScript>
-            <debug>false</debug>
+            <debug>true</debug>
             <goals>
               <goal>clean</goal>
               <goal>install</goal>
