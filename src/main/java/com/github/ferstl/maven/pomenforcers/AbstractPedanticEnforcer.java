@@ -34,7 +34,7 @@ public abstract class AbstractPedanticEnforcer implements EnforcerRule {
   private ProjectModel projectModel;
 
   @Override
-  public void execute(EnforcerRuleHelper helper) throws EnforcerRuleException {
+  public final void execute(EnforcerRuleHelper helper) throws EnforcerRuleException {
     // Read the POM
     MavenProject project = EnforcerRuleUtils.getMavenProject(helper);
     this.pom = XmlUtils.parseXml(project.getFile());
