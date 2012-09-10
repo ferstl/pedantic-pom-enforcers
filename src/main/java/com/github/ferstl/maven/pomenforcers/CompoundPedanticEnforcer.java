@@ -283,8 +283,9 @@ public class CompoundPedanticEnforcer extends AbstractPedanticEnforcer {
   protected void doEnforce() throws EnforcerRuleException {
     for (PedanticEnforcerRule pedanticEnforcer : this.enforcers) {
       AbstractPedanticEnforcer rule = pedanticEnforcer.createEnforcerRule();
+      rule.initialize(getHelper(), getPom(), getProjectModel());
       rule.accept(this.propertyInitializer);
-      rule.execute(getHelper());
+      rule.doEnforce();
     }
   }
 

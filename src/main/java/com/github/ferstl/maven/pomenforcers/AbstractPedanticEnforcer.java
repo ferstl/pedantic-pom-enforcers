@@ -50,6 +50,20 @@ public abstract class AbstractPedanticEnforcer implements EnforcerRule {
     doEnforce();
   }
 
+  /**
+   * Initialization method. Use this method when the enforcer rule is not instantiated by the
+   * maven-enforcer-plugin.
+   * @param helper Enforcer rule helper.
+   * @param pom POM Document.
+   * @param projectModel Project model.
+   */
+  void initialize(EnforcerRuleHelper helper, Document pom, ProjectModel projectModel) {
+    this.helper = helper;
+    this.log = helper.getLog();
+    this.pom = pom;
+    this.projectModel = projectModel;
+  }
+
   protected EnforcerRuleHelper getHelper() {
     return this.helper;
   }

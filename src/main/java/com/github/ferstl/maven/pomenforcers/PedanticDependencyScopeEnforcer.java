@@ -20,7 +20,6 @@ import java.util.Set;
 
 import org.apache.maven.enforcer.rule.api.EnforcerRuleException;
 import org.apache.maven.model.Dependency;
-import org.apache.maven.plugin.logging.Log;
 
 import com.github.ferstl.maven.pomenforcers.artifact.StringToArtifactTransformer;
 import com.github.ferstl.maven.pomenforcers.model.ArtifactModel;
