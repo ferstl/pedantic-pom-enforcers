@@ -4,7 +4,11 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
+import javax.xml.bind.annotation.XmlAnyElement;
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElementWrapper;
+
+import org.w3c.dom.Element;
 
 import com.google.common.base.Joiner;
 
@@ -12,8 +16,9 @@ public class PluginModel extends ArtifactModel {
 
   private static final Joiner TO_STRING_JOINER = Joiner.on(":").skipNulls();
 
-  @XmlElement(name = "configuration")
-  private PluginConfigurationModel configuration;
+  @XmlElementWrapper(name = "configuration")
+  @XmlAnyElement
+  private List<Element> configItems;
 
   @XmlElement(name = "dependencies")
   private DependenciesModel dependencies;
@@ -25,7 +30,7 @@ public class PluginModel extends ArtifactModel {
   }
 
   public boolean isConfigured() {
-    return this.configuration != null && this.configuration.isConfigured();
+    return this.configItems != null && !this.configItems.isEmpty();
   }
 
   public List<DependencyModel> getDependencies() {
@@ -51,12 +56,13 @@ public class PluginModel extends ArtifactModel {
 
     PluginModel other = (PluginModel) obj;
     return super.equals(other)
-        && Objects.equals(this.configuration, other.configuration)
+        // TODO: Element implementations may not implement equals()!!
+        && Objects.equals(this.configItems, other.configItems)
         && Objects.equals(this.dependencies, other.dependencies);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(super.hashCode(), this.configuration, this.dependencies);
+    return Objects.hash(super.hashCode(), this.configItems, this.dependencies);
   }
 }
