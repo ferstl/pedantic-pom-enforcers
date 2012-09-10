@@ -62,7 +62,7 @@ public enum DependencyElement implements PriorityComparatorFactory<String, Depen
       Function<DependencyModel, String> transformer = new Function<DependencyModel, String>() {
         @Override
         public String apply(DependencyModel input) {
-          return input.getScope();
+          return input.getScope().getScopeName();
         }
       };
       return new PriorityComparator<>(priorityCollection, transformer);

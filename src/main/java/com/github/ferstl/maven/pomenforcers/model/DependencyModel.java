@@ -7,6 +7,7 @@ import java.util.Objects;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import com.github.ferstl.maven.pomenforcers.DependencyScope;
 import com.google.common.base.Joiner;
@@ -19,7 +20,8 @@ public class DependencyModel extends ArtifactModel {
   private static final Joiner TO_STRING_JOINER = Joiner.on(":");
 
   @XmlElement(name = "scope")
-  private String scope;
+  @XmlJavaTypeAdapter(value = DependencyScopeAdapter.class)
+  private DependencyScope scope;
 
   @XmlElement(name = "classifier")
   private String classifier;
@@ -32,13 +34,13 @@ public class DependencyModel extends ArtifactModel {
 
   public DependencyModel(String groupId, String artifactId, String version, String scope, String classifier) {
     super(groupId, artifactId, version);
-    this.scope = scope;
+    this.scope = scope != null ? DependencyScope.getByScopeName(scope) : null;
     this.classifier = classifier;
   }
 
-  public String getScope() {
+  public DependencyScope getScope() {
     if (this.scope == null) {
-      return DependencyScope.COMPILE.getScopeName();
+      return DependencyScope.COMPILE;
     }
     return this.scope;
   }
@@ -55,7 +57,7 @@ public class DependencyModel extends ArtifactModel {
   public String toString() {
     return TO_STRING_JOINER.join(
         super.toString(),
-        this.scope != null ? this.scope : "compile",
+        getScope().getScopeName(),
         this.classifier != null ? this.classifier : "<no classifier>",
         this.exclusions != null ? this.exclusions : "<no exclusions>");
   }

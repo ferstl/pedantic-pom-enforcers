@@ -62,7 +62,7 @@ public class DependencyMatcher {
               supersetDependency.getGroupId(),
               supersetDependency.getArtifactId(),
               supersetDependency.getVersion(),
-              supersetDependency.getScope(),
+              supersetDependency.getScope().getScopeName(),
               supersetDependency.getClassifier());
         }
       }
