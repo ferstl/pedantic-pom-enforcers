@@ -4,11 +4,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
-import javax.xml.bind.annotation.XmlElement;
-
 public class PluginManagementModel {
 
-  @XmlElement(name = "plugins")
   private PluginsModel plugins;
 
   public List<PluginModel> getPlugins() {

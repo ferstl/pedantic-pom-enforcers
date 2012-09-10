@@ -4,6 +4,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import com.google.common.base.Joiner;
@@ -15,13 +17,16 @@ public class ProjectModel {
 
   private String groupId;
   private String artifactId;
-  private ModulesModel modules;
+
+  @XmlElementWrapper
+  @XmlElement(name = "module")
+  private List<String> modules;
   private DependencyManagementModel dependencyManagement;
   private DependenciesModel dependencies;
   private BuildModel build;
 
   public List<String> getModules() {
-    return this.modules != null ? this.modules.getModules() : Collections.<String>emptyList();
+    return this.modules != null ? this.modules : Collections.<String>emptyList();
   }
 
   public List<DependencyModel> getManagedDependencies() {
@@ -50,7 +55,12 @@ public class ProjectModel {
         .append(this.artifactId)
         .append(" [\n");
     return TO_STRING_JOINER
-             .appendTo(sb, this.modules, this.dependencyManagement, this.dependencies, this.build)
+             .appendTo(
+                 sb,
+                 CollectionToStringHelper.toString("Modules", this.modules),
+                 this.dependencyManagement,
+                 this.dependencies,
+                 this.build)
              .append("\n]")
              .toString();
   }

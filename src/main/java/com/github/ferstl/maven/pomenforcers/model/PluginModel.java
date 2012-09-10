@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Objects;
 
 import javax.xml.bind.annotation.XmlAnyElement;
-import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 
 import org.w3c.dom.Element;
@@ -20,7 +19,6 @@ public class PluginModel extends ArtifactModel {
   @XmlAnyElement
   private List<Element> configItems;
 
-  @XmlElement(name = "dependencies")
   private DependenciesModel dependencies;
 
   PluginModel() {}

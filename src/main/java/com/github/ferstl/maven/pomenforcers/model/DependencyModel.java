@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Objects;
 
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
@@ -19,15 +20,13 @@ public class DependencyModel extends ArtifactModel {
 
   private static final Joiner TO_STRING_JOINER = Joiner.on(":");
 
-  @XmlElement(name = "scope")
   @XmlJavaTypeAdapter(value = DependencyScopeAdapter.class)
   private DependencyScope scope;
-
-  @XmlElement(name = "classifier")
   private String classifier;
 
-  @XmlElement(name = "exclusions")
-  private ExclusionModel exclusions;
+  @XmlElementWrapper
+  @XmlElement(name = "exclusion")
+  private List<ArtifactModel> exclusions;
 
   // Constructor used by JAXB
   DependencyModel() {}
@@ -50,7 +49,7 @@ public class DependencyModel extends ArtifactModel {
   }
 
   public List<ArtifactModel> getExclusions() {
-    return this.exclusions != null ? this.exclusions.getExclusions() : Collections.<ArtifactModel>emptyList();
+    return this.exclusions != null ? this.exclusions : Collections.<ArtifactModel>emptyList();
   }
 
   @Override
@@ -59,7 +58,7 @@ public class DependencyModel extends ArtifactModel {
         super.toString(),
         getScope().getScopeName(),
         this.classifier != null ? this.classifier : "<no classifier>",
-        this.exclusions != null ? this.exclusions : "<no exclusions>");
+        this.exclusions != null ? CollectionToStringHelper.toString("Exclusions", this.exclusions) : "<no exclusions>");
   }
 
   // Note that this equals() implementation breaks the symmetry contract!

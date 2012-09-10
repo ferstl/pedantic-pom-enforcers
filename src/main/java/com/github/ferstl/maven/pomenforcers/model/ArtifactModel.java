@@ -2,8 +2,6 @@ package com.github.ferstl.maven.pomenforcers.model;
 
 import java.util.Objects;
 
-import javax.xml.bind.annotation.XmlElement;
-
 import com.google.common.base.Joiner;
 
 import static com.google.common.base.Objects.equal;
@@ -12,13 +10,8 @@ public class ArtifactModel {
 
   private static final Joiner TO_STRING_JOINER = Joiner.on(":");
 
-  @XmlElement(name = "groupId")
   private String groupId;
-
-  @XmlElement(name = "artifactId")
   private String artifactId;
-
-  @XmlElement(name = "version")
   private String version;
 
   ArtifactModel() {}

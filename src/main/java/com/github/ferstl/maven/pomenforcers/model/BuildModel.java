@@ -4,18 +4,14 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
-import javax.xml.bind.annotation.XmlElement;
-
 import com.google.common.base.Joiner;
 
 class BuildModel {
 
   private static final Joiner TO_STRING_JOINER = Joiner.on("\n");
 
-  @XmlElement(name = "pluginManagement")
   private PluginManagementModel pluginManagement;
 
-  @XmlElement(name = "plugins")
   private PluginsModel plugins;
 
 
