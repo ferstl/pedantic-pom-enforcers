@@ -15,18 +15,18 @@
  */
 package com.github.ferstl.maven.pomenforcers.artifact;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
 import com.github.ferstl.maven.pomenforcers.priority.PriorityComparatorFactory;
 import com.google.common.collect.LinkedHashMultimap;
-import com.google.common.collect.Lists;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.Ordering;
-import com.google.common.collect.Sets;
 
 
 public class ArtifactSorter<T, F extends PriorityComparatorFactory<String, T>> {
@@ -35,7 +35,7 @@ public class ArtifactSorter<T, F extends PriorityComparatorFactory<String, T>> {
   private final Multimap<F, String> priorityMap;
 
   public ArtifactSorter() {
-    this.orderBy = Sets.newLinkedHashSet();
+    this.orderBy = new LinkedHashSet<>();
     this.priorityMap = LinkedHashMultimap.create();
   }
 
@@ -57,22 +57,13 @@ public class ArtifactSorter<T, F extends PriorityComparatorFactory<String, T>> {
   }
 
   public Ordering<T> createOrdering() {
-    List<Comparator<T>> comparators = Lists.newArrayListWithCapacity(this.orderBy.size());
+    List<Comparator<T>> comparators = new ArrayList<>(this.orderBy.size());
     for (F artifactElement : this.orderBy) {
       Comparator<T> comparator =
           artifactElement.createPriorityComparator(this.priorityMap.get(artifactElement));
       comparators.add(comparator);
     }
 
-    Ordering<T> ordering;
-    if (comparators.size() > 0) {
-      ordering = Ordering.from(comparators.get(0));
-      for (Comparator<T> comparator : comparators.subList(1, comparators.size())) {
-        ordering = ordering.compound(comparator);
-      }
-    } else {
-      throw new IllegalStateException("Undefined artifact order.");
-    }
-    return ordering;
+    return Ordering.compound(comparators);
   }
 }
