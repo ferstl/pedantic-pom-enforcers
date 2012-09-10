@@ -29,7 +29,7 @@ import com.google.common.collect.Multimap;
 import com.google.common.collect.Ordering;
 
 
-public class ArtifactSorter<T, F extends PriorityComparatorFactory<String, T>> {
+public class ArtifactSorter<T, F extends PriorityComparatorFactory<String, T>> extends Ordering<T> {
 
   private final Set<F> orderBy;
   private final Multimap<F, String> priorityMap;
@@ -56,7 +56,12 @@ public class ArtifactSorter<T, F extends PriorityComparatorFactory<String, T>> {
     return this.priorityMap.get(artifactElement);
   }
 
-  public Ordering<T> createOrdering() {
+  @Override
+  public int compare(T left, T right) {
+    return createOrdering().compare(left, right);
+  }
+
+  private Ordering<T> createOrdering() {
     List<Comparator<T>> comparators = new ArrayList<>(this.orderBy.size());
     for (F artifactElement : this.orderBy) {
       Comparator<T> comparator =

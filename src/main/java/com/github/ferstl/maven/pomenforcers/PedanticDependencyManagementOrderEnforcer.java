@@ -24,6 +24,7 @@ import org.apache.maven.model.DependencyManagement;
 import org.apache.maven.plugin.logging.Log;
 import org.apache.maven.project.MavenProject;
 
+import com.github.ferstl.maven.pomenforcers.artifact.ArtifactSorter;
 import com.github.ferstl.maven.pomenforcers.artifact.DependencyElement;
 import com.github.ferstl.maven.pomenforcers.model.DependencyModel;
 import com.github.ferstl.maven.pomenforcers.model.ProjectModel;
@@ -32,7 +33,6 @@ import com.github.ferstl.maven.pomenforcers.util.EnforcerRuleUtils;
 import com.google.common.base.Function;
 import com.google.common.collect.Collections2;
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Ordering;
 
 /**
  * This enforcer makes sure that all artifacts in your dependency management are
@@ -63,17 +63,18 @@ public class PedanticDependencyManagementOrderEnforcer extends AbstractPedanticD
   @Override
   protected void doEnforce() throws EnforcerRuleException {
     MavenProject project = EnforcerRuleUtils.getMavenProject(getHelper());
+    ArtifactSorter<DependencyModel, DependencyElement> artifactSorter = getArtifactSorter();
 
     Log log = getLog();
     log.info("Enforcing dependency management order.");
     log.info("  -> Dependencies have to be ordered by: "
-           + CommaSeparatorUtils.join(getArtifactSorter().getOrderBy()));
+           + CommaSeparatorUtils.join(artifactSorter.getOrderBy()));
     log.info("  -> Scope priorities: "
-           + CommaSeparatorUtils.join(getArtifactSorter().getPriorities(DependencyElement.SCOPE)));
+           + CommaSeparatorUtils.join(artifactSorter.getPriorities(DependencyElement.SCOPE)));
     log.info("  -> Group ID priorities: "
-           + CommaSeparatorUtils.join(getArtifactSorter().getPriorities(DependencyElement.GROUP_ID)));
+           + CommaSeparatorUtils.join(artifactSorter.getPriorities(DependencyElement.GROUP_ID)));
     log.info("  -> Artifact ID priorities: "
-           + CommaSeparatorUtils.join(getArtifactSorter().getPriorities(DependencyElement.ARTIFACT_ID)));
+           + CommaSeparatorUtils.join(artifactSorter.getPriorities(DependencyElement.ARTIFACT_ID)));
 
     ProjectModel projectModel = getProjectModel();
     Collection<DependencyModel> declaredDependencyManagement = projectModel.getManagedDependencies();
@@ -81,11 +82,9 @@ public class PedanticDependencyManagementOrderEnforcer extends AbstractPedanticD
     Collection<DependencyModel> managedDependencyArtifacts =
         matchDependencies(declaredDependencyManagement, getManagedDependencies(project), getHelper());
 
-    Ordering<DependencyModel> dependencyOrdering = getArtifactSorter().createOrdering();
-
-    if (!dependencyOrdering.isOrdered(managedDependencyArtifacts)) {
+    if (!artifactSorter.isOrdered(managedDependencyArtifacts)) {
       ImmutableList<DependencyModel> sortedDependencies =
-          dependencyOrdering.immutableSortedCopy(managedDependencyArtifacts);
+          artifactSorter.immutableSortedCopy(managedDependencyArtifacts);
       throw new EnforcerRuleException("One does not simply declare dependency management! "
           + "Your dependency management has to be ordered this way:" + sortedDependencies);
     }

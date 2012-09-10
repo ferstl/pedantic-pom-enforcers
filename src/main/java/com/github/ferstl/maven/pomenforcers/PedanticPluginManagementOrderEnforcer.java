@@ -19,7 +19,6 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 
 import org.apache.maven.enforcer.rule.api.EnforcerRuleException;
-import org.apache.maven.enforcer.rule.api.EnforcerRuleHelper;
 import org.apache.maven.model.Plugin;
 import org.apache.maven.plugin.logging.Log;
 import org.apache.maven.project.MavenProject;
@@ -33,7 +32,6 @@ import com.github.ferstl.maven.pomenforcers.util.EnforcerRuleUtils;
 import com.google.common.base.Function;
 import com.google.common.collect.Collections2;
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Ordering;
 import com.google.common.collect.Sets;
 
 /**
@@ -139,12 +137,10 @@ public class PedanticPluginManagementOrderEnforcer extends AbstractPedanticEnfor
         return new PluginModel(input.getGroupId(), input.getArtifactId(), input.getVersion());
       }
     });
-    Collection<PluginModel> declaredManagedPlugins = matchPlugins(declaredPluginManagement, managedPlugins, getHelper());
+    Collection<PluginModel> declaredManagedPlugins = matchPlugins(declaredPluginManagement, managedPlugins);
 
-    Ordering<PluginModel> pluginOrdering = this.artifactSorter.createOrdering();
-
-    if (!pluginOrdering.isOrdered(declaredManagedPlugins)) {
-      ImmutableList<PluginModel> sortedDependencies = pluginOrdering.immutableSortedCopy(declaredManagedPlugins);
+    if (!this.artifactSorter.isOrdered(declaredManagedPlugins)) {
+      ImmutableList<PluginModel> sortedDependencies = this.artifactSorter.immutableSortedCopy(declaredManagedPlugins);
       throw new EnforcerRuleException("One does not simply declare plugin management! "
           + "Your plugin management has to be ordered this way:" + sortedDependencies);
     }
@@ -156,7 +152,7 @@ public class PedanticPluginManagementOrderEnforcer extends AbstractPedanticEnfor
   }
 
   private Collection<PluginModel> matchPlugins(
-      Collection<PluginModel> subset, Collection<PluginModel> superset, EnforcerRuleHelper helper) {
-    return new PluginMatcher(superset, helper).match(subset);
+      Collection<PluginModel> subset, Collection<PluginModel> superset) {
+    return new PluginMatcher(superset, getHelper()).match(subset);
   }
 }
