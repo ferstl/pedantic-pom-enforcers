@@ -2,8 +2,6 @@ package com.github.ferstl.maven.pomenforcers.model;
 
 import javax.xml.bind.annotation.adapters.XmlAdapter;
 
-import com.github.ferstl.maven.pomenforcers.DependencyScope;
-
 
 class DependencyScopeAdapter extends XmlAdapter<String, DependencyScope> {
 

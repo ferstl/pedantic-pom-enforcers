@@ -10,7 +10,6 @@ import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
-import com.github.ferstl.maven.pomenforcers.DependencyScope;
 import com.google.common.base.Joiner;
 
 import static com.google.common.base.Objects.equal;

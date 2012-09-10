@@ -11,6 +11,7 @@ import org.w3c.dom.Document;
 
 import com.github.ferstl.maven.pomenforcers.artifact.StringToArtifactTransformer;
 import com.github.ferstl.maven.pomenforcers.model.ArtifactModel;
+import com.github.ferstl.maven.pomenforcers.model.DependencyScope;
 import com.github.ferstl.maven.pomenforcers.util.CommaSeparatorUtils;
 import com.github.ferstl.maven.pomenforcers.util.EnforcerRuleUtils;
 import com.google.common.base.Function;
@@ -18,12 +19,13 @@ import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.Sets;
 
-import static com.github.ferstl.maven.pomenforcers.DependencyScope.COMPILE;
-import static com.github.ferstl.maven.pomenforcers.DependencyScope.IMPORT;
-import static com.github.ferstl.maven.pomenforcers.DependencyScope.PROVIDED;
-import static com.github.ferstl.maven.pomenforcers.DependencyScope.RUNTIME;
-import static com.github.ferstl.maven.pomenforcers.DependencyScope.SYSTEM;
-import static com.github.ferstl.maven.pomenforcers.DependencyScope.TEST;
+import static com.github.ferstl.maven.pomenforcers.model.DependencyScope.COMPILE;
+import static com.github.ferstl.maven.pomenforcers.model.DependencyScope.IMPORT;
+import static com.github.ferstl.maven.pomenforcers.model.DependencyScope.PROVIDED;
+import static com.github.ferstl.maven.pomenforcers.model.DependencyScope.RUNTIME;
+import static com.github.ferstl.maven.pomenforcers.model.DependencyScope.SYSTEM;
+import static com.github.ferstl.maven.pomenforcers.model.DependencyScope.TEST;
+
 
 /**
  * Enforces that the configured dependencies have to be defined within a specific scope.

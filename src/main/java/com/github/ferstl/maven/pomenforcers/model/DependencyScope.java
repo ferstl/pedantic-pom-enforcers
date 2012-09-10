@@ -1,4 +1,4 @@
-package com.github.ferstl.maven.pomenforcers;
+package com.github.ferstl.maven.pomenforcers.model;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
