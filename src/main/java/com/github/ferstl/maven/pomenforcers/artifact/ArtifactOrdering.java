@@ -16,17 +16,19 @@
 package com.github.ferstl.maven.pomenforcers.artifact;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
 import com.github.ferstl.maven.pomenforcers.priority.PriorityComparatorFactory;
+import com.google.common.collect.Iterables;
 import com.google.common.collect.LinkedHashMultimap;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.Ordering;
+import com.google.common.collect.Sets;
 
 
 public class ArtifactOrdering<T, F extends PriorityComparatorFactory<String, T>> extends Ordering<T> {
@@ -34,14 +36,23 @@ public class ArtifactOrdering<T, F extends PriorityComparatorFactory<String, T>>
   private final Set<F> orderBy;
   private final Multimap<F, String> priorityMap;
 
-  public ArtifactOrdering() {
-    this.orderBy = new LinkedHashSet<>();
-    this.priorityMap = LinkedHashMultimap.create();
+  public static <T, F extends PriorityComparatorFactory<String, T>>
+  ArtifactOrdering<T, F> orderBy(Iterable<F> artifactElements) {
+    if (Iterables.isEmpty(artifactElements)) {
+      throw new IllegalArgumentException("No order specified.");
+    }
+    return new ArtifactOrdering<>(artifactElements);
   }
 
-  public void orderBy(Collection<F> artifactElements) {
-    this.orderBy.clear();
-    this.orderBy.addAll(artifactElements);
+  @SafeVarargs
+  public static <T, F extends PriorityComparatorFactory<String, T>>
+  ArtifactOrdering<T, F> orderBy(F... artifactElements) {
+    return orderBy(Arrays.asList(artifactElements));
+  }
+
+  private ArtifactOrdering(Iterable<F> artifactElements) {
+    this.orderBy = Sets.newLinkedHashSet(artifactElements);
+    this.priorityMap = LinkedHashMultimap.create();
   }
 
   public void setPriorities(F artifactElement, Iterable<String> priorities) {

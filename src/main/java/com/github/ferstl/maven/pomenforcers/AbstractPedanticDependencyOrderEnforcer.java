@@ -29,18 +29,17 @@ import com.github.ferstl.maven.pomenforcers.util.CommaSeparatorUtils;
 import com.google.common.base.Function;
 import com.google.common.collect.Sets;
 
+import static com.github.ferstl.maven.pomenforcers.artifact.DependencyElement.ARTIFACT_ID;
+import static com.github.ferstl.maven.pomenforcers.artifact.DependencyElement.GROUP_ID;
+import static com.github.ferstl.maven.pomenforcers.artifact.DependencyElement.SCOPE;
+
 
 public abstract class AbstractPedanticDependencyOrderEnforcer extends AbstractPedanticEnforcer {
 
-  private final ArtifactOrdering<DependencyModel, DependencyElement> artifactOrdering;
+  private ArtifactOrdering<DependencyModel, DependencyElement> artifactOrdering;
 
   public AbstractPedanticDependencyOrderEnforcer() {
-    Set<DependencyElement> orderBy = Sets.newLinkedHashSet();
-    orderBy.add(DependencyElement.SCOPE);
-    orderBy.add(DependencyElement.GROUP_ID);
-    orderBy.add(DependencyElement.ARTIFACT_ID);
-    this.artifactOrdering = new ArtifactOrdering<>();
-    this.artifactOrdering.orderBy(orderBy);
+    this.artifactOrdering = ArtifactOrdering.orderBy(SCOPE, GROUP_ID, ARTIFACT_ID);
   }
 
   /**
@@ -50,7 +49,7 @@ public abstract class AbstractPedanticDependencyOrderEnforcer extends AbstractPe
    * @default scope,groupId,artifactId
    */
   public void setOrderBy(String dependencyElements) {
-    Set<DependencyElement> orderBy = Sets.newLinkedHashSet();
+    Set<DependencyElement> orderBy = new LinkedHashSet<>();
     Function<String, DependencyElement> transformer = new Function<String, DependencyElement>() {
       @Override
       public DependencyElement apply(String input) {
@@ -58,7 +57,7 @@ public abstract class AbstractPedanticDependencyOrderEnforcer extends AbstractPe
       }
     };
     CommaSeparatorUtils.splitAndAddToCollection(dependencyElements, orderBy, transformer);
-    this.artifactOrdering.orderBy(orderBy);
+    this.artifactOrdering = ArtifactOrdering.orderBy(orderBy);
   }
 
   /**

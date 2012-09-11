@@ -34,6 +34,9 @@ import com.google.common.collect.Collections2;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Sets;
 
+import static com.github.ferstl.maven.pomenforcers.artifact.PluginElement.ARTIFACT_ID;
+import static com.github.ferstl.maven.pomenforcers.artifact.PluginElement.GROUP_ID;
+
 /**
  * This enforcer makes sure that all plugins in your plugin management section
  * are ordered. The ordering can be defined by any combination of groupId and
@@ -55,14 +58,10 @@ import com.google.common.collect.Sets;
  */
 public class PedanticPluginManagementOrderEnforcer extends AbstractPedanticEnforcer {
 
-  private final ArtifactOrdering<PluginModel, PluginElement> artifactOrdering;
+  private ArtifactOrdering<PluginModel, PluginElement> artifactOrdering;
 
   public PedanticPluginManagementOrderEnforcer() {
-    Set<PluginElement> orderBy = Sets.newLinkedHashSet();
-    orderBy.add(PluginElement.GROUP_ID);
-    orderBy.add(PluginElement.ARTIFACT_ID);
-    this.artifactOrdering = new ArtifactOrdering<>();
-    this.artifactOrdering.orderBy(orderBy);
+    this.artifactOrdering = ArtifactOrdering.orderBy(GROUP_ID, ARTIFACT_ID);
   }
 
   /**
@@ -80,7 +79,7 @@ public class PedanticPluginManagementOrderEnforcer extends AbstractPedanticEnfor
       }
     };
     CommaSeparatorUtils.splitAndAddToCollection(pluginElements, orderBy, transformer);
-    this.artifactOrdering.orderBy(orderBy);
+    this.artifactOrdering = ArtifactOrdering.orderBy(orderBy);
   }
 
   /**
