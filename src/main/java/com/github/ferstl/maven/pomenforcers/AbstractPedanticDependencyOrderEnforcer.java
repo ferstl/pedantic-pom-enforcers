@@ -21,7 +21,7 @@ import java.util.Set;
 
 import org.apache.maven.enforcer.rule.api.EnforcerRuleHelper;
 
-import com.github.ferstl.maven.pomenforcers.artifact.ArtifactSorter;
+import com.github.ferstl.maven.pomenforcers.artifact.ArtifactOrdering;
 import com.github.ferstl.maven.pomenforcers.artifact.DependencyElement;
 import com.github.ferstl.maven.pomenforcers.artifact.DependencyMatcher;
 import com.github.ferstl.maven.pomenforcers.model.DependencyModel;
@@ -32,15 +32,15 @@ import com.google.common.collect.Sets;
 
 public abstract class AbstractPedanticDependencyOrderEnforcer extends AbstractPedanticEnforcer {
 
-  private final ArtifactSorter<DependencyModel, DependencyElement> artifactSorter;
+  private final ArtifactOrdering<DependencyModel, DependencyElement> artifactOrdering;
 
   public AbstractPedanticDependencyOrderEnforcer() {
     Set<DependencyElement> orderBy = Sets.newLinkedHashSet();
     orderBy.add(DependencyElement.SCOPE);
     orderBy.add(DependencyElement.GROUP_ID);
     orderBy.add(DependencyElement.ARTIFACT_ID);
-    this.artifactSorter = new ArtifactSorter<>();
-    this.artifactSorter.orderBy(orderBy);
+    this.artifactOrdering = new ArtifactOrdering<>();
+    this.artifactOrdering.orderBy(orderBy);
   }
 
   /**
@@ -58,7 +58,7 @@ public abstract class AbstractPedanticDependencyOrderEnforcer extends AbstractPe
       }
     };
     CommaSeparatorUtils.splitAndAddToCollection(dependencyElements, orderBy, transformer);
-    this.artifactSorter.orderBy(orderBy);
+    this.artifactOrdering.orderBy(orderBy);
   }
 
   /**
@@ -74,7 +74,7 @@ public abstract class AbstractPedanticDependencyOrderEnforcer extends AbstractPe
   public void setGroupIdPriorities(String groupIds) {
     LinkedHashSet<String> groupIdPriorities = Sets.newLinkedHashSet();
     CommaSeparatorUtils.splitAndAddToCollection(groupIds, groupIdPriorities);
-    this.artifactSorter.setPriorities(DependencyElement.GROUP_ID, groupIdPriorities);
+    this.artifactOrdering.setPriorities(DependencyElement.GROUP_ID, groupIdPriorities);
   }
 
   /**
@@ -90,7 +90,7 @@ public abstract class AbstractPedanticDependencyOrderEnforcer extends AbstractPe
   public void setArtifactIdPriorities(String artifactIds) {
     LinkedHashSet<String> artifactIdPriorities = Sets.newLinkedHashSet();
     CommaSeparatorUtils.splitAndAddToCollection(artifactIds, artifactIdPriorities);
-    this.artifactSorter.setPriorities(DependencyElement.ARTIFACT_ID, artifactIdPriorities);
+    this.artifactOrdering.setPriorities(DependencyElement.ARTIFACT_ID, artifactIdPriorities);
   }
 
   /**
@@ -105,11 +105,11 @@ public abstract class AbstractPedanticDependencyOrderEnforcer extends AbstractPe
   public void setScopePriorities(String scopes) {
     LinkedHashSet<String> scopePriorities = Sets.newLinkedHashSet();
     CommaSeparatorUtils.splitAndAddToCollection(scopes, scopePriorities);
-    this.artifactSorter.setPriorities(DependencyElement.SCOPE, scopePriorities);
+    this.artifactOrdering.setPriorities(DependencyElement.SCOPE, scopePriorities);
   }
 
-  public ArtifactSorter<DependencyModel, DependencyElement> getArtifactSorter() {
-    return this.artifactSorter;
+  public ArtifactOrdering<DependencyModel, DependencyElement> getArtifactOrdering() {
+    return this.artifactOrdering;
   }
 
   protected Collection<DependencyModel> matchDependencies(

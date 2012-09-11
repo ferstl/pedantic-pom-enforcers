@@ -29,12 +29,12 @@ import com.google.common.collect.Multimap;
 import com.google.common.collect.Ordering;
 
 
-public class ArtifactSorter<T, F extends PriorityComparatorFactory<String, T>> extends Ordering<T> {
+public class ArtifactOrdering<T, F extends PriorityComparatorFactory<String, T>> extends Ordering<T> {
 
   private final Set<F> orderBy;
   private final Multimap<F, String> priorityMap;
 
-  public ArtifactSorter() {
+  public ArtifactOrdering() {
     this.orderBy = new LinkedHashSet<>();
     this.priorityMap = LinkedHashMultimap.create();
   }

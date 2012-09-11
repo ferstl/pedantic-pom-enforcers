@@ -23,7 +23,7 @@ import org.apache.maven.model.Plugin;
 import org.apache.maven.plugin.logging.Log;
 import org.apache.maven.project.MavenProject;
 
-import com.github.ferstl.maven.pomenforcers.artifact.ArtifactSorter;
+import com.github.ferstl.maven.pomenforcers.artifact.ArtifactOrdering;
 import com.github.ferstl.maven.pomenforcers.artifact.PluginElement;
 import com.github.ferstl.maven.pomenforcers.artifact.PluginMatcher;
 import com.github.ferstl.maven.pomenforcers.model.PluginModel;
@@ -55,14 +55,14 @@ import com.google.common.collect.Sets;
  */
 public class PedanticPluginManagementOrderEnforcer extends AbstractPedanticEnforcer {
 
-  private final ArtifactSorter<PluginModel, PluginElement> artifactSorter;
+  private final ArtifactOrdering<PluginModel, PluginElement> artifactOrdering;
 
   public PedanticPluginManagementOrderEnforcer() {
     Set<PluginElement> orderBy = Sets.newLinkedHashSet();
     orderBy.add(PluginElement.GROUP_ID);
     orderBy.add(PluginElement.ARTIFACT_ID);
-    this.artifactSorter = new ArtifactSorter<>();
-    this.artifactSorter.orderBy(orderBy);
+    this.artifactOrdering = new ArtifactOrdering<>();
+    this.artifactOrdering.orderBy(orderBy);
   }
 
   /**
@@ -80,7 +80,7 @@ public class PedanticPluginManagementOrderEnforcer extends AbstractPedanticEnfor
       }
     };
     CommaSeparatorUtils.splitAndAddToCollection(pluginElements, orderBy, transformer);
-    this.artifactSorter.orderBy(orderBy);
+    this.artifactOrdering.orderBy(orderBy);
   }
 
   /**
@@ -96,7 +96,7 @@ public class PedanticPluginManagementOrderEnforcer extends AbstractPedanticEnfor
   public void setGroupIdPriorities(String groupIds) {
     LinkedHashSet<String> groupIdPriorities = Sets.newLinkedHashSet();
     CommaSeparatorUtils.splitAndAddToCollection(groupIds, groupIdPriorities);
-    this.artifactSorter.setPriorities(PluginElement.GROUP_ID, groupIdPriorities);
+    this.artifactOrdering.setPriorities(PluginElement.GROUP_ID, groupIdPriorities);
   }
 
   /**
@@ -112,7 +112,7 @@ public class PedanticPluginManagementOrderEnforcer extends AbstractPedanticEnfor
   public void setArtifactIdPriorities(String artifactIds) {
     LinkedHashSet<String> artifactIdPriorities = Sets.newLinkedHashSet();
     CommaSeparatorUtils.splitAndAddToCollection(artifactIds, artifactIdPriorities);
-    this.artifactSorter.setPriorities(PluginElement.ARTIFACT_ID, artifactIdPriorities);
+    this.artifactOrdering.setPriorities(PluginElement.ARTIFACT_ID, artifactIdPriorities);
   }
 
   @Override
@@ -121,11 +121,11 @@ public class PedanticPluginManagementOrderEnforcer extends AbstractPedanticEnfor
     Log log = getLog();
     log.info("Enforcing plugin management order.");
     log.info("  -> Plugins have to be ordered by: "
-           + CommaSeparatorUtils.join(this.artifactSorter.getOrderBy()));
+           + CommaSeparatorUtils.join(this.artifactOrdering.getOrderBy()));
     log.info("  -> Group ID priorities: "
-           + CommaSeparatorUtils.join(this.artifactSorter.getPriorities(PluginElement.GROUP_ID)));
+           + CommaSeparatorUtils.join(this.artifactOrdering.getPriorities(PluginElement.GROUP_ID)));
     log.info("  -> ArtifactModel ID priorities: "
-           + CommaSeparatorUtils.join(this.artifactSorter.getPriorities(PluginElement.ARTIFACT_ID)));
+           + CommaSeparatorUtils.join(this.artifactOrdering.getPriorities(PluginElement.ARTIFACT_ID)));
 
     Collection<PluginModel> declaredPluginManagement = getProjectModel().getManagedPlugins();
 
@@ -139,8 +139,8 @@ public class PedanticPluginManagementOrderEnforcer extends AbstractPedanticEnfor
     });
     Collection<PluginModel> declaredManagedPlugins = matchPlugins(declaredPluginManagement, managedPlugins);
 
-    if (!this.artifactSorter.isOrdered(declaredManagedPlugins)) {
-      ImmutableList<PluginModel> sortedDependencies = this.artifactSorter.immutableSortedCopy(declaredManagedPlugins);
+    if (!this.artifactOrdering.isOrdered(declaredManagedPlugins)) {
+      ImmutableList<PluginModel> sortedDependencies = this.artifactOrdering.immutableSortedCopy(declaredManagedPlugins);
       throw new EnforcerRuleException("One does not simply declare plugin management! "
           + "Your plugin management has to be ordered this way:" + sortedDependencies);
     }
