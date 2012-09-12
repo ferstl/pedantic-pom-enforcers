@@ -58,7 +58,7 @@ import static com.github.ferstl.maven.pomenforcers.artifact.PluginElement.GROUP_
  */
 public class PedanticPluginManagementOrderEnforcer extends AbstractPedanticEnforcer {
 
-  private ArtifactOrdering<PluginModel, PluginElement> artifactOrdering;
+  private final ArtifactOrdering<PluginModel, PluginElement> artifactOrdering;
 
   public PedanticPluginManagementOrderEnforcer() {
     this.artifactOrdering = ArtifactOrdering.orderBy(GROUP_ID, ARTIFACT_ID);
@@ -79,7 +79,7 @@ public class PedanticPluginManagementOrderEnforcer extends AbstractPedanticEnfor
       }
     };
     CommaSeparatorUtils.splitAndAddToCollection(pluginElements, orderBy, transformer);
-    this.artifactOrdering = ArtifactOrdering.orderBy(orderBy);
+    this.artifactOrdering.redefineOrderBy(orderBy);
   }
 
   /**

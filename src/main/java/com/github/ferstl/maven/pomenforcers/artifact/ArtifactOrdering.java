@@ -26,6 +26,7 @@ import java.util.Set;
 import com.github.ferstl.maven.pomenforcers.priority.PriorityComparatorFactory;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.LinkedHashMultimap;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.Ordering;
 import com.google.common.collect.Sets;
@@ -53,6 +54,11 @@ public class ArtifactOrdering<T, F extends PriorityComparatorFactory<String, T>>
   private ArtifactOrdering(Iterable<F> artifactElements) {
     this.orderBy = Sets.newLinkedHashSet(artifactElements);
     this.priorityMap = LinkedHashMultimap.create();
+  }
+
+  public void redefineOrderBy(Iterable<F> artifactElements) {
+    this.orderBy.clear();
+    this.orderBy.addAll(Lists.newArrayList(artifactElements));
   }
 
   public void setPriorities(F artifactElement, Iterable<String> priorities) {
