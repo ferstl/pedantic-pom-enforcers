@@ -16,13 +16,13 @@
 package com.github.ferstl.maven.pomenforcers.priority;
 
 import java.util.Collection;
-import java.util.Comparator;
 import java.util.LinkedHashSet;
 import java.util.List;
 
 import com.google.common.base.Equivalence;
 import com.google.common.base.Function;
 import com.google.common.base.Functions;
+import com.google.common.collect.Ordering;
 
 /**
  * Comparator that makes comparisons based on a priority collection. Objects that match an item in
@@ -35,7 +35,7 @@ import com.google.common.base.Functions;
  * @param <P> Type of the priority collection.
  * @param <T> Type of the values to be compared.
  */
-public class PriorityComparator<P extends Comparable<P>, T> implements Comparator<T> {
+public class PriorityComparator<P extends Comparable<P>, T> extends Ordering<T> {
 
   /** The priority collection. */
   private final Collection<P> priorityCollection;
