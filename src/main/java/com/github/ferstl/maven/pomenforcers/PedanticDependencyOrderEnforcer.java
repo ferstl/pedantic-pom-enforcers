@@ -21,7 +21,7 @@ import org.apache.maven.model.Dependency;
 import org.apache.maven.plugin.logging.Log;
 import org.apache.maven.project.MavenProject;
 
-import com.github.ferstl.maven.pomenforcers.artifact.ArtifactOrdering;
+import com.github.ferstl.maven.pomenforcers.artifact.CompoundPriorityOrdering;
 import com.github.ferstl.maven.pomenforcers.artifact.DependencyElement;
 import com.github.ferstl.maven.pomenforcers.model.DependencyModel;
 import com.github.ferstl.maven.pomenforcers.util.CommaSeparatorUtils;
@@ -58,7 +58,7 @@ public class PedanticDependencyOrderEnforcer extends AbstractPedanticDependencyO
   @Override
   protected void doEnforce() throws EnforcerRuleException {
     MavenProject project = EnforcerRuleUtils.getMavenProject(getHelper());
-    ArtifactOrdering<DependencyModel, String, DependencyElement> artifactOrdering = getArtifactOrdering();
+    CompoundPriorityOrdering<DependencyModel, String, DependencyElement> artifactOrdering = getArtifactOrdering();
 
     Log log = getLog();
     log.info("Enforcing dependency order.");

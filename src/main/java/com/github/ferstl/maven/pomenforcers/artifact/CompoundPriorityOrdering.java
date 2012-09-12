@@ -36,26 +36,26 @@ import com.google.common.collect.Sets;
  * @param <P> Type of the priorities.
  * @param <F> Type of the {@link PriorityComparatorFactory}.
  */
-public class ArtifactOrdering<T, P extends Comparable<P>, F extends PriorityComparatorFactory<P, T>> extends Ordering<T> {
+public class CompoundPriorityOrdering<T, P extends Comparable<P>, F extends PriorityComparatorFactory<P, T>> extends Ordering<T> {
 
   private final Set<F> orderBy;
   private final Multimap<F, P> priorityMap;
 
   public static <T, P extends Comparable<P>, F extends PriorityComparatorFactory<P, T>>
-  ArtifactOrdering<T, P, F> orderBy(Iterable<F> artifactElements) {
+  CompoundPriorityOrdering<T, P, F> orderBy(Iterable<F> artifactElements) {
     if (Iterables.isEmpty(artifactElements)) {
       throw new IllegalArgumentException("No order specified.");
     }
-    return new ArtifactOrdering<>(artifactElements);
+    return new CompoundPriorityOrdering<>(artifactElements);
   }
 
   @SafeVarargs
   public static <T, P extends Comparable<P>, F extends PriorityComparatorFactory<P, T>>
-  ArtifactOrdering<T, P, F> orderBy(F... artifactElements) {
+  CompoundPriorityOrdering<T, P, F> orderBy(F... artifactElements) {
     return orderBy(Arrays.asList(artifactElements));
   }
 
-  private ArtifactOrdering(Iterable<F> artifactElements) {
+  private CompoundPriorityOrdering(Iterable<F> artifactElements) {
     this.orderBy = Sets.newLinkedHashSet(artifactElements);
     this.priorityMap = LinkedHashMultimap.create();
   }

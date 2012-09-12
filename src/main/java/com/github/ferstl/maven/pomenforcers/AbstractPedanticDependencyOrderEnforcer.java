@@ -21,7 +21,7 @@ import java.util.Set;
 
 import org.apache.maven.enforcer.rule.api.EnforcerRuleHelper;
 
-import com.github.ferstl.maven.pomenforcers.artifact.ArtifactOrdering;
+import com.github.ferstl.maven.pomenforcers.artifact.CompoundPriorityOrdering;
 import com.github.ferstl.maven.pomenforcers.artifact.DependencyElement;
 import com.github.ferstl.maven.pomenforcers.artifact.DependencyMatcher;
 import com.github.ferstl.maven.pomenforcers.model.DependencyModel;
@@ -36,10 +36,10 @@ import static com.github.ferstl.maven.pomenforcers.artifact.DependencyElement.SC
 
 public abstract class AbstractPedanticDependencyOrderEnforcer extends AbstractPedanticEnforcer {
 
-  private final ArtifactOrdering<DependencyModel, String, DependencyElement> artifactOrdering;
+  private final CompoundPriorityOrdering<DependencyModel, String, DependencyElement> artifactOrdering;
 
   public AbstractPedanticDependencyOrderEnforcer() {
-    this.artifactOrdering = ArtifactOrdering.orderBy(SCOPE, GROUP_ID, ARTIFACT_ID);
+    this.artifactOrdering = CompoundPriorityOrdering.orderBy(SCOPE, GROUP_ID, ARTIFACT_ID);
   }
 
   /**
@@ -107,7 +107,7 @@ public abstract class AbstractPedanticDependencyOrderEnforcer extends AbstractPe
     this.artifactOrdering.setPriorities(DependencyElement.SCOPE, scopePriorities);
   }
 
-  protected ArtifactOrdering<DependencyModel, String, DependencyElement> getArtifactOrdering() {
+  protected CompoundPriorityOrdering<DependencyModel, String, DependencyElement> getArtifactOrdering() {
     return this.artifactOrdering;
   }
 
