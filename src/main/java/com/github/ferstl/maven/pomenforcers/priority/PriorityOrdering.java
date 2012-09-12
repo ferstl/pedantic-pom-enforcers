@@ -35,7 +35,7 @@ import com.google.common.collect.Ordering;
  * @param <P> Type of the priority collection.
  * @param <T> Type of the values to be compared.
  */
-public class PriorityComparator<P extends Comparable<P>, T> extends Ordering<T> {
+public class PriorityOrdering<P extends Comparable<P>, T> extends Ordering<T> {
 
   /** The priority collection. */
   private final Collection<P> priorityCollection;
@@ -51,14 +51,14 @@ public class PriorityComparator<P extends Comparable<P>, T> extends Ordering<T> 
   private final Function<T, P> transformer;
 
 
-  public PriorityComparator(
+  public PriorityOrdering(
       Collection<P> priorizedItems, Function<T, P> transformer, Equivalence<P> priorityMatcher) {
     this.priorityCollection = priorizedItems;
     this.priorityMatcher = priorityMatcher;
     this.transformer = transformer;
   }
 
-  public PriorityComparator(Collection<P> priorityCollection, Function<T, P> transformer) {
+  public PriorityOrdering(Collection<P> priorityCollection, Function<T, P> transformer) {
     // Equivalences.equals() would do the same job but it returns Equivalence<Object> which does not fit here.
     this(priorityCollection, transformer, new Equivalence<P>() {
       @Override

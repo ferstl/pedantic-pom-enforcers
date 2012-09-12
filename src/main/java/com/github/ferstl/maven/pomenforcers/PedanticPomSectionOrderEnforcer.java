@@ -91,7 +91,7 @@ public class PedanticPomSectionOrderEnforcer extends AbstractPedanticEnforcer {
     }
 
     // The default ordering is the order of the PomSection enum.
-    Ordering<PomSection> ordering = Ordering.from(PomSection.createPriorityComparator(this.sectionPriorities));
+    Ordering<PomSection> ordering = PomSection.createPriorityOrdering(this.sectionPriorities);
 
     if (!ordering.isOrdered(pomSections)) {
       List<String> sortedPomSections =

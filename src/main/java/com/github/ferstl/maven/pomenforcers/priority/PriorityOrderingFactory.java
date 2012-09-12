@@ -19,6 +19,6 @@ import java.util.Collection;
 import java.util.Comparator;
 
 
-public interface PriorityComparatorFactory<P extends Comparable<? super P>, T> {
-  Comparator<T> createPriorityComparator(Collection<P> priorityCollection);
+public interface PriorityOrderingFactory<P extends Comparable<? super P>, T> {
+  Comparator<T> createPriorityOrdering(Collection<P> priorityCollection);
 }

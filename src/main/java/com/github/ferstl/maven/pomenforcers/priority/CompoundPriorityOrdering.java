@@ -33,14 +33,14 @@ import com.google.common.collect.Sets;
 /**
  * @param <T> Type of this ordering.
  * @param <P> Type of the priorities.
- * @param <F> Type of the {@link PriorityComparatorFactory}.
+ * @param <F> Type of the {@link PriorityOrderingFactory}.
  */
-public class CompoundPriorityOrdering<T, P extends Comparable<P>, F extends PriorityComparatorFactory<P, T>> extends Ordering<T> {
+public class CompoundPriorityOrdering<T, P extends Comparable<P>, F extends PriorityOrderingFactory<P, T>> extends Ordering<T> {
 
   private final Set<F> orderBy;
   private final Multimap<F, P> priorityMap;
 
-  public static <T, P extends Comparable<P>, F extends PriorityComparatorFactory<P, T>>
+  public static <T, P extends Comparable<P>, F extends PriorityOrderingFactory<P, T>>
   CompoundPriorityOrdering<T, P, F> orderBy(Iterable<F> artifactElements) {
     if (Iterables.isEmpty(artifactElements)) {
       throw new IllegalArgumentException("No order specified.");
@@ -49,7 +49,7 @@ public class CompoundPriorityOrdering<T, P extends Comparable<P>, F extends Prio
   }
 
   @SafeVarargs
-  public static <T, P extends Comparable<P>, F extends PriorityComparatorFactory<P, T>>
+  public static <T, P extends Comparable<P>, F extends PriorityOrderingFactory<P, T>>
   CompoundPriorityOrdering<T, P, F> orderBy(F... artifactElements) {
     return orderBy(Arrays.asList(artifactElements));
   }
@@ -85,7 +85,7 @@ public class CompoundPriorityOrdering<T, P extends Comparable<P>, F extends Prio
     List<Comparator<T>> comparators = new ArrayList<>(this.orderBy.size());
     for (F artifactElement : this.orderBy) {
       Comparator<T> comparator =
-          artifactElement.createPriorityComparator(this.priorityMap.get(artifactElement));
+          artifactElement.createPriorityOrdering(this.priorityMap.get(artifactElement));
       comparators.add(comparator);
     }
 

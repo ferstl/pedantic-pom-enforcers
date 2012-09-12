@@ -20,18 +20,18 @@ import java.util.Comparator;
 import java.util.Map;
 
 import com.github.ferstl.maven.pomenforcers.model.PluginModel;
-import com.github.ferstl.maven.pomenforcers.priority.PriorityComparator;
-import com.github.ferstl.maven.pomenforcers.priority.PriorityComparatorFactory;
+import com.github.ferstl.maven.pomenforcers.priority.PriorityOrdering;
+import com.github.ferstl.maven.pomenforcers.priority.PriorityOrderingFactory;
 import com.github.ferstl.maven.pomenforcers.priority.StringStartsWithEquivalence;
 import com.google.common.base.Function;
 import com.google.common.collect.Maps;
 
 
-public enum PluginElement implements PriorityComparatorFactory<String, PluginModel> {
+public enum PluginElement implements PriorityOrderingFactory<String, PluginModel> {
 
   GROUP_ID("groupId") {
     @Override
-    public Comparator<PluginModel> createPriorityComparator(Collection<String> priorityCollection) {
+    public Comparator<PluginModel> createPriorityOrdering(Collection<String> priorityCollection) {
       StringStartsWithEquivalence priorityMatcher = new StringStartsWithEquivalence();
       Function<PluginModel, String> transformer = new Function<PluginModel, String>() {
         @Override
@@ -39,13 +39,13 @@ public enum PluginElement implements PriorityComparatorFactory<String, PluginMod
           return input.getGroupId();
         }
       };
-      return new PriorityComparator<>(priorityCollection, transformer, priorityMatcher);
+      return new PriorityOrdering<>(priorityCollection, transformer, priorityMatcher);
     }
   },
 
   ARTIFACT_ID("artifactId") {
     @Override
-    public Comparator<PluginModel> createPriorityComparator(Collection<String> priorityCollection) {
+    public Comparator<PluginModel> createPriorityOrdering(Collection<String> priorityCollection) {
       StringStartsWithEquivalence priorityMatcher = new StringStartsWithEquivalence();
       Function<PluginModel, String> transformer = new Function<PluginModel, String>() {
         @Override
@@ -53,7 +53,7 @@ public enum PluginElement implements PriorityComparatorFactory<String, PluginMod
           return input.getArtifactId();
         }
       };
-      return new PriorityComparator<>(priorityCollection, transformer, priorityMatcher);
+      return new PriorityOrdering<>(priorityCollection, transformer, priorityMatcher);
     }
   };
 

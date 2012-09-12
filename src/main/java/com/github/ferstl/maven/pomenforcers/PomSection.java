@@ -16,12 +16,12 @@
 package com.github.ferstl.maven.pomenforcers;
 
 import java.util.Collection;
-import java.util.Comparator;
 import java.util.Map;
 
-import com.github.ferstl.maven.pomenforcers.priority.PriorityComparator;
+import com.github.ferstl.maven.pomenforcers.priority.PriorityOrdering;
 import com.google.common.base.Functions;
 import com.google.common.collect.Maps;
+import com.google.common.collect.Ordering;
 
 
 
@@ -88,8 +88,8 @@ public enum PomSection {
     return this.sectionName;
   }
 
-  public static Comparator<PomSection> createPriorityComparator(Collection<PomSection> priorityCollection) {
-    return new PriorityComparator<>(priorityCollection, Functions.<PomSection>identity());
+  public static Ordering<PomSection> createPriorityOrdering(Collection<PomSection> priorityCollection) {
+    return new PriorityOrdering<>(priorityCollection, Functions.<PomSection>identity());
   }
 
 }
