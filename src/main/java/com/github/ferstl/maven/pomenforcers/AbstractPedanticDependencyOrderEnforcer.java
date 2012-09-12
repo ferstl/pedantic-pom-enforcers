@@ -21,10 +21,10 @@ import java.util.Set;
 
 import org.apache.maven.enforcer.rule.api.EnforcerRuleHelper;
 
-import com.github.ferstl.maven.pomenforcers.artifact.CompoundPriorityOrdering;
 import com.github.ferstl.maven.pomenforcers.artifact.DependencyElement;
 import com.github.ferstl.maven.pomenforcers.artifact.DependencyMatcher;
 import com.github.ferstl.maven.pomenforcers.model.DependencyModel;
+import com.github.ferstl.maven.pomenforcers.priority.CompoundPriorityOrdering;
 import com.github.ferstl.maven.pomenforcers.util.CommaSeparatorUtils;
 import com.google.common.base.Function;
 import com.google.common.collect.Sets;

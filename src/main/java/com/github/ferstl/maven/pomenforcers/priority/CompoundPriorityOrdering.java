@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.ferstl.maven.pomenforcers.artifact;
+package com.github.ferstl.maven.pomenforcers.priority;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -23,7 +23,6 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
 
-import com.github.ferstl.maven.pomenforcers.priority.PriorityComparatorFactory;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.LinkedHashMultimap;
 import com.google.common.collect.Lists;
