@@ -36,7 +36,7 @@ import static com.github.ferstl.maven.pomenforcers.artifact.DependencyElement.SC
 
 public abstract class AbstractPedanticDependencyOrderEnforcer extends AbstractPedanticEnforcer {
 
-  private final ArtifactOrdering<DependencyModel, DependencyElement> artifactOrdering;
+  private final ArtifactOrdering<DependencyModel, String, DependencyElement> artifactOrdering;
 
   public AbstractPedanticDependencyOrderEnforcer() {
     this.artifactOrdering = ArtifactOrdering.orderBy(SCOPE, GROUP_ID, ARTIFACT_ID);
@@ -107,7 +107,7 @@ public abstract class AbstractPedanticDependencyOrderEnforcer extends AbstractPe
     this.artifactOrdering.setPriorities(DependencyElement.SCOPE, scopePriorities);
   }
 
-  public ArtifactOrdering<DependencyModel, DependencyElement> getArtifactOrdering() {
+  protected ArtifactOrdering<DependencyModel, String, DependencyElement> getArtifactOrdering() {
     return this.artifactOrdering;
   }
 

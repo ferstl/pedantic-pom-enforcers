@@ -31,14 +31,18 @@ import com.google.common.collect.Multimap;
 import com.google.common.collect.Ordering;
 import com.google.common.collect.Sets;
 
-
-public class ArtifactOrdering<T, F extends PriorityComparatorFactory<String, T>> extends Ordering<T> {
+/**
+ * @param <T> Type of this ordering.
+ * @param <P> Type of the priorities.
+ * @param <F> Type of the {@link PriorityComparatorFactory}.
+ */
+public class ArtifactOrdering<T, P extends Comparable<P>, F extends PriorityComparatorFactory<P, T>> extends Ordering<T> {
 
   private final Set<F> orderBy;
-  private final Multimap<F, String> priorityMap;
+  private final Multimap<F, P> priorityMap;
 
-  public static <T, F extends PriorityComparatorFactory<String, T>>
-  ArtifactOrdering<T, F> orderBy(Iterable<F> artifactElements) {
+  public static <T, P extends Comparable<P>, F extends PriorityComparatorFactory<P, T>>
+  ArtifactOrdering<T, P, F> orderBy(Iterable<F> artifactElements) {
     if (Iterables.isEmpty(artifactElements)) {
       throw new IllegalArgumentException("No order specified.");
     }
@@ -46,8 +50,8 @@ public class ArtifactOrdering<T, F extends PriorityComparatorFactory<String, T>>
   }
 
   @SafeVarargs
-  public static <T, F extends PriorityComparatorFactory<String, T>>
-  ArtifactOrdering<T, F> orderBy(F... artifactElements) {
+  public static <T, P extends Comparable<P>, F extends PriorityComparatorFactory<P, T>>
+  ArtifactOrdering<T, P, F> orderBy(F... artifactElements) {
     return orderBy(Arrays.asList(artifactElements));
   }
 
@@ -61,7 +65,7 @@ public class ArtifactOrdering<T, F extends PriorityComparatorFactory<String, T>>
     this.orderBy.addAll(Lists.newArrayList(artifactElements));
   }
 
-  public void setPriorities(F artifactElement, Iterable<String> priorities) {
+  public void setPriorities(F artifactElement, Iterable<P> priorities) {
     this.priorityMap.putAll(artifactElement, priorities);
   }
 
@@ -69,7 +73,7 @@ public class ArtifactOrdering<T, F extends PriorityComparatorFactory<String, T>>
     return Collections.unmodifiableCollection(this.orderBy);
   }
 
-  public Collection<String> getPriorities(F artifactElement) {
+  public Collection<P> getPriorities(F artifactElement) {
     return this.priorityMap.get(artifactElement);
   }
 

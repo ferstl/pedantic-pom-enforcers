@@ -58,7 +58,7 @@ public class PedanticDependencyOrderEnforcer extends AbstractPedanticDependencyO
   @Override
   protected void doEnforce() throws EnforcerRuleException {
     MavenProject project = EnforcerRuleUtils.getMavenProject(getHelper());
-    ArtifactOrdering<DependencyModel, DependencyElement> artifactOrdering = getArtifactOrdering();
+    ArtifactOrdering<DependencyModel, String, DependencyElement> artifactOrdering = getArtifactOrdering();
 
     Log log = getLog();
     log.info("Enforcing dependency order.");

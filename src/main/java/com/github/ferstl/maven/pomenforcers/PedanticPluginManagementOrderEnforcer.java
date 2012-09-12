@@ -58,7 +58,7 @@ import static com.github.ferstl.maven.pomenforcers.artifact.PluginElement.GROUP_
  */
 public class PedanticPluginManagementOrderEnforcer extends AbstractPedanticEnforcer {
 
-  private final ArtifactOrdering<PluginModel, PluginElement> artifactOrdering;
+  private final ArtifactOrdering<PluginModel, String, PluginElement> artifactOrdering;
 
   public PedanticPluginManagementOrderEnforcer() {
     this.artifactOrdering = ArtifactOrdering.orderBy(GROUP_ID, ARTIFACT_ID);
