@@ -79,14 +79,14 @@ public class PedanticDependencyManagementOrderEnforcer extends AbstractPedanticD
            + CommaSeparatorUtils.join(artifactOrdering.getPriorities(DependencyElement.ARTIFACT_ID)));
 
     ProjectModel projectModel = getProjectModel();
-    Collection<DependencyModel> declaredDependencyManagement = projectModel.getManagedDependencies();
+    Collection<DependencyModel> declaredManagedDependencies = projectModel.getManagedDependencies();
 
-    Collection<DependencyModel> managedDependencyArtifacts =
-        matchDependencies(declaredDependencyManagement, getManagedDependencies(project));
+    Collection<DependencyModel> managedDependencies =
+        matchDependencies(declaredManagedDependencies, getManagedDependencies(project));
 
-    if (!artifactOrdering.isOrdered(managedDependencyArtifacts)) {
+    if (!artifactOrdering.isOrdered(managedDependencies)) {
       ImmutableList<DependencyModel> sortedDependencies =
-          artifactOrdering.immutableSortedCopy(managedDependencyArtifacts);
+          artifactOrdering.immutableSortedCopy(managedDependencies);
       throw new EnforcerRuleException("One does not simply declare dependency management! "
           + "Your dependency management has to be ordered this way:" + sortedDependencies);
     }
