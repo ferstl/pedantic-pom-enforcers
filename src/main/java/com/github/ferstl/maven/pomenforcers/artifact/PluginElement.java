@@ -21,6 +21,7 @@ import java.util.Map;
 import com.github.ferstl.maven.pomenforcers.model.PluginModel;
 import com.github.ferstl.maven.pomenforcers.priority.PriorityOrdering;
 import com.github.ferstl.maven.pomenforcers.priority.PriorityOrderingFactory;
+import com.google.common.base.Function;
 import com.google.common.collect.Maps;
 
 import static com.github.ferstl.maven.pomenforcers.functions.Equivalences.stringStartsWith;
@@ -45,6 +46,9 @@ public enum PluginElement implements PriorityOrderingFactory<String, PluginModel
     }
   };
 
+  private static final Function<String, PluginElement> STRING_TO_PLUGIN_ELEMENT =
+      new StringToPluginElementTransformer();
+
   private static Map<String, PluginElement> elementMap;
 
   static {
@@ -67,6 +71,10 @@ public enum PluginElement implements PriorityOrderingFactory<String, PluginModel
     return result;
   }
 
+  public static Function<String, PluginElement> stringToPluginElement() {
+    return STRING_TO_PLUGIN_ELEMENT;
+  }
+
   private final String elementName;
 
   private PluginElement(String elementName) {
@@ -75,5 +83,12 @@ public enum PluginElement implements PriorityOrderingFactory<String, PluginModel
 
   public String getElementName() {
     return this.elementName;
+  }
+
+  private static class StringToPluginElementTransformer implements Function<String, PluginElement> {
+    @Override
+    public PluginElement apply(String input) {
+      return getByElementName(input);
+    }
   }
 }

@@ -26,7 +26,7 @@ import com.google.common.base.Joiner;
 import com.google.common.base.Strings;
 import com.google.common.collect.Sets;
 
-import static com.github.ferstl.maven.pomenforcers.functions.Transformers.stringToEnforcerRule;
+import static com.github.ferstl.maven.pomenforcers.PedanticEnforcerRule.stringToEnforcerRule;
 
 /**
  * The compound enforcer aggregates any combination of the available pedantic

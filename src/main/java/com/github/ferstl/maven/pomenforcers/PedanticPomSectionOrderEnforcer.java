@@ -29,8 +29,8 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Ordering;
 import com.google.common.collect.Sets;
 
-import static com.github.ferstl.maven.pomenforcers.functions.Transformers.pomSectionToString;
-import static com.github.ferstl.maven.pomenforcers.functions.Transformers.stringToPomSection;
+import static com.github.ferstl.maven.pomenforcers.PomSection.pomSectionToString;
+import static com.github.ferstl.maven.pomenforcers.PomSection.stringToPomSection;
 
 
 /**

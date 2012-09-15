@@ -31,7 +31,7 @@ import com.google.common.collect.Sets;
 import static com.github.ferstl.maven.pomenforcers.artifact.DependencyElement.ARTIFACT_ID;
 import static com.github.ferstl.maven.pomenforcers.artifact.DependencyElement.GROUP_ID;
 import static com.github.ferstl.maven.pomenforcers.artifact.DependencyElement.SCOPE;
-import static com.github.ferstl.maven.pomenforcers.functions.Transformers.stringToDependencyElement;
+import static com.github.ferstl.maven.pomenforcers.artifact.DependencyElement.stringToDependencyElement;
 
 
 public abstract class AbstractPedanticDependencyOrderEnforcer extends AbstractPedanticEnforcer {

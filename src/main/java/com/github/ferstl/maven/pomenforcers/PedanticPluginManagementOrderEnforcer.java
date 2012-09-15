@@ -34,8 +34,8 @@ import com.google.common.collect.Sets;
 
 import static com.github.ferstl.maven.pomenforcers.artifact.PluginElement.ARTIFACT_ID;
 import static com.github.ferstl.maven.pomenforcers.artifact.PluginElement.GROUP_ID;
+import static com.github.ferstl.maven.pomenforcers.artifact.PluginElement.stringToPluginElement;
 import static com.github.ferstl.maven.pomenforcers.functions.Transformers.pluginToPluginModel;
-import static com.github.ferstl.maven.pomenforcers.functions.Transformers.stringToPluginElement;
 
 /**
  * This enforcer makes sure that all plugins in your plugin management section

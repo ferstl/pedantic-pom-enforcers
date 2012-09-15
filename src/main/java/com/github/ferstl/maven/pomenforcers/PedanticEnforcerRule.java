@@ -15,6 +15,8 @@
  */
 package com.github.ferstl.maven.pomenforcers;
 
+import com.google.common.base.Function;
+
 /**
  * Each pedantic enforcer rule is identified by an ID. These IDs can be used within the
  * {@link CompoundPedanticEnforcer} to enable specific rules. The compound enforcer is more efficient
@@ -114,5 +116,19 @@ public enum PedanticEnforcerRule {
     }
   };
 
+  private static final Function<String, PedanticEnforcerRule> STRING_TO_ENFORCER_RULE =
+      new StringToEnforcerRuleTransformer();
+
+  public static Function<String, PedanticEnforcerRule> stringToEnforcerRule() {
+    return STRING_TO_ENFORCER_RULE;
+  }
+
   public abstract AbstractPedanticEnforcer createEnforcerRule();
+
+  private static class StringToEnforcerRuleTransformer implements Function<String, PedanticEnforcerRule> {
+    @Override
+    public PedanticEnforcerRule apply(String input) {
+      return PedanticEnforcerRule.valueOf(input);
+    }
+  }
 }

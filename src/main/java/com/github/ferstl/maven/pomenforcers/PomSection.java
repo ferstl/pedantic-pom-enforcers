@@ -19,10 +19,10 @@ import java.util.Collection;
 import java.util.Map;
 
 import com.github.ferstl.maven.pomenforcers.priority.PriorityOrdering;
+import com.google.common.base.Function;
 import com.google.common.base.Functions;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Ordering;
-
 
 
 public enum PomSection {
@@ -57,6 +57,8 @@ public enum PomSection {
   REPORTING("reporting"),
   REPORTS("reports");
 
+  private static final Function<String, PomSection> STRING_TO_POM_SECTION = new StringToPomSectionTransformer();
+  private static final Function<PomSection, String> POM_SECTION_TO_STRING = new PomSectionToStringTransformer();
   private static final Map<String, PomSection> pomSectionMap;
 
   static {
@@ -78,7 +80,19 @@ public enum PomSection {
     return value;
   }
 
+  public static Function<String, PomSection> stringToPomSection() {
+    return STRING_TO_POM_SECTION;
+  }
+
+  public static Function<PomSection, String> pomSectionToString() {
+    return POM_SECTION_TO_STRING;
+  }
+
   private final String sectionName;
+
+  public static Ordering<PomSection> createPriorityOrdering(Collection<PomSection> priorityCollection) {
+    return new PriorityOrdering<>(priorityCollection, Functions.<PomSection>identity());
+  }
 
   private PomSection(String sectionName) {
     this.sectionName = sectionName;
@@ -88,8 +102,18 @@ public enum PomSection {
     return this.sectionName;
   }
 
-  public static Ordering<PomSection> createPriorityOrdering(Collection<PomSection> priorityCollection) {
-    return new PriorityOrdering<>(priorityCollection, Functions.<PomSection>identity());
+  private static class StringToPomSectionTransformer implements Function<String, PomSection> {
+    @Override
+    public PomSection apply(String input) {
+      return getBySectionName(input);
+    }
+  }
+
+  private static class PomSectionToStringTransformer implements Function<PomSection, String> {
+    @Override
+    public String apply(PomSection input) {
+      return input.getSectionName();
+    }
   }
 
 }

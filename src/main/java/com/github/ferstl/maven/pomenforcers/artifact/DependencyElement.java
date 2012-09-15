@@ -21,6 +21,7 @@ import java.util.Map;
 import com.github.ferstl.maven.pomenforcers.model.DependencyModel;
 import com.github.ferstl.maven.pomenforcers.priority.PriorityOrdering;
 import com.github.ferstl.maven.pomenforcers.priority.PriorityOrderingFactory;
+import com.google.common.base.Function;
 import com.google.common.collect.Maps;
 
 import static com.github.ferstl.maven.pomenforcers.functions.Equivalences.stringStartsWith;
@@ -52,6 +53,9 @@ public enum DependencyElement implements PriorityOrderingFactory<String, Depende
     }
   };
 
+  private static final Function<String, DependencyElement> STRING_TO_DEPENDENCY_ELEMENT =
+      new StringToDependencyElementTransformer();
+
   private static Map<String, DependencyElement> elementMap;
 
   static {
@@ -74,6 +78,10 @@ public enum DependencyElement implements PriorityOrderingFactory<String, Depende
     return result;
   }
 
+  public static Function<String, DependencyElement> stringToDependencyElement() {
+    return STRING_TO_DEPENDENCY_ELEMENT;
+  }
+
   private final String elementName;
 
   private DependencyElement(String elementName) {
@@ -82,5 +90,12 @@ public enum DependencyElement implements PriorityOrderingFactory<String, Depende
 
   public String getElementName() {
     return this.elementName;
+  }
+
+  private static class StringToDependencyElementTransformer implements Function<String, DependencyElement> {
+    @Override
+    public DependencyElement apply(String input) {
+      return getByElementName(input);
+    }
   }
 }
