@@ -34,6 +34,6 @@ class StringToArtifactTransformer implements Function<String, ArtifactModel> {
      throw new IllegalArgumentException("Cannot read POM information: " + input);
    }
 
-   return new ArtifactModel(artifactElements.get(0), artifactElements.get(1), null);
+   return new ArtifactModel(artifactElements.get(0), artifactElements.get(1));
   }
 }

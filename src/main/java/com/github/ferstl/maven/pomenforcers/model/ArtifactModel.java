@@ -37,6 +37,12 @@ public class ArtifactModel {
     this.version = version;
   }
 
+  public ArtifactModel(String groupId, String artifactId) {
+    this.groupId = groupId;
+    this.artifactId = artifactId;
+    this.version = null;
+  }
+
   public String getGroupId() {
     return this.groupId;
   }
