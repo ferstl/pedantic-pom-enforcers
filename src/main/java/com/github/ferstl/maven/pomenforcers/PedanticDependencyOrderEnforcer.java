@@ -77,7 +77,7 @@ public class PedanticDependencyOrderEnforcer extends AbstractPedanticDependencyO
         Collections2.transform(project.getDependencies(), dependencyToDependencyModel());
 
     Collection<DependencyModel> dependencyArtifacts =
-        matchDependencies(declaredDependencies, projectDependencies, getHelper());
+        matchDependencies(declaredDependencies, projectDependencies);
 
     if (!artifactOrdering.isOrdered(dependencyArtifacts)) {
       ImmutableList<DependencyModel> sortedDependencies =

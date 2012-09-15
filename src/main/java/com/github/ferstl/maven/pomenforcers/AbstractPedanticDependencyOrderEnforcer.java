@@ -19,13 +19,13 @@ import java.util.Collection;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-import org.apache.maven.enforcer.rule.api.EnforcerRuleHelper;
-
 import com.github.ferstl.maven.pomenforcers.model.DependencyElement;
 import com.github.ferstl.maven.pomenforcers.model.DependencyModel;
-import com.github.ferstl.maven.pomenforcers.model.functions.DependencyMatcher;
+import com.github.ferstl.maven.pomenforcers.model.functions.DependencyMatchFunction;
 import com.github.ferstl.maven.pomenforcers.priority.CompoundPriorityOrdering;
 import com.github.ferstl.maven.pomenforcers.util.CommaSeparatorUtils;
+import com.google.common.base.Function;
+import com.google.common.collect.Collections2;
 import com.google.common.collect.Sets;
 
 import static com.github.ferstl.maven.pomenforcers.model.DependencyElement.ARTIFACT_ID;
@@ -107,9 +107,8 @@ public abstract class AbstractPedanticDependencyOrderEnforcer extends AbstractPe
   }
 
   protected Collection<DependencyModel> matchDependencies(
-      final Collection<DependencyModel> subset,
-      final Collection<DependencyModel> superset,
-      final EnforcerRuleHelper helper) {
-    return new DependencyMatcher(superset, helper).match(subset);
+      Collection<DependencyModel> subset, Collection<DependencyModel> superset) {
+    Function<DependencyModel, DependencyModel> matchFunction = new DependencyMatchFunction(superset, getHelper());
+    return Collections2.transform(subset, matchFunction);
   }
 }

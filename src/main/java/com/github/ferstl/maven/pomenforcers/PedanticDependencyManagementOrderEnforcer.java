@@ -82,7 +82,7 @@ public class PedanticDependencyManagementOrderEnforcer extends AbstractPedanticD
     Collection<DependencyModel> declaredDependencyManagement = projectModel.getManagedDependencies();
 
     Collection<DependencyModel> managedDependencyArtifacts =
-        matchDependencies(declaredDependencyManagement, getManagedDependencies(project), getHelper());
+        matchDependencies(declaredDependencyManagement, getManagedDependencies(project));
 
     if (!artifactOrdering.isOrdered(managedDependencyArtifacts)) {
       ImmutableList<DependencyModel> sortedDependencies =

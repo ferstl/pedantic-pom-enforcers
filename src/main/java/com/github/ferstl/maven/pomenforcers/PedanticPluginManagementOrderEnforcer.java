@@ -24,10 +24,11 @@ import org.apache.maven.project.MavenProject;
 
 import com.github.ferstl.maven.pomenforcers.model.PluginElement;
 import com.github.ferstl.maven.pomenforcers.model.PluginModel;
-import com.github.ferstl.maven.pomenforcers.model.functions.PluginMatcher;
+import com.github.ferstl.maven.pomenforcers.model.functions.PluginMatchFunction;
 import com.github.ferstl.maven.pomenforcers.priority.CompoundPriorityOrdering;
 import com.github.ferstl.maven.pomenforcers.util.CommaSeparatorUtils;
 import com.github.ferstl.maven.pomenforcers.util.EnforcerRuleUtils;
+import com.google.common.base.Function;
 import com.google.common.collect.Collections2;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Sets;
@@ -35,7 +36,6 @@ import com.google.common.collect.Sets;
 import static com.github.ferstl.maven.pomenforcers.model.PluginElement.ARTIFACT_ID;
 import static com.github.ferstl.maven.pomenforcers.model.PluginElement.GROUP_ID;
 import static com.github.ferstl.maven.pomenforcers.model.PluginElement.stringToPluginElement;
-
 import static com.github.ferstl.maven.pomenforcers.model.functions.Transformers.pluginToPluginModel;
 
 
@@ -141,8 +141,8 @@ public class PedanticPluginManagementOrderEnforcer extends AbstractPedanticEnfor
     visitor.visit(this);
   }
 
-  private Collection<PluginModel> matchPlugins(
-      Collection<PluginModel> subset, Collection<PluginModel> superset) {
-    return new PluginMatcher(superset, getHelper()).match(subset);
+  private Collection<PluginModel> matchPlugins(Collection<PluginModel> subset, Collection<PluginModel> superset) {
+    Function<PluginModel, PluginModel> matchFunction = new PluginMatchFunction(superset, getHelper());
+    return Collections2.transform(subset, matchFunction);
   }
 }
