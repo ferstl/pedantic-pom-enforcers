@@ -24,7 +24,7 @@ import org.apache.maven.model.DependencyManagement;
 import org.apache.maven.plugin.logging.Log;
 import org.apache.maven.project.MavenProject;
 
-import com.github.ferstl.maven.pomenforcers.artifact.DependencyElement;
+import com.github.ferstl.maven.pomenforcers.model.DependencyElement;
 import com.github.ferstl.maven.pomenforcers.model.DependencyModel;
 import com.github.ferstl.maven.pomenforcers.model.ProjectModel;
 import com.github.ferstl.maven.pomenforcers.priority.CompoundPriorityOrdering;
@@ -33,7 +33,8 @@ import com.github.ferstl.maven.pomenforcers.util.EnforcerRuleUtils;
 import com.google.common.collect.Collections2;
 import com.google.common.collect.ImmutableList;
 
-import static com.github.ferstl.maven.pomenforcers.functions.Transformers.dependencyToDependencyModel;
+import static com.github.ferstl.maven.pomenforcers.model.functions.Transformers.dependencyToDependencyModel;
+
 
 /**
  * This enforcer makes sure that all artifacts in your dependency management are

@@ -22,9 +22,9 @@ import org.apache.maven.enforcer.rule.api.EnforcerRuleException;
 import org.apache.maven.plugin.logging.Log;
 import org.apache.maven.project.MavenProject;
 
-import com.github.ferstl.maven.pomenforcers.artifact.PluginElement;
-import com.github.ferstl.maven.pomenforcers.artifact.PluginMatcher;
+import com.github.ferstl.maven.pomenforcers.model.PluginElement;
 import com.github.ferstl.maven.pomenforcers.model.PluginModel;
+import com.github.ferstl.maven.pomenforcers.model.functions.PluginMatcher;
 import com.github.ferstl.maven.pomenforcers.priority.CompoundPriorityOrdering;
 import com.github.ferstl.maven.pomenforcers.util.CommaSeparatorUtils;
 import com.github.ferstl.maven.pomenforcers.util.EnforcerRuleUtils;
@@ -32,10 +32,12 @@ import com.google.common.collect.Collections2;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Sets;
 
-import static com.github.ferstl.maven.pomenforcers.artifact.PluginElement.ARTIFACT_ID;
-import static com.github.ferstl.maven.pomenforcers.artifact.PluginElement.GROUP_ID;
-import static com.github.ferstl.maven.pomenforcers.artifact.PluginElement.stringToPluginElement;
-import static com.github.ferstl.maven.pomenforcers.functions.Transformers.pluginToPluginModel;
+import static com.github.ferstl.maven.pomenforcers.model.PluginElement.ARTIFACT_ID;
+import static com.github.ferstl.maven.pomenforcers.model.PluginElement.GROUP_ID;
+import static com.github.ferstl.maven.pomenforcers.model.PluginElement.stringToPluginElement;
+
+import static com.github.ferstl.maven.pomenforcers.model.functions.Transformers.pluginToPluginModel;
+
 
 /**
  * This enforcer makes sure that all plugins in your plugin management section

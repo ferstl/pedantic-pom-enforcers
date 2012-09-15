@@ -25,7 +25,8 @@ import org.w3c.dom.Document;
 import com.github.ferstl.maven.pomenforcers.model.ArtifactModel;
 import com.github.ferstl.maven.pomenforcers.util.EnforcerRuleUtils;
 
-import static com.github.ferstl.maven.pomenforcers.functions.Transformers.stringToArtifactModel;
+import static com.github.ferstl.maven.pomenforcers.model.functions.Transformers.stringToArtifactModel;
+
 import static com.github.ferstl.maven.pomenforcers.util.CommaSeparatorUtils.splitAndAddToCollection;
 
 /**

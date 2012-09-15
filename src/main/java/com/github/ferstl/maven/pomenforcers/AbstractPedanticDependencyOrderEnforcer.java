@@ -21,17 +21,18 @@ import java.util.Set;
 
 import org.apache.maven.enforcer.rule.api.EnforcerRuleHelper;
 
-import com.github.ferstl.maven.pomenforcers.artifact.DependencyElement;
-import com.github.ferstl.maven.pomenforcers.artifact.DependencyMatcher;
+import com.github.ferstl.maven.pomenforcers.model.DependencyElement;
 import com.github.ferstl.maven.pomenforcers.model.DependencyModel;
+import com.github.ferstl.maven.pomenforcers.model.functions.DependencyMatcher;
 import com.github.ferstl.maven.pomenforcers.priority.CompoundPriorityOrdering;
 import com.github.ferstl.maven.pomenforcers.util.CommaSeparatorUtils;
 import com.google.common.collect.Sets;
 
-import static com.github.ferstl.maven.pomenforcers.artifact.DependencyElement.ARTIFACT_ID;
-import static com.github.ferstl.maven.pomenforcers.artifact.DependencyElement.GROUP_ID;
-import static com.github.ferstl.maven.pomenforcers.artifact.DependencyElement.SCOPE;
-import static com.github.ferstl.maven.pomenforcers.artifact.DependencyElement.stringToDependencyElement;
+import static com.github.ferstl.maven.pomenforcers.model.DependencyElement.ARTIFACT_ID;
+import static com.github.ferstl.maven.pomenforcers.model.DependencyElement.GROUP_ID;
+import static com.github.ferstl.maven.pomenforcers.model.DependencyElement.SCOPE;
+import static com.github.ferstl.maven.pomenforcers.model.DependencyElement.stringToDependencyElement;
+
 
 
 public abstract class AbstractPedanticDependencyOrderEnforcer extends AbstractPedanticEnforcer {

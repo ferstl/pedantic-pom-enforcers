@@ -30,7 +30,8 @@ import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.Sets;
 
-import static com.github.ferstl.maven.pomenforcers.functions.Transformers.stringToArtifactModel;
+import static com.github.ferstl.maven.pomenforcers.model.functions.Transformers.stringToArtifactModel;
+
 import static com.github.ferstl.maven.pomenforcers.model.DependencyScope.COMPILE;
 import static com.github.ferstl.maven.pomenforcers.model.DependencyScope.IMPORT;
 import static com.github.ferstl.maven.pomenforcers.model.DependencyScope.PROVIDED;

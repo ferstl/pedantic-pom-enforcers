@@ -24,13 +24,15 @@ import org.apache.maven.plugin.logging.Log;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+import com.github.ferstl.maven.pomenforcers.model.PomSection;
 import com.github.ferstl.maven.pomenforcers.util.CommaSeparatorUtils;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Ordering;
 import com.google.common.collect.Sets;
 
-import static com.github.ferstl.maven.pomenforcers.PomSection.pomSectionToString;
-import static com.github.ferstl.maven.pomenforcers.PomSection.stringToPomSection;
+import static com.github.ferstl.maven.pomenforcers.model.PomSection.pomSectionToString;
+import static com.github.ferstl.maven.pomenforcers.model.PomSection.stringToPomSection;
+
 
 
 /**

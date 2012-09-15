@@ -1,4 +1,4 @@
-package com.github.ferstl.maven.pomenforcers.functions;
+package com.github.ferstl.maven.pomenforcers.model.functions;
 
 import com.github.ferstl.maven.pomenforcers.model.DependencyModel;
 import com.github.ferstl.maven.pomenforcers.model.PluginModel;

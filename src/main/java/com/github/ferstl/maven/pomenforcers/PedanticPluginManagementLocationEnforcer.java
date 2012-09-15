@@ -25,7 +25,8 @@ import com.github.ferstl.maven.pomenforcers.model.ArtifactModel;
 import com.github.ferstl.maven.pomenforcers.util.CommaSeparatorUtils;
 import com.github.ferstl.maven.pomenforcers.util.EnforcerRuleUtils;
 
-import static com.github.ferstl.maven.pomenforcers.functions.Transformers.stringToArtifactModel;
+import static com.github.ferstl.maven.pomenforcers.model.functions.Transformers.stringToArtifactModel;
+
 
 /**
  * Enforces that only a well-defined set of POMs may declare plugin management.

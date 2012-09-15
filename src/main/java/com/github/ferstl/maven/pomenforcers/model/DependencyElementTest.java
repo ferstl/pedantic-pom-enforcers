@@ -13,11 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.ferstl.maven.pomenforcers.artifact;
+package com.github.ferstl.maven.pomenforcers.model;
 
 import org.junit.Test;
 
-import com.github.ferstl.maven.pomenforcers.artifact.DependencyElement;
+import com.github.ferstl.maven.pomenforcers.model.DependencyElement;
 
 
 import static org.hamcrest.Matchers.is;

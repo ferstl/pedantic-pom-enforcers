@@ -1,4 +1,4 @@
-package com.github.ferstl.maven.pomenforcers.functions;
+package com.github.ferstl.maven.pomenforcers.model.functions;
 
 import com.google.common.base.Equivalence;
 

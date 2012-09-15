@@ -13,20 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.ferstl.maven.pomenforcers.artifact;
+package com.github.ferstl.maven.pomenforcers.model;
 
 import java.util.Collection;
 import java.util.Map;
 
-import com.github.ferstl.maven.pomenforcers.model.PluginModel;
 import com.github.ferstl.maven.pomenforcers.priority.PriorityOrdering;
 import com.github.ferstl.maven.pomenforcers.priority.PriorityOrderingFactory;
 import com.google.common.base.Function;
 import com.google.common.collect.Maps;
 
-import static com.github.ferstl.maven.pomenforcers.functions.Equivalences.stringStartsWith;
-import static com.github.ferstl.maven.pomenforcers.functions.Extractors.pluginArtifactId;
-import static com.github.ferstl.maven.pomenforcers.functions.Extractors.pluginGroupId;
+import static com.github.ferstl.maven.pomenforcers.model.functions.Equivalences.stringStartsWith;
+import static com.github.ferstl.maven.pomenforcers.model.functions.Extractors.pluginArtifactId;
+import static com.github.ferstl.maven.pomenforcers.model.functions.Extractors.pluginGroupId;
+
 
 
 
