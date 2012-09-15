@@ -35,7 +35,7 @@ import com.google.common.collect.Ordering;
  * @param <P> Type of the priority collection.
  * @param <T> Type of the values to be compared.
  */
-public class PriorityOrdering<P extends Comparable<P>, T> extends Ordering<T> {
+public class PriorityOrdering<P extends Comparable<? super P>, T> extends Ordering<T> {
 
   /** The priority collection. */
   private final Collection<P> priorityCollection;

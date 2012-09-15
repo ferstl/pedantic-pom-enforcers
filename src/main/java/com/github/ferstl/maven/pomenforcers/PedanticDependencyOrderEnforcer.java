@@ -17,7 +17,6 @@ package com.github.ferstl.maven.pomenforcers;
 import java.util.Collection;
 
 import org.apache.maven.enforcer.rule.api.EnforcerRuleException;
-import org.apache.maven.model.Dependency;
 import org.apache.maven.plugin.logging.Log;
 import org.apache.maven.project.MavenProject;
 
@@ -26,9 +25,10 @@ import com.github.ferstl.maven.pomenforcers.model.DependencyModel;
 import com.github.ferstl.maven.pomenforcers.priority.CompoundPriorityOrdering;
 import com.github.ferstl.maven.pomenforcers.util.CommaSeparatorUtils;
 import com.github.ferstl.maven.pomenforcers.util.EnforcerRuleUtils;
-import com.google.common.base.Function;
 import com.google.common.collect.Collections2;
 import com.google.common.collect.ImmutableList;
+
+import static com.github.ferstl.maven.pomenforcers.functions.Transformers.dependencyToDependencyModel;
 
 /**
  * This enforcer makes sure that all artifacts in your dependencies section are
@@ -73,13 +73,7 @@ public class PedanticDependencyOrderEnforcer extends AbstractPedanticDependencyO
 
     Collection<DependencyModel> declaredDependencies = getProjectModel().getDependencies();
     Collection<DependencyModel> projectDependencies =
-        Collections2.transform(project.getDependencies(), new Function<Dependency, DependencyModel>() {
-      @Override
-      public DependencyModel apply(Dependency input) {
-        return new DependencyModel(
-            input.getGroupId(), input.getArtifactId(), input.getVersion(), input.getScope(), input.getClassifier());
-      }
-    });
+        Collections2.transform(project.getDependencies(), dependencyToDependencyModel());
 
     Collection<DependencyModel> dependencyArtifacts =
         matchDependencies(declaredDependencies, projectDependencies, getHelper());

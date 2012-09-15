@@ -25,10 +25,12 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import com.github.ferstl.maven.pomenforcers.util.CommaSeparatorUtils;
-import com.google.common.base.Function;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Ordering;
 import com.google.common.collect.Sets;
+
+import static com.github.ferstl.maven.pomenforcers.functions.Transformers.pomSectionToString;
+import static com.github.ferstl.maven.pomenforcers.functions.Transformers.stringToPomSection;
 
 
 /**
@@ -65,13 +67,7 @@ public class PedanticPomSectionOrderEnforcer extends AbstractPedanticEnforcer {
    *          ,dependencies,build,profiles,reporting,reports
    */
   public void setSectionPriorities(String sectionPriorities) {
-    Function<String, PomSection> transformer = new Function<String, PomSection>() {
-      @Override
-      public PomSection apply(String input) {
-        return PomSection.getBySectionName(input);
-      }
-    };
-    CommaSeparatorUtils.splitAndAddToCollection(sectionPriorities, this.sectionPriorities, transformer);
+    CommaSeparatorUtils.splitAndAddToCollection(sectionPriorities, this.sectionPriorities, stringToPomSection());
   }
 
   @Override
@@ -95,12 +91,7 @@ public class PedanticPomSectionOrderEnforcer extends AbstractPedanticEnforcer {
 
     if (!ordering.isOrdered(pomSections)) {
       List<String> sortedPomSections =
-          Lists.transform(ordering.immutableSortedCopy(pomSections), new Function<PomSection, String>() {
-        @Override
-        public String apply(PomSection input) {
-          return input.getSectionName();
-        }
-      });
+          Lists.transform(ordering.immutableSortedCopy(pomSections), pomSectionToString());
       throw new EnforcerRuleException("One does not simply write a POM file! "
         + "Your POM file has to be organized this way: " + sortedPomSections);
     }

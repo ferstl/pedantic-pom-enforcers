@@ -21,7 +21,6 @@ import java.util.Set;
 import org.apache.maven.enforcer.rule.api.EnforcerRuleException;
 import org.apache.maven.model.Dependency;
 
-import com.github.ferstl.maven.pomenforcers.artifact.StringToArtifactTransformer;
 import com.github.ferstl.maven.pomenforcers.model.ArtifactModel;
 import com.github.ferstl.maven.pomenforcers.model.DependencyScope;
 import com.github.ferstl.maven.pomenforcers.util.CommaSeparatorUtils;
@@ -31,6 +30,7 @@ import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.Sets;
 
+import static com.github.ferstl.maven.pomenforcers.functions.Transformers.stringToArtifactModel;
 import static com.github.ferstl.maven.pomenforcers.model.DependencyScope.COMPILE;
 import static com.github.ferstl.maven.pomenforcers.model.DependencyScope.IMPORT;
 import static com.github.ferstl.maven.pomenforcers.model.DependencyScope.PROVIDED;
@@ -148,7 +148,7 @@ public class PedanticDependencyScopeEnforcer extends AbstractPedanticEnforcer {
 
   private Set<ArtifactModel> createDependencyInfo(String dependencies) {
     Set<ArtifactModel> dependencyInfoSet = Sets.newHashSet();
-    CommaSeparatorUtils.splitAndAddToCollection(dependencies, dependencyInfoSet, new StringToArtifactTransformer());
+    CommaSeparatorUtils.splitAndAddToCollection(dependencies, dependencyInfoSet, stringToArtifactModel());
 
     return dependencyInfoSet;
   }

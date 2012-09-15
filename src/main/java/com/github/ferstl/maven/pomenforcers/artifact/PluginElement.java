@@ -16,44 +16,32 @@
 package com.github.ferstl.maven.pomenforcers.artifact;
 
 import java.util.Collection;
-import java.util.Comparator;
 import java.util.Map;
 
 import com.github.ferstl.maven.pomenforcers.model.PluginModel;
 import com.github.ferstl.maven.pomenforcers.priority.PriorityOrdering;
 import com.github.ferstl.maven.pomenforcers.priority.PriorityOrderingFactory;
-import com.github.ferstl.maven.pomenforcers.priority.StringStartsWithEquivalence;
-import com.google.common.base.Function;
 import com.google.common.collect.Maps;
+
+import static com.github.ferstl.maven.pomenforcers.functions.Equivalences.stringStartsWith;
+import static com.github.ferstl.maven.pomenforcers.functions.Extractors.pluginArtifactId;
+import static com.github.ferstl.maven.pomenforcers.functions.Extractors.pluginGroupId;
+
 
 
 public enum PluginElement implements PriorityOrderingFactory<String, PluginModel> {
 
   GROUP_ID("groupId") {
     @Override
-    public Comparator<PluginModel> createPriorityOrdering(Collection<String> priorityCollection) {
-      StringStartsWithEquivalence priorityMatcher = new StringStartsWithEquivalence();
-      Function<PluginModel, String> transformer = new Function<PluginModel, String>() {
-        @Override
-        public String apply(PluginModel input) {
-          return input.getGroupId();
-        }
-      };
-      return new PriorityOrdering<>(priorityCollection, transformer, priorityMatcher);
+    public PriorityOrdering<String, PluginModel> createPriorityOrdering(Collection<String> priorityCollection) {
+      return new PriorityOrdering<>(priorityCollection, pluginGroupId(), stringStartsWith());
     }
   },
 
   ARTIFACT_ID("artifactId") {
     @Override
-    public Comparator<PluginModel> createPriorityOrdering(Collection<String> priorityCollection) {
-      StringStartsWithEquivalence priorityMatcher = new StringStartsWithEquivalence();
-      Function<PluginModel, String> transformer = new Function<PluginModel, String>() {
-        @Override
-        public String apply(PluginModel input) {
-          return input.getArtifactId();
-        }
-      };
-      return new PriorityOrdering<>(priorityCollection, transformer, priorityMatcher);
+    public PriorityOrdering<String, PluginModel> createPriorityOrdering(Collection<String> priorityCollection) {
+      return new PriorityOrdering<>(priorityCollection, pluginArtifactId(), stringStartsWith());
     }
   };
 

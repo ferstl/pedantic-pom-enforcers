@@ -21,10 +21,11 @@ import java.util.Set;
 import org.apache.maven.enforcer.rule.api.EnforcerRuleException;
 import org.apache.maven.project.MavenProject;
 
-import com.github.ferstl.maven.pomenforcers.artifact.StringToArtifactTransformer;
 import com.github.ferstl.maven.pomenforcers.model.ArtifactModel;
 import com.github.ferstl.maven.pomenforcers.util.CommaSeparatorUtils;
 import com.github.ferstl.maven.pomenforcers.util.EnforcerRuleUtils;
+
+import static com.github.ferstl.maven.pomenforcers.functions.Transformers.stringToArtifactModel;
 
 /**
  * Enforces that only a well-defined set of POMs may declare plugin management.
@@ -64,8 +65,7 @@ public class PedanticPluginManagementLocationEnforcer extends AbstractPedanticEn
    * @default n/a
    */
   public void setPluginManagingPoms(String pluginManagingPoms) {
-    StringToArtifactTransformer stringToArtifactTransformer = new StringToArtifactTransformer();
-    CommaSeparatorUtils.splitAndAddToCollection(pluginManagingPoms, this.pluginManagingPoms, stringToArtifactTransformer);
+    CommaSeparatorUtils.splitAndAddToCollection(pluginManagingPoms, this.pluginManagingPoms, stringToArtifactModel());
   }
 
   private boolean containsPluginManagement() {

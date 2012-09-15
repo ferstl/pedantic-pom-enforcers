@@ -26,12 +26,12 @@ import com.github.ferstl.maven.pomenforcers.artifact.DependencyMatcher;
 import com.github.ferstl.maven.pomenforcers.model.DependencyModel;
 import com.github.ferstl.maven.pomenforcers.priority.CompoundPriorityOrdering;
 import com.github.ferstl.maven.pomenforcers.util.CommaSeparatorUtils;
-import com.google.common.base.Function;
 import com.google.common.collect.Sets;
 
 import static com.github.ferstl.maven.pomenforcers.artifact.DependencyElement.ARTIFACT_ID;
 import static com.github.ferstl.maven.pomenforcers.artifact.DependencyElement.GROUP_ID;
 import static com.github.ferstl.maven.pomenforcers.artifact.DependencyElement.SCOPE;
+import static com.github.ferstl.maven.pomenforcers.functions.Transformers.stringToDependencyElement;
 
 
 public abstract class AbstractPedanticDependencyOrderEnforcer extends AbstractPedanticEnforcer {
@@ -50,13 +50,7 @@ public abstract class AbstractPedanticDependencyOrderEnforcer extends AbstractPe
    */
   public void setOrderBy(String dependencyElements) {
     Set<DependencyElement> orderBy = new LinkedHashSet<>();
-    Function<String, DependencyElement> transformer = new Function<String, DependencyElement>() {
-      @Override
-      public DependencyElement apply(String input) {
-        return DependencyElement.getByElementName(input);
-      }
-    };
-    CommaSeparatorUtils.splitAndAddToCollection(dependencyElements, orderBy, transformer);
+    CommaSeparatorUtils.splitAndAddToCollection(dependencyElements, orderBy, stringToDependencyElement());
     this.artifactOrdering.redefineOrderBy(orderBy);
   }
 

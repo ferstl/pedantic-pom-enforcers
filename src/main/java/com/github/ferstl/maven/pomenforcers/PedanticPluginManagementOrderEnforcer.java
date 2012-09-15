@@ -19,7 +19,6 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 
 import org.apache.maven.enforcer.rule.api.EnforcerRuleException;
-import org.apache.maven.model.Plugin;
 import org.apache.maven.plugin.logging.Log;
 import org.apache.maven.project.MavenProject;
 
@@ -29,13 +28,14 @@ import com.github.ferstl.maven.pomenforcers.model.PluginModel;
 import com.github.ferstl.maven.pomenforcers.priority.CompoundPriorityOrdering;
 import com.github.ferstl.maven.pomenforcers.util.CommaSeparatorUtils;
 import com.github.ferstl.maven.pomenforcers.util.EnforcerRuleUtils;
-import com.google.common.base.Function;
 import com.google.common.collect.Collections2;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Sets;
 
 import static com.github.ferstl.maven.pomenforcers.artifact.PluginElement.ARTIFACT_ID;
 import static com.github.ferstl.maven.pomenforcers.artifact.PluginElement.GROUP_ID;
+import static com.github.ferstl.maven.pomenforcers.functions.Transformers.pluginToPluginModel;
+import static com.github.ferstl.maven.pomenforcers.functions.Transformers.stringToPluginElement;
 
 /**
  * This enforcer makes sure that all plugins in your plugin management section
@@ -72,13 +72,7 @@ public class PedanticPluginManagementOrderEnforcer extends AbstractPedanticEnfor
    */
   public void setOrderBy(String pluginElements) {
     Set<PluginElement> orderBy = Sets.newLinkedHashSet();
-    Function<String, PluginElement> transformer = new Function<String, PluginElement>() {
-      @Override
-      public PluginElement apply(String input) {
-        return PluginElement.getByElementName(input);
-      }
-    };
-    CommaSeparatorUtils.splitAndAddToCollection(pluginElements, orderBy, transformer);
+    CommaSeparatorUtils.splitAndAddToCollection(pluginElements, orderBy, stringToPluginElement());
     this.compoundPriorityOrdering.redefineOrderBy(orderBy);
   }
 
@@ -130,12 +124,7 @@ public class PedanticPluginManagementOrderEnforcer extends AbstractPedanticEnfor
 
     // TODO use project model directly
     Collection<PluginModel> managedPlugins =
-        Collections2.transform(project.getPluginManagement().getPlugins(), new Function<Plugin, PluginModel>() {
-      @Override
-      public PluginModel apply(Plugin input) {
-        return new PluginModel(input.getGroupId(), input.getArtifactId(), input.getVersion());
-      }
-    });
+        Collections2.transform(project.getPluginManagement().getPlugins(), pluginToPluginModel());
     Collection<PluginModel> declaredManagedPlugins = matchPlugins(declaredPluginManagement, managedPlugins);
 
     if (!this.compoundPriorityOrdering.isOrdered(declaredManagedPlugins)) {

@@ -30,9 +30,10 @@ import com.github.ferstl.maven.pomenforcers.model.ProjectModel;
 import com.github.ferstl.maven.pomenforcers.priority.CompoundPriorityOrdering;
 import com.github.ferstl.maven.pomenforcers.util.CommaSeparatorUtils;
 import com.github.ferstl.maven.pomenforcers.util.EnforcerRuleUtils;
-import com.google.common.base.Function;
 import com.google.common.collect.Collections2;
 import com.google.common.collect.ImmutableList;
+
+import static com.github.ferstl.maven.pomenforcers.functions.Transformers.dependencyToDependencyModel;
 
 /**
  * This enforcer makes sure that all artifacts in your dependency management are
@@ -103,13 +104,6 @@ public class PedanticDependencyManagementOrderEnforcer extends AbstractPedanticD
     } else {
       managedDependencies = Collections.emptyList();
     }
-    return Collections2.transform(managedDependencies, new Function<Dependency, DependencyModel>() {
-      @Override
-      public DependencyModel apply(Dependency input) {
-        return new DependencyModel(
-            input.getGroupId(), input.getArtifactId(), input.getVersion(), input.getScope(), input.getClassifier());
-      }
-
-    });
+    return Collections2.transform(managedDependencies, dependencyToDependencyModel());
   }
 }

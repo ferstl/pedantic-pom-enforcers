@@ -22,10 +22,10 @@ import org.apache.maven.enforcer.rule.api.EnforcerRuleException;
 import org.apache.maven.project.MavenProject;
 import org.w3c.dom.Document;
 
-import com.github.ferstl.maven.pomenforcers.artifact.StringToArtifactTransformer;
 import com.github.ferstl.maven.pomenforcers.model.ArtifactModel;
 import com.github.ferstl.maven.pomenforcers.util.EnforcerRuleUtils;
 
+import static com.github.ferstl.maven.pomenforcers.functions.Transformers.stringToArtifactModel;
 import static com.github.ferstl.maven.pomenforcers.util.CommaSeparatorUtils.splitAndAddToCollection;
 
 /**
@@ -66,8 +66,7 @@ public class PedanticDependencyManagementLocationEnforcer extends AbstractPedant
    * @default n/a
    */
   public void setDependencyManagingPoms(String dependencyManagingPoms) {
-    StringToArtifactTransformer stringToArtifactTransformer = new StringToArtifactTransformer();
-    splitAndAddToCollection(dependencyManagingPoms, this.dependencyManagingPoms, stringToArtifactTransformer);
+    splitAndAddToCollection(dependencyManagingPoms, this.dependencyManagingPoms, stringToArtifactModel());
   }
 
   private boolean containsDependencyManagement(Document pom) {

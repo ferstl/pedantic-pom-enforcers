@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.ferstl.maven.pomenforcers.artifact;
+package com.github.ferstl.maven.pomenforcers.functions;
 
 import java.util.ArrayList;
 
@@ -22,7 +22,7 @@ import com.google.common.base.Function;
 import com.google.common.base.Splitter;
 import com.google.common.collect.Lists;
 
-public class StringToArtifactTransformer implements Function<String, ArtifactModel> {
+class StringToArtifactTransformer implements Function<String, ArtifactModel> {
 
   private static final Splitter COLON_SPLITTER = Splitter.on(":");
 

@@ -16,9 +16,8 @@
 package com.github.ferstl.maven.pomenforcers.priority;
 
 import java.util.Collection;
-import java.util.Comparator;
 
 
 public interface PriorityOrderingFactory<P extends Comparable<? super P>, T> {
-  Comparator<T> createPriorityOrdering(Collection<P> priorityCollection);
+  PriorityOrdering<P, T> createPriorityOrdering(Collection<P> priorityCollection);
 }

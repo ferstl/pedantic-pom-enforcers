@@ -22,10 +22,11 @@ import java.util.List;
 import org.apache.maven.enforcer.rule.api.EnforcerRuleException;
 
 import com.github.ferstl.maven.pomenforcers.util.CommaSeparatorUtils;
-import com.google.common.base.Function;
 import com.google.common.base.Joiner;
 import com.google.common.base.Strings;
 import com.google.common.collect.Sets;
+
+import static com.github.ferstl.maven.pomenforcers.functions.Transformers.stringToEnforcerRule;
 
 /**
  * The compound enforcer aggregates any combination of the available pedantic
@@ -278,12 +279,7 @@ public class CompoundPedanticEnforcer extends AbstractPedanticEnforcer {
   }
 
   public void setEnforcers(String enforcers) {
-    CommaSeparatorUtils.splitAndAddToCollection(enforcers, this.enforcers, new Function<String, PedanticEnforcerRule>() {
-      @Override
-      public PedanticEnforcerRule apply(String input) {
-        return PedanticEnforcerRule.valueOf(input);
-      }
-    });
+    CommaSeparatorUtils.splitAndAddToCollection(enforcers, this.enforcers, stringToEnforcerRule());
   }
 
   @Override

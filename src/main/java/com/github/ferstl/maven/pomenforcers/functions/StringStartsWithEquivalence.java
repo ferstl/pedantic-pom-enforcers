@@ -13,12 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.ferstl.maven.pomenforcers.priority;
+package com.github.ferstl.maven.pomenforcers.functions;
 
 import com.google.common.base.Equivalence;
 
 
-public class StringStartsWithEquivalence extends Equivalence<String> {
+class StringStartsWithEquivalence extends Equivalence<String> {
 
   @Override
   protected boolean doEquivalent(String a, String b) {
