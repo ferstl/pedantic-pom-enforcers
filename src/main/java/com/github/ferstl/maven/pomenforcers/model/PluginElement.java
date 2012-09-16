@@ -24,8 +24,8 @@ import com.google.common.base.Function;
 import com.google.common.collect.Maps;
 
 import static com.github.ferstl.maven.pomenforcers.model.functions.Equivalences.stringStartsWith;
-import static com.github.ferstl.maven.pomenforcers.model.functions.Extractors.pluginArtifactId;
-import static com.github.ferstl.maven.pomenforcers.model.functions.Extractors.pluginGroupId;
+import static com.github.ferstl.maven.pomenforcers.model.functions.PluginElementExtractor.ARTIFACT_ID_EXTRACTOR;
+import static com.github.ferstl.maven.pomenforcers.model.functions.PluginElementExtractor.GROUP_ID_EXTRACTOR;
 
 
 
@@ -35,14 +35,14 @@ public enum PluginElement implements PriorityOrderingFactory<String, PluginModel
   GROUP_ID("groupId") {
     @Override
     public PriorityOrdering<String, PluginModel> createPriorityOrdering(Collection<String> priorityCollection) {
-      return new PriorityOrdering<>(priorityCollection, pluginGroupId(), stringStartsWith());
+      return new PriorityOrdering<>(priorityCollection, GROUP_ID_EXTRACTOR, stringStartsWith());
     }
   },
 
   ARTIFACT_ID("artifactId") {
     @Override
     public PriorityOrdering<String, PluginModel> createPriorityOrdering(Collection<String> priorityCollection) {
-      return new PriorityOrdering<>(priorityCollection, pluginArtifactId(), stringStartsWith());
+      return new PriorityOrdering<>(priorityCollection, ARTIFACT_ID_EXTRACTOR, stringStartsWith());
     }
   };
 

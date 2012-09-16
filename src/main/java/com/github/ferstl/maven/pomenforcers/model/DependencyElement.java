@@ -23,10 +23,10 @@ import com.github.ferstl.maven.pomenforcers.priority.PriorityOrderingFactory;
 import com.google.common.base.Function;
 import com.google.common.collect.Maps;
 
+import static com.github.ferstl.maven.pomenforcers.model.functions.DependencyElementExtractor.ARTIFACT_ID_EXTRACTOR;
+import static com.github.ferstl.maven.pomenforcers.model.functions.DependencyElementExtractor.GROUP_ID_EXTRACTOR;
+import static com.github.ferstl.maven.pomenforcers.model.functions.DependencyElementExtractor.SCOPE_EXTRACTOR;
 import static com.github.ferstl.maven.pomenforcers.model.functions.Equivalences.stringStartsWith;
-import static com.github.ferstl.maven.pomenforcers.model.functions.Extractors.dependencyArtifactId;
-import static com.github.ferstl.maven.pomenforcers.model.functions.Extractors.dependencyGroupId;
-import static com.github.ferstl.maven.pomenforcers.model.functions.Extractors.dependencyScope;
 
 
 
@@ -35,21 +35,21 @@ public enum DependencyElement implements PriorityOrderingFactory<String, Depende
   GROUP_ID("groupId") {
     @Override
     public PriorityOrdering<String, DependencyModel> createPriorityOrdering(Collection<String> priorityCollection) {
-      return new PriorityOrdering<>(priorityCollection, dependencyGroupId(), stringStartsWith());
+      return new PriorityOrdering<>(priorityCollection, GROUP_ID_EXTRACTOR, stringStartsWith());
     }
   },
 
   ARTIFACT_ID("artifactId") {
     @Override
     public PriorityOrdering<String, DependencyModel> createPriorityOrdering(Collection<String> priorityCollection) {
-      return new PriorityOrdering<>(priorityCollection, dependencyArtifactId(), stringStartsWith());
+      return new PriorityOrdering<>(priorityCollection, ARTIFACT_ID_EXTRACTOR, stringStartsWith());
     }
   },
 
   SCOPE("scope") {
     @Override
     public PriorityOrdering<String, DependencyModel> createPriorityOrdering(Collection<String> priorityCollection) {
-      return new PriorityOrdering<>(priorityCollection, dependencyScope());
+      return new PriorityOrdering<>(priorityCollection, SCOPE_EXTRACTOR);
     }
   };
 
