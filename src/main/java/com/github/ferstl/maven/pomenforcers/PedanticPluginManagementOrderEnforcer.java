@@ -60,10 +60,10 @@ import static com.github.ferstl.maven.pomenforcers.model.functions.Transformers.
  */
 public class PedanticPluginManagementOrderEnforcer extends AbstractPedanticEnforcer {
 
-  private final CompoundPriorityOrdering<PluginModel, String, PluginElement> compoundPriorityOrdering;
+  private final CompoundPriorityOrdering<PluginModel, String, PluginElement> pluginOrdering;
 
   public PedanticPluginManagementOrderEnforcer() {
-    this.compoundPriorityOrdering = CompoundPriorityOrdering.orderBy(GROUP_ID, ARTIFACT_ID);
+    this.pluginOrdering = CompoundPriorityOrdering.orderBy(GROUP_ID, ARTIFACT_ID);
   }
 
   /**
@@ -75,7 +75,7 @@ public class PedanticPluginManagementOrderEnforcer extends AbstractPedanticEnfor
   public void setOrderBy(String pluginElements) {
     Set<PluginElement> orderBy = Sets.newLinkedHashSet();
     CommaSeparatorUtils.splitAndAddToCollection(pluginElements, orderBy, stringToPluginElement());
-    this.compoundPriorityOrdering.redefineOrderBy(orderBy);
+    this.pluginOrdering.redefineOrderBy(orderBy);
   }
 
   /**
@@ -91,7 +91,7 @@ public class PedanticPluginManagementOrderEnforcer extends AbstractPedanticEnfor
   public void setGroupIdPriorities(String groupIds) {
     LinkedHashSet<String> groupIdPriorities = Sets.newLinkedHashSet();
     CommaSeparatorUtils.splitAndAddToCollection(groupIds, groupIdPriorities);
-    this.compoundPriorityOrdering.setPriorities(PluginElement.GROUP_ID, groupIdPriorities);
+    this.pluginOrdering.setPriorities(PluginElement.GROUP_ID, groupIdPriorities);
   }
 
   /**
@@ -107,7 +107,7 @@ public class PedanticPluginManagementOrderEnforcer extends AbstractPedanticEnfor
   public void setArtifactIdPriorities(String artifactIds) {
     LinkedHashSet<String> artifactIdPriorities = Sets.newLinkedHashSet();
     CommaSeparatorUtils.splitAndAddToCollection(artifactIds, artifactIdPriorities);
-    this.compoundPriorityOrdering.setPriorities(PluginElement.ARTIFACT_ID, artifactIdPriorities);
+    this.pluginOrdering.setPriorities(PluginElement.ARTIFACT_ID, artifactIdPriorities);
   }
 
   @Override
@@ -116,21 +116,20 @@ public class PedanticPluginManagementOrderEnforcer extends AbstractPedanticEnfor
     Log log = getLog();
     log.info("Enforcing plugin management order.");
     log.info("  -> Plugins have to be ordered by: "
-           + CommaSeparatorUtils.join(this.compoundPriorityOrdering.getOrderBy()));
+           + CommaSeparatorUtils.join(this.pluginOrdering.getOrderBy()));
     log.info("  -> Group ID priorities: "
-           + CommaSeparatorUtils.join(this.compoundPriorityOrdering.getPriorities(PluginElement.GROUP_ID)));
+           + CommaSeparatorUtils.join(this.pluginOrdering.getPriorities(PluginElement.GROUP_ID)));
     log.info("  -> ArtifactModel ID priorities: "
-           + CommaSeparatorUtils.join(this.compoundPriorityOrdering.getPriorities(PluginElement.ARTIFACT_ID)));
+           + CommaSeparatorUtils.join(this.pluginOrdering.getPriorities(PluginElement.ARTIFACT_ID)));
 
     Collection<PluginModel> declaredPluginManagement = getProjectModel().getManagedPlugins();
 
-    // TODO use project model directly
     Collection<PluginModel> managedPlugins =
         Collections2.transform(project.getPluginManagement().getPlugins(), pluginToPluginModel());
     Collection<PluginModel> declaredManagedPlugins = matchPlugins(declaredPluginManagement, managedPlugins);
 
-    if (!this.compoundPriorityOrdering.isOrdered(declaredManagedPlugins)) {
-      ImmutableList<PluginModel> sortedDependencies = this.compoundPriorityOrdering.immutableSortedCopy(declaredManagedPlugins);
+    if (!this.pluginOrdering.isOrdered(declaredManagedPlugins)) {
+      ImmutableList<PluginModel> sortedDependencies = this.pluginOrdering.immutableSortedCopy(declaredManagedPlugins);
       throw new EnforcerRuleException("One does not simply declare plugin management! "
           + "Your plugin management has to be ordered this way:" + sortedDependencies);
     }
@@ -142,6 +141,7 @@ public class PedanticPluginManagementOrderEnforcer extends AbstractPedanticEnfor
   }
 
   private Collection<PluginModel> matchPlugins(Collection<PluginModel> subset, Collection<PluginModel> superset) {
+
     Function<PluginModel, PluginModel> matchFunction = new PluginMatchFunction(superset, getHelper());
     return Collections2.transform(subset, matchFunction);
   }
