@@ -23,33 +23,46 @@ import com.github.ferstl.maven.pomenforcers.priority.PriorityOrderingFactory;
 import com.google.common.base.Function;
 import com.google.common.collect.Maps;
 
-import static com.github.ferstl.maven.pomenforcers.model.functions.DependencyElementExtractor.ARTIFACT_ID_EXTRACTOR;
-import static com.github.ferstl.maven.pomenforcers.model.functions.DependencyElementExtractor.GROUP_ID_EXTRACTOR;
-import static com.github.ferstl.maven.pomenforcers.model.functions.DependencyElementExtractor.SCOPE_EXTRACTOR;
 import static com.github.ferstl.maven.pomenforcers.model.functions.Equivalences.stringStartsWith;
 
 
 
 
-public enum DependencyElement implements PriorityOrderingFactory<String, DependencyModel> {
+public enum DependencyElement
+implements PriorityOrderingFactory<String, DependencyModel>, Function<DependencyModel, String> {
   GROUP_ID("groupId") {
     @Override
     public PriorityOrdering<String, DependencyModel> createPriorityOrdering(Collection<String> priorityCollection) {
-      return new PriorityOrdering<>(priorityCollection, GROUP_ID_EXTRACTOR, stringStartsWith());
+      return new PriorityOrdering<>(priorityCollection, this, stringStartsWith());
+    }
+
+    @Override
+    public String apply(DependencyModel input) {
+      return input.getGroupId();
     }
   },
 
   ARTIFACT_ID("artifactId") {
     @Override
     public PriorityOrdering<String, DependencyModel> createPriorityOrdering(Collection<String> priorityCollection) {
-      return new PriorityOrdering<>(priorityCollection, ARTIFACT_ID_EXTRACTOR, stringStartsWith());
+      return new PriorityOrdering<>(priorityCollection, this, stringStartsWith());
+    }
+
+    @Override
+    public String apply(DependencyModel input) {
+      return input.getArtifactId();
     }
   },
 
   SCOPE("scope") {
     @Override
     public PriorityOrdering<String, DependencyModel> createPriorityOrdering(Collection<String> priorityCollection) {
-      return new PriorityOrdering<>(priorityCollection, SCOPE_EXTRACTOR);
+      return new PriorityOrdering<>(priorityCollection, this);
+    }
+
+    @Override
+    public String apply(DependencyModel input) {
+      return input.getScope().getScopeName();
     }
   };
 
