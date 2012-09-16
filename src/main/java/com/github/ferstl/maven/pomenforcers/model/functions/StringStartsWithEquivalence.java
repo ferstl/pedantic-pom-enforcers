@@ -18,7 +18,13 @@ package com.github.ferstl.maven.pomenforcers.model.functions;
 import com.google.common.base.Equivalence;
 
 
-class StringStartsWithEquivalence extends Equivalence<String> {
+public class StringStartsWithEquivalence extends Equivalence<String> {
+
+  private static final Equivalence<String> INSTANCE = new StringStartsWithEquivalence();
+
+  public static Equivalence<String> stringStartsWith() {
+    return INSTANCE;
+  }
 
   @Override
   protected boolean doEquivalent(String a, String b) {
@@ -29,5 +35,7 @@ class StringStartsWithEquivalence extends Equivalence<String> {
   protected int doHash(String t) {
     return t.hashCode();
   }
+
+  private StringStartsWithEquivalence() {}
 
 }

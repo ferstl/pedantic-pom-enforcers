@@ -23,7 +23,7 @@ import com.github.ferstl.maven.pomenforcers.priority.PriorityOrderingFactory;
 import com.google.common.base.Function;
 import com.google.common.collect.Maps;
 
-import static com.github.ferstl.maven.pomenforcers.model.functions.Equivalences.stringStartsWith;
+import static com.github.ferstl.maven.pomenforcers.model.functions.StringStartsWithEquivalence.stringStartsWith;
 
 
 
