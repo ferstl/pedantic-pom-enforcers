@@ -22,9 +22,14 @@ import com.google.common.base.Function;
 import com.google.common.base.Splitter;
 import com.google.common.collect.Lists;
 
-class StringToArtifactTransformer implements Function<String, ArtifactModel> {
+public class StringToArtifactTransformer implements Function<String, ArtifactModel> {
 
   private static final Splitter COLON_SPLITTER = Splitter.on(":");
+  public static final StringToArtifactTransformer INSTANCE = new StringToArtifactTransformer();
+
+  public static Function<String, ArtifactModel> stringToArtifactModel() {
+    return INSTANCE;
+  }
 
  @Override
  public ArtifactModel apply(String input) {
@@ -36,4 +41,7 @@ class StringToArtifactTransformer implements Function<String, ArtifactModel> {
 
    return new ArtifactModel(artifactElements.get(0), artifactElements.get(1));
   }
+
+
+  private StringToArtifactTransformer() {}
 }

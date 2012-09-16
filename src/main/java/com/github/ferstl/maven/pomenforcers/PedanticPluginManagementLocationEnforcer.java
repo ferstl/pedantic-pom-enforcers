@@ -25,7 +25,7 @@ import com.github.ferstl.maven.pomenforcers.model.ArtifactModel;
 import com.github.ferstl.maven.pomenforcers.util.CommaSeparatorUtils;
 import com.github.ferstl.maven.pomenforcers.util.EnforcerRuleUtils;
 
-import static com.github.ferstl.maven.pomenforcers.model.functions.Transformers.stringToArtifactModel;
+import static com.github.ferstl.maven.pomenforcers.model.functions.StringToArtifactTransformer.stringToArtifactModel;
 
 
 /**
