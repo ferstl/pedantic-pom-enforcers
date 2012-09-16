@@ -25,10 +25,8 @@ import com.github.ferstl.maven.pomenforcers.model.DependencyModel;
 import com.github.ferstl.maven.pomenforcers.priority.CompoundPriorityOrdering;
 import com.github.ferstl.maven.pomenforcers.util.CommaSeparatorUtils;
 import com.github.ferstl.maven.pomenforcers.util.EnforcerRuleUtils;
-import com.google.common.collect.Collections2;
+import com.google.common.collect.BiMap;
 import com.google.common.collect.ImmutableList;
-
-import static com.github.ferstl.maven.pomenforcers.model.functions.Transformers.dependencyToDependencyModel;
 
 
 /**
@@ -73,15 +71,12 @@ public class PedanticDependencyOrderEnforcer extends AbstractPedanticDependencyO
            + CommaSeparatorUtils.join(artifactOrdering.getPriorities(DependencyElement.ARTIFACT_ID)));
 
     Collection<DependencyModel> declaredDependencies = getProjectModel().getDependencies();
-    Collection<DependencyModel> projectDependencies =
-        Collections2.transform(project.getDependencies(), dependencyToDependencyModel());
+    BiMap<DependencyModel, DependencyModel> dependencyArtifacts =
+        matchDependencies(declaredDependencies, project.getDependencies());
 
-    Collection<DependencyModel> dependencyArtifacts =
-        matchDependencies(declaredDependencies, projectDependencies);
-
-    if (!artifactOrdering.isOrdered(dependencyArtifacts)) {
+    if (!artifactOrdering.isOrdered(dependencyArtifacts.values())) {
       ImmutableList<DependencyModel> sortedDependencies =
-          artifactOrdering.immutableSortedCopy(dependencyArtifacts);
+          artifactOrdering.immutableSortedCopy(dependencyArtifacts.values());
       throw new EnforcerRuleException("One does not simply declare dependencies! "
         + "Your dependencies have to be sorted this way: " + sortedDependencies);
     }

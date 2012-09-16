@@ -19,13 +19,15 @@ import java.util.Collection;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
+import org.apache.maven.model.Dependency;
+
 import com.github.ferstl.maven.pomenforcers.model.DependencyElement;
 import com.github.ferstl.maven.pomenforcers.model.DependencyModel;
 import com.github.ferstl.maven.pomenforcers.model.functions.DependencyMatchFunction;
+import com.github.ferstl.maven.pomenforcers.model.functions.OneToOneMatcher;
 import com.github.ferstl.maven.pomenforcers.priority.CompoundPriorityOrdering;
 import com.github.ferstl.maven.pomenforcers.util.CommaSeparatorUtils;
-import com.google.common.base.Function;
-import com.google.common.collect.Collections2;
+import com.google.common.collect.BiMap;
 import com.google.common.collect.Sets;
 
 import static com.github.ferstl.maven.pomenforcers.model.DependencyElement.ARTIFACT_ID;
@@ -106,9 +108,11 @@ public abstract class AbstractPedanticDependencyOrderEnforcer extends AbstractPe
     return this.artifactOrdering;
   }
 
-  protected Collection<DependencyModel> matchDependencies(
-      Collection<DependencyModel> subset, Collection<DependencyModel> superset) {
-    Function<DependencyModel, DependencyModel> matchFunction = new DependencyMatchFunction(superset, getHelper());
-    return Collections2.transform(subset, matchFunction);
+  protected BiMap<DependencyModel, DependencyModel> matchDependencies(
+      Collection<DependencyModel> subset, Collection<Dependency> superset) {
+
+    DependencyMatchFunction matchFunction = new DependencyMatchFunction(superset, getHelper());
+
+    return new OneToOneMatcher<DependencyModel>(matchFunction).match(subset);
   }
 }

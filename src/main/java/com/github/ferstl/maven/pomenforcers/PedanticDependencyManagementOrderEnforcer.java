@@ -30,10 +30,8 @@ import com.github.ferstl.maven.pomenforcers.model.ProjectModel;
 import com.github.ferstl.maven.pomenforcers.priority.CompoundPriorityOrdering;
 import com.github.ferstl.maven.pomenforcers.util.CommaSeparatorUtils;
 import com.github.ferstl.maven.pomenforcers.util.EnforcerRuleUtils;
-import com.google.common.collect.Collections2;
+import com.google.common.collect.BiMap;
 import com.google.common.collect.ImmutableList;
-
-import static com.github.ferstl.maven.pomenforcers.model.functions.Transformers.dependencyToDependencyModel;
 
 
 /**
@@ -81,12 +79,12 @@ public class PedanticDependencyManagementOrderEnforcer extends AbstractPedanticD
     ProjectModel projectModel = getProjectModel();
     Collection<DependencyModel> declaredManagedDependencies = projectModel.getManagedDependencies();
 
-    Collection<DependencyModel> managedDependencies =
+    BiMap<DependencyModel, DependencyModel> managedDependencies =
         matchDependencies(declaredManagedDependencies, getManagedDependencies(project));
 
-    if (!artifactOrdering.isOrdered(managedDependencies)) {
+    if (!artifactOrdering.isOrdered(managedDependencies.values())) {
       ImmutableList<DependencyModel> sortedDependencies =
-          artifactOrdering.immutableSortedCopy(managedDependencies);
+          artifactOrdering.immutableSortedCopy(managedDependencies.values());
       throw new EnforcerRuleException("One does not simply declare dependency management! "
           + "Your dependency management has to be ordered this way:" + sortedDependencies);
     }
@@ -97,14 +95,12 @@ public class PedanticDependencyManagementOrderEnforcer extends AbstractPedanticD
     visitor.visit(this);
   }
 
-  private Collection<DependencyModel> getManagedDependencies(MavenProject project) {
+  private Collection<Dependency> getManagedDependencies(MavenProject project) {
     DependencyManagement dependencyManagement = project.getDependencyManagement();
-    Collection<Dependency> managedDependencies;
     if (dependencyManagement != null) {
-      managedDependencies = dependencyManagement.getDependencies();
+      return dependencyManagement.getDependencies();
     } else {
-      managedDependencies = Collections.emptyList();
+      return Collections.emptyList();
     }
-    return Collections2.transform(managedDependencies, dependencyToDependencyModel());
   }
 }

@@ -19,24 +19,24 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 
 import org.apache.maven.enforcer.rule.api.EnforcerRuleException;
+import org.apache.maven.model.Plugin;
 import org.apache.maven.plugin.logging.Log;
 import org.apache.maven.project.MavenProject;
 
 import com.github.ferstl.maven.pomenforcers.model.PluginElement;
 import com.github.ferstl.maven.pomenforcers.model.PluginModel;
+import com.github.ferstl.maven.pomenforcers.model.functions.OneToOneMatcher;
 import com.github.ferstl.maven.pomenforcers.model.functions.PluginMatchFunction;
 import com.github.ferstl.maven.pomenforcers.priority.CompoundPriorityOrdering;
 import com.github.ferstl.maven.pomenforcers.util.CommaSeparatorUtils;
 import com.github.ferstl.maven.pomenforcers.util.EnforcerRuleUtils;
-import com.google.common.base.Function;
-import com.google.common.collect.Collections2;
+import com.google.common.collect.BiMap;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Sets;
 
 import static com.github.ferstl.maven.pomenforcers.model.PluginElement.ARTIFACT_ID;
 import static com.github.ferstl.maven.pomenforcers.model.PluginElement.GROUP_ID;
 import static com.github.ferstl.maven.pomenforcers.model.PluginElement.stringToPluginElement;
-import static com.github.ferstl.maven.pomenforcers.model.functions.Transformers.pluginToPluginModel;
 
 
 /**
@@ -122,14 +122,13 @@ public class PedanticPluginManagementOrderEnforcer extends AbstractPedanticEnfor
     log.info("  -> ArtifactModel ID priorities: "
            + CommaSeparatorUtils.join(this.pluginOrdering.getPriorities(PluginElement.ARTIFACT_ID)));
 
-    Collection<PluginModel> declaredPluginManagement = getProjectModel().getManagedPlugins();
+    Collection<PluginModel> declaredManagedPlugins = getProjectModel().getManagedPlugins();
 
-    Collection<PluginModel> managedPlugins =
-        Collections2.transform(project.getPluginManagement().getPlugins(), pluginToPluginModel());
-    Collection<PluginModel> declaredManagedPlugins = matchPlugins(declaredPluginManagement, managedPlugins);
+    Collection<Plugin> managedPlugins = project.getPluginManagement().getPlugins();
+    BiMap<PluginModel, PluginModel> matchedPlugins = matchPlugins(declaredManagedPlugins, managedPlugins);
 
-    if (!this.pluginOrdering.isOrdered(declaredManagedPlugins)) {
-      ImmutableList<PluginModel> sortedDependencies = this.pluginOrdering.immutableSortedCopy(declaredManagedPlugins);
+    if (!this.pluginOrdering.isOrdered(matchedPlugins.values())) {
+      ImmutableList<PluginModel> sortedDependencies = this.pluginOrdering.immutableSortedCopy(matchedPlugins.values());
       throw new EnforcerRuleException("One does not simply declare plugin management! "
           + "Your plugin management has to be ordered this way:" + sortedDependencies);
     }
@@ -140,9 +139,9 @@ public class PedanticPluginManagementOrderEnforcer extends AbstractPedanticEnfor
     visitor.visit(this);
   }
 
-  private Collection<PluginModel> matchPlugins(Collection<PluginModel> subset, Collection<PluginModel> superset) {
-
-    Function<PluginModel, PluginModel> matchFunction = new PluginMatchFunction(superset, getHelper());
-    return Collections2.transform(subset, matchFunction);
+  private BiMap<PluginModel, PluginModel> matchPlugins(Collection<PluginModel> subset, Collection<Plugin> superset) {
+    PluginMatchFunction pluginMatchFunction = new PluginMatchFunction(superset, getHelper());
+    OneToOneMatcher<PluginModel> matcher = new OneToOneMatcher<PluginModel>(pluginMatchFunction);
+    return matcher.match(subset);
   }
 }
