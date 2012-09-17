@@ -128,9 +128,9 @@ public class PedanticPluginManagementOrderEnforcer extends AbstractPedanticEnfor
     BiMap<PluginModel, PluginModel> matchedPlugins = matchPlugins(declaredManagedPlugins, managedPlugins);
 
     if (!this.pluginOrdering.isOrdered(matchedPlugins.values())) {
-      ImmutableList<PluginModel> sortedDependencies = this.pluginOrdering.immutableSortedCopy(matchedPlugins.values());
+      ImmutableList<PluginModel> sortedPlugins = this.pluginOrdering.immutableSortedCopy(matchedPlugins.values());
       throw new EnforcerRuleException("One does not simply declare plugin management! "
-          + "Your plugin management has to be ordered this way:" + sortedDependencies);
+          + "Your plugin management has to be ordered this way:" + sortedPlugins);
     }
   }
 
