@@ -87,17 +87,17 @@ public class PedanticPluginConfigurationEnforcer extends AbstractPedanticEnforce
   protected void doEnforce() throws EnforcerRuleException {
     Log log = getLog();
     if (this.manageVersions) {
-      log.info("Enforcing managed plugin versions.");
+      log.debug("Enforcing managed plugin versions.");
       enforceManagedVersions();
     }
 
     if (this.manageConfigurations) {
-      log.info("Enforcing managed plugin configurations.");
+      log.debug("Enforcing managed plugin configurations.");
       enforceManagedConfiguration();
     }
 
     if (this.manageDependencies) {
-      log.info("Enforcing managed plugin dependencies.");
+      log.debug("Enforcing managed plugin dependencies.");
       enforceManagedDependencies();
     }
   }

@@ -114,12 +114,12 @@ public class PedanticPluginManagementOrderEnforcer extends AbstractPedanticEnfor
   protected void doEnforce() throws EnforcerRuleException {
     MavenProject project = EnforcerRuleUtils.getMavenProject(getHelper());
     Log log = getLog();
-    log.info("Enforcing plugin management order.");
-    log.info("  -> Plugins have to be ordered by: "
+    log.debug("Enforcing plugin management order.");
+    log.debug("  -> Plugins have to be ordered by: "
            + CommaSeparatorUtils.join(this.pluginOrdering.getOrderBy()));
-    log.info("  -> Group ID priorities: "
+    log.debug("  -> Group ID priorities: "
            + CommaSeparatorUtils.join(this.pluginOrdering.getPriorities(PluginElement.GROUP_ID)));
-    log.info("  -> ArtifactModel ID priorities: "
+    log.debug("  -> ArtifactModel ID priorities: "
            + CommaSeparatorUtils.join(this.pluginOrdering.getPriorities(PluginElement.ARTIFACT_ID)));
 
     Collection<PluginModel> declaredManagedPlugins = getProjectModel().getManagedPlugins();

@@ -75,8 +75,8 @@ public class PedanticPomSectionOrderEnforcer extends AbstractPedanticEnforcer {
   @Override
   protected void doEnforce() throws EnforcerRuleException {
     Log log = getLog();
-    log.info("Enforcing correct POM section order.");
-    log.info("  -> Section priorities: " + CommaSeparatorUtils.join(this.sectionPriorities));
+    log.debug("Enforcing correct POM section order.");
+    log.debug("  -> Section priorities: " + CommaSeparatorUtils.join(this.sectionPriorities));
 
     Node firstChild = getProjectRoot();
     NodeList childNodes = firstChild.getChildNodes();

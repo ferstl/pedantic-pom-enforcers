@@ -74,8 +74,8 @@ public class PedanticModuleOrderEnforcer extends AbstractPedanticEnforcer {
     }
 
     Log log = getLog();
-    log.info("Enforcing alphabetical module order.");
-    log.info("  -> These modules are ignored: " + CommaSeparatorUtils.join(this.ignoredModules));
+    log.debug("Enforcing alphabetical module order.");
+    log.debug("  -> These modules are ignored: " + CommaSeparatorUtils.join(this.ignoredModules));
 
     // Remove all modules to be ignored.
     List<String> declaredModules = getProjectModel().getModules();

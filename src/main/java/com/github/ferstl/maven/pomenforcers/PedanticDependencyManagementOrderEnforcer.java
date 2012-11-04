@@ -66,14 +66,14 @@ public class PedanticDependencyManagementOrderEnforcer extends AbstractPedanticD
     CompoundPriorityOrdering<DependencyModel, String, DependencyElement> artifactOrdering = getArtifactOrdering();
 
     Log log = getLog();
-    log.info("Enforcing dependency management order.");
-    log.info("  -> Dependencies have to be ordered by: "
+    log.debug("Enforcing dependency management order.");
+    log.debug("  -> Dependencies have to be ordered by: "
            + CommaSeparatorUtils.join(artifactOrdering.getOrderBy()));
-    log.info("  -> Scope priorities: "
+    log.debug("  -> Scope priorities: "
            + CommaSeparatorUtils.join(artifactOrdering.getPriorities(DependencyElement.SCOPE)));
-    log.info("  -> Group ID priorities: "
+    log.debug("  -> Group ID priorities: "
            + CommaSeparatorUtils.join(artifactOrdering.getPriorities(DependencyElement.GROUP_ID)));
-    log.info("  -> Artifact ID priorities: "
+    log.debug("  -> Artifact ID priorities: "
            + CommaSeparatorUtils.join(artifactOrdering.getPriorities(DependencyElement.ARTIFACT_ID)));
 
     ProjectModel projectModel = getProjectModel();
