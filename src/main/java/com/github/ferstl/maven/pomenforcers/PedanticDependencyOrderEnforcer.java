@@ -39,7 +39,7 @@ import com.google.common.collect.Ordering;
  * <pre>
  * ### Example
  *     &lt;rules&gt;
- *       &lt;dependencyOrder implementation=&quot;ch.sferstl.maven.pomenforcer.PedanticDependencyOrderEnforcer&quot;&gt;
+ *       &lt;dependencyOrder implementation=&quot;com.github.ferstl.maven.pomenforcers.PedanticDependencyOrderEnforcer&quot;&gt;
  *         &lt;!-- order by scope, groupId and artifactId (default) --&gt;
  *         &lt;orderBy&gt;scope,groupId,artifactId&lt;/orderBy&gt;
  *         &lt;!-- runtime scope should occur before provided scope --&gt;
