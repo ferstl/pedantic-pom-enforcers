@@ -15,7 +15,6 @@
  */
 package com.github.ferstl.maven.pomenforcers;
 
-import java.util.HashSet;
 import java.util.Set;
 
 import org.apache.maven.enforcer.rule.api.EnforcerRuleException;
@@ -28,6 +27,7 @@ import com.github.ferstl.maven.pomenforcers.artifact.ArtifactInfoTransformer;
 import com.github.ferstl.maven.pomenforcers.util.CommaSeparatorUtils;
 import com.github.ferstl.maven.pomenforcers.util.EnforcerRuleUtils;
 import com.github.ferstl.maven.pomenforcers.util.XmlUtils;
+import com.google.common.collect.Sets;
 
 /**
  * Enforces that only a well-defined set of POMs may declare plugin management.
@@ -47,7 +47,7 @@ public class PedanticPluginManagementLocationEnforcer extends AbstractPedanticEn
   private final Set<ArtifactInfo> pluginManagingPoms;
 
   public PedanticPluginManagementLocationEnforcer() {
-    this.pluginManagingPoms = new HashSet<>();
+    this.pluginManagingPoms = Sets.newHashSet();
   }
 
   @Override

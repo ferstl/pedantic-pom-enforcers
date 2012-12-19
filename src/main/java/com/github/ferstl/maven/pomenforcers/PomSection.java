@@ -89,7 +89,7 @@ public enum PomSection {
   }
 
   public static Comparator<PomSection> createPriorityComparator(Collection<PomSection> priorityCollection) {
-    return new PriorityComparator<>(priorityCollection, Functions.<PomSection>identity());
+    return new PriorityComparator<PomSection, PomSection>(priorityCollection, Functions.<PomSection>identity());
   }
 
 }

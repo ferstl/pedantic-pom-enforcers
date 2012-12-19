@@ -16,7 +16,6 @@
 package com.github.ferstl.maven.pomenforcers.util;
 
 import java.io.File;
-import java.io.IOException;
 
 import javax.xml.namespace.QName;
 import javax.xml.parsers.DocumentBuilder;
@@ -32,7 +31,6 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-import org.xml.sax.SAXException;
 
 public final class XmlUtils {
 
@@ -48,7 +46,7 @@ public final class XmlUtils {
     try {
       DocumentBuilder docBuilder = createDocumentBuilder();
       return docBuilder.parse(file);
-    } catch (SAXException | IOException e) {
+    } catch (Exception e) {
       throw new IllegalStateException("Unable to parse XML file " + file, e);
     }
   }

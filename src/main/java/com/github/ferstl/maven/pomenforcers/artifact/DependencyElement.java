@@ -39,7 +39,7 @@ public enum DependencyElement implements PriorityComparatorFactory<String, Depen
           return input.getGroupId();
         }
       };
-      return new PriorityComparator<>(priorityCollection, transformer, priorityMatcher);
+      return new PriorityComparator<String, Dependency>(priorityCollection, transformer, priorityMatcher);
     }
   },
 
@@ -53,7 +53,7 @@ public enum DependencyElement implements PriorityComparatorFactory<String, Depen
           return input.getArtifactId();
         }
       };
-      return new PriorityComparator<>(priorityCollection, transformer, priorityMatcher);
+      return new PriorityComparator<String, Dependency>(priorityCollection, transformer, priorityMatcher);
     }
   },
 
@@ -66,7 +66,7 @@ public enum DependencyElement implements PriorityComparatorFactory<String, Depen
           return input.getScope();
         }
       };
-      return new PriorityComparator<>(priorityCollection, transformer);
+      return new PriorityComparator<String, Dependency>(priorityCollection, transformer);
     }
   };
 

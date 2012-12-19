@@ -1,6 +1,5 @@
 package com.github.ferstl.maven.pomenforcers;
 
-import java.util.HashSet;
 import java.util.Set;
 
 import org.apache.maven.enforcer.rule.api.EnforcerRuleException;
@@ -12,6 +11,7 @@ import com.github.ferstl.maven.pomenforcers.artifact.ArtifactInfo;
 import com.github.ferstl.maven.pomenforcers.artifact.ArtifactInfoTransformer;
 import com.github.ferstl.maven.pomenforcers.util.EnforcerRuleUtils;
 import com.github.ferstl.maven.pomenforcers.util.XmlUtils;
+import com.google.common.collect.Sets;
 
 import static com.github.ferstl.maven.pomenforcers.util.CommaSeparatorUtils.splitAndAddToCollection;
 
@@ -33,7 +33,7 @@ public class PedanticDependencyManagementLocationEnforcer extends AbstractPedant
   private final Set<ArtifactInfo> dependencyManagingPoms;
 
   public PedanticDependencyManagementLocationEnforcer() {
-    this.dependencyManagingPoms = new HashSet<>();
+    this.dependencyManagingPoms = Sets.newHashSet();
   }
 
   @Override

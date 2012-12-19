@@ -40,7 +40,7 @@ public enum PluginElement implements PriorityComparatorFactory<String, Plugin> {
           return input.getGroupId();
         }
       };
-      return new PriorityComparator<>(priorityCollection, transformer, priorityMatcher);
+      return new PriorityComparator<String, Plugin>(priorityCollection, transformer, priorityMatcher);
     }
   },
 
@@ -54,7 +54,7 @@ public enum PluginElement implements PriorityComparatorFactory<String, Plugin> {
           return input.getArtifactId();
         }
       };
-      return new PriorityComparator<>(priorityCollection, transformer, priorityMatcher);
+      return new PriorityComparator<String, Plugin>(priorityCollection, transformer, priorityMatcher);
     }
   };
 

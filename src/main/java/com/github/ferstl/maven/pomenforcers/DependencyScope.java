@@ -15,7 +15,7 @@ public enum DependencyScope {
   private static final Map<String, DependencyScope> dependencyScopeMap;
 
   static {
-    dependencyScopeMap = new LinkedHashMap<>();
+    dependencyScopeMap = new LinkedHashMap<String, DependencyScope>();
     for (DependencyScope scope : values()) {
       dependencyScopeMap.put(scope.getScopeName(), scope);
     }

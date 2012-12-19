@@ -39,7 +39,7 @@ public abstract class AbstractPedanticDependencyOrderEnforcer extends AbstractPe
     orderBy.add(DependencyElement.SCOPE);
     orderBy.add(DependencyElement.GROUP_ID);
     orderBy.add(DependencyElement.ARTIFACT_ID);
-    this.artifactSorter = new ArtifactSorter<>();
+    this.artifactSorter = new ArtifactSorter<Dependency, DependencyElement>();
     this.artifactSorter.orderBy(orderBy);
   }
 

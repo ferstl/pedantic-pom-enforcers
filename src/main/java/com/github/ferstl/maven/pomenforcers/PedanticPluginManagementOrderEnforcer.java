@@ -65,7 +65,7 @@ public class PedanticPluginManagementOrderEnforcer extends AbstractPedanticEnfor
     Set<PluginElement> orderBy = Sets.newLinkedHashSet();
     orderBy.add(PluginElement.GROUP_ID);
     orderBy.add(PluginElement.ARTIFACT_ID);
-    this.artifactSorter = new ArtifactSorter<>();
+    this.artifactSorter = new ArtifactSorter<Plugin, PluginElement>();
     this.artifactSorter.orderBy(orderBy);
   }
 

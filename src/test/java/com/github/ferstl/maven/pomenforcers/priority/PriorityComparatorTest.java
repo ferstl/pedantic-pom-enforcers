@@ -20,11 +20,9 @@ import java.util.ArrayList;
 import org.hamcrest.Matchers;
 import org.junit.Test;
 
-import com.github.ferstl.maven.pomenforcers.priority.PriorityComparator;
 import com.google.common.base.Function;
 import com.google.common.base.Functions;
 import com.google.common.collect.Lists;
-
 
 import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.is;
@@ -39,7 +37,8 @@ public class PriorityComparatorTest {
   public void testCompare() {
     ArrayList<String> priorizedItems = Lists.newArrayList("z", "y", "x");
     Function<String, String> transformer = Functions.identity();
-    PriorityComparator<String, String> testComparator = new PriorityComparator<>(priorizedItems, transformer);
+    PriorityComparator<String, String> testComparator =
+        new PriorityComparator<String, String>(priorizedItems, transformer);
 
     // x is in the priority list, a isn't -> a > x
     assertThat(testComparator.compare("a", "x"), greaterThan(0));
@@ -59,7 +58,8 @@ public class PriorityComparatorTest {
   public void testCompareWithoutPriorities() {
     ArrayList<String> priorizedItems = Lists.newArrayList();
     Function<String, String> identity = Functions.identity();
-    PriorityComparator<String, String> testComparator = new PriorityComparator<>(priorizedItems, identity);
+    PriorityComparator<String, String> testComparator =
+        new PriorityComparator<String, String>(priorizedItems, identity);
 
     assertThat(testComparator.compare("a", "b"), lessThan(0));
     assertThat(testComparator.compare("a", "a"), is(0));
