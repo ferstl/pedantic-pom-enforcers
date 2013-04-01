@@ -96,4 +96,10 @@ public class ProjectModel {
         && Objects.equals(this.dependencies, other.dependencies)
         && Objects.equals(this.build, other.build);
   }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(
+        this.groupId, this.artifactId, this.modules, this.dependencyManagement, this.dependencies, this.build);
+  }
 }
