@@ -46,6 +46,6 @@ public class PluginManagementModel {
 
   @Override
   public int hashCode() {
-    return this.plugins != null ? this.plugins.hashCode() : 0;
+    return Objects.hash(this.plugins);
   }
 }
