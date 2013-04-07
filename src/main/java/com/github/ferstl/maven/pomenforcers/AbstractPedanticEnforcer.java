@@ -36,15 +36,13 @@ public abstract class AbstractPedanticEnforcer implements EnforcerRule {
 
   @Override
   public final void execute(EnforcerRuleHelper helper) throws EnforcerRuleException {
-    // Read the POM
     MavenProject project = EnforcerRuleUtils.getMavenProject(helper);
-    this.pom = XmlUtils.parseXml(project.getFile());
-    this.projectModel = new PomSerializer(this.pom).read();
+    Document pom = XmlUtils.parseXml(project.getFile());
+    PomSerializer pomSerializer = new PomSerializer(this.pom);
+    ProjectModel model = pomSerializer.read();
 
-    // Initialize
-    initialize(helper, this.pom, this.projectModel);
+    initialize(helper, pom, model);
 
-    // Enforce
     doEnforce();
   }
 
