@@ -21,7 +21,6 @@ import java.util.List;
 import org.apache.maven.enforcer.rule.api.EnforcerRuleException;
 import org.apache.maven.plugin.logging.Log;
 
-import com.github.ferstl.maven.pomenforcers.PedanticPluginConfigurationEnforcer.PluginPredicate;
 import com.github.ferstl.maven.pomenforcers.model.PluginModel;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
@@ -102,7 +101,7 @@ public class PedanticPluginConfigurationEnforcer extends AbstractPedanticEnforce
   }
 
   private void enforceManagedVersions() throws EnforcerRuleException {
-    Collection<PluginModel> versionedPlugins = searchForPlugins(PluginPredicate.HAS_VERSION);
+    Collection<PluginModel> versionedPlugins = searchForPlugins(PluginPredicate.WITH_VERSION);
     if (versionedPlugins.size() > 0) {
       throw new EnforcerRuleException("One does not simply set versions on plugins. Plugins versions have to " +
       		"be declared in <pluginManagement>: " + versionedPlugins);
@@ -111,7 +110,7 @@ public class PedanticPluginConfigurationEnforcer extends AbstractPedanticEnforce
   }
 
   private void enforceManagedConfiguration() throws EnforcerRuleException {
-    Collection<PluginModel> configuredPlugins = searchForPlugins(PluginPredicate.HAS_CONFIGURATION);
+    Collection<PluginModel> configuredPlugins = searchForPlugins(PluginPredicate.WITH_CONFIGURATION);
     if (configuredPlugins.size() > 0) {
       throw new EnforcerRuleException("One does not simply configure plugins. Use <pluginManagement> to configure "
           +	"these plugins or configure them for a specific <execution>: " + configuredPlugins);
@@ -119,7 +118,7 @@ public class PedanticPluginConfigurationEnforcer extends AbstractPedanticEnforce
   }
 
   private void enforceManagedDependencies() throws EnforcerRuleException {
-    Collection<PluginModel> configuredPluginDependencies = searchForPlugins(PluginPredicate.HAS_DEPENDENCIES);
+    Collection<PluginModel> configuredPluginDependencies = searchForPlugins(PluginPredicate.WITH_DEPENDENCIES);
     if (configuredPluginDependencies.size() > 0) {
       throw new EnforcerRuleException("One does not simply configure plugin dependencies. Use <pluginManagement> "
       	+ "to configure plugin dependencies: " + configuredPluginDependencies);
@@ -137,21 +136,21 @@ public class PedanticPluginConfigurationEnforcer extends AbstractPedanticEnforce
   }
 
   static enum PluginPredicate implements Predicate<PluginModel> {
-    HAS_DEPENDENCIES {
+    WITH_DEPENDENCIES {
       @Override
       public boolean apply(PluginModel input) {
         return !input.getDependencies().isEmpty();
       }
     },
 
-    HAS_CONFIGURATION {
+    WITH_CONFIGURATION {
       @Override
       public boolean apply(PluginModel input) {
         return input.isConfigured();
       }
     },
 
-    HAS_VERSION {
+    WITH_VERSION {
       @Override
       public boolean apply(PluginModel input) {
         return input.getVersion() != null;
