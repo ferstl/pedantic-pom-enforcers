@@ -59,7 +59,7 @@ public class PriorityOrdering<P extends Comparable<? super P>, T> extends Orderi
   }
 
   public PriorityOrdering(Collection<P> priorityCollection, Function<T, P> transformer) {
-    // Equivalences.equals() would do the same job but it returns Equivalence<Object> which does not fit here.
+    // Equivalence.equals() would do the same job but it returns Equivalence<Object> which does not fit here.
     this(priorityCollection, transformer, new Equivalence<P>() {
       @Override
       protected boolean doEquivalent(P a, P b) {
