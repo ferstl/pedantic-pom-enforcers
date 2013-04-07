@@ -99,12 +99,11 @@ public class PedanticDependencyConfigurationEnforcer extends AbstractPedanticEnf
   }
 
   private void enforceManagedVersions() throws EnforcerRuleException {
-    Collection<DependencyModel> versionedDependencies =
-        searchForDependencies(new VersionedDependencyPredicate());
+    Collection<DependencyModel> versionedDependencies = searchForDependencies(DependencyPredicate.WITH_VERSION);
 
     // Filter all project versions if allowed
     if (this.allowUnmangedProjectVersions) {
-      versionedDependencies = Collections2.filter(versionedDependencies, new DependencyWithProjectVersionPredicate());
+      versionedDependencies = Collections2.filter(versionedDependencies, DependencyPredicate.WITH_PROJECT_VERSION);
     }
 
     if (versionedDependencies.size() > 0) {
@@ -114,8 +113,7 @@ public class PedanticDependencyConfigurationEnforcer extends AbstractPedanticEnf
   }
 
   private void enforceManagedExclusion() throws EnforcerRuleException {
-    Collection<DependencyModel> depsWithExclusions =
-        searchForDependencies(new DependencyWithExclusionPredicate());
+    Collection<DependencyModel> depsWithExclusions = searchForDependencies(DependencyPredicate.WITH_EXCLUSION);
 
     if (depsWithExclusions.size() > 0) {
       throw new EnforcerRuleException("One does not simply define exclusions on dependencies. Dependency exclusions " +
@@ -133,25 +131,25 @@ public class PedanticDependencyConfigurationEnforcer extends AbstractPedanticEnf
     visitor.visit(this);
   }
 
-  private static class DependencyWithExclusionPredicate implements Predicate<DependencyModel> {
-    @Override
-    public boolean apply(DependencyModel input) {
-      return !input.getExclusions().isEmpty();
-    }
-  }
-
-  private static class VersionedDependencyPredicate implements Predicate<DependencyModel> {
-    @Override
-    public boolean apply(DependencyModel input) {
-      return input.getVersion() != null;
-    }
-  }
-
-  private static class DependencyWithProjectVersionPredicate implements Predicate<DependencyModel> {
-    @Override
-    public boolean apply(DependencyModel input) {
-      return !"${project.version}".equals(input.getVersion())
-          && !"${version}".equals(input.getVersion());
-    }
+  private static enum DependencyPredicate implements Predicate<DependencyModel> {
+    WITH_VERSION {
+      @Override
+      public boolean apply(DependencyModel input) {
+        return input.getVersion() != null;
+      }
+    },
+    WITH_PROJECT_VERSION {
+      @Override
+      public boolean apply(DependencyModel input) {
+        return !"${project.version}".equals(input.getVersion())
+            && !"${version}".equals(input.getVersion());
+      }
+    },
+    WITH_EXCLUSION {
+      @Override
+      public boolean apply(DependencyModel input) {
+        return !input.getExclusions().isEmpty();
+      }
+    };
   }
 }
