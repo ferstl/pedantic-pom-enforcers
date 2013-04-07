@@ -65,12 +65,12 @@
   <properties>
     <!-- Plugin versions. -->
     <maven-license-plugin.version>1.9.0</maven-license-plugin.version>
-    <maven-compiler-plugin.version>2.3.2</maven-compiler-plugin.version>
+    <maven-compiler-plugin.version>3.0</maven-compiler-plugin.version>
     <maven-enforcer-plugin.version>1.1</maven-enforcer-plugin.version>
     <maven-gpg-plugin.version>1.4</maven-gpg-plugin.version>
-    <maven-invoker-plugin.version>1.6</maven-invoker-plugin.version>
+    <maven-invoker-plugin.version>1.7</maven-invoker-plugin.version>
     <maven-javadoc-plugin.version>2.8.1</maven-javadoc-plugin.version>
-    <maven-release-plugin.version>2.3</maven-release-plugin.version>
+    <maven-release-plugin.version>2.4</maven-release-plugin.version>
     <maven-source-plugin.version>2.1.2</maven-source-plugin.version>
 
     <!-- Other settings. -->
@@ -83,7 +83,7 @@
     <dependency>
       <groupId>com.google.guava</groupId>
       <artifactId>guava</artifactId>
-      <version>11.0.2</version>
+      <version>13.0.1</version>
     </dependency>
     <dependency>
       <groupId>org.apache.maven</groupId>
@@ -111,8 +111,8 @@
     </dependency>
     <dependency>
       <groupId>junit</groupId>
-      <artifactId>junit-dep</artifactId>
-      <version>4.10</version>
+      <artifactId>junit</artifactId>
+      <version>4.11</version>
       <scope>test</scope>
       <exclusions>
         <exclusion>
@@ -124,7 +124,7 @@
     <dependency>
       <groupId>org.hamcrest</groupId>
       <artifactId>hamcrest-library</artifactId>
-      <version>1.2.1</version>
+      <version>1.3</version>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -164,7 +164,7 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-compiler-plugin</artifactId>
-          <version>2.3.2</version>
+          <version>${maven-compiler-plugin.version}</version>
           <configuration>
             <source>1.7</source>
             <target>1.7</target>

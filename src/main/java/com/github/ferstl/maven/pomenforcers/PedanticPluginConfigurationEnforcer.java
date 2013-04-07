@@ -18,11 +18,10 @@ package com.github.ferstl.maven.pomenforcers;
 import java.util.Collection;
 import java.util.List;
 
-import javax.annotation.Nullable;
-
 import org.apache.maven.enforcer.rule.api.EnforcerRuleException;
 import org.apache.maven.plugin.logging.Log;
 
+import com.github.ferstl.maven.pomenforcers.PedanticPluginConfigurationEnforcer.PluginPredicate;
 import com.github.ferstl.maven.pomenforcers.model.PluginModel;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
@@ -147,7 +146,7 @@ public class PedanticPluginConfigurationEnforcer extends AbstractPedanticEnforce
 
     HAS_CONFIGURATION {
       @Override
-      public boolean apply(@Nullable PluginModel input) {
+      public boolean apply(PluginModel input) {
         return input.isConfigured();
       }
     },
