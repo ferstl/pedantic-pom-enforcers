@@ -59,11 +59,9 @@ import static com.github.ferstl.maven.pomenforcers.model.functions.StringToArtif
 public class PedanticDependencyScopeEnforcer extends AbstractPedanticEnforcer {
 
   private final Multimap<ArtifactModel, DependencyScope> scopedDependencies;
-  private final DependencyToArtifactTransformer dependencyToArtifactTransformer;
 
   public PedanticDependencyScopeEnforcer() {
     this.scopedDependencies = HashMultimap.create();
-    this.dependencyToArtifactTransformer = new DependencyToArtifactTransformer();
   }
 
   /**
@@ -128,7 +126,7 @@ public class PedanticDependencyScopeEnforcer extends AbstractPedanticEnforcer {
 
     // TODO: use project model
     for (Dependency dependency : dependencies) {
-      ArtifactModel artifactModel = this.dependencyToArtifactTransformer.apply(dependency);
+      ArtifactModel artifactModel = DependencyToArtifactTransformer.INSTANCE.apply(dependency);
       Collection<DependencyScope> allowedScopes = this.scopedDependencies.get(artifactModel);
       DependencyScope dependencyScope = getScope(dependency);
 
@@ -166,7 +164,8 @@ public class PedanticDependencyScopeEnforcer extends AbstractPedanticEnforcer {
     return DependencyScope.getByScopeName(dependency.getScope());
   }
 
-  private static class DependencyToArtifactTransformer implements Function<Dependency, ArtifactModel> {
+  private static enum DependencyToArtifactTransformer implements Function<Dependency, ArtifactModel> {
+    INSTANCE;
 
     @Override
     public ArtifactModel apply(Dependency input) {

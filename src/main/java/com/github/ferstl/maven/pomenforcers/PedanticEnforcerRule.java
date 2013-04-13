@@ -116,16 +116,15 @@ public enum PedanticEnforcerRule {
     }
   };
 
-  private static final Function<String, PedanticEnforcerRule> STRING_TO_ENFORCER_RULE =
-      new StringToEnforcerRuleTransformer();
-
   public static Function<String, PedanticEnforcerRule> stringToEnforcerRule() {
-    return STRING_TO_ENFORCER_RULE;
+    return StringToEnforcerRuleTransformer.INSTANCE;
   }
 
   public abstract AbstractPedanticEnforcer createEnforcerRule();
 
-  private static class StringToEnforcerRuleTransformer implements Function<String, PedanticEnforcerRule> {
+  private static enum StringToEnforcerRuleTransformer implements Function<String, PedanticEnforcerRule> {
+    INSTANCE;
+
     @Override
     public PedanticEnforcerRule apply(String input) {
       return PedanticEnforcerRule.valueOf(input);

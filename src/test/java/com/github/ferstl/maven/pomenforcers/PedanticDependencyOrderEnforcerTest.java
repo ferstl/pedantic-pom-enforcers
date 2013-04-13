@@ -56,7 +56,7 @@ public class PedanticDependencyOrderEnforcerTest {
 
     // Read all dependencies and convert them to artifacts (classifier = "", ArtifactHandler = null)
     List<DependencyModel> allDeps = new PomSerializer(allDepsPom).read().getDependencies();
-    List<Dependency> dependencies = Lists.transform(allDeps, new DependencyModelTransformer());
+    List<Dependency> dependencies = Lists.transform(allDeps, DependencyModelTransformer.INSTANCE);
 
     this.mockHelper = mock(EnforcerRuleHelper.class);
     this.mockProject = mock(MavenProject.class);
@@ -98,7 +98,9 @@ public class PedanticDependencyOrderEnforcerTest {
     rule.execute(this.mockHelper);
   }
 
-  private static class DependencyModelTransformer implements Function<DependencyModel, Dependency> {
+  private static enum DependencyModelTransformer implements Function<DependencyModel, Dependency> {
+    INSTANCE;
+
     @Override
     public Dependency apply(DependencyModel input) {
       Dependency dependency = new Dependency();

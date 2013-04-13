@@ -57,8 +57,6 @@ public enum PomSection {
   REPORTING("reporting"),
   REPORTS("reports");
 
-  private static final Function<String, PomSection> STRING_TO_POM_SECTION = new StringToPomSectionTransformer();
-  private static final Function<PomSection, String> POM_SECTION_TO_STRING = new PomSectionToStringTransformer();
   private static final Map<String, PomSection> pomSectionMap;
 
   static {
@@ -81,11 +79,11 @@ public enum PomSection {
   }
 
   public static Function<String, PomSection> stringToPomSection() {
-    return STRING_TO_POM_SECTION;
+    return StringToPomSectionTransformer.INSTANCE;
   }
 
   public static Function<PomSection, String> pomSectionToString() {
-    return POM_SECTION_TO_STRING;
+    return PomSectionToStringTransformer.INSTANCE;
   }
 
   private final String sectionName;
@@ -102,14 +100,18 @@ public enum PomSection {
     return this.sectionName;
   }
 
-  private static class StringToPomSectionTransformer implements Function<String, PomSection> {
+  private static enum StringToPomSectionTransformer implements Function<String, PomSection> {
+    INSTANCE;
+
     @Override
     public PomSection apply(String input) {
       return getBySectionName(input);
     }
   }
 
-  private static class PomSectionToStringTransformer implements Function<PomSection, String> {
+  private static enum PomSectionToStringTransformer implements Function<PomSection, String> {
+    INSTANCE;
+
     @Override
     public String apply(PomSection input) {
       return input.getSectionName();

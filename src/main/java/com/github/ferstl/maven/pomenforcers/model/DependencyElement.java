@@ -26,8 +26,6 @@ import com.google.common.collect.Maps;
 import static com.github.ferstl.maven.pomenforcers.model.functions.StringStartsWithEquivalence.stringStartsWith;
 
 
-
-
 public enum DependencyElement
 implements PriorityOrderingFactory<String, DependencyModel>, Function<DependencyModel, String> {
   GROUP_ID("groupId") {
@@ -66,9 +64,6 @@ implements PriorityOrderingFactory<String, DependencyModel>, Function<Dependency
     }
   };
 
-  private static final Function<String, DependencyElement> STRING_TO_DEPENDENCY_ELEMENT =
-      new StringToDependencyElementTransformer();
-
   private static Map<String, DependencyElement> elementMap;
 
   static {
@@ -92,7 +87,7 @@ implements PriorityOrderingFactory<String, DependencyModel>, Function<Dependency
   }
 
   public static Function<String, DependencyElement> stringToDependencyElement() {
-    return STRING_TO_DEPENDENCY_ELEMENT;
+    return StringToDependencyElementFunction.INSTANCE;
   }
 
   private final String elementName;
@@ -105,7 +100,9 @@ implements PriorityOrderingFactory<String, DependencyModel>, Function<Dependency
     return this.elementName;
   }
 
-  private static class StringToDependencyElementTransformer implements Function<String, DependencyElement> {
+  private static enum StringToDependencyElementFunction implements Function<String, DependencyElement> {
+    INSTANCE;
+
     @Override
     public DependencyElement apply(String input) {
       return getByElementName(input);
