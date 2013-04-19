@@ -29,7 +29,7 @@ import static com.github.ferstl.maven.pomenforcers.model.functions.StringToArtif
 import static com.github.ferstl.maven.pomenforcers.util.CommaSeparatorUtils.splitAndAddToCollection;
 
 /**
- * Enforces that only a well-defined set of POMs may declare plugin management.
+ * Enforces that only a well-defined set of POMs may declare dependency management.
  * <pre>
  * ### Example
  *     &lt;rules&gt;
