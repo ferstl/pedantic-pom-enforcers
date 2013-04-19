@@ -20,7 +20,6 @@ import java.util.Set;
 
 import org.apache.maven.enforcer.rule.api.EnforcerRuleException;
 import org.apache.maven.project.MavenProject;
-import org.w3c.dom.Document;
 
 import com.github.ferstl.maven.pomenforcers.model.ArtifactModel;
 import com.github.ferstl.maven.pomenforcers.util.EnforcerRuleUtils;
@@ -52,7 +51,7 @@ public class PedanticDependencyManagementLocationEnforcer extends AbstractPedant
   @Override
   protected void doEnforce() throws EnforcerRuleException {
     MavenProject mavenProject = EnforcerRuleUtils.getMavenProject(getHelper());
-    if (containsDependencyManagement(getPom()) && !isDependencyManagementAllowed(mavenProject)) {
+    if (containsDependencyManagement() && !isDependencyManagementAllowed(mavenProject)) {
       throw new EnforcerRuleException("One does not simply declare dependency management. " +
           "Only these POMs are allowed to manage dependencies: " + this.dependencyManagingPoms);
     }
@@ -69,7 +68,7 @@ public class PedanticDependencyManagementLocationEnforcer extends AbstractPedant
     splitAndAddToCollection(dependencyManagingPoms, this.dependencyManagingPoms, stringToArtifactModel());
   }
 
-  private boolean containsDependencyManagement(Document pom) {
+  private boolean containsDependencyManagement() {
     return !getProjectModel().getManagedDependencies().isEmpty();
   }
 
