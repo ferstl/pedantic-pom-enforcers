@@ -22,7 +22,6 @@ import java.util.List;
 import org.apache.maven.enforcer.rule.api.EnforcerRuleException;
 
 import com.github.ferstl.maven.pomenforcers.util.CommaSeparatorUtils;
-import com.google.common.base.Joiner;
 import com.google.common.base.Strings;
 import com.google.common.collect.Sets;
 
@@ -91,10 +90,6 @@ import static com.github.ferstl.maven.pomenforcers.PedanticEnforcerRule.stringTo
  * @id n/a
  */
 public class CompoundPedanticEnforcer extends AbstractPedanticEnforcer {
-
-  private static final int ERROR_SEPARATION_COUNT = 20;
-  private static final String ERROR_REPORT_SEPARATOR = Strings.repeat("=", ERROR_SEPARATION_COUNT);
-  private static final Joiner ERROR_JOINER = Joiner.on("\n" + Strings.repeat("-", ERROR_SEPARATION_COUNT) + "\n");
 
   /**
    * See {@link PedanticPomSectionOrderEnforcer#setSectionPriorities(String)}.
@@ -306,12 +301,14 @@ public class CompoundPedanticEnforcer extends AbstractPedanticEnforcer {
 
   private void handleErrors(List<EnforcerRuleException> errorList) throws EnforcerRuleException {
     if (!errorList.isEmpty()) {
-      StringBuilder sb = new StringBuilder(500)
-        .append("\n").append(ERROR_REPORT_SEPARATOR).append("\n")
-        .append("One does not simply write a POM file. Please fix these problems:\n");
-      ERROR_JOINER.appendTo(sb, errorList);
-      sb.append("\n").append(ERROR_REPORT_SEPARATOR);
-      throw new EnforcerRuleException(sb.toString());
+      ErrorReport report = new ErrorReport("One does not simply write a POM file.")
+            .useLargeTitle()
+            .addLine("Please fix these problems:")
+            .emptyLine();
+      for (EnforcerRuleException error : errorList) {
+        report.addLine(error.getMessage()).emptyLine().emptyLine();
+      }
+      throw new EnforcerRuleException(report.toString());
     }
   }
 

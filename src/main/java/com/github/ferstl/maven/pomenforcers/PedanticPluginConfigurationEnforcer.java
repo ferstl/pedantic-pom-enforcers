@@ -25,6 +25,8 @@ import com.github.ferstl.maven.pomenforcers.model.PluginModel;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
 
+import static com.github.ferstl.maven.pomenforcers.ErrorReport.toList;
+
 /**
  * Enforces that plugin versions, configurations and dependencies are defined in the
  * <code>&lt;pluginManagement&gt;</code> section. Plugins <code>&lt;executions&gt;</code> can still
@@ -84,44 +86,52 @@ public class PedanticPluginConfigurationEnforcer extends AbstractPedanticEnforce
   @Override
   protected void doEnforce() throws EnforcerRuleException {
     Log log = getLog();
+
+    ErrorReport report = new ErrorReport(PedanticEnforcerRule.PLUGIN_CONFIGURATION, "One does not simply configure plugins!");
+
     if (this.manageVersions) {
       log.debug("Enforcing managed plugin versions.");
-      enforceManagedVersions();
+      enforceManagedVersions(report);
     }
 
     if (this.manageConfigurations) {
       log.debug("Enforcing managed plugin configurations.");
-      enforceManagedConfiguration();
+      enforceManagedConfiguration(report);
     }
 
     if (this.manageDependencies) {
       log.debug("Enforcing managed plugin dependencies.");
-      enforceManagedDependencies();
+      enforceManagedDependencies(report);
+    }
+
+    if (report.hasErrors()) {
+      throw new EnforcerRuleException(report.toString());
     }
   }
 
-  private void enforceManagedVersions() throws EnforcerRuleException {
+  private void enforceManagedVersions(ErrorReport report) {
     Collection<PluginModel> versionedPlugins = searchForPlugins(PluginPredicate.WITH_VERSION);
-    if (versionedPlugins.size() > 0) {
-      throw new EnforcerRuleException("One does not simply set versions on plugins. Plugins versions have to " +
-      		"be declared in <pluginManagement>: " + versionedPlugins);
+    if (!versionedPlugins.isEmpty()) {
+
+      report.addLine("Plugin versions have to be declared in <pluginManagement>:")
+            .addLine(toList(versionedPlugins));
     }
 
   }
 
-  private void enforceManagedConfiguration() throws EnforcerRuleException {
+  private void enforceManagedConfiguration(ErrorReport report) {
     Collection<PluginModel> configuredPlugins = searchForPlugins(PluginPredicate.WITH_CONFIGURATION);
-    if (configuredPlugins.size() > 0) {
-      throw new EnforcerRuleException("One does not simply configure plugins. Use <pluginManagement> to configure "
-          +	"these plugins or configure them for a specific <execution>: " + configuredPlugins);
+    if (!configuredPlugins.isEmpty()) {
+      report.addLine("Use <pluginManagement> to configure these plugins or configure them for a specific <execution>:")
+            .addLine(toList(configuredPlugins));
     }
   }
 
-  private void enforceManagedDependencies() throws EnforcerRuleException {
-    Collection<PluginModel> configuredPluginDependencies = searchForPlugins(PluginPredicate.WITH_DEPENDENCIES);
-    if (configuredPluginDependencies.size() > 0) {
-      throw new EnforcerRuleException("One does not simply configure plugin dependencies. Use <pluginManagement> "
-      	+ "to configure plugin dependencies: " + configuredPluginDependencies);
+  private void enforceManagedDependencies(ErrorReport report) {
+    Collection<PluginModel> pluginsWithDependencies = searchForPlugins(PluginPredicate.WITH_DEPENDENCIES);
+    if (!pluginsWithDependencies.isEmpty()) {
+      report.addLine("Use <pluginManagement> to configure plugin dependencies:")
+            .addLine(toList(pluginsWithDependencies));
     }
   }
 

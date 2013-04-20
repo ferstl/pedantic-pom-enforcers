@@ -77,8 +77,11 @@ public class PedanticDependencyOrderEnforcer extends AbstractPedanticDependencyO
     if (!artifactOrdering.isOrdered(dependencyArtifacts.values())) {
       ImmutableList<DependencyModel> sortedDependencies =
           artifactOrdering.immutableSortedCopy(dependencyArtifacts.values());
-      throw new EnforcerRuleException("One does not simply declare dependencies! "
-        + "Your dependencies have to be sorted this way: " + sortedDependencies);
+      ErrorReport report =
+          new ErrorReport(PedanticEnforcerRule.DEPENDENCY_MANAGEMENT_ORDER, "One does not simply declare dependencies!")
+              .addLine("Your dependencies have to be sorted this way:")
+              .addLine(ErrorReport.toList(sortedDependencies));
+      throw new EnforcerRuleException(report.toString());
     }
   }
 

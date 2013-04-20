@@ -34,6 +34,7 @@ import com.google.common.collect.BiMap;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Sets;
 
+import static com.github.ferstl.maven.pomenforcers.ErrorReport.toList;
 import static com.github.ferstl.maven.pomenforcers.model.PluginElement.ARTIFACT_ID;
 import static com.github.ferstl.maven.pomenforcers.model.PluginElement.GROUP_ID;
 import static com.github.ferstl.maven.pomenforcers.model.PluginElement.stringToPluginElement;
@@ -129,8 +130,11 @@ public class PedanticPluginManagementOrderEnforcer extends AbstractPedanticEnfor
 
     if (!this.pluginOrdering.isOrdered(matchedPlugins.values())) {
       ImmutableList<PluginModel> sortedPlugins = this.pluginOrdering.immutableSortedCopy(matchedPlugins.values());
-      throw new EnforcerRuleException("One does not simply declare plugin management! "
-          + "Your plugin management has to be ordered this way:" + sortedPlugins);
+      ErrorReport report =
+          new ErrorReport(PedanticEnforcerRule.PLUGIN_MANAGEMENT_ORDER, "One does not simply declare plugin management!")
+              .addLine("Your plugin management has to be ordered this way:")
+              .addLine(toList(sortedPlugins));
+      throw new EnforcerRuleException(report.toString());
     }
   }
 

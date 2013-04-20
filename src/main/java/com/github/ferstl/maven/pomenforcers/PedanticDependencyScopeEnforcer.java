@@ -26,6 +26,7 @@ import com.github.ferstl.maven.pomenforcers.model.DependencyScope;
 import com.github.ferstl.maven.pomenforcers.util.CommaSeparatorUtils;
 import com.github.ferstl.maven.pomenforcers.util.EnforcerRuleUtils;
 import com.google.common.base.Function;
+import com.google.common.base.Joiner;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.Sets;
@@ -124,19 +125,22 @@ public class PedanticDependencyScopeEnforcer extends AbstractPedanticEnforcer {
 
     Collection<Dependency> dependencies = EnforcerRuleUtils.getMavenProject(getHelper()).getDependencies();
 
-    // TODO: use project model
+    ErrorReport report =
+        new ErrorReport(PedanticEnforcerRule.DEPENDENCY_SCOPE, "One does not simply declare dependency scopes!");
+
     for (Dependency dependency : dependencies) {
       ArtifactModel artifactModel = DependencyToArtifactTransformer.INSTANCE.apply(dependency);
       Collection<DependencyScope> allowedScopes = this.scopedDependencies.get(artifactModel);
       DependencyScope dependencyScope = getScope(dependency);
 
-      if (allowedScopes.size() > 0 && !allowedScopes.contains(dependencyScope)) {
-        throw new EnforcerRuleException("One does not simply declare '" + dependencyScope.getScopeName() +
-            "' scoped dependencies! Dependency " + dependency + " has to be declared in these scopes: " +
-            allowedScopes);
+      if (!allowedScopes.isEmpty() && !allowedScopes.contains(dependencyScope)) {
+        report.formatLine("%s -> %s", dependency, Joiner.on(", ").join(allowedScopes));
       }
     }
 
+    if (report.hasErrors()) {
+      throw new EnforcerRuleException(report.toString());
+    }
   }
 
   @Override

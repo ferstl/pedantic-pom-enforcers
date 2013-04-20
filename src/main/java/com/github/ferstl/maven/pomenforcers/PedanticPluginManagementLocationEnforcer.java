@@ -53,8 +53,11 @@ public class PedanticPluginManagementLocationEnforcer extends AbstractPedanticEn
   protected void doEnforce() throws EnforcerRuleException {
     MavenProject mavenProject = EnforcerRuleUtils.getMavenProject(getHelper());
     if (containsPluginManagement() && !isPluginManagementAllowed(mavenProject)) {
-      throw new EnforcerRuleException("One does not simply declare plugin management. " +
-      		"Only these POMs are allowed to manage plugins: " + this.pluginManagingPoms);
+      ErrorReport report =
+          new ErrorReport(PedanticEnforcerRule.PLUGIN_MANAGEMENT_LOCATION, "One does not simply declare plugin management")
+             .addLine("Only these POMs are allowed to manage plugins:")
+             .addLine(ErrorReport.toList(this.pluginManagingPoms));
+      throw new EnforcerRuleException(report.toString());
     }
   }
 

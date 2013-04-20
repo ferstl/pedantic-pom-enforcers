@@ -55,7 +55,7 @@ public class PluginModel extends ArtifactModel {
     return TO_STRING_JOINER.join(
         super.toString(),
         isConfigured() ? "<no configuration>" : "<contains configuration>",
-        this.dependencies != null ? this.dependencies : "<no dependenices>");
+        this.dependencies != null ? "<contains dependencies>" : "<no dependenices>");
   }
 
   @Override

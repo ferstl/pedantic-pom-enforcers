@@ -24,6 +24,8 @@ import com.github.ferstl.maven.pomenforcers.model.DependencyModel;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
 
+import static com.github.ferstl.maven.pomenforcers.ErrorReport.toList;
+
 /**
  * This enforcer makes sure that dependency versions and exclusions are declared in the
  * <code>&lt;dependencyManagement&gt;</code> section.
@@ -88,17 +90,23 @@ public class PedanticDependencyConfigurationEnforcer extends AbstractPedanticEnf
 
   @Override
   protected void doEnforce() throws EnforcerRuleException {
+    ErrorReport report =
+        new ErrorReport(PedanticEnforcerRule.DEPENDENCY_CONFIGURATION, "One does not simply configure dependencies");
     if (this.manageVersions) {
       getLog().debug("Enforcing managed dependency versions");
-      enforceManagedVersions();
+      enforceManagedVersions(report);
     }
     if (this.manageExclusions) {
       getLog().debug("Enforcing managed dependency exclusions");
-      enforceManagedExclusion();
+      enforceManagedExclusion(report);
+    }
+
+    if (report.hasErrors()) {
+      throw new EnforcerRuleException(report.toString());
     }
   }
 
-  private void enforceManagedVersions() throws EnforcerRuleException {
+  private void enforceManagedVersions(ErrorReport report) {
     Collection<DependencyModel> versionedDependencies = searchForDependencies(DependencyPredicate.WITH_VERSION);
 
     // Filter all project versions if allowed
@@ -106,18 +114,18 @@ public class PedanticDependencyConfigurationEnforcer extends AbstractPedanticEnf
       versionedDependencies = Collections2.filter(versionedDependencies, DependencyPredicate.WITH_PROJECT_VERSION);
     }
 
-    if (versionedDependencies.size() > 0) {
-      throw new EnforcerRuleException("One does not simply set versions on dependencies. Dependency versions have " +
-          "to be declared in <dependencyManagement>: " + versionedDependencies);
+    if (!versionedDependencies.isEmpty()) {
+      report.addLine("Dependency versions have to be declared in <dependencyManagement>:")
+            .addLine(toList(versionedDependencies));
     }
   }
 
-  private void enforceManagedExclusion() throws EnforcerRuleException {
+  private void enforceManagedExclusion(ErrorReport report) {
     Collection<DependencyModel> depsWithExclusions = searchForDependencies(DependencyPredicate.WITH_EXCLUSION);
 
-    if (depsWithExclusions.size() > 0) {
-      throw new EnforcerRuleException("One does not simply define exclusions on dependencies. Dependency exclusions " +
-           "have to be declared in <dependencyManagement>: " + depsWithExclusions);
+    if (!depsWithExclusions.isEmpty()) {
+      report.addLine("Dependency exclusions have to be declared in <dependencyManagement>:")
+            .addLine(toList(depsWithExclusions));
     }
   }
 

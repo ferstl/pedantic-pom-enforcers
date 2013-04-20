@@ -30,6 +30,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Ordering;
 import com.google.common.collect.Sets;
 
+import static com.github.ferstl.maven.pomenforcers.ErrorReport.toList;
 import static com.github.ferstl.maven.pomenforcers.model.PomSection.pomSectionToString;
 import static com.github.ferstl.maven.pomenforcers.model.PomSection.stringToPomSection;
 
@@ -94,8 +95,11 @@ public class PedanticPomSectionOrderEnforcer extends AbstractPedanticEnforcer {
     if (!ordering.isOrdered(pomSections)) {
       List<String> sortedPomSections =
           Lists.transform(ordering.immutableSortedCopy(pomSections), pomSectionToString());
-      throw new EnforcerRuleException("One does not simply write a POM file! "
-        + "Your POM file has to be organized this way: " + sortedPomSections);
+
+      ErrorReport report = new ErrorReport(PedanticEnforcerRule.POM_SECTION_ORDER, "One does not simply write a POM file")
+          .addLine("Your POM file has to be organized this way:")
+          .addLine(toList(sortedPomSections));
+      throw new EnforcerRuleException(report.toString());
     }
   }
 

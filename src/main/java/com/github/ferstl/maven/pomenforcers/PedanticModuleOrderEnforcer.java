@@ -15,6 +15,7 @@
  */
 package com.github.ferstl.maven.pomenforcers;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -24,7 +25,6 @@ import org.apache.maven.project.MavenProject;
 
 import com.github.ferstl.maven.pomenforcers.util.CommaSeparatorUtils;
 import com.github.ferstl.maven.pomenforcers.util.EnforcerRuleUtils;
-import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Ordering;
 import com.google.common.collect.Sets;
 
@@ -78,19 +78,14 @@ public class PedanticModuleOrderEnforcer extends AbstractPedanticEnforcer {
     log.debug("  -> These modules are ignored: " + CommaSeparatorUtils.join(this.ignoredModules));
 
     // Remove all modules to be ignored.
-    List<String> declaredModules = getProjectModel().getModules();
+    List<String> declaredModules = new ArrayList<>(getProjectModel().getModules());
     declaredModules.removeAll(this.ignoredModules);
 
     // Enforce the module order
     Ordering<String> moduleOrdering = Ordering.natural();
     if (!moduleOrdering.isOrdered(declaredModules)) {
-      ImmutableList<String> orderedModules = moduleOrdering.immutableSortedCopy(declaredModules);
-      String message = "One does not simply declare modules! "
-          + "You have to sort your modules alphabetically: " + orderedModules;
-      if (!this.ignoredModules.isEmpty()) {
-        message += " You may place these modules in any order: " + this.ignoredModules;
-      }
-      throw new EnforcerRuleException(message);
+      ErrorReport report = createErrorReport(moduleOrdering.immutableSortedCopy(declaredModules));
+      throw new EnforcerRuleException(report.toString());
     }
   }
 
@@ -101,5 +96,17 @@ public class PedanticModuleOrderEnforcer extends AbstractPedanticEnforcer {
 
   private boolean isPomProject(MavenProject project) {
     return "pom".equals(project.getPackaging());
+  }
+
+  private ErrorReport createErrorReport(List<String> orderedModules) {
+    ErrorReport report = new ErrorReport(PedanticEnforcerRule.MODULE_ORDER, "One does not simply declare modules!")
+      .formatLine("You have to sort your modules alphabetically:")
+      .formatLine(ErrorReport.toList(orderedModules));
+    if (!this.ignoredModules.isEmpty()) {
+      report.emptyLine()
+            .formatLine("You may place these modules anywhere in your <modules> section:")
+            .formatLine(ErrorReport.toList(this.ignoredModules));
+    }
+    return report;
   }
 }

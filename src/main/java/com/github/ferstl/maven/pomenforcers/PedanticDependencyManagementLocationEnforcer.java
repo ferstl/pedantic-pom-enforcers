@@ -52,8 +52,11 @@ public class PedanticDependencyManagementLocationEnforcer extends AbstractPedant
   protected void doEnforce() throws EnforcerRuleException {
     MavenProject mavenProject = EnforcerRuleUtils.getMavenProject(getHelper());
     if (containsDependencyManagement() && !isDependencyManagementAllowed(mavenProject)) {
-      throw new EnforcerRuleException("One does not simply declare dependency management. " +
-          "Only these POMs are allowed to manage dependencies: " + this.dependencyManagingPoms);
+      ErrorReport report =
+          new ErrorReport(PedanticEnforcerRule.DEPENDENCY_MANAGEMENT_LOCATION, "One does not simply declare dependency management!")
+              .addLine("Only these POMs are allowed to manage dependencies:")
+              .addLine(ErrorReport.toList(this.dependencyManagingPoms));
+      throw new EnforcerRuleException(report.toString());
     }
   }
 
