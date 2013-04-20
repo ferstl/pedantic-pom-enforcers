@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2012 by The Author(s)
+ * Copyright (c) 2013 by Stefan Ferstl <st.ferstl@gmail.com>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
