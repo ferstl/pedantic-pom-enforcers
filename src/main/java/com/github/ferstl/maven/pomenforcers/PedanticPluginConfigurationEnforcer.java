@@ -19,7 +19,6 @@ import java.util.Collection;
 import java.util.List;
 
 import org.apache.maven.enforcer.rule.api.EnforcerRuleException;
-import org.apache.maven.plugin.logging.Log;
 
 import com.github.ferstl.maven.pomenforcers.model.PluginModel;
 import com.google.common.base.Predicate;
@@ -85,22 +84,17 @@ public class PedanticPluginConfigurationEnforcer extends AbstractPedanticEnforce
 
   @Override
   protected void doEnforce() throws EnforcerRuleException {
-    Log log = getLog();
-
     ErrorReport report = new ErrorReport(PedanticEnforcerRule.PLUGIN_CONFIGURATION);
 
     if (this.manageVersions) {
-      log.debug("Enforcing managed plugin versions.");
       enforceManagedVersions(report);
     }
 
     if (this.manageConfigurations) {
-      log.debug("Enforcing managed plugin configurations.");
       enforceManagedConfiguration(report);
     }
 
     if (this.manageDependencies) {
-      log.debug("Enforcing managed plugin dependencies.");
       enforceManagedDependencies(report);
     }
 

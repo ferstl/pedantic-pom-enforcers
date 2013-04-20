@@ -20,7 +20,6 @@ import java.util.Set;
 
 import org.apache.maven.enforcer.rule.api.EnforcerRuleException;
 import org.apache.maven.model.Plugin;
-import org.apache.maven.plugin.logging.Log;
 import org.apache.maven.project.MavenProject;
 
 import com.github.ferstl.maven.pomenforcers.model.PluginElement;
@@ -114,17 +113,8 @@ public class PedanticPluginManagementOrderEnforcer extends AbstractPedanticEnfor
   @Override
   protected void doEnforce() throws EnforcerRuleException {
     MavenProject project = EnforcerRuleUtils.getMavenProject(getHelper());
-    Log log = getLog();
-    log.debug("Enforcing plugin management order.");
-    log.debug("  -> Plugins have to be ordered by: "
-           + CommaSeparatorUtils.join(this.pluginOrdering.getOrderBy()));
-    log.debug("  -> Group ID priorities: "
-           + CommaSeparatorUtils.join(this.pluginOrdering.getPriorities(PluginElement.GROUP_ID)));
-    log.debug("  -> ArtifactModel ID priorities: "
-           + CommaSeparatorUtils.join(this.pluginOrdering.getPriorities(PluginElement.ARTIFACT_ID)));
 
     Collection<PluginModel> declaredManagedPlugins = getProjectModel().getManagedPlugins();
-
     Collection<Plugin> managedPlugins = project.getPluginManagement().getPlugins();
     BiMap<PluginModel, PluginModel> matchedPlugins = matchPlugins(declaredManagedPlugins, managedPlugins);
 

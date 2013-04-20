@@ -21,14 +21,12 @@ import java.util.Collections;
 import org.apache.maven.enforcer.rule.api.EnforcerRuleException;
 import org.apache.maven.model.Dependency;
 import org.apache.maven.model.DependencyManagement;
-import org.apache.maven.plugin.logging.Log;
 import org.apache.maven.project.MavenProject;
 
 import com.github.ferstl.maven.pomenforcers.model.DependencyElement;
 import com.github.ferstl.maven.pomenforcers.model.DependencyModel;
 import com.github.ferstl.maven.pomenforcers.model.ProjectModel;
 import com.github.ferstl.maven.pomenforcers.priority.CompoundPriorityOrdering;
-import com.github.ferstl.maven.pomenforcers.util.CommaSeparatorUtils;
 import com.github.ferstl.maven.pomenforcers.util.EnforcerRuleUtils;
 import com.google.common.collect.BiMap;
 import com.google.common.collect.ImmutableList;
@@ -66,17 +64,6 @@ public class PedanticDependencyManagementOrderEnforcer extends AbstractPedanticD
   protected void doEnforce() throws EnforcerRuleException {
     MavenProject project = EnforcerRuleUtils.getMavenProject(getHelper());
     CompoundPriorityOrdering<DependencyModel, String, DependencyElement> artifactOrdering = getArtifactOrdering();
-
-    Log log = getLog();
-    log.debug("Enforcing dependency management order.");
-    log.debug("  -> Dependencies have to be ordered by: "
-           + CommaSeparatorUtils.join(artifactOrdering.getOrderBy()));
-    log.debug("  -> Scope priorities: "
-           + CommaSeparatorUtils.join(artifactOrdering.getPriorities(DependencyElement.SCOPE)));
-    log.debug("  -> Group ID priorities: "
-           + CommaSeparatorUtils.join(artifactOrdering.getPriorities(DependencyElement.GROUP_ID)));
-    log.debug("  -> Artifact ID priorities: "
-           + CommaSeparatorUtils.join(artifactOrdering.getPriorities(DependencyElement.ARTIFACT_ID)));
 
     ProjectModel projectModel = getProjectModel();
     Collection<DependencyModel> declaredManagedDependencies = projectModel.getManagedDependencies();

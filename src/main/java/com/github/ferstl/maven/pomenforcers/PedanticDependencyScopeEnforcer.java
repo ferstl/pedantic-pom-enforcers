@@ -121,8 +121,6 @@ public class PedanticDependencyScopeEnforcer extends AbstractPedanticEnforcer {
 
   @Override
   protected void doEnforce() throws EnforcerRuleException {
-    getLog().debug("Enforcing dependency scopes.");
-
     Collection<Dependency> dependencies = EnforcerRuleUtils.getMavenProject(getHelper()).getDependencies();
 
     ErrorReport report = new ErrorReport(PedanticEnforcerRule.DEPENDENCY_SCOPE);

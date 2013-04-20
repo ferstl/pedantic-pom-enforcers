@@ -92,11 +92,9 @@ public class PedanticDependencyConfigurationEnforcer extends AbstractPedanticEnf
   protected void doEnforce() throws EnforcerRuleException {
     ErrorReport report = new ErrorReport(PedanticEnforcerRule.DEPENDENCY_CONFIGURATION);
     if (this.manageVersions) {
-      getLog().debug("Enforcing managed dependency versions");
       enforceManagedVersions(report);
     }
     if (this.manageExclusions) {
-      getLog().debug("Enforcing managed dependency exclusions");
       enforceManagedExclusion(report);
     }
 

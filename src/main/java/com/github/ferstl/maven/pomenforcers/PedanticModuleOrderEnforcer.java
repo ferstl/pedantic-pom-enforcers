@@ -20,7 +20,6 @@ import java.util.List;
 import java.util.Set;
 
 import org.apache.maven.enforcer.rule.api.EnforcerRuleException;
-import org.apache.maven.plugin.logging.Log;
 import org.apache.maven.project.MavenProject;
 
 import com.github.ferstl.maven.pomenforcers.util.CommaSeparatorUtils;
@@ -74,10 +73,6 @@ public class PedanticModuleOrderEnforcer extends AbstractPedanticEnforcer {
     if (!isPomProject(project)) {
       return;
     }
-
-    Log log = getLog();
-    log.debug("Enforcing alphabetical module order.");
-    log.debug("  -> These modules are ignored: " + CommaSeparatorUtils.join(this.ignoredModules));
 
     // Remove all modules to be ignored.
     List<String> declaredModules = new ArrayList<>(getProjectModel().getModules());
