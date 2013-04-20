@@ -44,13 +44,9 @@ public class ErrorReport {
     return LIST_ITEM + LIST_JOINER.join(Collections2.transform(collection, toStringFunction));
   }
 
-  public ErrorReport(String title) {
-    this.title = title;
-    this.lines = new LinkedList<>();
-  }
-
   public ErrorReport(PedanticEnforcerRule rule) {
-    this(rule.name() + ": " + rule.getSlogan());
+    this.title = rule.name() + ": " + rule.getSlogan();
+    this.lines = new LinkedList<>();
   }
 
   public ErrorReport useLargeTitle() {
