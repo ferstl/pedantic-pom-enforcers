@@ -25,8 +25,6 @@ import org.codehaus.plexus.logging.console.ConsoleLogger;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.github.ferstl.maven.pomenforcers.PedanticModuleOrderEnforcer;
-
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -40,6 +38,7 @@ public class PedanticModuleOrderEnforcerTest {
     this.mockHelper = mock(EnforcerRuleHelper.class);
     MavenProject mockProject = mock(MavenProject.class);
     when(mockProject.getFile()).thenReturn(new File("target/test-classes/test-pom.xml"));
+    when(mockProject.getPackaging()).thenReturn("pom");
     ConsoleLogger plexusLogger = new ConsoleLogger(Logger.LEVEL_DEBUG, "testLogger");
     when(this.mockHelper.getLog()).thenReturn(new DefaultLog(plexusLogger));
     when(this.mockHelper.evaluate("${project}")).thenReturn(mockProject);
