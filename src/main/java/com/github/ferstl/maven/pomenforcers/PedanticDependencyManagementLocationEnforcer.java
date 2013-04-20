@@ -48,6 +48,17 @@ public class PedanticDependencyManagementLocationEnforcer extends AbstractPedant
     this.dependencyManagingPoms = new HashSet<>();
   }
 
+  /**
+   * Comma separated list of POMs that may declare <code>&lt;dependencyManagement&gt;</code>.
+   * Each POM has to be defined in the format <code>groupId:artifactId</code>.
+   * @param dependencyManagingPoms Comma separated list of POMs that may declare plugin management.
+   * @configParam
+   * @default n/a
+   */
+  public void setDependencyManagingPoms(String dependencyManagingPoms) {
+    splitAndAddToCollection(dependencyManagingPoms, this.dependencyManagingPoms, stringToArtifactModel());
+  }
+
   @Override
   protected PedanticEnforcerRule getDescription() {
     return PedanticEnforcerRule.DEPENDENCY_MANAGEMENT_LOCATION;
@@ -67,24 +78,13 @@ public class PedanticDependencyManagementLocationEnforcer extends AbstractPedant
     }
   }
 
-  /**
-   * Comma separated list of POMs that may declare <code>&lt;dependencyManagement&gt;</code>.
-   * Each POM has to be defined in the format <code>groupId:artifactId</code>.
-   * @param dependencyManagingPoms Comma separated list of POMs that may declare plugin management.
-   * @configParam
-   * @default n/a
-   */
-  public void setDependencyManagingPoms(String dependencyManagingPoms) {
-    splitAndAddToCollection(dependencyManagingPoms, this.dependencyManagingPoms, stringToArtifactModel());
-  }
-
   private boolean containsDependencyManagement() {
     return !getProjectModel().getManagedDependencies().isEmpty();
   }
 
   private boolean isDependencyManagementAllowed(MavenProject project) {
     ArtifactModel projectInfo = new ArtifactModel(project.getGroupId(), project.getArtifactId(), project.getVersion());
-    return this.dependencyManagingPoms.contains(projectInfo);
+    return this.dependencyManagingPoms.isEmpty() || this.dependencyManagingPoms.contains(projectInfo);
   }
 
 }

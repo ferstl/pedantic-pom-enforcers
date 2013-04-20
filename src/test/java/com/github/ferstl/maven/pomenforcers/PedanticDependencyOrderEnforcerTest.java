@@ -15,109 +15,125 @@
  */
 package com.github.ferstl.maven.pomenforcers;
 
-import java.io.File;
-import java.util.List;
-
-import org.apache.maven.enforcer.rule.api.EnforcerRuleException;
-import org.apache.maven.enforcer.rule.api.EnforcerRuleHelper;
-import org.apache.maven.model.Dependency;
-import org.apache.maven.model.Exclusion;
-import org.apache.maven.monitor.logging.DefaultLog;
-import org.apache.maven.project.MavenProject;
-import org.codehaus.plexus.logging.Logger;
-import org.codehaus.plexus.logging.console.ConsoleLogger;
-import org.junit.Before;
 import org.junit.Test;
-import org.w3c.dom.Document;
 
-import com.github.ferstl.maven.pomenforcers.model.ArtifactModel;
-import com.github.ferstl.maven.pomenforcers.model.DependencyModel;
-import com.github.ferstl.maven.pomenforcers.serializer.PomSerializer;
-import com.github.ferstl.maven.pomenforcers.util.XmlUtils;
-import com.google.common.base.Function;
-import com.google.common.collect.Lists;
+import com.github.ferstl.maven.pomenforcers.model.DependencyScope;
 
+import static org.hamcrest.Matchers.equalTo;
+import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.verify;
 
-public class PedanticDependencyOrderEnforcerTest {
+/**
+ * JUnit tests for {@link PedanticDependencyOrderEnforcer}.
+ */
+public class PedanticDependencyOrderEnforcerTest extends AbstractPedanticEnforcerTest<PedanticDependencyOrderEnforcer> {
 
-  private static final File ALL_DEPENDENCIES_FILE =
-      new File("target/test-classes/all-dependencies.xml");
-  private static final File TEST_DIRECTORY =
-      new File("target/test-classes/PedanticDependencyOrderEnforcer");
+  @Override
+  PedanticDependencyOrderEnforcer createRule() {
+    return new PedanticDependencyOrderEnforcer();
+  }
 
-  private EnforcerRuleHelper mockHelper;
-  private MavenProject mockProject;
+  @Override
+  @Test
+  public void getDescription() {
+    assertThat(this.testRule.getDescription(), equalTo(PedanticEnforcerRule.DEPENDENCY_ORDER));
+  }
 
-  @Before
-  public void setUp() throws Exception {
-    Document allDepsPom = XmlUtils.parseXml(ALL_DEPENDENCIES_FILE);
+  @Override
+  @Test
+  public void accept() {
+    PedanticEnforcerVisitor visitor = mock(PedanticEnforcerVisitor.class);
+    this.testRule.accept(visitor);
 
-    // Read all dependencies and convert them to artifacts (classifier = "", ArtifactHandler = null)
-    List<DependencyModel> allDeps = new PomSerializer(allDepsPom).read().getDependencies();
-    List<Dependency> dependencies = Lists.transform(allDeps, DependencyModelTransformer.INSTANCE);
-
-    this.mockHelper = mock(EnforcerRuleHelper.class);
-    this.mockProject = mock(MavenProject.class);
-    when(this.mockProject.getDependencies()).thenReturn(dependencies);
-    ConsoleLogger plexusLogger = new ConsoleLogger(Logger.LEVEL_DEBUG, "testLogger");
-    when(this.mockHelper.getLog()).thenReturn(new DefaultLog(plexusLogger));
-    when(this.mockHelper.evaluate("${project}")).thenReturn(this.mockProject);
-
+    verify(visitor).visit(this.testRule);
   }
 
   @Test
-  public void testDefaultSettings() throws Exception {
-    File testPomFile = new File(TEST_DIRECTORY, "dependency-order-default-correct.xml");
-    when(this.mockProject.getFile()).thenReturn(testPomFile);
+  public void defaultSettingsCorrect() {
+    addDependency("a.b.c", "a", DependencyScope.COMPILE);
+    addDependency("a.b.c", "b", DependencyScope.COMPILE);
 
-    PedanticDependencyOrderEnforcer rule = new PedanticDependencyOrderEnforcer();
-    rule.execute(this.mockHelper);
-  }
+    addDependency("d.e.f", "a", DependencyScope.IMPORT);
+    addDependency("d.e.f", "b", DependencyScope.IMPORT);
 
-  @Test(expected = EnforcerRuleException.class)
-  public void testDefaultSettingsWrongOrder() throws Exception {
-    File testPomFile = new File(TEST_DIRECTORY, "dependency-order-default-wrong.xml");
-    when(this.mockProject.getFile()).thenReturn(testPomFile);
+    addDependency("g.h.i", "a", DependencyScope.PROVIDED);
+    addDependency("g.h.i", "b", DependencyScope.PROVIDED);
 
-    PedanticDependencyOrderEnforcer rule = new PedanticDependencyOrderEnforcer();
-    rule.execute(this.mockHelper);
+    addDependency("j.k.l", "a", DependencyScope.SYSTEM);
+    addDependency("j.k.l", "b", DependencyScope.SYSTEM);
+
+    addDependency("m.n.o", "a", DependencyScope.TEST);
+    addDependency("m.n.o", "b", DependencyScope.TEST);
+
+    executeRuleAndCheckReport(false);
   }
 
   @Test
-  public void testCustomSettings() throws Exception {
-    File testPomFile = new File(TEST_DIRECTORY, "dependency-order-custom-correct.xml");
-    when(this.mockProject.getFile()).thenReturn(testPomFile);
+  public void defaultSettingsWrongScopeOrder() {
+    // Test before compile
+    addDependency("a.b.c", "a", DependencyScope.TEST);
+    addDependency("x.y.z", "z", DependencyScope.COMPILE);
 
-    AbstractPedanticDependencyOrderEnforcer rule = new PedanticDependencyOrderEnforcer();
-    rule.setOrderBy("scope,artifactId,groupId");
-    rule.setScopePriorities("test,provided");
-    rule.setArtifactIdPriorities("junit,lambdaj");
-    rule.setGroupIdPriorities("org.apache.commons");
-    rule.execute(this.mockHelper);
+    executeRuleAndCheckReport(true);
   }
 
-  private static enum DependencyModelTransformer implements Function<DependencyModel, Dependency> {
-    INSTANCE;
+  @Test
+  public void defaultSettingsWrongGroupIdOrder() {
+    addDependency("d.e.f", "a", DependencyScope.COMPILE);
+    addDependency("a.b.c", "a", DependencyScope.COMPILE);
 
-    @Override
-    public Dependency apply(DependencyModel input) {
-      Dependency dependency = new Dependency();
-      dependency.setGroupId(input.getGroupId());
-      dependency.setArtifactId(input.getArtifactId());
-      dependency.setVersion(input.getVersion());
-      dependency.setClassifier(input.getClassifier());
-      dependency.setScope(input.getScope().getScopeName());
-      dependency.setType(input.getType());
+    executeRuleAndCheckReport(true);
+  }
 
-      for (ArtifactModel exclusionModel : input.getExclusions()) {
-        Exclusion exclusion = new Exclusion();
-        exclusion.setGroupId(exclusionModel.getGroupId());
-        exclusion.setArtifactId(exclusionModel.getArtifactId());
-        dependency.addExclusion(exclusion);
-      }
-      return dependency;
-    }
+  @Test
+  public void defaultSettingsWrongArtifactIdOrder() {
+    addDependency("a.b.c", "b", DependencyScope.COMPILE);
+    addDependency("a.b.c", "a", DependencyScope.COMPILE);
+
+    executeRuleAndCheckReport(true);
+  }
+
+  @Test
+  public void groupIdPriorities() {
+    this.testRule.setGroupIdPriorities("u.v.w,x.y.z");
+
+    addDependency("u.v.w", "z", DependencyScope.COMPILE);
+    addDependency("x.y.z", "z", DependencyScope.COMPILE);
+    addDependency("a.b.c", "a", DependencyScope.COMPILE);
+
+    executeRuleAndCheckReport(false);
+  }
+
+
+  @Test
+  public void artifactIdPriorities() {
+    this.testRule.setArtifactIdPriorities("z,y");
+
+    addDependency("a.b.c", "z", DependencyScope.COMPILE);
+    addDependency("a.b.c", "y", DependencyScope.COMPILE);
+    addDependency("a.b.c", "a", DependencyScope.COMPILE);
+
+    executeRuleAndCheckReport(false);
+  }
+
+  @Test
+  public void scopePriorities() {
+    this.testRule.setScopePriorities("system,compile");
+
+    addDependency("x.y.z", "z", DependencyScope.SYSTEM);
+    addDependency("a.b.c", "a", DependencyScope.COMPILE);
+
+    executeRuleAndCheckReport(false);
+  }
+
+  @Test
+  public void orderBy() {
+    this.testRule.setOrderBy("groupId,artifactId");
+
+    addDependency("a.b.c", "a", DependencyScope.TEST);
+    addDependency("a.b.c", "b", DependencyScope.COMPILE);
+
+    executeRuleAndCheckReport(false);
   }
 }

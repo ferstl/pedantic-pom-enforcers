@@ -15,39 +15,83 @@
  */
 package com.github.ferstl.maven.pomenforcers;
 
-import java.io.File;
+import java.util.Arrays;
 
-import org.apache.maven.enforcer.rule.api.EnforcerRuleHelper;
-import org.apache.maven.monitor.logging.DefaultLog;
-import org.apache.maven.project.MavenProject;
-import org.codehaus.plexus.logging.Logger;
-import org.codehaus.plexus.logging.console.ConsoleLogger;
 import org.junit.Before;
 import org.junit.Test;
 
+import static org.hamcrest.Matchers.equalTo;
+import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+/**
+ * JUnit tests for {@link PedanticModuleOrderEnforcer}.
+ */
+public class PedanticModuleOrderEnforcerTest extends AbstractPedanticEnforcerTest<PedanticModuleOrderEnforcer> {
 
-public class PedanticModuleOrderEnforcerTest {
-
-  private EnforcerRuleHelper mockHelper;
+  @Override
+  PedanticModuleOrderEnforcer createRule() {
+    return new PedanticModuleOrderEnforcer();
+  }
 
   @Before
-  public void setUp() throws Exception {
-    this.mockHelper = mock(EnforcerRuleHelper.class);
-    MavenProject mockProject = mock(MavenProject.class);
-    when(mockProject.getFile()).thenReturn(new File("target/test-classes/test-pom.xml"));
-    when(mockProject.getPackaging()).thenReturn("pom");
-    ConsoleLogger plexusLogger = new ConsoleLogger(Logger.LEVEL_DEBUG, "testLogger");
-    when(this.mockHelper.getLog()).thenReturn(new DefaultLog(plexusLogger));
-    when(this.mockHelper.evaluate("${project}")).thenReturn(mockProject);
+  public void before() throws Exception {
+    when(this.mockMavenProject.getPackaging()).thenReturn("pom");
+  }
+
+  @Override
+  @Test
+  public void getDescription() {
+    assertThat(this.testRule.getDescription(), equalTo(PedanticEnforcerRule.MODULE_ORDER));
+  }
+
+  @Override
+  @Test
+  public void accept() {
+    PedanticEnforcerVisitor visitor = mock(PedanticEnforcerVisitor.class);
+    this.testRule.accept(visitor);
+
+    verify(visitor).visit(this.testRule);
   }
 
   @Test
-  public void test() throws Exception {
-    PedanticModuleOrderEnforcer rule = new PedanticModuleOrderEnforcer();
-    rule.execute(this.mockHelper);
+  public void correctOrder() {
+    when(this.projectModel.getModules()).thenReturn(Arrays.asList("m1", "m2", "m3"));
+
+    executeRuleAndCheckReport(false);
+  }
+
+  @Test
+  public void correctOrderWithIgnores() {
+    when(this.projectModel.getModules()).thenReturn(Arrays.asList("m9", "m8", "m1", "m2", "m7", "m3"));
+    this.testRule.setIgnoredModules("m9,m8,m7");
+
+    executeRuleAndCheckReport(false);
+  }
+
+  @Test
+  public void noPomPackaging() {
+    when(this.mockMavenProject.getPackaging()).thenReturn("jar");
+    when(this.projectModel.getModules()).thenReturn(null);
+
+    executeRuleAndCheckReport(false);
+  }
+
+  @Test
+  public void incorrectOrder() {
+    when(this.projectModel.getModules()).thenReturn(Arrays.asList("m2", "m1"));
+
+    executeRuleAndCheckReport(true);
+  }
+
+  @Test
+  public void incorrectOrderWithIgnores() {
+    when(this.projectModel.getModules()).thenReturn(Arrays.asList("m9", "m2", "m1"));
+    this.testRule.setIgnoredModules("m9");
+
+    executeRuleAndCheckReport(true);
   }
 
 }

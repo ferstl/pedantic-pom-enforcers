@@ -24,7 +24,6 @@ import org.w3c.dom.NodeList;
 
 import com.github.ferstl.maven.pomenforcers.model.PomSection;
 import com.github.ferstl.maven.pomenforcers.util.CommaSeparatorUtils;
-import com.google.common.collect.Lists;
 import com.google.common.collect.Ordering;
 import com.google.common.collect.Sets;
 
@@ -83,11 +82,11 @@ public class PedanticPomSectionOrderEnforcer extends AbstractPedanticEnforcer {
 
   @Override
   protected void doEnforce(ErrorReport report) {
-    Node firstChild = getProjectRoot();
-    NodeList childNodes = firstChild.getChildNodes();
-    ArrayList<PomSection> pomSections = Lists.newArrayList();
-    for (int i = 0; i < childNodes.getLength(); i++) {
-      Node node = childNodes.item(i);
+    Node docElement = getPom().getDocumentElement();
+    NodeList sectionNodes = docElement.getChildNodes();
+    ArrayList<PomSection> pomSections = new ArrayList<>();
+    for (int i = 0; i < sectionNodes.getLength(); i++) {
+      Node node = sectionNodes.item(i);
       if (node.getNodeType() == Node.ELEMENT_NODE) {
         pomSections.add(PomSection.getBySectionName(node.getNodeName()));
       }
@@ -97,29 +96,14 @@ public class PedanticPomSectionOrderEnforcer extends AbstractPedanticEnforcer {
     Ordering<PomSection> ordering = PomSection.createPriorityOrdering(this.sectionPriorities);
 
     if (!ordering.isOrdered(pomSections)) {
-      List<String> sortedPomSections =
-          Lists.transform(ordering.immutableSortedCopy(pomSections), pomSectionToString());
+      List<PomSection> sortedPomSections = ordering.immutableSortedCopy(pomSections);
 
-      report.addLine("Your POM file has to be organized this way:")
-            .addLine(toList(sortedPomSections));
+      report.addLine("Your POM is currently organized like this:")
+            .addLine(toList(pomSections, pomSectionToString()))
+            .emptyLine()
+            .addLine("... but it has to be organized this way:")
+            .addLine(toList(sortedPomSections, pomSectionToString()));
     }
-  }
-
-  /**
-   * Gets the <code>&lt;project&gt;</code> node from the given POM file.
-   * @param pom POM document.
-   * @return The <code>&lt;project&gt;</code> node or <code>null</code> if not found.
-   */
-  private Node getProjectRoot() {
-    Node node = getPom().getFirstChild();
-    do {
-      if ("project".equals(node.getNodeName())) {
-        break;
-      } else {
-        node = node.getNextSibling();
-      }
-    } while (node.getNextSibling() != null);
-    return node;
   }
 
 }

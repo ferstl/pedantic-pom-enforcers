@@ -15,64 +15,108 @@
  */
 package com.github.ferstl.maven.pomenforcers;
 
-import java.io.File;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
 
-import org.apache.maven.enforcer.rule.api.EnforcerRuleException;
-import org.apache.maven.enforcer.rule.api.EnforcerRuleHelper;
-import org.apache.maven.monitor.logging.DefaultLog;
-import org.apache.maven.project.MavenProject;
-import org.codehaus.plexus.logging.Logger;
-import org.codehaus.plexus.logging.console.ConsoleLogger;
-import org.junit.Before;
 import org.junit.Test;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 
+import com.github.ferstl.maven.pomenforcers.model.PomSection;
+
+import static org.hamcrest.Matchers.equalTo;
+import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.verify;
 
-public class PedanticPomSectionOrderEnforcerTest {
+/**
+ * JUnit tests for {@link PedanticPomSectionOrderEnforcer}.
+ */
+public class PedanticPomSectionOrderEnforcerTest extends AbstractPedanticEnforcerTest<PedanticPomSectionOrderEnforcer> {
 
-  private static final File TEST_DIRECTORY =
-      new File("target/test-classes/PedanticPomSectionOrderEnforcer");
+  @Override
+  PedanticPomSectionOrderEnforcer createRule() {
+    return new PedanticPomSectionOrderEnforcer();
+  }
 
-  private EnforcerRuleHelper mockHelper;
-  private MavenProject mockProject;
+  @Override
+  @Test
+  public void getDescription() {
+    assertThat(this.testRule.getDescription(), equalTo(PedanticEnforcerRule.POM_SECTION_ORDER));
+  }
 
-  @Before
-  public void setUp() throws Exception {
-    this.mockHelper = mock(EnforcerRuleHelper.class);
-    this.mockProject = mock(MavenProject.class);
-    ConsoleLogger plexusLogger = new ConsoleLogger(Logger.LEVEL_DEBUG, "testLogger");
-    when(this.mockHelper.getLog()).thenReturn(new DefaultLog(plexusLogger));
-    when(this.mockHelper.evaluate("${project}")).thenReturn(this.mockProject);
+  @Override
+  @Test
+  public void accept() {
+    PedanticEnforcerVisitor visitor = mock(PedanticEnforcerVisitor.class);
+    this.testRule.accept(visitor);
 
+    verify(visitor).visit(this.testRule);
   }
 
   @Test
-  public void testDefaultSettings() throws Exception {
-    File testPomFile = new File(TEST_DIRECTORY, "pom-section-order-default-correct.xml");
-    when(this.mockProject.getFile()).thenReturn(testPomFile);
+  public void defaultSettingsCorrect() {
+    configurePom(Arrays.asList(PomSection.values()));
 
-    PedanticPomSectionOrderEnforcer rule = new PedanticPomSectionOrderEnforcer();
-    rule.execute(this.mockHelper);
-  }
-
-  @Test(expected = EnforcerRuleException.class)
-  public void testDefaultSettingsWrongOrder() throws Exception {
-    File testPomFile = new File(TEST_DIRECTORY, "pom-section-order-default-wrong.xml");
-    when(this.mockProject.getFile()).thenReturn(testPomFile);
-
-    PedanticPomSectionOrderEnforcer rule = new PedanticPomSectionOrderEnforcer();
-    rule.execute(this.mockHelper);
+    executeRuleAndCheckReport(false);
   }
 
   @Test
-  public void testCustomSettings() throws Exception {
-    File testPomFile = new File(TEST_DIRECTORY, "pom-section-order-custom-correct.xml");
-    when(this.mockProject.getFile()).thenReturn(testPomFile);
+  public void defaultSettingsWrongOrder() {
+    // Put <dependencyManagement> and <dependencies> in the wrong order.
+    List<PomSection> sections = Arrays.asList(PomSection.values());
+    swapSections(sections, PomSection.DEPENDENCY_MANAGEMENT, PomSection.DEPENDENCIES);
+    configurePom(sections);
 
-    PedanticPomSectionOrderEnforcer rule = new PedanticPomSectionOrderEnforcer();
-    rule.setSectionPriorities("modelVersion,groupId,artifactId,version,packaging,name,description,url,parent");
-    rule.execute(this.mockHelper);
+    executeRuleAndCheckReport(true);
+  }
+
+  @Test
+  public void customSettingsCorrect() {
+    // Parent declaration after project coordinates
+    this.testRule.setSectionPriorities("modelVersion,groupId,artifactId,version,packaging,name,description,url,parent");
+
+    // Re-arrange the POM sections according to the enforcer configuration.
+    List<PomSection> sections = new ArrayList<>(Arrays.asList(PomSection.values()));
+    List<PomSection> reorderedSections = Arrays.asList(
+        PomSection.MODEL_VERSION, PomSection.GROUP_ID, PomSection.ARTIFACT_ID, PomSection.VERSION, PomSection.PACKAGING,
+        PomSection.NAME, PomSection.DESCRIPTION, PomSection.URL, PomSection.PARENT);
+
+    sections.removeAll(reorderedSections);
+    sections.addAll(0, reorderedSections);
+
+    configurePom(sections);
+
+    executeRuleAndCheckReport(false);
+  }
+
+
+  @Test
+  public void customSettingsWrongOrder() {
+    this.testRule.setSectionPriorities("modelVersion,groupId,artifactId,version,packaging,name,description,url,parent");
+
+    configurePom(Arrays.asList(PomSection.values()));
+
+    executeRuleAndCheckReport(true);
+  }
+
+  private void configurePom(Collection<PomSection> sections) {
+    Document pom = this.testRule.getPom();
+    Element root = pom.getDocumentElement();
+
+    for (PomSection section : sections) {
+      root.appendChild(pom.createElement(section.getSectionName()));
+    }
+  }
+
+  private void swapSections(List<PomSection> sections, PomSection first, PomSection second) {
+    int iFirst = sections.indexOf(first);
+    int iSecond = sections.indexOf(second);
+
+    sections.set(iFirst, second);
+    sections.set(iSecond, first);
   }
 
 }
