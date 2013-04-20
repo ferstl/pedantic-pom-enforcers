@@ -109,7 +109,7 @@ public class PedanticDependencyOrderEnforcerTest {
       dependency.setVersion(input.getVersion());
       dependency.setClassifier(input.getClassifier());
       dependency.setScope(input.getScope().getScopeName());
-      dependency.setType("jar");
+      dependency.setType(input.getType());
 
       for (ArtifactModel exclusionModel : input.getExclusions()) {
         Exclusion exclusion = new Exclusion();

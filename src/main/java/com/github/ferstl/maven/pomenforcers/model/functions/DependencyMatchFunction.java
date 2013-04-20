@@ -43,20 +43,23 @@ public class DependencyMatchFunction implements Function<DependencyModel, Entry<
     String groupId = evaluateProperties(dependency.getGroupId(), this.helper);
     String artifactId = evaluateProperties(dependency.getArtifactId(), this.helper);
     String classifier = evaluateProperties(dependency.getClassifier(), this.helper);
+    String type = evaluateProperties(dependency.getType(), this.helper);
 
     for (Dependency supersetDependency : this.superset) {
       DependencyModel supersetDependencyModel = createDependencyModel(supersetDependency);
 
       if (equal(supersetDependency.getGroupId(), groupId)
        && equal(supersetDependency.getArtifactId(), artifactId)
-       && equal(supersetDependency.getClassifier(), classifier)) {
+       && equal(supersetDependency.getClassifier(), classifier)
+       && equal(supersetDependency.getType(), type)) {
 
         DependencyModel dependencyModel = new DependencyModel(
             supersetDependency.getGroupId(),
             supersetDependency.getArtifactId(),
             supersetDependency.getVersion(),
             supersetDependency.getScope(),
-            supersetDependency.getClassifier());
+            supersetDependency.getClassifier(),
+            supersetDependency.getType());
         return Maps.immutableEntry(supersetDependencyModel, dependencyModel);
       }
     }
@@ -71,7 +74,8 @@ public class DependencyMatchFunction implements Function<DependencyModel, Entry<
         dependency.getArtifactId(),
         dependency.getVersion(),
         dependency.getScope(),
-        dependency.getClassifier());
+        dependency.getClassifier(),
+        dependency.getType());
   }
 
 }

@@ -16,6 +16,14 @@
       <artifactId>module1</artifactId>
       <version>${project.version}</version>
     </dependency>
+    <!-- Test JAR dependency with classifier -->
+    <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>module1</artifactId>
+      <version>${project.version}</version>
+      <classifier>tests</classifier>
+      <scope>test</scope>
+    </dependency>
   </dependencies>
   
 </project>

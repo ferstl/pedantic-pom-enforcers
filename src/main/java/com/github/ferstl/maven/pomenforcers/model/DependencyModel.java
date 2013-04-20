@@ -37,6 +37,7 @@ public class DependencyModel extends ArtifactModel {
   @XmlJavaTypeAdapter(value = DependencyScopeAdapter.class)
   private DependencyScope scope;
   private String classifier;
+  private String type;
 
   @XmlElementWrapper
   @XmlElement(name = "exclusion")
@@ -45,21 +46,25 @@ public class DependencyModel extends ArtifactModel {
   // Constructor used by JAXB
   DependencyModel() {}
 
-  public DependencyModel(String groupId, String artifactId, String version, String scope, String classifier) {
+  public DependencyModel(
+      String groupId, String artifactId, String version, String scope, String classifier, String type) {
+
     super(groupId, artifactId, version);
     this.scope = scope != null ? DependencyScope.getByScopeName(scope) : null;
     this.classifier = classifier;
+    this.type = type;
   }
 
   public DependencyScope getScope() {
-    if (this.scope == null) {
-      return DependencyScope.COMPILE;
-    }
-    return this.scope;
+    return this.scope != null ? this.scope : DependencyScope.COMPILE;
   }
 
   public String getClassifier() {
     return this.classifier;
+  }
+
+  public String getType() {
+    return this.type != null ? this.type : "jar";
   }
 
   public List<ArtifactModel> getExclusions() {
@@ -70,6 +75,7 @@ public class DependencyModel extends ArtifactModel {
   public String toString() {
     return TO_STRING_JOINER.join(
         super.toString(),
+        this.type != null ? this.type : "<no type>",
         getScope().getScopeName(),
         this.classifier != null ? this.classifier : "<no classifier>",
         this.exclusions != null ? CollectionToStringHelper.toString("Exclusions", this.exclusions) : "<no exclusions>");
@@ -88,13 +94,14 @@ public class DependencyModel extends ArtifactModel {
     DependencyModel other = (DependencyModel) obj;
     return super.equals(other)
         && equal(this.classifier, other.classifier)
+        && equal(this.type, other.type)
         && equal(this.scope, other.scope)
         && equal(this.exclusions, other.exclusions);
   }
 
   @Override
   public int hashCode() {
-   return Objects.hash(super.hashCode(), this.classifier, this.scope);
+   return Objects.hash(super.hashCode(), this.classifier, this.type, this.scope);
   }
 
 }

@@ -13,6 +13,11 @@
   <dependencies>
     <dependency>
       <groupId>${project.groupId}</groupId>
+      <artifactId>module1</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>${project.groupId}</groupId>
       <artifactId>module2</artifactId>
       <version>${project.version}</version>
     </dependency>
@@ -20,6 +25,14 @@
       <groupId>${project.groupId}</groupId>
       <artifactId>module3</artifactId>
       <version>${project.version}</version>
+    </dependency>
+    <!-- Test JAR dependency with type -->
+    <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>module1</artifactId>
+      <version>${project.version}</version>
+      <type>test-jar</type>
+      <scope>test</scope>
     </dependency>
   </dependencies>
 </project>
