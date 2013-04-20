@@ -24,6 +24,7 @@ import org.apache.maven.project.MavenProject;
 import com.github.ferstl.maven.pomenforcers.model.ArtifactModel;
 import com.github.ferstl.maven.pomenforcers.util.EnforcerRuleUtils;
 
+import static com.github.ferstl.maven.pomenforcers.ErrorReport.toList;
 import static com.github.ferstl.maven.pomenforcers.model.functions.StringToArtifactTransformer.stringToArtifactModel;
 import static com.github.ferstl.maven.pomenforcers.util.CommaSeparatorUtils.splitAndAddToCollection;
 
@@ -52,10 +53,9 @@ public class PedanticDependencyManagementLocationEnforcer extends AbstractPedant
   protected void doEnforce() throws EnforcerRuleException {
     MavenProject mavenProject = EnforcerRuleUtils.getMavenProject(getHelper());
     if (containsDependencyManagement() && !isDependencyManagementAllowed(mavenProject)) {
-      ErrorReport report =
-          new ErrorReport(PedanticEnforcerRule.DEPENDENCY_MANAGEMENT_LOCATION, "One does not simply declare dependency management!")
-              .addLine("Only these POMs are allowed to manage dependencies:")
-              .addLine(ErrorReport.toList(this.dependencyManagingPoms));
+      ErrorReport report = new ErrorReport(PedanticEnforcerRule.DEPENDENCY_MANAGEMENT_LOCATION)
+          .addLine("Only these POMs are allowed to manage dependencies:")
+          .addLine(toList(this.dependencyManagingPoms));
       throw new EnforcerRuleException(report.toString());
     }
   }

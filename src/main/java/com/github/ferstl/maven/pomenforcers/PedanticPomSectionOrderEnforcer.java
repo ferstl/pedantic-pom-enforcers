@@ -96,7 +96,7 @@ public class PedanticPomSectionOrderEnforcer extends AbstractPedanticEnforcer {
       List<String> sortedPomSections =
           Lists.transform(ordering.immutableSortedCopy(pomSections), pomSectionToString());
 
-      ErrorReport report = new ErrorReport(PedanticEnforcerRule.POM_SECTION_ORDER, "One does not simply write a POM file")
+      ErrorReport report = new ErrorReport(PedanticEnforcerRule.POM_SECTION_ORDER)
           .addLine("Your POM file has to be organized this way:")
           .addLine(toList(sortedPomSections));
       throw new EnforcerRuleException(report.toString());

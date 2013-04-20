@@ -28,7 +28,7 @@ public enum PedanticEnforcerRule {
   /**
    * @see PedanticPomSectionOrderEnforcer
    */
-  POM_SECTION_ORDER {
+  POM_SECTION_ORDER("One does not simply write a POM file!") {
     @Override
     public AbstractPedanticEnforcer createEnforcerRule() {
       return new PedanticPomSectionOrderEnforcer();
@@ -37,7 +37,7 @@ public enum PedanticEnforcerRule {
   /**
    * @see PedanticModuleOrderEnforcer
    */
-  MODULE_ORDER {
+  MODULE_ORDER("One does not simply declare modules!") {
     @Override
     public AbstractPedanticEnforcer createEnforcerRule() {
       return new PedanticModuleOrderEnforcer();
@@ -46,7 +46,7 @@ public enum PedanticEnforcerRule {
   /**
    * @see PedanticDependencyManagementOrderEnforcer
    */
-  DEPENDENCY_MANAGEMENT_ORDER {
+  DEPENDENCY_MANAGEMENT_ORDER("One does not simply declare dependency management!") {
     @Override
     public AbstractPedanticEnforcer createEnforcerRule() {
       return new PedanticDependencyManagementOrderEnforcer();
@@ -55,7 +55,7 @@ public enum PedanticEnforcerRule {
   /**
    * @see PedanticDependencyManagementLocationEnforcer
    */
-  DEPENDENCY_MANAGEMENT_LOCATION {
+  DEPENDENCY_MANAGEMENT_LOCATION("One does not simply declare dependency management!") {
     @Override
     public AbstractPedanticEnforcer createEnforcerRule() {
       return new PedanticDependencyManagementLocationEnforcer();
@@ -64,7 +64,7 @@ public enum PedanticEnforcerRule {
   /**
    * @see PedanticDependencyOrderEnforcer
    */
-  DEPENDENCY_ORDER {
+  DEPENDENCY_ORDER("One does not simply declare dependencies!") {
     @Override
     public AbstractPedanticEnforcer createEnforcerRule() {
       return new PedanticDependencyOrderEnforcer();
@@ -73,7 +73,7 @@ public enum PedanticEnforcerRule {
   /**
    * @see PedanticDependencyConfigurationEnforcer
    */
-  DEPENDENCY_CONFIGURATION {
+  DEPENDENCY_CONFIGURATION("One does not simply configure dependencies!") {
     @Override
     public AbstractPedanticEnforcer createEnforcerRule() {
       return new PedanticDependencyConfigurationEnforcer();
@@ -82,7 +82,7 @@ public enum PedanticEnforcerRule {
   /**
    * @see PedanticDependencyScopeEnforcer
    */
-  DEPENDENCY_SCOPE {
+  DEPENDENCY_SCOPE("One does not simply declare dependency scopes!") {
     @Override
     public AbstractPedanticEnforcer createEnforcerRule() {
       return new PedanticDependencyScopeEnforcer();
@@ -91,7 +91,7 @@ public enum PedanticEnforcerRule {
   /**
    * @see PedanticPluginManagementOrderEnforcer
    */
-  PLUGIN_MANAGEMENT_ORDER {
+  PLUGIN_MANAGEMENT_ORDER("One does not simply declare plugin management!") {
     @Override
     public AbstractPedanticEnforcer createEnforcerRule() {
       return new PedanticPluginManagementOrderEnforcer();
@@ -100,7 +100,7 @@ public enum PedanticEnforcerRule {
   /**
    * @see PedanticPluginConfigurationEnforcer
    */
-  PLUGIN_CONFIGURATION {
+  PLUGIN_CONFIGURATION("One does not simply configure plugins!") {
     @Override
     public AbstractPedanticEnforcer createEnforcerRule() {
       return new PedanticPluginConfigurationEnforcer();
@@ -109,12 +109,22 @@ public enum PedanticEnforcerRule {
   /**
    * @see PedanticPluginManagementLocationEnforcer
    */
-  PLUGIN_MANAGEMENT_LOCATION {
+  PLUGIN_MANAGEMENT_LOCATION("One does not simply declare plugin management!") {
     @Override
     public AbstractPedanticEnforcer createEnforcerRule() {
       return new PedanticPluginManagementLocationEnforcer();
     }
   };
+
+  private final String slogan;
+
+  private PedanticEnforcerRule(String slogan) {
+    this.slogan = slogan;
+  }
+
+  public String getSlogan() {
+    return this.slogan;
+  }
 
   public static Function<String, PedanticEnforcerRule> stringToEnforcerRule() {
     return StringToEnforcerRuleTransformer.INSTANCE;

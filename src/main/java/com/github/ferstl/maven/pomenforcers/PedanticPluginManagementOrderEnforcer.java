@@ -130,8 +130,7 @@ public class PedanticPluginManagementOrderEnforcer extends AbstractPedanticEnfor
 
     if (!this.pluginOrdering.isOrdered(matchedPlugins.values())) {
       ImmutableList<PluginModel> sortedPlugins = this.pluginOrdering.immutableSortedCopy(matchedPlugins.values());
-      ErrorReport report =
-          new ErrorReport(PedanticEnforcerRule.PLUGIN_MANAGEMENT_ORDER, "One does not simply declare plugin management!")
+      ErrorReport report = new ErrorReport(PedanticEnforcerRule.PLUGIN_MANAGEMENT_ORDER)
               .addLine("Your plugin management has to be ordered this way:")
               .addLine(toList(sortedPlugins));
       throw new EnforcerRuleException(report.toString());

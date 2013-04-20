@@ -25,6 +25,7 @@ import com.github.ferstl.maven.pomenforcers.model.ArtifactModel;
 import com.github.ferstl.maven.pomenforcers.util.CommaSeparatorUtils;
 import com.github.ferstl.maven.pomenforcers.util.EnforcerRuleUtils;
 
+import static com.github.ferstl.maven.pomenforcers.ErrorReport.toList;
 import static com.github.ferstl.maven.pomenforcers.model.functions.StringToArtifactTransformer.stringToArtifactModel;
 
 
@@ -53,10 +54,9 @@ public class PedanticPluginManagementLocationEnforcer extends AbstractPedanticEn
   protected void doEnforce() throws EnforcerRuleException {
     MavenProject mavenProject = EnforcerRuleUtils.getMavenProject(getHelper());
     if (containsPluginManagement() && !isPluginManagementAllowed(mavenProject)) {
-      ErrorReport report =
-          new ErrorReport(PedanticEnforcerRule.PLUGIN_MANAGEMENT_LOCATION, "One does not simply declare plugin management")
+      ErrorReport report = new ErrorReport(PedanticEnforcerRule.PLUGIN_MANAGEMENT_LOCATION)
              .addLine("Only these POMs are allowed to manage plugins:")
-             .addLine(ErrorReport.toList(this.pluginManagingPoms));
+             .addLine(toList(this.pluginManagingPoms));
       throw new EnforcerRuleException(report.toString());
     }
   }

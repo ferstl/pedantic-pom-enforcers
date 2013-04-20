@@ -34,8 +34,8 @@ public class ErrorReport {
     this.lines = new LinkedList<>();
   }
 
-  public ErrorReport(PedanticEnforcerRule rule, String title) {
-    this(rule.name() + ": " + title);
+  public ErrorReport(PedanticEnforcerRule rule) {
+    this(rule.name() + ": " + rule.getSlogan());
   }
 
   public ErrorReport useLargeTitle() {

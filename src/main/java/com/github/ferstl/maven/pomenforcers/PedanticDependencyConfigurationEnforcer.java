@@ -90,8 +90,7 @@ public class PedanticDependencyConfigurationEnforcer extends AbstractPedanticEnf
 
   @Override
   protected void doEnforce() throws EnforcerRuleException {
-    ErrorReport report =
-        new ErrorReport(PedanticEnforcerRule.DEPENDENCY_CONFIGURATION, "One does not simply configure dependencies");
+    ErrorReport report = new ErrorReport(PedanticEnforcerRule.DEPENDENCY_CONFIGURATION);
     if (this.manageVersions) {
       getLog().debug("Enforcing managed dependency versions");
       enforceManagedVersions(report);

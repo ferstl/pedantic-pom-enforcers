@@ -28,6 +28,8 @@ import com.github.ferstl.maven.pomenforcers.util.EnforcerRuleUtils;
 import com.google.common.collect.BiMap;
 import com.google.common.collect.ImmutableList;
 
+import static com.github.ferstl.maven.pomenforcers.ErrorReport.toList;
+
 
 /**
  * This enforcer makes sure that all artifacts in your dependencies section are
@@ -77,10 +79,9 @@ public class PedanticDependencyOrderEnforcer extends AbstractPedanticDependencyO
     if (!artifactOrdering.isOrdered(dependencyArtifacts.values())) {
       ImmutableList<DependencyModel> sortedDependencies =
           artifactOrdering.immutableSortedCopy(dependencyArtifacts.values());
-      ErrorReport report =
-          new ErrorReport(PedanticEnforcerRule.DEPENDENCY_MANAGEMENT_ORDER, "One does not simply declare dependencies!")
-              .addLine("Your dependencies have to be sorted this way:")
-              .addLine(ErrorReport.toList(sortedDependencies));
+      ErrorReport report = new ErrorReport(PedanticEnforcerRule.DEPENDENCY_MANAGEMENT_ORDER)
+          .addLine("Your dependencies have to be sorted this way:")
+          .addLine(toList(sortedDependencies));
       throw new EnforcerRuleException(report.toString());
     }
   }

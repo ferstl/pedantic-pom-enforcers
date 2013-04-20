@@ -125,8 +125,7 @@ public class PedanticDependencyScopeEnforcer extends AbstractPedanticEnforcer {
 
     Collection<Dependency> dependencies = EnforcerRuleUtils.getMavenProject(getHelper()).getDependencies();
 
-    ErrorReport report =
-        new ErrorReport(PedanticEnforcerRule.DEPENDENCY_SCOPE, "One does not simply declare dependency scopes!");
+    ErrorReport report = new ErrorReport(PedanticEnforcerRule.DEPENDENCY_SCOPE);
 
     for (Dependency dependency : dependencies) {
       ArtifactModel artifactModel = DependencyToArtifactTransformer.INSTANCE.apply(dependency);

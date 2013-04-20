@@ -28,6 +28,8 @@ import com.github.ferstl.maven.pomenforcers.util.EnforcerRuleUtils;
 import com.google.common.collect.Ordering;
 import com.google.common.collect.Sets;
 
+import static com.github.ferstl.maven.pomenforcers.ErrorReport.toList;
+
 
 /**
  * This enforcer makes sure that your <code>modules</code> section is sorted
@@ -99,13 +101,13 @@ public class PedanticModuleOrderEnforcer extends AbstractPedanticEnforcer {
   }
 
   private ErrorReport createErrorReport(List<String> orderedModules) {
-    ErrorReport report = new ErrorReport(PedanticEnforcerRule.MODULE_ORDER, "One does not simply declare modules!")
-      .formatLine("You have to sort your modules alphabetically:")
-      .formatLine(ErrorReport.toList(orderedModules));
+    ErrorReport report = new ErrorReport(PedanticEnforcerRule.MODULE_ORDER)
+      .addLine("You have to sort your modules alphabetically:")
+      .addLine(toList(orderedModules));
     if (!this.ignoredModules.isEmpty()) {
       report.emptyLine()
-            .formatLine("You may place these modules anywhere in your <modules> section:")
-            .formatLine(ErrorReport.toList(this.ignoredModules));
+            .addLine("You may place these modules anywhere in your <modules> section:")
+            .addLine(toList(this.ignoredModules));
     }
     return report;
   }

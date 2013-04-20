@@ -87,7 +87,7 @@ public class PedanticPluginConfigurationEnforcer extends AbstractPedanticEnforce
   protected void doEnforce() throws EnforcerRuleException {
     Log log = getLog();
 
-    ErrorReport report = new ErrorReport(PedanticEnforcerRule.PLUGIN_CONFIGURATION, "One does not simply configure plugins!");
+    ErrorReport report = new ErrorReport(PedanticEnforcerRule.PLUGIN_CONFIGURATION);
 
     if (this.manageVersions) {
       log.debug("Enforcing managed plugin versions.");
