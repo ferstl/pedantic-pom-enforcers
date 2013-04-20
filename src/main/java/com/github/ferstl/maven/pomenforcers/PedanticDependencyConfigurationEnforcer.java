@@ -18,8 +18,6 @@ package com.github.ferstl.maven.pomenforcers;
 import java.util.Collection;
 import java.util.List;
 
-import org.apache.maven.enforcer.rule.api.EnforcerRuleException;
-
 import com.github.ferstl.maven.pomenforcers.model.DependencyModel;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
@@ -89,17 +87,22 @@ public class PedanticDependencyConfigurationEnforcer extends AbstractPedanticEnf
   }
 
   @Override
-  protected void doEnforce() throws EnforcerRuleException {
-    ErrorReport report = new ErrorReport(PedanticEnforcerRule.DEPENDENCY_CONFIGURATION);
+  protected PedanticEnforcerRule getDescription() {
+    return PedanticEnforcerRule.DEPENDENCY_CONFIGURATION;
+  }
+
+  @Override
+  protected void accept(PedanticEnforcerVisitor visitor) {
+    visitor.visit(this);
+  }
+
+  @Override
+  protected void doEnforce(ErrorReport report) {
     if (this.manageVersions) {
       enforceManagedVersions(report);
     }
     if (this.manageExclusions) {
       enforceManagedExclusion(report);
-    }
-
-    if (report.hasErrors()) {
-      throw new EnforcerRuleException(report.toString());
     }
   }
 
@@ -129,11 +132,6 @@ public class PedanticDependencyConfigurationEnforcer extends AbstractPedanticEnf
   private Collection<DependencyModel> searchForDependencies(Predicate<DependencyModel> predicate) {
     List<DependencyModel> dependencies = getProjectModel().getDependencies();
     return Collections2.filter(dependencies, predicate);
-  }
-
-  @Override
-  protected void accept(PedanticEnforcerVisitor visitor) {
-    visitor.visit(this);
   }
 
   private static enum DependencyPredicate implements Predicate<DependencyModel> {

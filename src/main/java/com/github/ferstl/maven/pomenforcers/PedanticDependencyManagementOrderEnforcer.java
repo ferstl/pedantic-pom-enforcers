@@ -18,7 +18,6 @@ package com.github.ferstl.maven.pomenforcers;
 import java.util.Collection;
 import java.util.Collections;
 
-import org.apache.maven.enforcer.rule.api.EnforcerRuleException;
 import org.apache.maven.model.Dependency;
 import org.apache.maven.model.DependencyManagement;
 import org.apache.maven.project.MavenProject;
@@ -61,7 +60,17 @@ import static com.github.ferstl.maven.pomenforcers.ErrorReport.toList;
 public class PedanticDependencyManagementOrderEnforcer extends AbstractPedanticDependencyOrderEnforcer {
 
   @Override
-  protected void doEnforce() throws EnforcerRuleException {
+  protected PedanticEnforcerRule getDescription() {
+    return PedanticEnforcerRule.DEPENDENCY_MANAGEMENT_ORDER;
+  }
+
+  @Override
+  protected void accept(PedanticEnforcerVisitor visitor) {
+    visitor.visit(this);
+  }
+
+  @Override
+  protected void doEnforce(ErrorReport report) {
     MavenProject project = EnforcerRuleUtils.getMavenProject(getHelper());
     CompoundPriorityOrdering<DependencyModel, String, DependencyElement> artifactOrdering = getArtifactOrdering();
 
@@ -74,16 +83,9 @@ public class PedanticDependencyManagementOrderEnforcer extends AbstractPedanticD
     if (!artifactOrdering.isOrdered(managedDependencies.values())) {
       ImmutableList<DependencyModel> sortedDependencies =
           artifactOrdering.immutableSortedCopy(managedDependencies.values());
-      ErrorReport report = new ErrorReport(PedanticEnforcerRule.DEPENDENCY_MANAGEMENT_ORDER)
-          .addLine("Your dependency management has to be ordered this way:")
-          .addLine(toList(sortedDependencies));
-      throw new EnforcerRuleException(report.toString());
+      report.addLine("Your dependency management has to be ordered this way:")
+            .addLine(toList(sortedDependencies));
     }
-  }
-
-  @Override
-  protected void accept(PedanticEnforcerVisitor visitor) {
-    visitor.visit(this);
   }
 
   private Collection<Dependency> getManagedDependencies(MavenProject project) {

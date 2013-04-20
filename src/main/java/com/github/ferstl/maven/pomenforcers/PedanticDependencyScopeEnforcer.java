@@ -18,7 +18,6 @@ package com.github.ferstl.maven.pomenforcers;
 import java.util.Collection;
 import java.util.Set;
 
-import org.apache.maven.enforcer.rule.api.EnforcerRuleException;
 import org.apache.maven.model.Dependency;
 
 import com.github.ferstl.maven.pomenforcers.model.ArtifactModel;
@@ -120,10 +119,18 @@ public class PedanticDependencyScopeEnforcer extends AbstractPedanticEnforcer {
   }
 
   @Override
-  protected void doEnforce() throws EnforcerRuleException {
-    Collection<Dependency> dependencies = EnforcerRuleUtils.getMavenProject(getHelper()).getDependencies();
+  protected PedanticEnforcerRule getDescription() {
+    return PedanticEnforcerRule.DEPENDENCY_SCOPE;
+  }
 
-    ErrorReport report = new ErrorReport(PedanticEnforcerRule.DEPENDENCY_SCOPE);
+  @Override
+  protected void accept(PedanticEnforcerVisitor visitor) {
+    visitor.visit(this);
+  }
+
+  @Override
+  protected void doEnforce(ErrorReport report) {
+    Collection<Dependency> dependencies = EnforcerRuleUtils.getMavenProject(getHelper()).getDependencies();
 
     for (Dependency dependency : dependencies) {
       ArtifactModel artifactModel = DependencyToArtifactTransformer.INSTANCE.apply(dependency);
@@ -134,15 +141,6 @@ public class PedanticDependencyScopeEnforcer extends AbstractPedanticEnforcer {
         report.formatLine("%s -> %s", dependency, Joiner.on(", ").join(allowedScopes));
       }
     }
-
-    if (report.hasErrors()) {
-      throw new EnforcerRuleException(report.toString());
-    }
-  }
-
-  @Override
-  protected void accept(PedanticEnforcerVisitor visitor) {
-    visitor.visit(this);
   }
 
   private Set<ArtifactModel> createDependencyInfo(String dependencies) {

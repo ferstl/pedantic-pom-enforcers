@@ -18,7 +18,6 @@ package com.github.ferstl.maven.pomenforcers;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.apache.maven.enforcer.rule.api.EnforcerRuleException;
 import org.apache.maven.project.MavenProject;
 
 import com.github.ferstl.maven.pomenforcers.model.ArtifactModel;
@@ -50,13 +49,21 @@ public class PedanticDependencyManagementLocationEnforcer extends AbstractPedant
   }
 
   @Override
-  protected void doEnforce() throws EnforcerRuleException {
+  protected PedanticEnforcerRule getDescription() {
+    return PedanticEnforcerRule.DEPENDENCY_MANAGEMENT_LOCATION;
+  }
+
+  @Override
+  protected void accept(PedanticEnforcerVisitor visitor) {
+    visitor.visit(this);
+  }
+
+  @Override
+  protected void doEnforce(ErrorReport report) {
     MavenProject mavenProject = EnforcerRuleUtils.getMavenProject(getHelper());
     if (containsDependencyManagement() && !isDependencyManagementAllowed(mavenProject)) {
-      ErrorReport report = new ErrorReport(PedanticEnforcerRule.DEPENDENCY_MANAGEMENT_LOCATION)
-          .addLine("Only these POMs are allowed to manage dependencies:")
-          .addLine(toList(this.dependencyManagingPoms));
-      throw new EnforcerRuleException(report.toString());
+      report.addLine("Only these POMs are allowed to manage dependencies:")
+            .addLine(toList(this.dependencyManagingPoms));
     }
   }
 
@@ -78,11 +85,6 @@ public class PedanticDependencyManagementLocationEnforcer extends AbstractPedant
   private boolean isDependencyManagementAllowed(MavenProject project) {
     ArtifactModel projectInfo = new ArtifactModel(project.getGroupId(), project.getArtifactId(), project.getVersion());
     return this.dependencyManagingPoms.contains(projectInfo);
-  }
-
-  @Override
-  protected void accept(PedanticEnforcerVisitor visitor) {
-    visitor.visit(this);
   }
 
 }

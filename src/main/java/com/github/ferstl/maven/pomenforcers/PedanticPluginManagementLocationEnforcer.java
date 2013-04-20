@@ -18,7 +18,6 @@ package com.github.ferstl.maven.pomenforcers;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.apache.maven.enforcer.rule.api.EnforcerRuleException;
 import org.apache.maven.project.MavenProject;
 
 import com.github.ferstl.maven.pomenforcers.model.ArtifactModel;
@@ -51,13 +50,21 @@ public class PedanticPluginManagementLocationEnforcer extends AbstractPedanticEn
   }
 
   @Override
-  protected void doEnforce() throws EnforcerRuleException {
+  protected PedanticEnforcerRule getDescription() {
+    return PedanticEnforcerRule.PLUGIN_MANAGEMENT_LOCATION;
+  }
+
+  @Override
+  protected void accept(PedanticEnforcerVisitor visitor) {
+    visitor.visit(this);
+  }
+
+  @Override
+  protected void doEnforce(ErrorReport report) {
     MavenProject mavenProject = EnforcerRuleUtils.getMavenProject(getHelper());
     if (containsPluginManagement() && !isPluginManagementAllowed(mavenProject)) {
-      ErrorReport report = new ErrorReport(PedanticEnforcerRule.PLUGIN_MANAGEMENT_LOCATION)
-             .addLine("Only these POMs are allowed to manage plugins:")
-             .addLine(toList(this.pluginManagingPoms));
-      throw new EnforcerRuleException(report.toString());
+      report.addLine("Only these POMs are allowed to manage plugins:")
+            .addLine(toList(this.pluginManagingPoms));
     }
   }
 
@@ -79,10 +86,5 @@ public class PedanticPluginManagementLocationEnforcer extends AbstractPedanticEn
   private boolean isPluginManagementAllowed(MavenProject project) {
     ArtifactModel projectInfo = new ArtifactModel(project.getGroupId(), project.getArtifactId(), project.getVersion());
     return this.pluginManagingPoms.contains(projectInfo);
-  }
-
-  @Override
-  protected void accept(PedanticEnforcerVisitor visitor) {
-    visitor.visit(this);
   }
 }

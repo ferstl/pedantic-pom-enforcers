@@ -25,6 +25,15 @@ import com.google.common.base.Function;
  */
 public enum PedanticEnforcerRule {
 
+  COMPOUND("One does not simply write a POM file!") {
+    @Override
+    public AbstractPedanticEnforcer createEnforcerRule() {
+      throw new UnsupportedOperationException(
+          "The " + CompoundPedanticEnforcer.class.getSimpleName()
+        + " is not supposed to be instantiated outside the maven-enforcer-plugin.");
+    }
+  },
+
   /**
    * @see PedanticPomSectionOrderEnforcer
    */

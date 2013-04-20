@@ -43,7 +43,12 @@ public abstract class AbstractPedanticEnforcer implements EnforcerRule {
 
     initialize(helper, pom, model);
 
-    doEnforce();
+    ErrorReport report = new ErrorReport(getDescription());
+    doEnforce(report);
+
+    if (report.hasErrors()) {
+      throw new EnforcerRuleException(report.toString());
+    }
   }
 
   /**
@@ -76,7 +81,9 @@ public abstract class AbstractPedanticEnforcer implements EnforcerRule {
     return this.projectModel;
   }
 
-  protected abstract void doEnforce() throws EnforcerRuleException;
+  protected abstract PedanticEnforcerRule getDescription();
+
+  protected abstract void doEnforce(ErrorReport report);
 
   protected abstract void accept(PedanticEnforcerVisitor visitor);
 

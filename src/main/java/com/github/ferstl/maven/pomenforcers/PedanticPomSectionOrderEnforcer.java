@@ -19,7 +19,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-import org.apache.maven.enforcer.rule.api.EnforcerRuleException;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
@@ -73,7 +72,17 @@ public class PedanticPomSectionOrderEnforcer extends AbstractPedanticEnforcer {
   }
 
   @Override
-  protected void doEnforce() throws EnforcerRuleException {
+  protected PedanticEnforcerRule getDescription() {
+    return PedanticEnforcerRule.POM_SECTION_ORDER;
+  }
+
+  @Override
+  protected void accept(PedanticEnforcerVisitor visitor) {
+    visitor.visit(this);
+  }
+
+  @Override
+  protected void doEnforce(ErrorReport report) {
     Node firstChild = getProjectRoot();
     NodeList childNodes = firstChild.getChildNodes();
     ArrayList<PomSection> pomSections = Lists.newArrayList();
@@ -91,10 +100,8 @@ public class PedanticPomSectionOrderEnforcer extends AbstractPedanticEnforcer {
       List<String> sortedPomSections =
           Lists.transform(ordering.immutableSortedCopy(pomSections), pomSectionToString());
 
-      ErrorReport report = new ErrorReport(PedanticEnforcerRule.POM_SECTION_ORDER)
-          .addLine("Your POM file has to be organized this way:")
-          .addLine(toList(sortedPomSections));
-      throw new EnforcerRuleException(report.toString());
+      report.addLine("Your POM file has to be organized this way:")
+            .addLine(toList(sortedPomSections));
     }
   }
 
@@ -113,11 +120,6 @@ public class PedanticPomSectionOrderEnforcer extends AbstractPedanticEnforcer {
       }
     } while (node.getNextSibling() != null);
     return node;
-  }
-
-  @Override
-  protected void accept(PedanticEnforcerVisitor visitor) {
-    visitor.visit(this);
   }
 
 }

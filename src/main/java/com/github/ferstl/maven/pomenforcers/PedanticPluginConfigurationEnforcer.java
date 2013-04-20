@@ -18,8 +18,6 @@ package com.github.ferstl.maven.pomenforcers;
 import java.util.Collection;
 import java.util.List;
 
-import org.apache.maven.enforcer.rule.api.EnforcerRuleException;
-
 import com.github.ferstl.maven.pomenforcers.model.PluginModel;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
@@ -83,9 +81,17 @@ public class PedanticPluginConfigurationEnforcer extends AbstractPedanticEnforce
   }
 
   @Override
-  protected void doEnforce() throws EnforcerRuleException {
-    ErrorReport report = new ErrorReport(PedanticEnforcerRule.PLUGIN_CONFIGURATION);
+  protected PedanticEnforcerRule getDescription() {
+    return PedanticEnforcerRule.PLUGIN_CONFIGURATION;
+  }
 
+  @Override
+  protected void accept(PedanticEnforcerVisitor visitor) {
+    visitor.visit(this);
+  }
+
+  @Override
+  protected void doEnforce(ErrorReport report) {
     if (this.manageVersions) {
       enforceManagedVersions(report);
     }
@@ -96,10 +102,6 @@ public class PedanticPluginConfigurationEnforcer extends AbstractPedanticEnforce
 
     if (this.manageDependencies) {
       enforceManagedDependencies(report);
-    }
-
-    if (report.hasErrors()) {
-      throw new EnforcerRuleException(report.toString());
     }
   }
 
@@ -132,11 +134,6 @@ public class PedanticPluginConfigurationEnforcer extends AbstractPedanticEnforce
   private Collection<PluginModel> searchForPlugins(Predicate<PluginModel> predicate) {
     List<PluginModel> plugins = getProjectModel().getPlugins();
     return Collections2.filter(plugins, predicate);
-  }
-
-  @Override
-  protected void accept(PedanticEnforcerVisitor visitor) {
-    visitor.visit(this);
   }
 
   static enum PluginPredicate implements Predicate<PluginModel> {

@@ -18,7 +18,6 @@ import java.util.Collection;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-import org.apache.maven.enforcer.rule.api.EnforcerRuleException;
 import org.apache.maven.model.Plugin;
 import org.apache.maven.project.MavenProject;
 
@@ -111,7 +110,17 @@ public class PedanticPluginManagementOrderEnforcer extends AbstractPedanticEnfor
   }
 
   @Override
-  protected void doEnforce() throws EnforcerRuleException {
+  protected PedanticEnforcerRule getDescription() {
+    return PedanticEnforcerRule.PLUGIN_MANAGEMENT_ORDER;
+  }
+
+  @Override
+  protected void accept(PedanticEnforcerVisitor visitor) {
+    visitor.visit(this);
+  }
+
+  @Override
+  protected void doEnforce(ErrorReport report) {
     MavenProject project = EnforcerRuleUtils.getMavenProject(getHelper());
 
     Collection<PluginModel> declaredManagedPlugins = getProjectModel().getManagedPlugins();
@@ -120,16 +129,9 @@ public class PedanticPluginManagementOrderEnforcer extends AbstractPedanticEnfor
 
     if (!this.pluginOrdering.isOrdered(matchedPlugins.values())) {
       ImmutableList<PluginModel> sortedPlugins = this.pluginOrdering.immutableSortedCopy(matchedPlugins.values());
-      ErrorReport report = new ErrorReport(PedanticEnforcerRule.PLUGIN_MANAGEMENT_ORDER)
-              .addLine("Your plugin management has to be ordered this way:")
-              .addLine(toList(sortedPlugins));
-      throw new EnforcerRuleException(report.toString());
+      report.addLine("Your plugin management has to be ordered this way:")
+            .addLine(toList(sortedPlugins));
     }
-  }
-
-  @Override
-  protected void accept(PedanticEnforcerVisitor visitor) {
-    visitor.visit(this);
   }
 
   private BiMap<PluginModel, PluginModel> matchPlugins(Collection<PluginModel> subset, Collection<Plugin> superset) {

@@ -19,8 +19,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import org.apache.maven.enforcer.rule.api.EnforcerRuleException;
-
 import com.github.ferstl.maven.pomenforcers.util.CommaSeparatorUtils;
 import com.google.common.base.Strings;
 import com.google.common.collect.Sets;
@@ -278,37 +276,44 @@ public class CompoundPedanticEnforcer extends AbstractPedanticEnforcer {
   }
 
   @Override
+  protected PedanticEnforcerRule getDescription() {
+    return PedanticEnforcerRule.COMPOUND;
+  }
+
+  @Override
   protected void accept(PedanticEnforcerVisitor visitor) {
     visitor.visit(this);
   }
 
   @Override
-  protected void doEnforce() throws EnforcerRuleException {
-    List<EnforcerRuleException> errorList = new ArrayList<>();
+  protected void doEnforce(ErrorReport report) {
+    report.useLargeTitle();
+
+    List<ErrorReport> ruleErrors = new ArrayList<>();
     for (PedanticEnforcerRule pedanticEnforcer : this.enforcers) {
       AbstractPedanticEnforcer rule = pedanticEnforcer.createEnforcerRule();
       rule.initialize(getHelper(), getPom(), getProjectModel());
       rule.accept(this.propertyInitializer);
 
-      try {
-        rule.doEnforce();
-      } catch (EnforcerRuleException e) {
-        errorList.add(e);
+      ErrorReport ruleReport = new ErrorReport(rule.getDescription());
+      rule.doEnforce(ruleReport);
+
+      if (ruleReport.hasErrors()) {
+        ruleErrors.add(ruleReport);
       }
     }
-    handleErrors(errorList);
+    collectErrors(report, ruleErrors);
   }
 
-  private void handleErrors(List<EnforcerRuleException> errorList) throws EnforcerRuleException {
-    if (!errorList.isEmpty()) {
-      ErrorReport report = new ErrorReport("One does not simply write a POM file.")
-            .useLargeTitle()
-            .addLine("Please fix these problems:")
-            .emptyLine();
-      for (EnforcerRuleException error : errorList) {
-        report.addLine(error.getMessage()).emptyLine().emptyLine();
+  private void collectErrors(ErrorReport compundReport, List<ErrorReport> ruleErrors) {
+    if (!ruleErrors.isEmpty()) {
+      compundReport
+        .useLargeTitle()
+        .addLine("Please fix these problems:")
+        .emptyLine();
+      for (ErrorReport ruleError : ruleErrors) {
+        compundReport.addLine(ruleError.toString()).emptyLine().emptyLine();
       }
-      throw new EnforcerRuleException(report.toString());
     }
   }
 

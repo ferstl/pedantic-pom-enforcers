@@ -19,7 +19,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-import org.apache.maven.enforcer.rule.api.EnforcerRuleException;
 import org.apache.maven.project.MavenProject;
 
 import com.github.ferstl.maven.pomenforcers.util.CommaSeparatorUtils;
@@ -67,7 +66,17 @@ public class PedanticModuleOrderEnforcer extends AbstractPedanticEnforcer {
   }
 
   @Override
-  protected void doEnforce() throws EnforcerRuleException {
+  protected PedanticEnforcerRule getDescription() {
+    return PedanticEnforcerRule.MODULE_ORDER;
+  }
+
+  @Override
+  protected void accept(PedanticEnforcerVisitor visitor) {
+    visitor.visit(this);
+  }
+
+  @Override
+  protected void doEnforce(ErrorReport report) {
     MavenProject project = EnforcerRuleUtils.getMavenProject(getHelper());
     // Do nothing if the project is not a parent project
     if (!isPomProject(project)) {
@@ -81,24 +90,17 @@ public class PedanticModuleOrderEnforcer extends AbstractPedanticEnforcer {
     // Enforce the module order
     Ordering<String> moduleOrdering = Ordering.natural();
     if (!moduleOrdering.isOrdered(declaredModules)) {
-      ErrorReport report = createErrorReport(moduleOrdering.immutableSortedCopy(declaredModules));
-      throw new EnforcerRuleException(report.toString());
+      reportError(report, moduleOrdering.immutableSortedCopy(declaredModules));
     }
-  }
-
-  @Override
-  protected void accept(PedanticEnforcerVisitor visitor) {
-    visitor.visit(this);
   }
 
   private boolean isPomProject(MavenProject project) {
     return "pom".equals(project.getPackaging());
   }
 
-  private ErrorReport createErrorReport(List<String> orderedModules) {
-    ErrorReport report = new ErrorReport(PedanticEnforcerRule.MODULE_ORDER)
-      .addLine("You have to sort your modules alphabetically:")
-      .addLine(toList(orderedModules));
+  private ErrorReport reportError(ErrorReport report, List<String> orderedModules) {
+    report.addLine("You have to sort your modules alphabetically:")
+          .addLine(toList(orderedModules));
     if (!this.ignoredModules.isEmpty()) {
       report.emptyLine()
             .addLine("You may place these modules anywhere in your <modules> section:")
