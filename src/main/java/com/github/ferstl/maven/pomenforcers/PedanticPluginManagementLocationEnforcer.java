@@ -85,6 +85,6 @@ public class PedanticPluginManagementLocationEnforcer extends AbstractPedanticEn
 
   private boolean isPluginManagementAllowed(MavenProject project) {
     ArtifactModel projectInfo = new ArtifactModel(project.getGroupId(), project.getArtifactId(), project.getVersion());
-    return this.pluginManagingPoms.contains(projectInfo);
+    return this.pluginManagingPoms.isEmpty() || this.pluginManagingPoms.contains(projectInfo);
   }
 }
