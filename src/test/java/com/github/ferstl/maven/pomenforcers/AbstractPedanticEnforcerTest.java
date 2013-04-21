@@ -19,6 +19,7 @@ import org.w3c.dom.Element;
 
 import com.github.ferstl.maven.pomenforcers.model.DependencyModel;
 import com.github.ferstl.maven.pomenforcers.model.DependencyScope;
+import com.github.ferstl.maven.pomenforcers.model.PluginModel;
 import com.github.ferstl.maven.pomenforcers.model.ProjectModel;
 
 import static com.github.ferstl.maven.pomenforcers.ErrorReportMatcher.hasErrors;
@@ -44,6 +45,8 @@ public abstract class AbstractPedanticEnforcerTest<T extends AbstractPedanticEnf
 
     when(this.projectModel.getDependencies()).thenReturn(new LinkedList<DependencyModel>());
     when(this.projectModel.getManagedDependencies()).thenReturn(new LinkedList<DependencyModel>());
+    when(this.projectModel.getPlugins()).thenReturn(new LinkedList<PluginModel>());
+    when(this.projectModel.getManagedPlugins()).thenReturn(new LinkedList<PluginModel>());
     when(this.mockMavenProject.getDependencies()).thenReturn(new LinkedList<Dependency>());
 
     ConsoleLogger plexusLogger = new ConsoleLogger(Logger.LEVEL_DEBUG, "testLogger");
