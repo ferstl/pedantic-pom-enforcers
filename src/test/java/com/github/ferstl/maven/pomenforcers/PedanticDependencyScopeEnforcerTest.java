@@ -59,7 +59,6 @@ public class PedanticDependencyScopeEnforcerTest extends AbstractPedanticEnforce
   @Before
   public void before() {
     addDependenciesForAllScopes();
-    createWrongConfiguration(DependencyScope.COMPILE);
   }
 
   @Override
