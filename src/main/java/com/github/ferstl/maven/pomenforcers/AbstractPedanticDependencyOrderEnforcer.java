@@ -113,6 +113,6 @@ public abstract class AbstractPedanticDependencyOrderEnforcer extends AbstractPe
 
     DependencyMatchFunction matchFunction = new DependencyMatchFunction(superset, getHelper());
 
-    return new OneToOneMatcher<DependencyModel>(matchFunction).match(subset);
+    return new OneToOneMatcher<>(matchFunction).match(subset);
   }
 }
