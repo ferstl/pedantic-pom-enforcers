@@ -44,7 +44,7 @@ import static com.github.ferstl.maven.pomenforcers.model.functions.StringToArtif
  * <pre>
  * ### Example
  *     &lt;rules&gt;
- *       &lt;dependencyScope implementation=&quot;ch.sferstl.maven.pomenforcer.PedanticDependencyScopeEnforcer&quot;&gt;
+ *       &lt;dependencyScope implementation=&quot;com.github.ferstl.maven.pomenforcers.PedanticDependencyScopeEnforcer&quot;&gt;
  *         &lt;!-- These dependencies can only be defined in test scope --&gt;
  *         &lt;testDependencies&gt;junit:junit,org.hamcrest:hamcrest-library,org.mockito:mockito-core&lt;/testDependencies&gt;
  *

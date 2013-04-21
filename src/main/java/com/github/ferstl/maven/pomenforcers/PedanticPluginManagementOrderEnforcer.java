@@ -45,7 +45,7 @@ import static com.github.ferstl.maven.pomenforcers.model.PluginElement.stringToP
  * <pre>
  * ### Example
  *     &lt;rules&gt;
- *       &lt;pluginManagementOrder implementation=&quot;ch.sferstl.maven.pomenforcer.PedanticPluginManagementOrderEnforcer&quot;&gt;
+ *       &lt;pluginManagementOrder implementation=&quot;com.github.ferstl.maven.pomenforcers.PedanticPluginManagementOrderEnforcer&quot;&gt;
  *         &lt;!-- order by groupId and artifactId (default) --&gt;
  *         &lt;orderBy&gt;groupId,artifactId&lt;/orderBy&gt;
  *         &lt;!-- all group IDs starting with com.myproject.plugins and com.myproject.testplugins should occur first --&gt;

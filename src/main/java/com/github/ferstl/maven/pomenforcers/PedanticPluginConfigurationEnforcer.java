@@ -26,7 +26,7 @@ import static com.github.ferstl.maven.pomenforcers.ErrorReport.toList;
 
 /**
  * Enforces that plugin versions, configurations and dependencies are defined in the
- * <code>&lt;pluginManagement&gt;</code> section. Plugins <code>&lt;executions&gt;</code> can still
+ * <code>&lt;pluginManagement&gt;</code> section. Plugin <code>&lt;executions&gt;</code> can still
  * be configured in the <code>&lt;plugins&gt;</code> section if this enforcer is active.
  * <pre>
  * ### Example
