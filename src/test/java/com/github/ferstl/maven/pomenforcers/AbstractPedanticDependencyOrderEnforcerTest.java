@@ -18,7 +18,7 @@ import static org.junit.Assert.fail;
 public abstract class AbstractPedanticDependencyOrderEnforcerTest<T extends AbstractPedanticDependencyOrderEnforcer>
 extends AbstractPedanticEnforcerTest<T> {
 
-  MethodHandle dependencyAdder;
+  private MethodHandle dependencyAdder;
 
   @Before
   public void setupDependencyAdder() throws Exception {
