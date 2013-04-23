@@ -15,6 +15,10 @@
  */
 package com.github.ferstl.maven.pomenforcers;
 
+import java.lang.invoke.MethodHandle;
+import java.lang.invoke.MethodHandles;
+import java.lang.invoke.MethodType;
+
 import org.junit.Test;
 
 import com.github.ferstl.maven.pomenforcers.model.DependencyScope;
@@ -27,7 +31,7 @@ import static org.mockito.Mockito.verify;
 /**
  * JUnit tests for {@link PedanticDependencyOrderEnforcer}.
  */
-public class PedanticDependencyOrderEnforcerTest extends AbstractPedanticEnforcerTest<PedanticDependencyOrderEnforcer> {
+public class PedanticDependencyOrderEnforcerTest extends AbstractPedanticDependencyOrderEnforcerTest<PedanticDependencyOrderEnforcer> {
 
   @Override
   PedanticDependencyOrderEnforcer createRule() {
@@ -49,91 +53,10 @@ public class PedanticDependencyOrderEnforcerTest extends AbstractPedanticEnforce
     verify(visitor).visit(this.testRule);
   }
 
-  @Test
-  public void defaultSettingsCorrect() {
-    addDependency("a.b.c", "a", DependencyScope.COMPILE);
-    addDependency("a.b.c", "b", DependencyScope.COMPILE);
-
-    addDependency("d.e.f", "a", DependencyScope.IMPORT);
-    addDependency("d.e.f", "b", DependencyScope.IMPORT);
-
-    addDependency("g.h.i", "a", DependencyScope.PROVIDED);
-    addDependency("g.h.i", "b", DependencyScope.PROVIDED);
-
-    addDependency("j.k.l", "a", DependencyScope.SYSTEM);
-    addDependency("j.k.l", "b", DependencyScope.SYSTEM);
-
-    addDependency("m.n.o", "a", DependencyScope.TEST);
-    addDependency("m.n.o", "b", DependencyScope.TEST);
-
-    executeRuleAndCheckReport(false);
+  @Override
+  public MethodHandle createDependencyAdder() throws Exception {
+    MethodType methodType = MethodType.methodType(void.class, String.class, String.class, DependencyScope.class);
+    return MethodHandles.lookup().findVirtual(getClass(), "addDependency", methodType);
   }
 
-  @Test
-  public void defaultSettingsWrongScopeOrder() {
-    // Test before compile
-    addDependency("a.b.c", "a", DependencyScope.TEST);
-    addDependency("x.y.z", "z", DependencyScope.COMPILE);
-
-    executeRuleAndCheckReport(true);
-  }
-
-  @Test
-  public void defaultSettingsWrongGroupIdOrder() {
-    addDependency("d.e.f", "a", DependencyScope.COMPILE);
-    addDependency("a.b.c", "a", DependencyScope.COMPILE);
-
-    executeRuleAndCheckReport(true);
-  }
-
-  @Test
-  public void defaultSettingsWrongArtifactIdOrder() {
-    addDependency("a.b.c", "b", DependencyScope.COMPILE);
-    addDependency("a.b.c", "a", DependencyScope.COMPILE);
-
-    executeRuleAndCheckReport(true);
-  }
-
-  @Test
-  public void groupIdPriorities() {
-    this.testRule.setGroupIdPriorities("u.v.w,x.y.z");
-
-    addDependency("u.v.w", "z", DependencyScope.COMPILE);
-    addDependency("x.y.z", "z", DependencyScope.COMPILE);
-    addDependency("a.b.c", "a", DependencyScope.COMPILE);
-
-    executeRuleAndCheckReport(false);
-  }
-
-
-  @Test
-  public void artifactIdPriorities() {
-    this.testRule.setArtifactIdPriorities("z,y");
-
-    addDependency("a.b.c", "z", DependencyScope.COMPILE);
-    addDependency("a.b.c", "y", DependencyScope.COMPILE);
-    addDependency("a.b.c", "a", DependencyScope.COMPILE);
-
-    executeRuleAndCheckReport(false);
-  }
-
-  @Test
-  public void scopePriorities() {
-    this.testRule.setScopePriorities("system,compile");
-
-    addDependency("x.y.z", "z", DependencyScope.SYSTEM);
-    addDependency("a.b.c", "a", DependencyScope.COMPILE);
-
-    executeRuleAndCheckReport(false);
-  }
-
-  @Test
-  public void orderBy() {
-    this.testRule.setOrderBy("groupId,artifactId");
-
-    addDependency("a.b.c", "a", DependencyScope.TEST);
-    addDependency("a.b.c", "b", DependencyScope.COMPILE);
-
-    executeRuleAndCheckReport(false);
-  }
 }
