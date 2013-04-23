@@ -8,6 +8,7 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import org.apache.maven.enforcer.rule.api.EnforcerRuleHelper;
 import org.apache.maven.model.Dependency;
+import org.apache.maven.model.DependencyManagement;
 import org.apache.maven.monitor.logging.DefaultLog;
 import org.apache.maven.project.MavenProject;
 import org.codehaus.plexus.logging.Logger;
@@ -31,6 +32,8 @@ import static org.mockito.Mockito.when;
 
 public abstract class AbstractPedanticEnforcerTest<T extends AbstractPedanticEnforcer> {
 
+  public static final String DEFAULT_VERSION = "1.0";
+
   EnforcerRuleHelper mockHelper;
   ProjectModel projectModel;
   MavenProject mockMavenProject;
@@ -48,6 +51,9 @@ public abstract class AbstractPedanticEnforcerTest<T extends AbstractPedanticEnf
     when(this.projectModel.getPlugins()).thenReturn(new LinkedList<PluginModel>());
     when(this.projectModel.getManagedPlugins()).thenReturn(new LinkedList<PluginModel>());
     when(this.mockMavenProject.getDependencies()).thenReturn(new LinkedList<Dependency>());
+    DependencyManagement depMgmtMock = mock(DependencyManagement.class);
+    when(depMgmtMock.getDependencies()).thenReturn(new LinkedList<Dependency>());
+    when(this.mockMavenProject.getDependencyManagement()).thenReturn(depMgmtMock);
 
     ConsoleLogger plexusLogger = new ConsoleLogger(Logger.LEVEL_DEBUG, "testLogger");
     when(this.mockHelper.getLog()).thenReturn(new DefaultLog(plexusLogger));
@@ -78,18 +84,36 @@ public abstract class AbstractPedanticEnforcerTest<T extends AbstractPedanticEnf
   }
 
   protected void addDependency(String groupId, String artifactId, DependencyScope scope) {
-    String version = "1.0";
+    String version = DEFAULT_VERSION;
 
+    Dependency mavenDependency = createMavenDependency(groupId, artifactId, scope, version);
+    DependencyModel dependency = createDependencyModel(groupId, artifactId, version);
+
+    this.mockMavenProject.getDependencies().add(mavenDependency);
+    this.projectModel.getDependencies().add(dependency);
+  }
+
+  protected void addManagedDependency(String groupId, String artifactId, DependencyScope scope) {
+    String version = DEFAULT_VERSION;
+
+    Dependency mavenDependency = createMavenDependency(groupId, artifactId, scope, version);
+    DependencyModel dependency = createDependencyModel(groupId, artifactId, version);
+
+    this.mockMavenProject.getDependencyManagement().getDependencies().add(mavenDependency);
+    this.projectModel.getManagedDependencies().add(dependency);
+  }
+
+  private static DependencyModel createDependencyModel(String groupId, String artifactId, String version) {
+    return new DependencyModel(groupId, artifactId, version, null, null, null);
+  }
+
+  private static Dependency createMavenDependency(String groupId, String artifactId, DependencyScope scope, String version) {
     Dependency mavenDependency = new Dependency();
     mavenDependency.setGroupId(groupId);
     mavenDependency.setArtifactId(artifactId);
     mavenDependency.setVersion(version);
     mavenDependency.setScope(scope.getScopeName());
-
-    DependencyModel dependency = new DependencyModel(groupId, artifactId, version, null, null, null);
-
-    this.mockMavenProject.getDependencies().add(mavenDependency);
-    this.projectModel.getDependencies().add(dependency);
+    return mavenDependency;
   }
 
   private static Document createEmptyPom() {
