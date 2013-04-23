@@ -11,9 +11,16 @@ import static org.junit.Assert.fail;
 
 
 /**
- * Abstract test to test subclasses of {@link AbstractPedanticDependencyOrderEnforcer}. Because of
- * the base class' generic type it is a bit tricky to create this abstract test. The only
- * solution that came to my mind at this time of the day was to use {@link MethodHandle}s to add mock dependencies.
+ * <p>
+ * Abstract test for {@link PedanticDependencyOrderEnforcer} and
+ * {@link PedanticDependencyManagementOrderEnforcer}. Both classes do the same thing but one works
+ * on the managed dependencies and one on the dependencies themselves.
+ * </p>
+ * <p>
+ * Due to the generic type of {@link AbstractPedanticEnforcerTest} it is a bit tricky to make this
+ * class a common base class to test the aforementioned classes. It uses a {@link MethodHandle} to
+ * add either dependencies or managed dependencies to the maven project.
+ * </p>
  */
 public abstract class AbstractPedanticDependencyOrderEnforcerTest<T extends AbstractPedanticDependencyOrderEnforcer>
 extends AbstractPedanticEnforcerTest<T> {
