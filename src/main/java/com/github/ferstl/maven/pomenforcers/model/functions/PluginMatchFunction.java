@@ -17,6 +17,7 @@ package com.github.ferstl.maven.pomenforcers.model.functions;
 
 import java.util.Collection;
 import java.util.Map.Entry;
+import java.util.Objects;
 
 import org.apache.maven.enforcer.rule.api.EnforcerRuleHelper;
 import org.apache.maven.model.Plugin;
@@ -26,7 +27,6 @@ import com.google.common.base.Function;
 import com.google.common.collect.Maps;
 
 import static com.github.ferstl.maven.pomenforcers.util.EnforcerRuleUtils.evaluateProperties;
-import static com.google.common.base.Objects.equal;
 
 public class PluginMatchFunction implements Function<PluginModel, Entry<PluginModel, PluginModel>> {
 
@@ -46,8 +46,8 @@ public class PluginMatchFunction implements Function<PluginModel, Entry<PluginMo
     for (Plugin supersetPlugin : this.superset) {
       PluginModel supersetPluginModel = createPluginModel(supersetPlugin);
 
-      if (equal(supersetPlugin.getGroupId(), groupId)
-       && equal(supersetPlugin.getArtifactId(), artifactId)) {
+      if (Objects.equals(supersetPlugin.getGroupId(), groupId)
+       && Objects.equals(supersetPlugin.getArtifactId(), artifactId)) {
         return Maps.immutableEntry(supersetPluginModel, plugin);
       }
     }

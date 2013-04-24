@@ -37,7 +37,7 @@ public class OneToOneMatcher<T> {
   public BiMap<T, T> match(Collection<T> subset) {
 
     Collection<Entry<T, T>> matchedEntries =  transform(subset, this.matchFunction);
-    Builder<T, T> bimapBuilder = ImmutableBiMap.<T, T>builder();
+    Builder<T, T> bimapBuilder = ImmutableBiMap.builder();
     for (Entry<T, T> entry : matchedEntries) {
       bimapBuilder.put(entry.getKey(), entry.getValue());
     }

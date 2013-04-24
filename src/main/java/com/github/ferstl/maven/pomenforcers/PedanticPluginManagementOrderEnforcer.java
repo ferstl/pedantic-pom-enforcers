@@ -136,7 +136,7 @@ public class PedanticPluginManagementOrderEnforcer extends AbstractPedanticEnfor
 
   private BiMap<PluginModel, PluginModel> matchPlugins(Collection<PluginModel> subset, Collection<Plugin> superset) {
     PluginMatchFunction pluginMatchFunction = new PluginMatchFunction(superset, getHelper());
-    OneToOneMatcher<PluginModel> matcher = new OneToOneMatcher<PluginModel>(pluginMatchFunction);
+    OneToOneMatcher<PluginModel> matcher = new OneToOneMatcher<>(pluginMatchFunction);
     return matcher.match(subset);
   }
 }
