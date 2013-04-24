@@ -15,10 +15,6 @@
  */
 package com.github.ferstl.maven.pomenforcers;
 
-import java.lang.invoke.MethodHandle;
-import java.lang.invoke.MethodHandles;
-import java.lang.invoke.MethodType;
-
 import org.junit.Test;
 
 import com.github.ferstl.maven.pomenforcers.model.DependencyScope;
@@ -54,9 +50,13 @@ public class PedanticDependencyOrderEnforcerTest extends AbstractPedanticDepende
   }
 
   @Override
-  public MethodHandle createDependencyAdder() throws Exception {
-    MethodType methodType = MethodType.methodType(void.class, String.class, String.class, DependencyScope.class);
-    return MethodHandles.lookup().findVirtual(getClass(), "addDependency", methodType);
+  public DependencyAdder createDependencyAdder() {
+    return new DependencyAdder() {
+
+      @Override
+      public void addDependency(String groupId, String artifactId, DependencyScope scope) {
+        PedanticDependencyOrderEnforcerTest.this.addDependency(groupId, artifactId, scope);
+      }};
   }
 
 }

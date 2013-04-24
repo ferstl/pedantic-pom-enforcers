@@ -1,13 +1,9 @@
 package com.github.ferstl.maven.pomenforcers;
 
-import java.lang.invoke.MethodHandle;
-
 import org.junit.Before;
 import org.junit.Test;
 
 import com.github.ferstl.maven.pomenforcers.model.DependencyScope;
-
-import static org.junit.Assert.fail;
 
 
 /**
@@ -16,40 +12,35 @@ import static org.junit.Assert.fail;
  * {@link PedanticDependencyManagementOrderEnforcer}. Both classes do the same thing but one works
  * on the managed dependencies and one on the dependencies themselves.
  * </p>
- * <p>
- * Due to the generic type of {@link AbstractPedanticEnforcerTest} it is a bit tricky to make this
- * class a common base class to test the aforementioned classes. It uses a {@link MethodHandle} to
- * add either dependencies or managed dependencies to the maven project.
- * </p>
  */
 public abstract class AbstractPedanticDependencyOrderEnforcerTest<T extends AbstractPedanticDependencyOrderEnforcer>
 extends AbstractPedanticEnforcerTest<T> {
 
-  private MethodHandle dependencyAdder;
+  private DependencyAdder dependencyAdder;
 
   @Before
-  public void setupDependencyAdder() throws Exception {
+  public void setupDependencyAdder() {
     this.dependencyAdder = createDependencyAdder();
   }
 
-  public abstract MethodHandle createDependencyAdder() throws Exception;
+  public abstract DependencyAdder createDependencyAdder();
 
   @Test
   public void defaultSettingsCorrect() {
-    invokeDependencyAdder("a.b.c", "a", DependencyScope.COMPILE);
-    invokeDependencyAdder("a.b.c", "b", DependencyScope.COMPILE);
+    this.dependencyAdder.addDependency("a.b.c", "a", DependencyScope.COMPILE);
+    this.dependencyAdder.addDependency("a.b.c", "b", DependencyScope.COMPILE);
 
-    invokeDependencyAdder("d.e.f", "a", DependencyScope.IMPORT);
-    invokeDependencyAdder("d.e.f", "b", DependencyScope.IMPORT);
+    this.dependencyAdder.addDependency("d.e.f", "a", DependencyScope.IMPORT);
+    this.dependencyAdder.addDependency("d.e.f", "b", DependencyScope.IMPORT);
 
-    invokeDependencyAdder("g.h.i", "a", DependencyScope.PROVIDED);
-    invokeDependencyAdder("g.h.i", "b", DependencyScope.PROVIDED);
+    this.dependencyAdder.addDependency("g.h.i", "a", DependencyScope.PROVIDED);
+    this.dependencyAdder.addDependency("g.h.i", "b", DependencyScope.PROVIDED);
 
-    invokeDependencyAdder("j.k.l", "a", DependencyScope.SYSTEM);
-    invokeDependencyAdder("j.k.l", "b", DependencyScope.SYSTEM);
+    this.dependencyAdder.addDependency("j.k.l", "a", DependencyScope.SYSTEM);
+    this.dependencyAdder.addDependency("j.k.l", "b", DependencyScope.SYSTEM);
 
-    invokeDependencyAdder("m.n.o", "a", DependencyScope.TEST);
-    invokeDependencyAdder("m.n.o", "b", DependencyScope.TEST);
+    this.dependencyAdder.addDependency("m.n.o", "a", DependencyScope.TEST);
+    this.dependencyAdder.addDependency("m.n.o", "b", DependencyScope.TEST);
 
     executeRuleAndCheckReport(false);
   }
@@ -57,24 +48,24 @@ extends AbstractPedanticEnforcerTest<T> {
   @Test
   public void defaultSettingsWrongScopeOrder() {
     // Test before compile
-    invokeDependencyAdder("a.b.c", "a", DependencyScope.TEST);
-    invokeDependencyAdder("x.y.z", "z", DependencyScope.COMPILE);
+    this.dependencyAdder.addDependency("a.b.c", "a", DependencyScope.TEST);
+    this.dependencyAdder.addDependency("x.y.z", "z", DependencyScope.COMPILE);
 
     executeRuleAndCheckReport(true);
   }
 
   @Test
   public void defaultSettingsWrongGroupIdOrder() {
-    invokeDependencyAdder("d.e.f", "a", DependencyScope.COMPILE);
-    invokeDependencyAdder("a.b.c", "a", DependencyScope.COMPILE);
+    this.dependencyAdder.addDependency("d.e.f", "a", DependencyScope.COMPILE);
+    this.dependencyAdder.addDependency("a.b.c", "a", DependencyScope.COMPILE);
 
     executeRuleAndCheckReport(true);
   }
 
   @Test
   public void defaultSettingsWrongArtifactIdOrder() {
-    invokeDependencyAdder("a.b.c", "b", DependencyScope.COMPILE);
-    invokeDependencyAdder("a.b.c", "a", DependencyScope.COMPILE);
+    this.dependencyAdder.addDependency("a.b.c", "b", DependencyScope.COMPILE);
+    this.dependencyAdder.addDependency("a.b.c", "a", DependencyScope.COMPILE);
 
     executeRuleAndCheckReport(true);
   }
@@ -83,9 +74,9 @@ extends AbstractPedanticEnforcerTest<T> {
   public void groupIdPriorities() {
     this.testRule.setGroupIdPriorities("u.v.w,x.y.z");
 
-    invokeDependencyAdder("u.v.w", "z", DependencyScope.COMPILE);
-    invokeDependencyAdder("x.y.z", "z", DependencyScope.COMPILE);
-    invokeDependencyAdder("a.b.c", "a", DependencyScope.COMPILE);
+    this.dependencyAdder.addDependency("u.v.w", "z", DependencyScope.COMPILE);
+    this.dependencyAdder.addDependency("x.y.z", "z", DependencyScope.COMPILE);
+    this.dependencyAdder.addDependency("a.b.c", "a", DependencyScope.COMPILE);
 
     executeRuleAndCheckReport(false);
   }
@@ -95,9 +86,9 @@ extends AbstractPedanticEnforcerTest<T> {
   public void artifactIdPriorities() {
     this.testRule.setArtifactIdPriorities("z,y");
 
-    invokeDependencyAdder("a.b.c", "z", DependencyScope.COMPILE);
-    invokeDependencyAdder("a.b.c", "y", DependencyScope.COMPILE);
-    invokeDependencyAdder("a.b.c", "a", DependencyScope.COMPILE);
+    this.dependencyAdder.addDependency("a.b.c", "z", DependencyScope.COMPILE);
+    this.dependencyAdder.addDependency("a.b.c", "y", DependencyScope.COMPILE);
+    this.dependencyAdder.addDependency("a.b.c", "a", DependencyScope.COMPILE);
 
     executeRuleAndCheckReport(false);
   }
@@ -106,8 +97,8 @@ extends AbstractPedanticEnforcerTest<T> {
   public void scopePriorities() {
     this.testRule.setScopePriorities("system,compile");
 
-    invokeDependencyAdder("x.y.z", "z", DependencyScope.SYSTEM);
-    invokeDependencyAdder("a.b.c", "a", DependencyScope.COMPILE);
+    this.dependencyAdder.addDependency("x.y.z", "z", DependencyScope.SYSTEM);
+    this.dependencyAdder.addDependency("a.b.c", "a", DependencyScope.COMPILE);
 
     executeRuleAndCheckReport(false);
   }
@@ -116,17 +107,13 @@ extends AbstractPedanticEnforcerTest<T> {
   public void orderBy() {
     this.testRule.setOrderBy("groupId,artifactId");
 
-    invokeDependencyAdder("a.b.c", "a", DependencyScope.TEST);
-    invokeDependencyAdder("a.b.c", "b", DependencyScope.COMPILE);
+    this.dependencyAdder.addDependency("a.b.c", "a", DependencyScope.TEST);
+    this.dependencyAdder.addDependency("a.b.c", "b", DependencyScope.COMPILE);
 
     executeRuleAndCheckReport(false);
   }
 
-  private void invokeDependencyAdder(String groupId, String artifactId, DependencyScope scope) {
-    try {
-      this.dependencyAdder.invoke(this, groupId, artifactId, scope);
-    } catch (Throwable e) {
-      fail("Could not add dependency: " + e.getMessage());
-    }
+  static interface DependencyAdder {
+    void addDependency(String groupId, String artifactId, DependencyScope scope);
   }
 }
