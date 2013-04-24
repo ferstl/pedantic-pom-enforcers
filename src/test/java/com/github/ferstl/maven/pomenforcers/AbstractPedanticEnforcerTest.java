@@ -9,6 +9,8 @@ import javax.xml.parsers.ParserConfigurationException;
 import org.apache.maven.enforcer.rule.api.EnforcerRuleHelper;
 import org.apache.maven.model.Dependency;
 import org.apache.maven.model.DependencyManagement;
+import org.apache.maven.model.Plugin;
+import org.apache.maven.model.PluginManagement;
 import org.apache.maven.monitor.logging.DefaultLog;
 import org.apache.maven.project.MavenProject;
 import org.codehaus.plexus.logging.Logger;
@@ -52,8 +54,11 @@ public abstract class AbstractPedanticEnforcerTest<T extends AbstractPedanticEnf
     when(this.projectModel.getManagedPlugins()).thenReturn(new LinkedList<PluginModel>());
     when(this.mockMavenProject.getDependencies()).thenReturn(new LinkedList<Dependency>());
     DependencyManagement depMgmtMock = mock(DependencyManagement.class);
+    PluginManagement pluginMgmtMock = mock(PluginManagement.class);
     when(depMgmtMock.getDependencies()).thenReturn(new LinkedList<Dependency>());
+    when(pluginMgmtMock.getPlugins()).thenReturn(new LinkedList<Plugin>());
     when(this.mockMavenProject.getDependencyManagement()).thenReturn(depMgmtMock);
+    when(this.mockMavenProject.getPluginManagement()).thenReturn(pluginMgmtMock);
 
     ConsoleLogger plexusLogger = new ConsoleLogger(Logger.LEVEL_DEBUG, "testLogger");
     when(this.mockHelper.getLog()).thenReturn(new DefaultLog(plexusLogger));
