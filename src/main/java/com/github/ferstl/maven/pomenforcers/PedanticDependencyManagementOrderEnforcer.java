@@ -80,7 +80,7 @@ public class PedanticDependencyManagementOrderEnforcer extends AbstractPedanticD
     BiMap<DependencyModel, DependencyModel> managedDependencies =
         matchDependencies(declaredManagedDependencies, getManagedDependencies(project));
 
-    if (!artifactOrdering.isOrdered(managedDependencies.values())) {
+    if (!artifactOrdering.isOrdered(managedDependencies.keySet())) {
       ImmutableList<DependencyModel> sortedDependencies =
           artifactOrdering.immutableSortedCopy(managedDependencies.values());
       report.addLine("Your dependency management has to be ordered this way:")

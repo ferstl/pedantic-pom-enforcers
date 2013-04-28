@@ -23,8 +23,7 @@ import org.apache.maven.model.Dependency;
 
 import com.github.ferstl.maven.pomenforcers.model.DependencyElement;
 import com.github.ferstl.maven.pomenforcers.model.DependencyModel;
-import com.github.ferstl.maven.pomenforcers.model.functions.DependencyMatchFunction;
-import com.github.ferstl.maven.pomenforcers.model.functions.OneToOneMatcher;
+import com.github.ferstl.maven.pomenforcers.model.functions.DependencyMatcher;
 import com.github.ferstl.maven.pomenforcers.priority.CompoundPriorityOrdering;
 import com.github.ferstl.maven.pomenforcers.util.CommaSeparatorUtils;
 import com.google.common.collect.BiMap;
@@ -111,8 +110,6 @@ public abstract class AbstractPedanticDependencyOrderEnforcer extends AbstractPe
   protected BiMap<DependencyModel, DependencyModel> matchDependencies(
       Collection<DependencyModel> subset, Collection<Dependency> superset) {
 
-    DependencyMatchFunction matchFunction = new DependencyMatchFunction(superset, getHelper());
-
-    return new OneToOneMatcher<>(matchFunction).match(subset);
+    return new DependencyMatcher(getHelper()).match(superset, subset);
   }
 }

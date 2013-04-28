@@ -23,8 +23,7 @@ import org.apache.maven.project.MavenProject;
 
 import com.github.ferstl.maven.pomenforcers.model.PluginElement;
 import com.github.ferstl.maven.pomenforcers.model.PluginModel;
-import com.github.ferstl.maven.pomenforcers.model.functions.OneToOneMatcher;
-import com.github.ferstl.maven.pomenforcers.model.functions.PluginMatchFunction;
+import com.github.ferstl.maven.pomenforcers.model.functions.PluginMatcher;
 import com.github.ferstl.maven.pomenforcers.priority.CompoundPriorityOrdering;
 import com.github.ferstl.maven.pomenforcers.util.CommaSeparatorUtils;
 import com.github.ferstl.maven.pomenforcers.util.EnforcerRuleUtils;
@@ -127,7 +126,7 @@ public class PedanticPluginManagementOrderEnforcer extends AbstractPedanticEnfor
     Collection<Plugin> managedPlugins = project.getPluginManagement().getPlugins();
     BiMap<PluginModel, PluginModel> matchedPlugins = matchPlugins(declaredManagedPlugins, managedPlugins);
 
-    if (!this.pluginOrdering.isOrdered(matchedPlugins.values())) {
+    if (!this.pluginOrdering.isOrdered(matchedPlugins.keySet())) {
       ImmutableList<PluginModel> sortedPlugins = this.pluginOrdering.immutableSortedCopy(matchedPlugins.values());
       report.addLine("Your plugin management has to be ordered this way:")
             .addLine(toList(sortedPlugins));
@@ -135,8 +134,6 @@ public class PedanticPluginManagementOrderEnforcer extends AbstractPedanticEnfor
   }
 
   private BiMap<PluginModel, PluginModel> matchPlugins(Collection<PluginModel> subset, Collection<Plugin> superset) {
-    PluginMatchFunction pluginMatchFunction = new PluginMatchFunction(superset, getHelper());
-    OneToOneMatcher<PluginModel> matcher = new OneToOneMatcher<>(pluginMatchFunction);
-    return matcher.match(subset);
+    return new PluginMatcher(getHelper()).match(superset, subset);
   }
 }
