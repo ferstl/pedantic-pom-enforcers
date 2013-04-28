@@ -16,14 +16,10 @@
 package com.github.ferstl.maven.pomenforcers;
 import java.util.Collection;
 
+import org.apache.maven.model.Dependency;
 import org.apache.maven.project.MavenProject;
 
-import com.github.ferstl.maven.pomenforcers.model.DependencyElement;
 import com.github.ferstl.maven.pomenforcers.model.DependencyModel;
-import com.github.ferstl.maven.pomenforcers.priority.CompoundPriorityOrdering;
-import com.github.ferstl.maven.pomenforcers.util.EnforcerRuleUtils;
-import com.google.common.collect.BiMap;
-import com.google.common.collect.ImmutableList;
 
 import static com.github.ferstl.maven.pomenforcers.ErrorReport.toList;
 
@@ -64,19 +60,18 @@ public class PedanticDependencyOrderEnforcer extends AbstractPedanticDependencyO
   }
 
   @Override
-  protected void doEnforce(ErrorReport report) {
-    MavenProject project = EnforcerRuleUtils.getMavenProject(getHelper());
-    CompoundPriorityOrdering<DependencyModel, String, DependencyElement> artifactOrdering = getArtifactOrdering();
+  protected Collection<DependencyModel> getDeclaredDependencies() {
+    return getProjectModel().getDependencies();
+  }
 
-    Collection<DependencyModel> declaredDependencies = getProjectModel().getDependencies();
-    BiMap<DependencyModel, DependencyModel> dependencyArtifacts =
-        matchDependencies(declaredDependencies, project.getDependencies());
+  @Override
+  protected Collection<Dependency> getMavenDependencies(MavenProject project) {
+    return project.getDependencies();
+  }
 
-    if (!artifactOrdering.isOrdered(dependencyArtifacts.keySet())) {
-      ImmutableList<DependencyModel> sortedDependencies =
-          artifactOrdering.immutableSortedCopy(dependencyArtifacts.values());
-      report.addLine("Your dependencies have to be sorted this way:")
-            .addLine(toList(sortedDependencies));
-    }
+  @Override
+  protected void reportError(ErrorReport report, Collection<DependencyModel> sortedDependencies) {
+    report.addLine("Your dependencies have to be sorted this way:")
+          .addLine(toList(sortedDependencies));
   }
 }

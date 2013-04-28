@@ -22,13 +22,7 @@ import org.apache.maven.model.Dependency;
 import org.apache.maven.model.DependencyManagement;
 import org.apache.maven.project.MavenProject;
 
-import com.github.ferstl.maven.pomenforcers.model.DependencyElement;
 import com.github.ferstl.maven.pomenforcers.model.DependencyModel;
-import com.github.ferstl.maven.pomenforcers.model.ProjectModel;
-import com.github.ferstl.maven.pomenforcers.priority.CompoundPriorityOrdering;
-import com.github.ferstl.maven.pomenforcers.util.EnforcerRuleUtils;
-import com.google.common.collect.BiMap;
-import com.google.common.collect.ImmutableList;
 
 import static com.github.ferstl.maven.pomenforcers.ErrorReport.toList;
 
@@ -70,30 +64,23 @@ public class PedanticDependencyManagementOrderEnforcer extends AbstractPedanticD
   }
 
   @Override
-  protected void doEnforce(ErrorReport report) {
-    MavenProject project = EnforcerRuleUtils.getMavenProject(getHelper());
-    CompoundPriorityOrdering<DependencyModel, String, DependencyElement> artifactOrdering = getArtifactOrdering();
-
-    ProjectModel projectModel = getProjectModel();
-    Collection<DependencyModel> declaredManagedDependencies = projectModel.getManagedDependencies();
-
-    BiMap<DependencyModel, DependencyModel> managedDependencies =
-        matchDependencies(declaredManagedDependencies, getManagedDependencies(project));
-
-    if (!artifactOrdering.isOrdered(managedDependencies.keySet())) {
-      ImmutableList<DependencyModel> sortedDependencies =
-          artifactOrdering.immutableSortedCopy(managedDependencies.values());
-      report.addLine("Your dependency management has to be ordered this way:")
-            .addLine(toList(sortedDependencies));
-    }
+  protected Collection<DependencyModel> getDeclaredDependencies() {
+    return getProjectModel().getManagedDependencies();
   }
 
-  private Collection<Dependency> getManagedDependencies(MavenProject project) {
+  @Override
+  protected Collection<Dependency> getMavenDependencies(MavenProject project) {
     DependencyManagement dependencyManagement = project.getDependencyManagement();
     if (dependencyManagement != null) {
       return dependencyManagement.getDependencies();
     } else {
       return Collections.emptyList();
     }
+  }
+
+  @Override
+  protected void reportError(ErrorReport report, Collection<DependencyModel> sortedDependencies) {
+    report.addLine("Your dependency management has to be ordered this way:")
+          .addLine(toList(sortedDependencies));
   }
 }

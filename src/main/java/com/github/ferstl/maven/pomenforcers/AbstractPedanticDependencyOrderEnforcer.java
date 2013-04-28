@@ -20,12 +20,14 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 
 import org.apache.maven.model.Dependency;
+import org.apache.maven.project.MavenProject;
 
 import com.github.ferstl.maven.pomenforcers.model.DependencyElement;
 import com.github.ferstl.maven.pomenforcers.model.DependencyModel;
 import com.github.ferstl.maven.pomenforcers.model.functions.DependencyMatcher;
 import com.github.ferstl.maven.pomenforcers.priority.CompoundPriorityOrdering;
 import com.github.ferstl.maven.pomenforcers.util.CommaSeparatorUtils;
+import com.github.ferstl.maven.pomenforcers.util.EnforcerRuleUtils;
 import com.google.common.collect.BiMap;
 import com.google.common.collect.Sets;
 
@@ -36,7 +38,7 @@ import static com.github.ferstl.maven.pomenforcers.model.DependencyElement.strin
 
 
 
-public abstract class AbstractPedanticDependencyOrderEnforcer extends AbstractPedanticEnforcer {
+abstract class AbstractPedanticDependencyOrderEnforcer extends AbstractPedanticEnforcer {
 
   private final CompoundPriorityOrdering<DependencyModel, String, DependencyElement> artifactOrdering;
 
@@ -103,13 +105,22 @@ public abstract class AbstractPedanticDependencyOrderEnforcer extends AbstractPe
     this.artifactOrdering.setPriorities(DependencyElement.SCOPE, scopePriorities);
   }
 
-  protected CompoundPriorityOrdering<DependencyModel, String, DependencyElement> getArtifactOrdering() {
-    return this.artifactOrdering;
-  }
+  protected abstract Collection<DependencyModel> getDeclaredDependencies();
 
-  protected BiMap<DependencyModel, DependencyModel> matchDependencies(
-      Collection<DependencyModel> subset, Collection<Dependency> superset) {
+  protected abstract Collection<Dependency> getMavenDependencies(MavenProject mavenProject);
 
-    return new DependencyMatcher(getHelper()).match(superset, subset);
+  protected abstract void reportError(ErrorReport report, Collection<DependencyModel> sortedDependencies);
+
+  @Override
+  protected final void doEnforce(ErrorReport report) {
+    MavenProject mavenProject = EnforcerRuleUtils.getMavenProject(getHelper());
+    DependencyMatcher dependencyMatcher = new DependencyMatcher(getHelper());
+
+    BiMap<DependencyModel, DependencyModel> dependencyArtifacts =
+        dependencyMatcher.match(getMavenDependencies(mavenProject), getDeclaredDependencies());
+
+    if (!this.artifactOrdering.isOrdered(dependencyArtifacts.keySet())) {
+      reportError(report, this.artifactOrdering.immutableSortedCopy(dependencyArtifacts.values()));
+    }
   }
 }
