@@ -9,7 +9,9 @@ import com.github.ferstl.maven.pomenforcers.model.PluginModel;
 
 import static com.github.ferstl.maven.pomenforcers.util.EnforcerRuleUtils.evaluateProperties;
 
-
+/**
+ * Matches Maven {@link Plugin} objects with {@link PluginModel} objects.
+ */
 public class PluginMatcher extends AbstractOneToOneMatcher<Plugin, PluginModel> {
 
   public PluginMatcher(EnforcerRuleHelper helper) {

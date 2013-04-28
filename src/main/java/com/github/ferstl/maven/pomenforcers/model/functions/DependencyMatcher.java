@@ -9,7 +9,9 @@ import com.github.ferstl.maven.pomenforcers.model.DependencyModel;
 
 import static com.github.ferstl.maven.pomenforcers.util.EnforcerRuleUtils.evaluateProperties;
 
-
+/**
+ * Matches Maven {@link Dependency} objects with {@link DependencyModel} objects.
+ */
 public class DependencyMatcher extends AbstractOneToOneMatcher<Dependency, DependencyModel> {
 
   public DependencyMatcher(EnforcerRuleHelper helper) {
