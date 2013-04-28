@@ -27,6 +27,10 @@ import org.w3c.dom.Node;
 
 import com.github.ferstl.maven.pomenforcers.util.XmlUtils;
 
+import static org.hamcrest.Matchers.not;
+import static org.hamcrest.Matchers.nullValue;
+import static org.junit.Assert.assertThat;
+
 public class ModelTest {
 
   @Test
@@ -35,9 +39,9 @@ public class ModelTest {
     JAXBContext ctx = JAXBContext.newInstance(ProjectModel.class);
 
     Binder<Node> binder = ctx.createBinder();
-    JAXBElement<ProjectModel> projectElement = binder.unmarshal(pom, ProjectModel.class);
+    JAXBElement<ProjectModel> projectModel = binder.unmarshal(pom, ProjectModel.class);
 
-    System.out.println(projectElement.getValue());
+    assertThat(projectModel, not(nullValue()));
   }
 
 }

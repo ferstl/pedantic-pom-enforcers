@@ -57,7 +57,7 @@ public enum PluginElement implements PriorityOrderingFactory<String, PluginModel
   private static final Function<String, PluginElement> STRING_TO_PLUGIN_ELEMENT =
       new StringToPluginElementTransformer();
 
-  private static Map<String, PluginElement> elementMap;
+  private static final Map<String, PluginElement> elementMap;
 
   static {
     elementMap = Maps.newLinkedHashMap();
@@ -66,7 +66,7 @@ public enum PluginElement implements PriorityOrderingFactory<String, PluginModel
     }
   }
 
-  public static PluginElement getByElementName(String elementName) {
+  private static PluginElement getByElementName(String elementName) {
     if (elementName == null) {
       throw new NullPointerException("Element name is null");
     }

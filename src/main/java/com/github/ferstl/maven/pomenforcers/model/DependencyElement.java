@@ -64,7 +64,7 @@ implements PriorityOrderingFactory<String, DependencyModel>, Function<Dependency
     }
   };
 
-  private static Map<String, DependencyElement> elementMap;
+  private static final Map<String, DependencyElement> elementMap;
 
   static {
     elementMap = Maps.newLinkedHashMap();

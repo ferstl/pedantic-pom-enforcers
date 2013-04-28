@@ -17,9 +17,6 @@ package com.github.ferstl.maven.pomenforcers.model;
 
 import org.junit.Test;
 
-import com.github.ferstl.maven.pomenforcers.model.DependencyElement;
-
-
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 

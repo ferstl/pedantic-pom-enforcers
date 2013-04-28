@@ -153,6 +153,6 @@ public class PedanticDependencyConfigurationEnforcer extends AbstractPedanticEnf
       public boolean apply(DependencyModel input) {
         return !input.getExclusions().isEmpty();
       }
-    };
+    }
   }
 }

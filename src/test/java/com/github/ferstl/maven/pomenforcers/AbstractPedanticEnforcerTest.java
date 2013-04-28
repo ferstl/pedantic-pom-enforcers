@@ -34,9 +34,9 @@ import static org.mockito.Mockito.when;
 
 public abstract class AbstractPedanticEnforcerTest<T extends AbstractPedanticEnforcer> {
 
-  public static final String DEFAULT_VERSION = "1.0";
+  private static final String DEFAULT_VERSION = "1.0";
 
-  EnforcerRuleHelper mockHelper;
+  private EnforcerRuleHelper mockHelper;
   ProjectModel projectModel;
   MavenProject mockMavenProject;
   T testRule;

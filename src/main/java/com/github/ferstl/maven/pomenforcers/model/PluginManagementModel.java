@@ -19,7 +19,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
-public class PluginManagementModel {
+class PluginManagementModel {
 
   private PluginsModel plugins;
 
@@ -37,7 +37,7 @@ public class PluginManagementModel {
     if (obj == this) {
       return true;
     }
-    if (!(obj instanceof PluginsModel)) {
+    if (!(obj instanceof PluginManagementModel)) {
       return false;
     }
     PluginManagementModel other = (PluginManagementModel) obj;

@@ -15,7 +15,7 @@ public abstract class AbstractOneToOneMatcher<U, V> {
 
   private final EnforcerRuleHelper helper;
 
-  public AbstractOneToOneMatcher(EnforcerRuleHelper helper) {
+  AbstractOneToOneMatcher(EnforcerRuleHelper helper) {
     this.helper = helper;
   }
 
@@ -48,7 +48,7 @@ public abstract class AbstractOneToOneMatcher<U, V> {
 
   protected abstract boolean matches(V supersetItem, V subsetItem);
 
-  protected EnforcerRuleHelper getHelper() {
+  EnforcerRuleHelper getHelper() {
     return this.helper;
   }
 

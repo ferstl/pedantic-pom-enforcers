@@ -20,11 +20,9 @@ import java.util.ArrayList;
 import org.hamcrest.Matchers;
 import org.junit.Test;
 
-import com.github.ferstl.maven.pomenforcers.priority.PriorityOrdering;
 import com.google.common.base.Function;
 import com.google.common.base.Functions;
 import com.google.common.collect.Lists;
-
 
 import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.is;

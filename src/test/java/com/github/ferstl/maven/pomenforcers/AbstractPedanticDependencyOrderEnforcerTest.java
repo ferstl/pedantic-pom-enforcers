@@ -23,7 +23,7 @@ extends AbstractPedanticEnforcerTest<T> {
     this.dependencyAdder = createDependencyAdder();
   }
 
-  public abstract DependencyAdder createDependencyAdder();
+  protected abstract DependencyAdder createDependencyAdder();
 
   @Test
   public void defaultSettingsCorrect() {

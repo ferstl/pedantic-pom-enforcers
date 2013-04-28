@@ -21,7 +21,7 @@ import java.util.Objects;
 
 import javax.xml.bind.annotation.XmlElement;
 
-public class PluginsModel {
+class PluginsModel {
 
   @XmlElement(name = "plugin")
   private List<PluginModel> plugins;

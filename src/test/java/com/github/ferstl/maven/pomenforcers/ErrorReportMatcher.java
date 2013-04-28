@@ -6,11 +6,11 @@ import org.hamcrest.TypeSafeMatcher;
 /**
  * Matcher that shows the {@link ErrorReport} in case of an unexpected failure.
  */
-public class ErrorReportMatcher extends TypeSafeMatcher<ErrorReport> {
+class ErrorReportMatcher extends TypeSafeMatcher<ErrorReport> {
 
   private final boolean expectedErrors;
 
-  ErrorReportMatcher(boolean expectedErrors) {
+  private ErrorReportMatcher(boolean expectedErrors) {
     this.expectedErrors = expectedErrors;
   }
 
