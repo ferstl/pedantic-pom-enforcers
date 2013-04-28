@@ -78,7 +78,7 @@ public class DependencyModel extends ArtifactModel {
         this.type != null ? this.type : "<no type>",
         getScope().getScopeName(),
         this.classifier != null ? this.classifier : "<no classifier>",
-        this.exclusions != null ? CollectionToStringHelper.toString("Exclusions", this.exclusions) : "<no exclusions>");
+        this.exclusions != null ? "<contains exclusions>" : "<no exclusions>");
   }
 
   // Note that this equals() implementation breaks the symmetry contract!
