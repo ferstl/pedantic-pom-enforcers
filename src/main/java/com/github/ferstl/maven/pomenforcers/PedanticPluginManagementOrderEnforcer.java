@@ -28,7 +28,6 @@ import com.github.ferstl.maven.pomenforcers.priority.CompoundPriorityOrdering;
 import com.github.ferstl.maven.pomenforcers.util.CommaSeparatorUtils;
 import com.github.ferstl.maven.pomenforcers.util.EnforcerRuleUtils;
 import com.google.common.collect.BiMap;
-import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Sets;
 
 import static com.github.ferstl.maven.pomenforcers.ErrorReport.toList;
@@ -126,8 +125,9 @@ public class PedanticPluginManagementOrderEnforcer extends AbstractPedanticEnfor
     Collection<Plugin> managedPlugins = project.getPluginManagement().getPlugins();
     BiMap<PluginModel, PluginModel> matchedPlugins = matchPlugins(declaredManagedPlugins, managedPlugins);
 
-    if (!this.pluginOrdering.isOrdered(matchedPlugins.keySet())) {
-      ImmutableList<PluginModel> sortedPlugins = this.pluginOrdering.immutableSortedCopy(matchedPlugins.values());
+    Set<PluginModel> resolvedPlugins = matchedPlugins.keySet();
+    if (!this.pluginOrdering.isOrdered(resolvedPlugins)) {
+      Collection<PluginModel> sortedPlugins = this.pluginOrdering.immutableSortedCopy(resolvedPlugins);
       report.addLine("Your plugin management has to be ordered this way:")
             .addLine(toList(sortedPlugins));
     }

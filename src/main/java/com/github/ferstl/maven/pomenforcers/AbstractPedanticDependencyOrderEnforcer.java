@@ -116,11 +116,12 @@ abstract class AbstractPedanticDependencyOrderEnforcer extends AbstractPedanticE
     MavenProject mavenProject = EnforcerRuleUtils.getMavenProject(getHelper());
     DependencyMatcher dependencyMatcher = new DependencyMatcher(getHelper());
 
-    BiMap<DependencyModel, DependencyModel> dependencyArtifacts =
+    BiMap<DependencyModel, DependencyModel> matchedDependencies =
         dependencyMatcher.match(getMavenDependencies(mavenProject), getDeclaredDependencies());
 
-    if (!this.artifactOrdering.isOrdered(dependencyArtifacts.keySet())) {
-      reportError(report, this.artifactOrdering.immutableSortedCopy(dependencyArtifacts.values()));
+    Set<DependencyModel> resolvedDependencies = matchedDependencies.keySet();
+    if (!this.artifactOrdering.isOrdered(resolvedDependencies)) {
+      reportError(report, this.artifactOrdering.immutableSortedCopy(resolvedDependencies));
     }
   }
 }
