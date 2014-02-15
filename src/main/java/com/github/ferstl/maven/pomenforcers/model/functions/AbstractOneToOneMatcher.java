@@ -37,11 +37,15 @@ public abstract class AbstractOneToOneMatcher<U, V> {
       }
 
       if (!itemMatched) {
-        throw new IllegalArgumentException("Could not match item " + subsetItem + " with superset");
+        handleUnmatchedItem(mapBuilder, subsetItem);
       }
     }
 
     return mapBuilder.build();
+  }
+
+  protected void handleUnmatchedItem(Builder<V,V> mapBuilder, V subsetItem) {
+    throw new IllegalArgumentException("Could not match item " + subsetItem + " with superset");
   }
 
   protected abstract V transform(U supersetItem);
