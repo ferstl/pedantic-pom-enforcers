@@ -21,7 +21,7 @@ To activate the enforcer rules, just declare them in the configuration of the [`
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-enforcer-plugin</artifactId>
-          <version>1.1</version>
+          <version>1.3.1</version>
           <configuration>
             <rules>
               <compound implementation="com.github.ferstl.maven.pomenforcers.CompoundPedanticEnforcer">
@@ -38,7 +38,7 @@ To activate the enforcer rules, just declare them in the configuration of the [`
             <dependency>
               <groupId>com.github.ferstl</groupId>
               <artifactId>pedantic-pom-enforcers</artifactId>
-              <version>1.1.1</version>
+              <version>1.1.2</version>
             </dependency>
           </dependencies>
         </plugin>
