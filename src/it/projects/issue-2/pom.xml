@@ -3,35 +3,20 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>com.github.ferstl</groupId>
-  <artifactId>issue-2-it</artifactId>
+  <artifactId>issue-2-it-parent</artifactId>
   <version>1.0-SNAPSHOT</version>
+  <packaging>pom</packaging>
 
   <description>
-    Integration test for issue #2. See https://github.com/ferstl/pedantic-pom-enforcers/pull/2
+    Integration test for issue #2. See https://github.com/ferstl/pedantic-pom-enforcers/pull/2 .
+    This project contains two modules. pom-module has &lt;packaging&gt;pom&lt;/packaging&gt;.
+    jar-module has &lt;packaging&gt;jar&lt;/packaging&gt; and an import-scope dependency to pom-module.
   </description>
 
-  <dependencyManagement>
-    <dependencies>
-      <dependency>
-        <groupId>commons-codec</groupId>
-        <artifactId>commons-codec</artifactId>
-        <version>1.6</version>
-      </dependency>
-      <dependency>
-        <groupId>com.googlecode.lambdaj</groupId>
-        <artifactId>lambdaj</artifactId>
-        <version>2.3.3</version>
-        <scope>import</scope>
-      </dependency>
-    </dependencies>
-  </dependencyManagement>
-
-  <dependencies>
-    <dependency>
-      <groupId>com.googlecode.lambdaj</groupId>
-      <artifactId>lambdaj</artifactId>
-    </dependency>
-  </dependencies>
+  <modules>
+    <module>jar-module</module>
+    <module>pom-module</module>
+  </modules>
 
   <build>
     <pluginManagement>
@@ -39,12 +24,12 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-enforcer-plugin</artifactId>
-          <version>1.1</version>
+          <version>1.3.1</version>
           <configuration>
             <rules>
               <compound implementation="com.github.ferstl.maven.pomenforcers.CompoundPedanticEnforcer">
                 <!-- Enforcers -->
-                <enforcers>DEPENDENCY_ORDER</enforcers>
+                <enforcers>DEPENDENCY_MANAGEMENT_ORDER,DEPENDENCY_ORDER</enforcers>
               </compound>
             </rules>
             <fail>true</fail>
