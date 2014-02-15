@@ -17,6 +17,10 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
+  <prerequisites>
+    <maven>2.2.1</maven>
+  </prerequisites>
+
   <groupId>com.github.ferstl</groupId>
   <artifactId>pedantic-pom-enforcers</artifactId>
   <version>1.1.2-SNAPSHOT</version>
@@ -65,13 +69,19 @@
   <properties>
     <!-- Plugin versions. -->
     <maven-license-plugin.version>1.10.b1</maven-license-plugin.version>
+    <maven-clean-plugin.version>2.5</maven-clean-plugin.version>
     <maven-compiler-plugin.version>3.1</maven-compiler-plugin.version>
+    <maven-deploy-plugin.version>2.8.1</maven-deploy-plugin.version>
     <maven-enforcer-plugin.version>1.3.1</maven-enforcer-plugin.version>
     <maven-gpg-plugin.version>1.4</maven-gpg-plugin.version>
+    <maven-install-plugin.version>2.5.1</maven-install-plugin.version>
     <maven-invoker-plugin.version>1.8</maven-invoker-plugin.version>
+    <maven-jar-plugin.version>2.4</maven-jar-plugin.version>
     <maven-javadoc-plugin.version>2.9.1</maven-javadoc-plugin.version>
     <maven-release-plugin.version>2.4.2</maven-release-plugin.version>
+    <maven-resources-plugin.version>2.6</maven-resources-plugin.version>
     <maven-source-plugin.version>2.2.1</maven-source-plugin.version>
+    <maven-surefire-plugin.version>2.16</maven-surefire-plugin.version>
 
     <!-- Other settings. -->
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -163,6 +173,12 @@
 
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-clean-plugin</artifactId>
+          <version>${maven-clean-plugin.version}</version>
+        </plugin>
+
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-compiler-plugin</artifactId>
           <version>${maven-compiler-plugin.version}</version>
           <configuration>
@@ -171,11 +187,17 @@
           </configuration>
         </plugin>
 
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-deploy-plugin</artifactId>
+          <version>${maven-deploy-plugin.version}</version>
+        </plugin>
         
         <!-- Obey the own rules!
              (Has to be disabled because the maven-release-plugin doesn't like depending on the
              artifact which it is releasing.
-             And no, putting it into an inactive profile doesn't work either -->
+             And no, putting it into an inactive profile doesn't work either
+             To verify the POM structure, uncomment the section below and run mvn enforcer:enforce .-->
         <!-- plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-enforcer-plugin</artifactId>
@@ -202,6 +224,12 @@
           <artifactId>maven-gpg-plugin</artifactId>
           <version>${maven-gpg-plugin.version}</version>
         </plugin>
+        
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-install-plugin</artifactId>
+          <version>${maven-install-plugin.version}</version>
+        </plugin>
 
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
@@ -223,6 +251,12 @@
               <goal>org.apache.maven.plugins:maven-enforcer-plugin:${maven-enforcer-plugin.version}:enforce</goal>
             </goals>
           </configuration>
+        </plugin>
+        
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-jar-plugin</artifactId>
+          <version>${maven-jar-plugin.version}</version>
         </plugin>
 
         <plugin>
@@ -260,11 +294,23 @@
             <arguments>-Pdeploy-to-sonatype-oss</arguments>
           </configuration>
         </plugin>
+        
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-resources-plugin</artifactId>
+          <version>${maven-resources-plugin.version}</version>
+        </plugin>
 
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-source-plugin</artifactId>
           <version>${maven-source-plugin.version}</version>
+        </plugin>
+        
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-surefire-plugin</artifactId>
+          <version>${maven-surefire-plugin.version}</version>
         </plugin>
       </plugins>
     </pluginManagement>
