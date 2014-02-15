@@ -11,6 +11,11 @@ If so, the *Pedantic POM Enforcers* are absolutely the thing you need!
 The *Pedantic POM Enforcers* consist of serveral Maven enforcer rules that help you keep your project setup consistent and organized. For example, the enforcer rules ensure that your POM files are organized in a well-defined manner, that your `<modules>`/`<dependencyManagement>`/`<dependencies>`/`<pluginManagement>` sections are sorted in a reasonable way and that version numbers, plugin configurations, etc. are defined only on places where it makes sense.
 
 
+### Release Notes / Solved Issues
+
+- [Version 1.1.2](https://github.com/ferstl/pedantic-pom-enforcers/issues?milestone=1&state=closed)
+
+
 ### How to use the Pedantic POM Enforcers
 The *Pedantic POM Enforcers* are available on [Maven Central](http://central.maven.org/maven2/com/github/ferstl/pedantic-pom-enforcers/). So no further repository configuration is required.
 
