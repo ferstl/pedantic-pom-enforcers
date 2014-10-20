@@ -1,6 +1,7 @@
 # Pedantic POM Enforcers
 *- One does not simply write a POM file*
 
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.github.ferstl/pedantic-pom-enforcers/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.github.ferstl/pedantic-pom-enforcers)
 
 Have you ever experienced symptoms like headaches, unfocused anger or a feeling of total resignation when looking at a Maven project where everybody adds and changes stuff just as they need? Do people call you a "POM-Nazi" if you show them how to setup proper and well organized projects?
 
