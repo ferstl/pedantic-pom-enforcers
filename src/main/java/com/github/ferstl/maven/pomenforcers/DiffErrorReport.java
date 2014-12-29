@@ -30,6 +30,7 @@ public class DiffErrorReport {
     Patch<String> patch = DiffUtils.diff(actual, required);
 
     int origPos = 0;
+    int reqPos = 0;
     List<String> origSide = new ArrayList<>();
     List<String> reqSide = new ArrayList<>();
 
@@ -37,8 +38,12 @@ public class DiffErrorReport {
     for (Delta<String> delta : deltas) {
       while (origPos < delta.getOriginal().getPosition()) {
         add(origSide, " ", actual.get(origPos));
-        add(reqSide, " ", actual.get(origPos));
+//        add(reqSide, " ", actual.get(origPos));
         origPos++;
+      }
+
+      while (reqPos < delta.getRevised().getPosition()) {
+        add(reqSide, " ", required.get(reqPos++));
       }
 
       switch(delta.getType()) {
@@ -47,6 +52,7 @@ public class DiffErrorReport {
             add(origSide, " ", "");
           }
           addAll(reqSide, "+", delta.getRevised().getLines());
+          reqPos += delta.getRevised().size();
           break;
 
         case CHANGE:
@@ -56,6 +62,7 @@ public class DiffErrorReport {
             add(origSide, " ", "");
           }
           origPos += delta.getOriginal().size();
+          reqPos += delta.getRevised().size();
 
 
           addAll(reqSide, "+", delta.getRevised().getLines());
