@@ -11,6 +11,7 @@ import com.google.common.base.Strings;
 import com.google.common.collect.FluentIterable;
 import com.google.common.collect.Ordering;
 
+import difflib.Chunk;
 import difflib.Delta;
 import difflib.DiffUtils;
 import difflib.Patch;
@@ -23,80 +24,114 @@ public class DiffErrorReport {
   }
 
 
+
   public void fuck() {
-     List<String> actual = slightyDifferentOrder();
-//    List<String> actual = sortedOrder();
-    List<String> required = requiredOrder();
-    Patch<String> patch = DiffUtils.diff(actual, required);
+//    List<String> actual = slightyDifferentOrder();
+   List<String> actual = sortedOrder();
+   List<String> required = requiredOrder();
+   Patch<String> patch = DiffUtils.diff(actual, required);
 
-    int origPos = 0;
-    int reqPos = 0;
-    List<String> origSide = new ArrayList<>();
-    List<String> reqSide = new ArrayList<>();
+   List<String> left = new ArrayList<String>(actual);
+   List<String> right = new ArrayList<String>(actual);
+   List<Delta<String>> deltas = patch.getDeltas();
+   int offset = 0;
+   for (Delta<String> delta : deltas) {
+     Chunk<String> original = delta.getOriginal();
+     Chunk<String> revised = delta.getRevised();
 
-    List<Delta<String>> deltas = patch.getDeltas();
-    for (Delta<String> delta : deltas) {
-      while (origPos < delta.getOriginal().getPosition()) {
-        add(origSide, " ", actual.get(origPos));
-//        add(reqSide, " ", actual.get(origPos));
-        origPos++;
-      }
+     System.out.println(delta + " " + revised.getPosition());
+    switch(delta.getType()) {
+       case INSERT:
+         int nrOfInsertions1 = insertEmptyLines(left, offset + original.getPosition(), revised.size());
+         insertAll(right, offset + original.getPosition(), "+", revised.getLines());
+         offset += nrOfInsertions1;
+         break;
 
-      while (reqPos < delta.getRevised().getPosition()) {
-        add(reqSide, " ", required.get(reqPos++));
-      }
+       case CHANGE:
+         int changeSize = Math.max(original.size(), revised.size());
+         markRemoved(left, offset + original.getPosition(), original.size());
+         int nrOfInsertions = insertEmptyLines(left, offset + original.getPosition() + original.size(), changeSize - original.size());
+         insertEmptyLines(right, offset + original.getPosition() + original.size(), nrOfInsertions);
+         for (int i = 0; i < revised.size(); i++) {
+           set(right, offset + original.getPosition() + i, "+", revised.getLines().get(i));
+         }
+         offset += nrOfInsertions;
+         clear(right, offset + original.getPosition() + revised.size(), changeSize - revised.size());
 
-      switch(delta.getType()) {
-        case INSERT:
-          for(int i = 0; i < delta.getRevised().size(); i++) {
-            add(origSide, " ", "");
-          }
-          addAll(reqSide, "+", delta.getRevised().getLines());
-          reqPos += delta.getRevised().size();
-          break;
+         break;
+       case DELETE:
+         markRemoved(left, offset + original.getPosition(), original.size());
+         clear(right, offset + original.getPosition(), original.size()) ;
+         break;
 
-        case CHANGE:
-          addAll(origSide, "-", delta.getOriginal().getLines());
-          // fill up original side
-          for(int i = 0; i < delta.getRevised().size() - delta.getOriginal().size(); i++) {
-            add(origSide, " ", "");
-          }
-          origPos += delta.getOriginal().size();
-          reqPos += delta.getRevised().size();
+       default:
+         throw new IllegalStateException("Unsupported delta type: " + delta.getType());
+
+     }
 
 
-          addAll(reqSide, "+", delta.getRevised().getLines());
-          // fill up required side
-          for(int i = 0; i < delta.getOriginal().size() - delta.getRevised().size(); i++) {
-            add(reqSide, " ", "");
-          }
+   }
 
-        break;
+   System.out.println(sideBySide(left, right));
+  }
 
-        case DELETE:
-          addAll(origSide, "-", delta.getOriginal().getLines());
-          origPos += delta.getOriginal().size();
-          for(int i = 0; i < delta.getOriginal().size(); i++) {
-            add(reqSide, " ", "");
-          }
-          break;
-        default:
-          throw new IllegalStateException("Unsupported Delta: " + delta.getType());
+  private int insertEmptyLines(List<String> l, int index, int nrOf) {
+    if (nrOf < 1) {
+      return 0;
+    }
+
+    String[] emptyLines = new String[nrOf];
+    Arrays.fill(emptyLines, "");
+    l.addAll(index, Arrays.asList(emptyLines));
+
+    return emptyLines.length;
+  }
+
+  private int clear(List<String> l, int index, int nrOf) {
+    if (nrOf < 1) {
+      return 0;
+    }
+
+    for(int i = 0; i < nrOf; i++) {
+      int insertionPoint = i + index;
+      if (insertionPoint < l.size()) {
+        l.set(i + index, "");
+      } else {
+        insertEmptyLines(l, insertionPoint, 1);
       }
     }
 
+    return nrOf;
+  }
 
-    System.out.println(sideBySide(origSide, reqSide));
+  private void markRemoved(List<String> l, int index, int nrOf) {
+    for (int i = index; i < index + nrOf; i++) {
+      String value = l.get(i);
+      l.set(i, "- " + value);
+    }
+  }
+
+
+  private void set(List<String> l, int index, String prefix, String content) {
+    if (index < l.size() && l.size() > 0) {
+      l.set(index, prefix + " " + content);
+    } else {
+      add(l, prefix, content);
+    }
+  }
+
+  private void insertAll(List<String> l, int index, String prefix, Collection<String> content) {
+    for (String string : content) {
+      insert(l, index, prefix, string);
+    }
+  }
+
+  private void insert(List<String> l, int index, String prefix, String content) {
+    l.add(index, prefix + " " + content);
   }
 
   private void add(Collection<String> c, String prefix, String content) {
     c.add(prefix + " " + content);
-  }
-
-  private void addAll(Collection<String> c, String prefix, Collection<String> content) {
-    for (String string : content) {
-      add(c, prefix, string);
-    }
   }
 
   private String sideBySide(List<String> left, List<String> right) {
