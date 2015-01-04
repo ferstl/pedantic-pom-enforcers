@@ -43,8 +43,7 @@ public class DiffErrorReport {
       System.out.println(delta + " " + revised.getPosition());
       switch(delta.getType()) {
         case INSERT:
-          insertEmptyLines(right, currentPosition, revised.size());
-          insertEmptyLines(left, currentPosition, revised.size());
+          expand(left, right, currentPosition, revised.size());
           setLines(right, currentPosition, "+", revised.getLines());
           offset += revised.size();
           break;
@@ -52,8 +51,7 @@ public class DiffErrorReport {
         case CHANGE:
           int difference = revised.size() - original.size();
           if (difference > 0) {
-            insertEmptyLines(left, currentPosition + original.size(), difference);
-            insertEmptyLines(right, currentPosition + original.size(), difference);
+            expand(left, right, currentPosition + original.size(), difference);
             offset += difference;
           }
 
@@ -77,30 +75,26 @@ public class DiffErrorReport {
     System.out.println(sideBySide(left, right));
   }
 
-  private int insertEmptyLines(List<String> l, int index, int nrOf) {
-    if (nrOf < 1) {
-      return 0;
-    }
-
-    String[] emptyLines = new String[nrOf];
-    Arrays.fill(emptyLines, "");
-    l.addAll(index, Arrays.asList(emptyLines));
-
-    return emptyLines.length;
-  }
-
-  private void clear(List<String> l, int index, int nrOf) {
-    if (nrOf < 1) {
+  private void expand(List<String> left, List<String> right, int index, int size) {
+    if (size < 1) {
       return;
     }
 
-    for(int i = 0; i < nrOf; i++) {
-      int insertionPoint = i + index;
-      if (insertionPoint < l.size()) {
-        l.set(i + index, "");
-      } else {
-        insertEmptyLines(l, insertionPoint, 1);
-      }
+    String[] emptyLines = new String[size];
+    Arrays.fill(emptyLines, "");
+    List<String> emptyLinesAsList = Arrays.asList(emptyLines);
+
+    left.addAll(index, emptyLinesAsList);
+    right.addAll(index, emptyLinesAsList);
+  }
+
+  private void clear(List<String> l, int index, int size) {
+    if (size < 1) {
+      return;
+    }
+
+    for(int i = 0; i < size; i++) {
+      l.set(i + index, "");
     }
   }
 
