@@ -28,51 +28,53 @@ public class DiffErrorReport {
   public void fuck() {
 //    List<String> actual = slightyDifferentOrder();
    List<String> actual = sortedOrder();
-   List<String> required = requiredOrder();
-   Patch<String> patch = DiffUtils.diff(actual, required);
+    List<String> required = requiredOrder();
+    Patch<String> patch = DiffUtils.diff(actual, required);
 
-   List<String> left = new ArrayList<String>(actual);
-   List<String> right = new ArrayList<String>(actual);
-   List<Delta<String>> deltas = patch.getDeltas();
-   int offset = 0;
-   for (Delta<String> delta : deltas) {
-     Chunk<String> original = delta.getOriginal();
-     Chunk<String> revised = delta.getRevised();
+    List<String> left = new ArrayList<String>(actual);
+    List<String> right = new ArrayList<String>(actual);
+    List<Delta<String>> deltas = patch.getDeltas();
+    int offset = 0;
+    for (Delta<String> delta : deltas) {
+      Chunk<String> original = delta.getOriginal();
+      Chunk<String> revised = delta.getRevised();
+      int currentPosition = original.getPosition() + offset;
 
-     System.out.println(delta + " " + revised.getPosition());
-    switch(delta.getType()) {
-       case INSERT:
-         // Insert content on the right side, expand left side accordingly
-         insertAll(right, offset + original.getPosition(), "+", revised.getLines());
-         offset += insertEmptyLines(left, offset + original.getPosition(), revised.size());
-         break;
+      System.out.println(delta + " " + revised.getPosition());
+      switch(delta.getType()) {
+        case INSERT:
+          insertEmptyLines(right, currentPosition, revised.size());
+          insertEmptyLines(left, currentPosition, revised.size());
+          setLines(right, currentPosition, "+", revised.getLines());
+          offset += revised.size();
+          break;
 
-       case CHANGE:
-         int changeSize = Math.max(original.size(), revised.size());
-         // left side: mark content as removed and fill in empty lines if the right side part of the delta is bigger
-         markRemoved(left, offset + original.getPosition(), original.size());
-         int nrOfInsertions = insertEmptyLines(left, offset + original.getPosition() + original.size(), changeSize - original.size());
+        case CHANGE:
+          int difference = revised.size() - original.size();
+          if (difference > 0) {
+            insertEmptyLines(left, currentPosition + original.size(), difference);
+            insertEmptyLines(right, currentPosition + original.size(), difference);
+            offset += difference;
+          }
 
-         insertEmptyLines(right, offset + original.getPosition() + original.size(), nrOfInsertions);
-         setLines(right, offset + original.getPosition(), "+", revised.getLines());
-         offset += nrOfInsertions;
-         clear(right, offset + original.getPosition() + revised.size(), changeSize - revised.size());
+          clear(right, currentPosition + revised.size(), difference * -1);
+          setLines(left, currentPosition, "-", original.getLines());
+          setLines(right, currentPosition, "+", revised.getLines());
+          break;
+        case DELETE:
+          markRemoved(left, currentPosition, original.size());
+          clear(right, currentPosition, original.size());
+          break;
 
-         break;
-       case DELETE:
-         markRemoved(left, offset + original.getPosition(), original.size());
-         clear(right, offset + original.getPosition(), original.size()) ;
-         break;
+        default:
+          throw new IllegalStateException("Unsupported delta type: " + delta.getType());
 
-       default:
-         throw new IllegalStateException("Unsupported delta type: " + delta.getType());
-
-     }
+      }
 
 
-   }
+    }
 
-   System.out.println(sideBySide(left, right));
+    System.out.println(sideBySide(left, right));
   }
 
   private int insertEmptyLines(List<String> l, int index, int nrOf) {
@@ -115,16 +117,6 @@ public class DiffErrorReport {
     for (String line : lines) {
       l.set(index + i++, prefix + " " + line);
     }
-  }
-
-  private void insertAll(List<String> l, int index, String prefix, Collection<String> content) {
-    for (String string : content) {
-      insert(l, index, prefix, string);
-    }
-  }
-
-  private void insert(List<String> l, int index, String prefix, String content) {
-    l.add(index, prefix + " " + content);
   }
 
   private String sideBySide(List<String> left, List<String> right) {
