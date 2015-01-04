@@ -42,18 +42,19 @@ public class DiffErrorReport {
      System.out.println(delta + " " + revised.getPosition());
     switch(delta.getType()) {
        case INSERT:
+         // Insert content on the right side, expand left side accordingly
          insertAll(right, offset + original.getPosition(), "+", revised.getLines());
          offset += insertEmptyLines(left, offset + original.getPosition(), revised.size());
          break;
 
        case CHANGE:
          int changeSize = Math.max(original.size(), revised.size());
+         // left side: mark content as removed and fill in empty lines if the right side part of the delta is bigger
          markRemoved(left, offset + original.getPosition(), original.size());
          int nrOfInsertions = insertEmptyLines(left, offset + original.getPosition() + original.size(), changeSize - original.size());
+
          insertEmptyLines(right, offset + original.getPosition() + original.size(), nrOfInsertions);
-         for (int i = 0; i < revised.size(); i++) {
-           set(right, offset + original.getPosition() + i, "+", revised.getLines().get(i));
-         }
+         setLines(right, offset + original.getPosition(), "+", revised.getLines());
          offset += nrOfInsertions;
          clear(right, offset + original.getPosition() + revised.size(), changeSize - revised.size());
 
@@ -108,12 +109,11 @@ public class DiffErrorReport {
     }
   }
 
+  private void setLines(List<String> l, int index, String prefix, Collection<String> lines) {
+    int i = 0;
 
-  private void set(List<String> l, int index, String prefix, String content) {
-    if (index < l.size() && l.size() > 0) {
-      l.set(index, prefix + " " + content);
-    } else {
-      add(l, prefix, content);
+    for (String line : lines) {
+      l.set(index + i++, prefix + " " + line);
     }
   }
 
@@ -125,10 +125,6 @@ public class DiffErrorReport {
 
   private void insert(List<String> l, int index, String prefix, String content) {
     l.add(index, prefix + " " + content);
-  }
-
-  private void add(Collection<String> c, String prefix, String content) {
-    c.add(prefix + " " + content);
   }
 
   private String sideBySide(List<String> left, List<String> right) {
