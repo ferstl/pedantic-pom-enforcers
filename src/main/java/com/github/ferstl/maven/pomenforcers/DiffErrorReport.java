@@ -42,9 +42,8 @@ public class DiffErrorReport {
      System.out.println(delta + " " + revised.getPosition());
     switch(delta.getType()) {
        case INSERT:
-         int nrOfInsertions1 = insertEmptyLines(left, offset + original.getPosition(), revised.size());
          insertAll(right, offset + original.getPosition(), "+", revised.getLines());
-         offset += nrOfInsertions1;
+         offset += insertEmptyLines(left, offset + original.getPosition(), revised.size());
          break;
 
        case CHANGE:
@@ -87,9 +86,9 @@ public class DiffErrorReport {
     return emptyLines.length;
   }
 
-  private int clear(List<String> l, int index, int nrOf) {
+  private void clear(List<String> l, int index, int nrOf) {
     if (nrOf < 1) {
-      return 0;
+      return;
     }
 
     for(int i = 0; i < nrOf; i++) {
@@ -100,8 +99,6 @@ public class DiffErrorReport {
         insertEmptyLines(l, insertionPoint, 1);
       }
     }
-
-    return nrOf;
   }
 
   private void markRemoved(List<String> l, int index, int nrOf) {
