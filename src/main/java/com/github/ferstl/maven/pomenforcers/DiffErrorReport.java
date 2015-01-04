@@ -19,6 +19,9 @@ import difflib.Patch;
 
 public class DiffErrorReport {
 
+  private static final String DELETION_MARKER = "-";
+  private static final String INSERTION_MARKER = "+";
+
   public static void main(String[] args) {
     new DiffErrorReport().fuck();
   }
@@ -35,6 +38,7 @@ public class DiffErrorReport {
     List<String> right = new ArrayList<String>(actual);
     List<Delta<String>> deltas = patch.getDeltas();
     int offset = 0;
+
     for (Delta<String> delta : deltas) {
       Chunk<String> original = delta.getOriginal();
       Chunk<String> revised = delta.getRevised();
@@ -44,7 +48,7 @@ public class DiffErrorReport {
       switch(delta.getType()) {
         case INSERT:
           expand(left, right, currentPosition, revised.size());
-          setLines(right, currentPosition, "+", revised.getLines());
+          setContent(right, currentPosition, INSERTION_MARKER, revised.getLines());
           offset += revised.size();
           break;
 
@@ -55,21 +59,20 @@ public class DiffErrorReport {
             offset += difference;
           }
 
-          clear(right, currentPosition + revised.size(), difference * -1);
-          setLines(left, currentPosition, "-", original.getLines());
-          setLines(right, currentPosition, "+", revised.getLines());
+          clearContent(right, currentPosition + revised.size(), difference * -1);
+          setContent(left, currentPosition, DELETION_MARKER, original.getLines());
+          setContent(right, currentPosition, INSERTION_MARKER, revised.getLines());
           break;
+
         case DELETE:
-          setLines(left, currentPosition, "-", original.getLines());
-          clear(right, currentPosition, original.size());
+          setContent(left, currentPosition, DELETION_MARKER, original.getLines());
+          clearContent(right, currentPosition, original.size());
           break;
 
         default:
           throw new IllegalStateException("Unsupported delta type: " + delta.getType());
 
       }
-
-
     }
 
     System.out.println(sideBySide(left, right));
@@ -88,7 +91,7 @@ public class DiffErrorReport {
     right.addAll(index, emptyLinesAsList);
   }
 
-  private void clear(List<String> l, int index, int size) {
+  private void clearContent(List<String> l, int index, int size) {
     if (size < 1) {
       return;
     }
@@ -98,12 +101,16 @@ public class DiffErrorReport {
     }
   }
 
-  private void setLines(List<String> l, int index, String prefix, Collection<String> lines) {
+  private void setContent(List<String> l, int index, String prefix, Collection<String> lines) {
     int i = 0;
 
     for (String line : lines) {
-      l.set(index + i++, prefix + " " + line);
+      l.set(index + i++, formatLine(prefix, line));
     }
+  }
+
+  private String formatLine(String prefix, String line) {
+    return prefix + " " + line;
   }
 
   private String sideBySide(List<String> left, List<String> right) {
