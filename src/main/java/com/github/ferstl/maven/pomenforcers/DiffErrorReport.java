@@ -60,7 +60,7 @@ public class DiffErrorReport {
           setLines(right, currentPosition, "+", revised.getLines());
           break;
         case DELETE:
-          markRemoved(left, currentPosition, original.size());
+          setLines(left, currentPosition, "-", original.getLines());
           clear(right, currentPosition, original.size());
           break;
 
@@ -95,13 +95,6 @@ public class DiffErrorReport {
 
     for(int i = 0; i < size; i++) {
       l.set(i + index, "");
-    }
-  }
-
-  private void markRemoved(List<String> l, int index, int nrOf) {
-    for (int i = index; i < index + nrOf; i++) {
-      String value = l.get(i);
-      l.set(i, "- " + value);
     }
   }
 
