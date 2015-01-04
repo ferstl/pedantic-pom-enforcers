@@ -32,11 +32,12 @@ public class DiffErrorReport {
 //    List<String> actual = slightyDifferentOrder();
    List<String> actual = sortedOrder();
     List<String> required = requiredOrder();
-    Patch<String> patch = DiffUtils.diff(actual, required);
 
-    List<String> left = new ArrayList<String>(actual);
-    List<String> right = new ArrayList<String>(actual);
-    List<Delta<String>> deltas = patch.getDeltas();
+    SideBySideData sideBySideData = calculateSideBySideData(actual, required);
+
+    List<String> left = prepareSide(sideBySideData.length, actual);
+    List<String> right = prepareSide(sideBySideData.length, actual);
+    List<Delta<String>> deltas = sideBySideData.patch.getDeltas();
     int offset = 0;
 
     for (Delta<String> delta : deltas) {
@@ -166,5 +167,53 @@ public class DiffErrorReport {
     String tmp = list.get(i1);
     list.set(i1, list.get(i2));
     list.set(i2, tmp);
+  }
+
+  private SideBySideData calculateSideBySideData(List<String> content1, List<String> content2) {
+    int length = Math.max(content1.size(), content2.size());
+    int width = Math.max(getMaxWidth(content1), getMaxWidth(content2));
+
+    Patch<String> patch = DiffUtils.diff(content1, content2);
+    for(Delta<String> delta : patch.getDeltas()) {
+      switch(delta.getType()) {
+        case INSERT:
+        case CHANGE:
+          int expansion = delta.getRevised().size() - delta.getOriginal().size();
+          length += (expansion > 0) ? expansion : 0;
+          break;
+
+        default: // NOP
+      }
+    }
+
+    return new SideBySideData(patch, length, width);
+  }
+
+  private List<String> prepareSide(int finalSize, Collection<String> content) {
+    List<String> side = new ArrayList<String>(finalSize);
+    side.addAll(content);
+
+    return side;
+  }
+
+  private int getMaxWidth(Collection<String> content) {
+    int width = 0;
+    for (String string : content) {
+      width = Math.max(width, string.length());
+    }
+
+    return width;
+  }
+
+  private static class SideBySideData {
+    private final int length;
+    private final int width;
+    private final Patch<String> patch;
+
+    public SideBySideData(Patch<String> patch, int length, int width) {
+      this.patch = patch;
+      this.length = length;
+      this.width = width;
+    }
   }
 }
