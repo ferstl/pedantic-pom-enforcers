@@ -105,9 +105,9 @@ public final class SideBySideDiffUtil {
    * Context to manipulate both sides of the diff.
    */
   private static class SideBySideContext {
-    private static final String EMPTY_MARKER = " ";
-    private static final String DELETION_MARKER = "-";
-    private static final String INSERTION_MARKER = "+";
+    private static final String EMPTY_MARKER = "  ";
+    private static final String DELETION_MARKER = "- ";
+    private static final String INSERTION_MARKER = "+ ";
 
     private final int width;
     private final Collection<Delta<String>> deltas;
@@ -193,7 +193,7 @@ public final class SideBySideDiffUtil {
     }
 
     private String formatLine(String prefix, String line) {
-      return prefix + EMPTY_MARKER + line;
+      return prefix + line;
     }
 
     private void expand(int index, int size) {
