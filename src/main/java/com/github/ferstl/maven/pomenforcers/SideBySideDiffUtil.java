@@ -16,13 +16,13 @@ import difflib.Delta;
 import difflib.DiffUtils;
 
 
-public class DiffErrorReport {
+public class SideBySideDiffUtil {
 
   private static final String DELETION_MARKER = "-";
   private static final String INSERTION_MARKER = "+";
 
   public static void main(String[] args) {
-    new DiffErrorReport().fuck();
+    new SideBySideDiffUtil().fuck();
   }
 
 
