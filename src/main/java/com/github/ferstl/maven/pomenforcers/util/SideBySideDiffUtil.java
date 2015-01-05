@@ -5,11 +5,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
-import com.github.ferstl.maven.pomenforcers.model.PomSection;
-import com.google.common.base.Function;
 import com.google.common.base.Strings;
-import com.google.common.collect.FluentIterable;
-import com.google.common.collect.Ordering;
 
 import difflib.Chunk;
 import difflib.Delta;
@@ -17,15 +13,6 @@ import difflib.DiffUtils;
 
 
 public final class SideBySideDiffUtil {
-
-  public static void main(String[] args) {
-//    List<String> actual = slightyDifferentOrder();
-    List<String> actual = sortedOrder();
-    List<String> required = requiredOrder();
-    System.out.println(SideBySideDiffUtil.diff(actual, required));
-  }
-
-
 
   public static String diff(List<String> actual, List<String> required) {
 
@@ -70,35 +57,6 @@ public final class SideBySideDiffUtil {
     }
 
     return context.toString();
-  }
-
-  private static List<String> requiredOrder() {
-    return FluentIterable.from(Arrays.asList(PomSection.values()))
-      .transform(new Function<PomSection, String>() {
-
-        @Override
-        public String apply(PomSection input) {
-          return input.getSectionName();
-        }})
-      .toList();
-  }
-
-  private static List<String> sortedOrder() {
-    return Ordering.usingToString().sortedCopy(requiredOrder());
-  }
-
-  private static List<String> slightyDifferentOrder() {
-    List<String> list = new ArrayList<>(requiredOrder());
-    swap(list, 0, 5);
-    swap(list, 4, 10);
-
-    return list;
-  }
-
-  private static void swap(List<String> list, int i1, int i2) {
-    String tmp = list.get(i1);
-    list.set(i1, list.get(i2));
-    list.set(i2, tmp);
   }
 
   private SideBySideDiffUtil() {
