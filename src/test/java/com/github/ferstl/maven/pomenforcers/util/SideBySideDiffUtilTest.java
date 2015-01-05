@@ -1,6 +1,7 @@
 package com.github.ferstl.maven.pomenforcers.util;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import org.hamcrest.Description;
@@ -14,7 +15,9 @@ import com.google.common.base.Function;
 import com.google.common.collect.FluentIterable;
 import com.google.common.collect.Ordering;
 
+import static com.github.ferstl.maven.pomenforcers.util.SideBySideDiffUtil.diff;
 import static com.github.ferstl.maven.pomenforcers.util.SideBySideDiffUtilTest.SideBySideDiffMatcher.hasContent;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 
 /**
@@ -22,14 +25,138 @@ import static org.junit.Assert.assertThat;
  */
 public class SideBySideDiffUtilTest {
 
-  // empty texts
-  // left/right empty
-  // completely different texts
-  // text with different lengths (left/right shorter)
-  // insertion
-  // change with bigger left side
-  // change with bigger right side
+  @Test
+  public void insertion() {
+    String diff = diff(
+        Arrays.asList("abc", "def", "ghi", "jkl"),
+        Arrays.asList("abc", "zyx", "def", "wvu", "ghi", "tsr", "jkl", "qpo"));
 
+    assertThat(diff, hasContent(
+        "  abc |   abc",
+        "      | + zyx",
+        "  def |   def",
+        "      | + wvu",
+        "  ghi |   ghi",
+        "      | + tsr",
+        "  jkl |   jkl",
+        "      | + qpo"
+        ));
+  }
+
+
+  @Test
+  public void deletion() {
+    String diff = diff(
+        Arrays.asList("abc", "zyx", "def", "wvu", "ghi", "tsr", "jkl", "qpo"),
+        Arrays.asList("abc", "def", "ghi", "jkl"));
+
+    assertThat(diff, hasContent(
+        "  abc |   abc",
+        "- zyx |      ",
+        "  def |   def",
+        "- wvu |      ",
+        "  ghi |   ghi",
+        "- tsr |      ",
+        "  jkl |   jkl",
+        "- qpo |      "
+        ));
+  }
+
+  @Test
+  public void changeWithBiggerLeftSide() {
+    String diff = diff(
+        Arrays.asList("abc", "def", "ghi", "jkl", "mno", "pqr"),
+        Arrays.asList("abc", "zyx", "jkl", "wvu"));
+
+    assertThat(diff, hasContent(
+        "  abc |   abc",
+        "- def | + zyx",
+        "- ghi |      ",
+        "  jkl |   jkl",
+        "- mno | + wvu",
+        "- pqr |      "
+        ));
+  }
+
+  @Test
+  public void changeWithBiggerRightSide() {
+    String diff = diff(
+        Arrays.asList("abc", "def", "ghi", "jkl", "mno", "pqr"),
+        Arrays.asList("zyx", "wvu", "def", "ghi", "wvu", "tsr", "mno", "pqr"));
+
+    assertThat(diff, hasContent(
+        "- abc | + zyx",
+        "      | + wvu",
+        "  def |   def",
+        "  ghi |   ghi",
+        "- jkl | + wvu",
+        "      | + tsr",
+        "  mno |   mno",
+        "  pqr |   pqr"
+        ));
+  }
+
+  @Test
+  public void emptyTexts() {
+    String diff = diff(Collections.<String>emptyList(), Collections.<String>emptyList());
+
+    assertEquals("", diff);
+  }
+
+  @Test
+  public void originalTextEmpty() {
+    String diff = diff(Collections.<String>emptyList(), Arrays.asList("abc", "def"));
+
+    assertThat(diff, hasContent(
+        "      | + abc",
+        "      | + def"
+        ));
+  }
+
+  @Test
+  public void revisedTextEmpty() {
+    String diff = diff(Arrays.asList("abc", "def"), Collections.<String>emptyList());
+
+    assertThat(diff, hasContent(
+        "- abc |      ",
+        "- def |      "
+        ));
+  }
+
+  @Test
+  public void differentTexts() {
+    String diff = diff(Arrays.asList("abc", "def", "ghi"), Arrays.asList("jklm", "nopq"));
+
+    assertThat(diff, hasContent(
+        "- abc  | + jklm",
+        "- def  | + nopq",
+        "- ghi  |       "
+        ));
+  }
+
+  @Test
+  public void differentLengthsShortOriginal() {
+    String diff = diff(Arrays.asList("abc"), Arrays.asList("def", "ghi", "jkl", "abc"));
+
+    assertThat(diff, hasContent(
+        "      | + def",
+        "      | + ghi",
+        "      | + jkl",
+        "  abc |   abc"
+        ));
+  }
+
+  @Test
+  public void differentLengthsShortRevised() {
+    String diff = diff(Arrays.asList("def", "ghi", "jkl", "abc"), Arrays.asList("abc"));
+
+    assertThat(diff, hasContent(
+        "- def |      ",
+        "- ghi |      ",
+        "- jkl |      ",
+        "  abc |   abc"
+        ));
+  }
 
   /**
    * Tests the combination of all scenarios by comparing the required order of {@link PomSection}s
@@ -48,7 +175,7 @@ public class SideBySideDiffUtilTest {
 
     List<String> actual = Ordering.usingToString().sortedCopy(required);
 
-    String diff = SideBySideDiffUtil.diff(actual, required);
+    String diff = diff(actual, required);
     assertThat(diff, hasContent(
         "                         | + modelVersion          ",
         "                         | + prerequisites         ",
@@ -112,8 +239,9 @@ public class SideBySideDiffUtilTest {
 
     @Override
     public void describeTo(Description description) {
+      description.appendText("Diff output:\n");
       for (String string : this.expectedContent) {
-        description.appendText(string).appendText("\n");
+        description.appendText("'").appendText(string).appendText("'\n");
       }
     }
 

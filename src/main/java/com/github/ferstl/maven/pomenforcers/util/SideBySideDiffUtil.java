@@ -24,7 +24,6 @@ public final class SideBySideDiffUtil {
       Chunk<String> revised = delta.getRevised();
       int currentPosition = original.getPosition() + offset;
 
-      System.out.println(delta);
       switch(delta.getType()) {
         case INSERT:
           context.expand(currentPosition, revised.size());
