@@ -101,6 +101,10 @@ public final class SideBySideDiffUtil {
     list.set(i2, tmp);
   }
 
+  private SideBySideDiffUtil() {
+    throw new AssertionError("not instantiable");
+  }
+
   /**
    * Context to manipulate both sides of the diff.
    */
