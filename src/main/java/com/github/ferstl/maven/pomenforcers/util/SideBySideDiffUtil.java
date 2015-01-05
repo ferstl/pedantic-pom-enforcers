@@ -14,7 +14,7 @@ import difflib.DiffUtils;
 
 public final class SideBySideDiffUtil {
 
-  public static String diff(List<String> actual, List<String> required) {
+  public static String diff(Collection<String> actual, Collection<String> required) {
 
     SideBySideContext context = new SideBySideContext(actual, required);
     int offset = 0;
@@ -75,8 +75,11 @@ public final class SideBySideDiffUtil {
     private final List<String> left;
     private final List<String> right;
 
-    public SideBySideContext(List<String> original, List<String> revised) {
-      this.deltas = DiffUtils.diff(original, revised).getDeltas();
+    public SideBySideContext(Collection<String> original, Collection<String> revised) {
+      List<String> originalList = original instanceof List ? (List<String>) original : new ArrayList<>(original);
+      List<String> revisedList = revised instanceof List ? (List<String>) revised : new ArrayList<>(revised);
+
+      this.deltas = DiffUtils.diff(originalList, revisedList).getDeltas();
       int width = Math.max(getMaxWidth(original), getMaxWidth(revised));
       this.width = width + 2; // include the markers
 
