@@ -14,7 +14,6 @@ import com.google.common.collect.Ordering;
 import difflib.Chunk;
 import difflib.Delta;
 import difflib.DiffUtils;
-import difflib.Patch;
 
 
 public class DiffErrorReport {
@@ -33,14 +32,10 @@ public class DiffErrorReport {
    List<String> actual = sortedOrder();
     List<String> required = requiredOrder();
 
-    SideBySideData sideBySideData = calculateSideBySideData(actual, required);
-
-    List<String> left = prepareSide(sideBySideData.length, actual);
-    List<String> right = prepareSide(sideBySideData.length, actual);
-    List<Delta<String>> deltas = sideBySideData.patch.getDeltas();
+    SideBySideContext context = new SideBySideContext(actual, required);
     int offset = 0;
 
-    for (Delta<String> delta : deltas) {
+    for (Delta<String> delta : context.deltas) {
       Chunk<String> original = delta.getOriginal();
       Chunk<String> revised = delta.getRevised();
       int currentPosition = original.getPosition() + offset;
@@ -48,26 +43,27 @@ public class DiffErrorReport {
       System.out.println(delta + " " + revised.getPosition());
       switch(delta.getType()) {
         case INSERT:
-          expand(left, right, currentPosition, revised.size());
-          setContent(right, currentPosition, INSERTION_MARKER, revised.getLines());
+          context.expand(currentPosition, revised.size());
+          context.setRightContent(currentPosition, revised.getLines());
           offset += revised.size();
           break;
 
         case CHANGE:
           int difference = revised.size() - original.size();
           if (difference > 0) {
-            expand(left, right, currentPosition + original.size(), difference);
+            context.expand(currentPosition + original.size(), difference);
             offset += difference;
+          } else {
+            context.clearRightContent(currentPosition + revised.size(), Math.abs(difference));
           }
 
-          clearContent(right, currentPosition + revised.size(), difference * -1);
-          setContent(left, currentPosition, DELETION_MARKER, original.getLines());
-          setContent(right, currentPosition, INSERTION_MARKER, revised.getLines());
+          context.setLeftContent(currentPosition, original.getLines());
+          context.setRightContent(currentPosition, revised.getLines());
           break;
 
         case DELETE:
-          setContent(left, currentPosition, DELETION_MARKER, original.getLines());
-          clearContent(right, currentPosition, original.size());
+          context.setLeftContent(currentPosition, original.getLines());
+          context.clearRightContent(currentPosition, original.size());
           break;
 
         default:
@@ -76,68 +72,7 @@ public class DiffErrorReport {
       }
     }
 
-    System.out.println(sideBySide(left, right));
-  }
-
-  private void expand(List<String> left, List<String> right, int index, int size) {
-    if (size < 1) {
-      return;
-    }
-
-    String[] emptyLines = new String[size];
-    Arrays.fill(emptyLines, "");
-    List<String> emptyLinesAsList = Arrays.asList(emptyLines);
-
-    left.addAll(index, emptyLinesAsList);
-    right.addAll(index, emptyLinesAsList);
-  }
-
-  private void clearContent(List<String> l, int index, int size) {
-    if (size < 1) {
-      return;
-    }
-
-    for(int i = 0; i < size; i++) {
-      l.set(i + index, "");
-    }
-  }
-
-  private void setContent(List<String> l, int index, String prefix, Collection<String> lines) {
-    int i = 0;
-
-    for (String line : lines) {
-      l.set(index + i++, formatLine(prefix, line));
-    }
-  }
-
-  private String formatLine(String prefix, String line) {
-    return prefix + " " + line;
-  }
-
-  private String sideBySide(List<String> left, List<String> right) {
-    int leftSize = left.size();
-    int rightSize = right.size();
-    int maxSize = Math.max(leftSize, rightSize);
-
-    StringBuilder sb = new StringBuilder();
-    for(int i = 0; i < maxSize; i++) {
-      String leftLine = i < leftSize ? left.get(i) : "";
-      String rightLine = i < rightSize ? right.get(i) : "";
-
-      String leftPadded = Strings.padEnd(leftLine, 25, ' ');
-      String rightPadded = Strings.padEnd(rightLine, 25, ' ');
-
-      sb.append(leftPadded)
-      .append(" | ")
-      .append(rightPadded)
-      .append("\n");
-    }
-
-    // Remove last newline
-    if (sb.length() > 0) {
-      sb.deleteCharAt(sb.length() - 1);
-    }
-    return sb.toString();
+    System.out.println(context);
   }
 
   private static List<String> requiredOrder() {
@@ -169,51 +104,127 @@ public class DiffErrorReport {
     list.set(i2, tmp);
   }
 
-  private SideBySideData calculateSideBySideData(List<String> content1, List<String> content2) {
-    int length = Math.max(content1.size(), content2.size());
-    int width = Math.max(getMaxWidth(content1), getMaxWidth(content2));
+  /**
+   * Context to manipulate both sides of the diff.
+   */
+  private static class SideBySideContext {
+    private static final String EMPTY_MARKER = " ";
+    private final int width;
+    private final Collection<Delta<String>> deltas;
+    private final List<String> left;
+    private final List<String> right;
 
-    Patch<String> patch = DiffUtils.diff(content1, content2);
-    for(Delta<String> delta : patch.getDeltas()) {
-      switch(delta.getType()) {
-        case INSERT:
-        case CHANGE:
-          int expansion = delta.getRevised().size() - delta.getOriginal().size();
-          length += (expansion > 0) ? expansion : 0;
-          break;
+    public SideBySideContext(List<String> original, List<String> revised) {
+      this.deltas = DiffUtils.diff(original, revised).getDeltas();
+      int width = Math.max(getMaxWidth(original), getMaxWidth(revised));
+      this.width = width + 2; // include the markers
 
-        default: // NOP
+      int length = Math.max(original.size(), revised.size());
+      length += getExpansionLength(this.deltas);
+      this.left = new ArrayList<>(length);
+      this.right = new ArrayList<>(length);
+
+      for (String string : original) {
+        String line = formatLine(EMPTY_MARKER, string);
+        this.left.add(line);
+        this.right.add(line);
       }
     }
 
-    return new SideBySideData(patch, length, width);
-  }
-
-  private List<String> prepareSide(int finalSize, Collection<String> content) {
-    List<String> side = new ArrayList<String>(finalSize);
-    side.addAll(content);
-
-    return side;
-  }
-
-  private int getMaxWidth(Collection<String> content) {
-    int width = 0;
-    for (String string : content) {
-      width = Math.max(width, string.length());
+    public void setLeftContent(int index, Collection<String> content) {
+      setContent(this.left, index, DELETION_MARKER, content);
     }
 
-    return width;
-  }
+    public void setRightContent(int index, Collection<String> content) {
+      setContent(this.right, index, INSERTION_MARKER, content);
+    }
 
-  private static class SideBySideData {
-    private final int length;
-    private final int width;
-    private final Patch<String> patch;
+    public void clearRightContent(int index, int size) {
+      clearContent(this.right, index, size);
+    }
 
-    public SideBySideData(Patch<String> patch, int length, int width) {
-      this.patch = patch;
-      this.length = length;
-      this.width = width;
+    @Override
+    public String toString() {
+      StringBuilder sb = new StringBuilder();
+      for(int i = 0; i < this.left.size(); i++) {
+        String leftLine = this.left.get(i);
+        String rightLine = this.right.get(i);
+
+        String leftPadded = Strings.padEnd(leftLine, this.width, ' ');
+        String rightPadded = Strings.padEnd(rightLine, this.width, ' ');
+
+        sb.append(leftPadded)
+        .append(" | ")
+        .append(rightPadded)
+        .append("\n");
+      }
+
+      // Remove last newline
+      if (sb.length() > 0) {
+        sb.deleteCharAt(sb.length() - 1);
+      }
+      return sb.toString();
+    }
+
+    private static int getMaxWidth(Collection<String> content) {
+      int width = 0;
+      for (String string : content) {
+        width = Math.max(width, string.length());
+      }
+
+      return width;
+    }
+
+    private static int getExpansionLength(Collection<Delta<String>> deltas) {
+      int length = 0;
+      for(Delta<?> delta : deltas) {
+        switch(delta.getType()) {
+          case INSERT:
+          case CHANGE:
+            int expansion = delta.getRevised().size() - delta.getOriginal().size();
+            length += (expansion > 0) ? expansion : 0;
+            break;
+
+          default: // NOP
+        }
+      }
+
+      return length;
+    }
+
+    private String formatLine(String prefix, String line) {
+      return prefix + EMPTY_MARKER + line;
+    }
+
+    private void expand(int index, int size) {
+      if (size < 1) {
+        return;
+      }
+
+      String[] emptyLines = new String[size];
+      Arrays.fill(emptyLines, "");
+      List<String> emptyLinesAsList = Arrays.asList(emptyLines);
+
+      this.left.addAll(index, emptyLinesAsList);
+      this.right.addAll(index, emptyLinesAsList);
+    }
+
+    private void clearContent(List<String> l, int index, int size) {
+      if (size < 1) {
+        return;
+      }
+
+      for(int i = 0; i < size; i++) {
+        l.set(i + index, "");
+      }
+    }
+
+    private void setContent(List<String> l, int index, String prefix, Collection<String> lines) {
+      int i = 0;
+
+      for (String line : lines) {
+        l.set(index + i++, formatLine(prefix, line));
+      }
     }
   }
 }
