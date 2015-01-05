@@ -16,21 +16,21 @@ import difflib.Delta;
 import difflib.DiffUtils;
 
 
-public class SideBySideDiffUtil {
+public final class SideBySideDiffUtil {
 
   private static final String DELETION_MARKER = "-";
   private static final String INSERTION_MARKER = "+";
 
   public static void main(String[] args) {
-    new SideBySideDiffUtil().fuck();
+//    List<String> actual = slightyDifferentOrder();
+    List<String> actual = sortedOrder();
+    List<String> required = requiredOrder();
+    System.out.println(SideBySideDiffUtil.diff(actual, required));
   }
 
 
 
-  public void fuck() {
-//    List<String> actual = slightyDifferentOrder();
-   List<String> actual = sortedOrder();
-    List<String> required = requiredOrder();
+  public static String diff(List<String> actual, List<String> required) {
 
     SideBySideContext context = new SideBySideContext(actual, required);
     int offset = 0;
@@ -72,7 +72,7 @@ public class SideBySideDiffUtil {
       }
     }
 
-    System.out.println(context);
+    return context.toString();
   }
 
   private static List<String> requiredOrder() {
