@@ -23,8 +23,10 @@ import org.apache.maven.model.DependencyManagement;
 import org.apache.maven.project.MavenProject;
 
 import com.github.ferstl.maven.pomenforcers.model.DependencyModel;
+import com.github.ferstl.maven.pomenforcers.util.SideBySideDiffUtil;
+import com.google.common.collect.Collections2;
 
-import static com.github.ferstl.maven.pomenforcers.ErrorReport.toList;
+import static com.google.common.base.Functions.toStringFunction;
 
 
 /**
@@ -79,8 +81,11 @@ public class PedanticDependencyManagementOrderEnforcer extends AbstractPedanticD
   }
 
   @Override
-  protected void reportError(ErrorReport report, Collection<DependencyModel> sortedDependencies) {
+  protected void reportError(ErrorReport report, Collection<DependencyModel> resolvedDependencies, Collection<DependencyModel> sortedDependencies) {
+    Collection<String> resolvedDependenciesAsString = Collections2.transform(resolvedDependencies, toStringFunction());
+    Collection<String> sortedDependenciesAsString = Collections2.transform(sortedDependencies, toStringFunction());
+
     report.addLine("Your dependency management has to be ordered this way:")
-          .addLine(toList(sortedDependencies));
+          .addLine(SideBySideDiffUtil.diff(resolvedDependenciesAsString, sortedDependenciesAsString));
   }
 }

@@ -27,13 +27,15 @@ import com.github.ferstl.maven.pomenforcers.model.functions.PluginMatcher;
 import com.github.ferstl.maven.pomenforcers.priority.CompoundPriorityOrdering;
 import com.github.ferstl.maven.pomenforcers.util.CommaSeparatorUtils;
 import com.github.ferstl.maven.pomenforcers.util.EnforcerRuleUtils;
+import com.github.ferstl.maven.pomenforcers.util.SideBySideDiffUtil;
 import com.google.common.collect.BiMap;
+import com.google.common.collect.Collections2;
 import com.google.common.collect.Sets;
 
-import static com.github.ferstl.maven.pomenforcers.ErrorReport.toList;
 import static com.github.ferstl.maven.pomenforcers.model.PluginElement.ARTIFACT_ID;
 import static com.github.ferstl.maven.pomenforcers.model.PluginElement.GROUP_ID;
 import static com.github.ferstl.maven.pomenforcers.model.PluginElement.stringToPluginElement;
+import static com.google.common.base.Functions.toStringFunction;
 
 
 /**
@@ -128,8 +130,11 @@ public class PedanticPluginManagementOrderEnforcer extends AbstractPedanticEnfor
     Set<PluginModel> resolvedPlugins = matchedPlugins.keySet();
     if (!this.pluginOrdering.isOrdered(resolvedPlugins)) {
       Collection<PluginModel> sortedPlugins = this.pluginOrdering.immutableSortedCopy(resolvedPlugins);
+      Collection<String> resolvedPluginsAsString = Collections2.transform(resolvedPlugins, toStringFunction());
+      Collection<String> sortedPluginsAsString = Collections2.transform(sortedPlugins, toStringFunction());
+
       report.addLine("Your plugin management has to be ordered this way:")
-            .addLine(toList(sortedPlugins));
+            .addLine(SideBySideDiffUtil.diff(resolvedPluginsAsString, sortedPluginsAsString));
     }
   }
 

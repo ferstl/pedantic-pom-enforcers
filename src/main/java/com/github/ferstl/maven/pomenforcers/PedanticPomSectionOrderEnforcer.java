@@ -16,6 +16,7 @@
 package com.github.ferstl.maven.pomenforcers;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
@@ -24,10 +25,11 @@ import org.w3c.dom.NodeList;
 
 import com.github.ferstl.maven.pomenforcers.model.PomSection;
 import com.github.ferstl.maven.pomenforcers.util.CommaSeparatorUtils;
+import com.github.ferstl.maven.pomenforcers.util.SideBySideDiffUtil;
+import com.google.common.collect.Collections2;
 import com.google.common.collect.Ordering;
 import com.google.common.collect.Sets;
 
-import static com.github.ferstl.maven.pomenforcers.ErrorReport.toList;
 import static com.github.ferstl.maven.pomenforcers.model.PomSection.pomSectionToString;
 import static com.github.ferstl.maven.pomenforcers.model.PomSection.stringToPomSection;
 
@@ -97,12 +99,11 @@ public class PedanticPomSectionOrderEnforcer extends AbstractPedanticEnforcer {
 
     if (!ordering.isOrdered(pomSections)) {
       List<PomSection> sortedPomSections = ordering.immutableSortedCopy(pomSections);
+      Collection<String> pomSectionsAsString = Collections2.transform(pomSections, pomSectionToString());
+      Collection<String> sortedPomSectionsAsString = Collections2.transform(sortedPomSections, pomSectionToString());
 
-      report.addLine("Your POM is currently organized like this:")
-            .addLine(toList(pomSections, pomSectionToString()))
-            .emptyLine()
-            .addLine("... but it has to be organized this way:")
-            .addLine(toList(sortedPomSections, pomSectionToString()));
+      report.addLine("Your POM has to be organized this way:")
+            .addLine(SideBySideDiffUtil.diff(pomSectionsAsString, sortedPomSectionsAsString));
     }
   }
 
