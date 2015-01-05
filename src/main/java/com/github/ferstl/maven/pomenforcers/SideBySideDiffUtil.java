@@ -18,9 +18,6 @@ import difflib.DiffUtils;
 
 public final class SideBySideDiffUtil {
 
-  private static final String DELETION_MARKER = "-";
-  private static final String INSERTION_MARKER = "+";
-
   public static void main(String[] args) {
 //    List<String> actual = slightyDifferentOrder();
     List<String> actual = sortedOrder();
@@ -109,6 +106,9 @@ public final class SideBySideDiffUtil {
    */
   private static class SideBySideContext {
     private static final String EMPTY_MARKER = " ";
+    private static final String DELETION_MARKER = "-";
+    private static final String INSERTION_MARKER = "+";
+
     private final int width;
     private final Collection<Delta<String>> deltas;
     private final List<String> left;
