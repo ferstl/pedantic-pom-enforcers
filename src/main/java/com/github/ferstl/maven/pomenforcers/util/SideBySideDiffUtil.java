@@ -1,4 +1,4 @@
-package com.github.ferstl.maven.pomenforcers;
+package com.github.ferstl.maven.pomenforcers.util;
 
 import java.util.ArrayList;
 import java.util.Arrays;
