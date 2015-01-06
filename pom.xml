@@ -78,23 +78,23 @@
   <properties>
     <!-- Plugin versions. -->
     <maven-license-plugin.version>1.10.b1</maven-license-plugin.version>
-    <maven-clean-plugin.version>2.5</maven-clean-plugin.version>
-    <maven-compiler-plugin.version>3.1</maven-compiler-plugin.version>
-    <maven-deploy-plugin.version>2.8.1</maven-deploy-plugin.version>
+    <maven-clean-plugin.version>2.6.1</maven-clean-plugin.version>
+    <maven-compiler-plugin.version>3.2</maven-compiler-plugin.version>
+    <maven-deploy-plugin.version>2.8.2</maven-deploy-plugin.version>
     <maven-enforcer-plugin.version>1.3.1</maven-enforcer-plugin.version>
-    <maven-gpg-plugin.version>1.4</maven-gpg-plugin.version>
-    <maven-install-plugin.version>2.5.1</maven-install-plugin.version>
-    <maven-invoker-plugin.version>1.8</maven-invoker-plugin.version>
-    <maven-jar-plugin.version>2.4</maven-jar-plugin.version>
-    <maven-javadoc-plugin.version>2.9.1</maven-javadoc-plugin.version>
-    <maven-release-plugin.version>2.4.2</maven-release-plugin.version>
-    <maven-resources-plugin.version>2.6</maven-resources-plugin.version>
-    <maven-source-plugin.version>2.2.1</maven-source-plugin.version>
-    <maven-surefire-plugin.version>2.16</maven-surefire-plugin.version>
+    <maven-gpg-plugin.version>1.5</maven-gpg-plugin.version>
+    <maven-install-plugin.version>2.5.2</maven-install-plugin.version>
+    <maven-invoker-plugin.version>1.9</maven-invoker-plugin.version>
+    <maven-jar-plugin.version>2.5</maven-jar-plugin.version>
+    <maven-javadoc-plugin.version>2.10.1</maven-javadoc-plugin.version>
+    <maven-release-plugin.version>2.5.1</maven-release-plugin.version>
+    <maven-resources-plugin.version>2.7</maven-resources-plugin.version>
+    <maven-source-plugin.version>2.4</maven-source-plugin.version>
+    <maven-surefire-plugin.version>2.18.1</maven-surefire-plugin.version>
 
     <!-- Other settings. -->
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <maven.version>3.1.1</maven.version>
+    <maven.version>3.2.5</maven.version>
     <pedantic-pom-enforcers-doclet.version>1.0.2</pedantic-pom-enforcers-doclet.version>
   </properties>
 
@@ -102,7 +102,7 @@
     <dependency>
       <groupId>com.google.guava</groupId>
       <artifactId>guava</artifactId>
-      <version>16.0.1</version>
+      <version>18.0</version>
     </dependency>
     <dependency>
       <groupId>com.googlecode.java-diff-utils</groupId>
@@ -136,7 +136,7 @@
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
-      <version>4.11</version>
+      <version>4.12</version>
       <scope>test</scope>
       <exclusions>
         <exclusion>
@@ -154,7 +154,7 @@
     <dependency>
       <groupId>org.mockito</groupId>
       <artifactId>mockito-core</artifactId>
-      <version>1.9.5</version>
+      <version>1.10.19</version>
       <scope>test</scope>
       <exclusions>
         <exclusion>
