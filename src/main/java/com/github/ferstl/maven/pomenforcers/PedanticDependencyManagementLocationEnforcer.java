@@ -39,6 +39,7 @@ import static com.github.ferstl.maven.pomenforcers.util.CommaSeparatorUtils.spli
  *     &lt;/rules&gt;
  * </pre>
  * @id {@link PedanticEnforcerRule#DEPENDENCY_MANAGEMENT_LOCATION}
+ * @since 1.0.0
  */
 public class PedanticDependencyManagementLocationEnforcer extends AbstractPedanticEnforcer {
 
@@ -54,6 +55,7 @@ public class PedanticDependencyManagementLocationEnforcer extends AbstractPedant
    * @param dependencyManagingPoms Comma separated list of POMs that may declare plugin management.
    * @configParam
    * @default n/a
+   * @since 1.0.0
    */
   public void setDependencyManagingPoms(String dependencyManagingPoms) {
     splitAndAddToCollection(dependencyManagingPoms, this.dependencyManagingPoms, stringToArtifactModel());

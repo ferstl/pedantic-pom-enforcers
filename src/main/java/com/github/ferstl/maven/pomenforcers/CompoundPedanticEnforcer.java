@@ -85,49 +85,58 @@ import static com.github.ferstl.maven.pomenforcers.PedanticEnforcerRule.stringTo
  *         &lt;pluginManagingPoms&gt;com.myproject:parent-pom&lt;/pluginManagingPoms&gt;
  *       &lt;/compound&gt;
  *     &lt;/rules&gt;
+ * </pre>
  * @id n/a
+ * @since 1.0.0
  */
 public class CompoundPedanticEnforcer extends AbstractPedanticEnforcer {
 
   /**
    * See {@link PedanticPomSectionOrderEnforcer#setSectionPriorities(String)}.
    * @configParam
+   * @since 1.0.0
    */
   private String pomSectionPriorities;
 
   /**
    * See {@link PedanticModuleOrderEnforcer#setIgnoredModules(String)}.
    * @configParam
+   * @since 1.0.0
    */
   private String moduleOrderIgnores;
 
   /**
    * See {@link PedanticDependencyOrderEnforcer#setOrderBy(String)}.
    * @configParam
+   * @since 1.0.0
    */
   private String dependenciesOrderBy;
 
   /**
    * See {@link PedanticDependencyOrderEnforcer#setGroupIdPriorities(String)}.
    * @configParam
+   * @since 1.0.0
    */
   private String dependenciesGroupIdPriorities;
 
   /**
    * See {@link PedanticDependencyOrderEnforcer#setArtifactIdPriorities(String)}.
    * @configParam
+   * @since 1.0.0
    */
   private String dependenciesArtifactIdPriorities;
 
   /**
    * See {@link PedanticDependencyOrderEnforcer#setScopePriorities(String)}.
    * @configParam
+   * @since 1.0.0
    */
   private String dependenciesScopePriorities;
 
   /**
    * See {@link PedanticDependencyManagementOrderEnforcer#setOrderBy(String)}.
    * @configParam
+   * @since 1.0.0
    */
   private String dependencyManagementOrderBy;
 
@@ -135,6 +144,7 @@ public class CompoundPedanticEnforcer extends AbstractPedanticEnforcer {
    * See
    * {@link PedanticDependencyManagementOrderEnforcer#setGroupIdPriorities(String)}.
    * @configParam
+   * @since 1.0.0
    */
   private String dependencyManagementGroupIdPriorities;
 
@@ -142,6 +152,7 @@ public class CompoundPedanticEnforcer extends AbstractPedanticEnforcer {
    * See
    * {@link PedanticDependencyManagementOrderEnforcer#setArtifactIdPriorities(String)}.
    * @configParam
+   * @since 1.0.0
    */
   private String dependencyManagementArtifactIdPriorities;
 
@@ -149,12 +160,14 @@ public class CompoundPedanticEnforcer extends AbstractPedanticEnforcer {
    * See
    * {@link PedanticDependencyManagementOrderEnforcer#setScopePriorities(String)}.
    * @configParam
+   * @since 1.0.0
    */
   private String dependencyManagementScopePriorities;
 
   /**
    * See {@link PedanticDependencyManagementLocationEnforcer#setDependencyManagingPoms(String)}.
    * @configParam
+   * @since 1.0.0
    */
   private String dependencyManagingPoms;
 
@@ -162,6 +175,7 @@ public class CompoundPedanticEnforcer extends AbstractPedanticEnforcer {
    * See
    * {@link PedanticDependencyConfigurationEnforcer#setManageVersions(boolean)}.
    * @configParam
+   * @since 1.0.0
    */
   private Boolean manageDependencyVersions;
 
@@ -169,6 +183,7 @@ public class CompoundPedanticEnforcer extends AbstractPedanticEnforcer {
    * See
    * {@link PedanticDependencyConfigurationEnforcer#setAllowUnmanagedProjectVersions(boolean)}.
    * @configParam
+   * @since 1.0.0
    */
   private Boolean allowUnmangedProjectVersions;
 
@@ -176,48 +191,56 @@ public class CompoundPedanticEnforcer extends AbstractPedanticEnforcer {
    * See
    * {@link PedanticDependencyConfigurationEnforcer#setManageExclusions(boolean)}.
    * @configParam
+   * @since 1.0.0
    */
   private Boolean manageDependencyExclusions;
 
   /**
    * See {@link PedanticDependencyScopeEnforcer#setCompileDependencies(String)}.
    * @configParam
+   * @since 1.0.0
    */
   private String compileDependencies;
 
   /**
    * See {@link PedanticDependencyScopeEnforcer#setProvidedDependencies(String)}.
    * @configParam
+   * @since 1.0.0
    */
   private String providedDependencies;
 
   /**
    * See {@link PedanticDependencyScopeEnforcer#setRuntimeDependencies(String)}.
    * @configParam
+   * @since 1.0.0
    */
   private String runtimeDependencies;
 
   /**
    * See {@link PedanticDependencyScopeEnforcer#setSystemDependencies(String)}.
    * @configParam
+   * @since 1.0.0
    */
   private String systemDependencies;
 
   /**
    * See {@link PedanticDependencyScopeEnforcer#setTestDependencies(String)}.
    * @configParam
+   * @since 1.0.0
    */
   private String testDependencies;
 
   /**
    * See {@link PedanticDependencyScopeEnforcer#setImportDependencies(String)}.
    * @configParam
+   * @since 1.0.0
    */
   private String importDependencies;
 
   /**
    * See {@link PedanticPluginManagementOrderEnforcer#setOrderBy(String)}.
    * @configParam
+   * @since 1.0.0
    */
   private String pluginManagementOrderBy;
 
@@ -225,6 +248,7 @@ public class CompoundPedanticEnforcer extends AbstractPedanticEnforcer {
    * See
    * {@link PedanticPluginManagementOrderEnforcer#setGroupIdPriorities(String)}.
    * @configParam
+   * @since 1.0.0
    */
   private String pluginManagementGroupIdPriorities;
 
@@ -232,6 +256,7 @@ public class CompoundPedanticEnforcer extends AbstractPedanticEnforcer {
    * See
    * {@link PedanticPluginManagementOrderEnforcer#setArtifactIdPriorities(String)}.
    * @configParam
+   * @since 1.0.0
    */
   private String pluginManagementArtifactIdPriorities;
 
@@ -239,24 +264,28 @@ public class CompoundPedanticEnforcer extends AbstractPedanticEnforcer {
    * See
    * {@link PedanticPluginManagementLocationEnforcer#setPluginManagingPoms(String)}.
    * @configParam
+   * @since 1.0.0
    */
   private String pluginManagingPoms;
 
   /**
    * See {@link PedanticPluginConfigurationEnforcer#managePluginVersions}.
    * @configParam
+   * @since 1.0.0
    */
   private Boolean managePluginVersions;
 
   /**
    * See {@link PedanticPluginConfigurationEnforcer#managePluginConfigurations}
    * @configParam
+   * @since 1.0.0
    */
   private Boolean managePluginConfigurations;
 
   /**
    * See {@link PedanticPluginConfigurationEnforcer#managePluginDependencies}
    * @configParam
+   * @since 1.0.0
    */
   private Boolean managePluginDependencies;
 

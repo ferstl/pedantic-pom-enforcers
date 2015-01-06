@@ -43,6 +43,7 @@ import static com.github.ferstl.maven.pomenforcers.ErrorReport.toList;
  * </pre>
  *
  * @id {@link PedanticEnforcerRule#DEPENDENCY_ORDER}
+ * @since 1.0.0
  */
 public class PedanticDependencyConfigurationEnforcer extends AbstractPedanticEnforcer {
 
@@ -60,6 +61,7 @@ public class PedanticDependencyConfigurationEnforcer extends AbstractPedanticEnf
    * @param manageVersions Manage dependency versions in the dependency management.
    * @configParam
    * @default <code>true</code>
+   * @since 1.0.0
    */
   public void setManageVersions(boolean manageVersions) {
     this.manageVersions = manageVersions;
@@ -71,6 +73,7 @@ public class PedanticDependencyConfigurationEnforcer extends AbstractPedanticEnf
    * @param allowUnmangedProjectVersions Allow project versions outside of the dependencies section.
    * @configParam
    * @default <code>true</code>
+   * @since 1.0.0
    */
   public void setAllowUnmanagedProjectVersions(boolean allowUnmangedProjectVersions) {
     this.allowUnmangedProjectVersions = allowUnmangedProjectVersions;
@@ -81,6 +84,7 @@ public class PedanticDependencyConfigurationEnforcer extends AbstractPedanticEnf
    * @param manageExclusions Manage exclusion in dependency management.
    * @configParam
    * @default <code>true</code>
+   * @since 1.0.0
    */
   public void setManageExclusions(boolean manageExclusions) {
     this.manageExclusions = manageExclusions;

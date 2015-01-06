@@ -48,6 +48,7 @@ import com.github.ferstl.maven.pomenforcers.model.DependencyModel;
  * </pre>
  *
  * @id {@link PedanticEnforcerRule#DEPENDENCY_MANAGEMENT_ORDER}
+ * @since 1.0.0
  */
 public class PedanticDependencyManagementOrderEnforcer extends AbstractPedanticDependencyOrderEnforcer {
 

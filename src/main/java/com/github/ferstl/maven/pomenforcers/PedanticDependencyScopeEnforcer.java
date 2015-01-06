@@ -55,6 +55,7 @@ import static com.github.ferstl.maven.pomenforcers.model.functions.StringToArtif
  * </pre>
  *
  * @id {@link PedanticEnforcerRule#DEPENDENCY_SCOPE}
+ * @since 1.0.0
  */
 public class PedanticDependencyScopeEnforcer extends AbstractPedanticEnforcer {
 
@@ -68,6 +69,7 @@ public class PedanticDependencyScopeEnforcer extends AbstractPedanticEnforcer {
    * Comma-separated list of <code>compile</code> scope dependencies in the format <code>groupId:artifactId</code>.
    * @param compileDependencies Comma-separated list of <code>compile</code> scope dependencies.
    * @configParam
+   * @since 1.0.0
    */
   public void setCompileDependencies(String compileDependencies) {
     addToArtifactMap(createDependencyInfo(compileDependencies), COMPILE);
@@ -77,6 +79,7 @@ public class PedanticDependencyScopeEnforcer extends AbstractPedanticEnforcer {
    * Comma-separated list of <code>provided</code> scope dependencies in the format <code>groupId:artifactId</code>.
    * @param providedDependencies Comma-separated list of <code>provided</code> scope dependencies.
    * @configParam
+   * @since 1.0.0
    */
   public void setProvidedDependencies(String providedDependencies) {
     addToArtifactMap(createDependencyInfo(providedDependencies), PROVIDED);
@@ -86,6 +89,7 @@ public class PedanticDependencyScopeEnforcer extends AbstractPedanticEnforcer {
    * Comma-separated list of <code>runtime</code> scope dependencies in the format <code>groupId:artifactId</code>.
    * @param runtimeDependencies Comma-separated list of <code>runtime</code> scope dependencies.
    * @configParam
+   * @since 1.0.0
    */
   public void setRuntimeDependencies(String runtimeDependencies) {
     addToArtifactMap(createDependencyInfo(runtimeDependencies), RUNTIME);
@@ -95,6 +99,7 @@ public class PedanticDependencyScopeEnforcer extends AbstractPedanticEnforcer {
    * Comma-separated list of <code>system</code> scope dependencies in the format <code>groupId:artifactId</code>.
    * @param systemDependencies Comma-separated list of <code>system</code> scope dependencies.
    * @configParam
+   * @since 1.0.0
    */
   public void setSystemDependencies(String systemDependencies) {
     addToArtifactMap(createDependencyInfo(systemDependencies), SYSTEM);
@@ -104,6 +109,7 @@ public class PedanticDependencyScopeEnforcer extends AbstractPedanticEnforcer {
    * Comma-separated list of <code>test</code> scope dependencies in the format <code>groupId:artifactId</code>.
    * @param testDependencies Comma-separated list of <code>test</code> scope dependencies.
    * @configParam
+   * @since 1.0.0
    */
   public void setTestDependencies(String testDependencies) {
     addToArtifactMap(createDependencyInfo(testDependencies), TEST);
@@ -113,6 +119,7 @@ public class PedanticDependencyScopeEnforcer extends AbstractPedanticEnforcer {
    * Comma-separated list of <code>import</code> scope dependencies in the format <code>groupId:artifactId</code>.
    * @param importDependencies Comma-separated list of <code>import</code> scope dependencies.
    * @configParam
+   * @since 1.0.0
    */
   public void setImportDependencies(String importDependencies) {
     addToArtifactMap(createDependencyInfo(importDependencies), IMPORT);

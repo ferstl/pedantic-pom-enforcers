@@ -53,6 +53,7 @@ import static com.github.ferstl.maven.pomenforcers.model.PluginElement.stringToP
  *     &lt;/rules&gt;
  * </pre>
  * @id {@link PedanticEnforcerRule#PLUGIN_MANAGEMENT_ORDER}
+ * @since 1.0.0
  */
 public class PedanticPluginManagementOrderEnforcer extends AbstractPedanticEnforcer {
 
@@ -67,6 +68,7 @@ public class PedanticPluginManagementOrderEnforcer extends AbstractPedanticEnfor
    * @param pluginElements Comma-separated list of plugin elements that defines the ordering.
    * @configParam
    * @default groupId,artifactId
+   * @since 1.0.0
    */
   public void setOrderBy(String pluginElements) {
     Set<PluginElement> orderBy = Sets.newLinkedHashSet();
@@ -83,6 +85,7 @@ public class PedanticPluginManagementOrderEnforcer extends AbstractPedanticEnfor
    * @param groupIds Comma separated list of group IDs.
    * @configParam
    * @default n/a
+   * @since 1.0.0
    */
   public void setGroupIdPriorities(String groupIds) {
     LinkedHashSet<String> groupIdPriorities = Sets.newLinkedHashSet();
@@ -99,6 +102,7 @@ public class PedanticPluginManagementOrderEnforcer extends AbstractPedanticEnfor
    * @param artifactIds Comma separated list of artifact IDs.
    * @configParam
    * @default n/a
+   * @since 1.0.0
    */
   public void setArtifactIdPriorities(String artifactIds) {
     LinkedHashSet<String> artifactIdPriorities = Sets.newLinkedHashSet();

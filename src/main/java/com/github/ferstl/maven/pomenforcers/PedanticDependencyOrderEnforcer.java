@@ -44,6 +44,7 @@ import com.github.ferstl.maven.pomenforcers.model.DependencyModel;
  * </pre>
  *
  * @id {@link PedanticEnforcerRule#DEPENDENCY_ORDER}
+ * @since 1.0.0
  */
 public class PedanticDependencyOrderEnforcer extends AbstractPedanticDependencyOrderEnforcer {
 

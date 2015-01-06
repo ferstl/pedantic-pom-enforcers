@@ -51,6 +51,7 @@ abstract class AbstractPedanticDependencyOrderEnforcer extends AbstractPedanticE
    * @param dependencyElements Comma-separated list of dependency elements that defines the ordering.
    * @configParam
    * @default scope,groupId,artifactId
+   * @since 1.0.0
    */
   public void setOrderBy(String dependencyElements) {
     Set<DependencyElement> orderBy = new LinkedHashSet<>();
@@ -67,6 +68,7 @@ abstract class AbstractPedanticDependencyOrderEnforcer extends AbstractPedanticE
    * @param groupIds Comma separated list of group IDs.
    * @configParam
    * @default n/a
+   * @since 1.0.0
    */
   public void setGroupIdPriorities(String groupIds) {
     LinkedHashSet<String> groupIdPriorities = Sets.newLinkedHashSet();
@@ -83,6 +85,7 @@ abstract class AbstractPedanticDependencyOrderEnforcer extends AbstractPedanticE
    * @param artifactIds Comma separated list of artifact IDs.
    * @configParam
    * @default n/a
+   * @since 1.0.0
    */
   public void setArtifactIdPriorities(String artifactIds) {
     LinkedHashSet<String> artifactIdPriorities = Sets.newLinkedHashSet();
@@ -98,6 +101,7 @@ abstract class AbstractPedanticDependencyOrderEnforcer extends AbstractPedanticE
    * @param scopes Comma separated list of scopes.
    * @configParam
    * @default n/a
+   * @since 1.0.0
    */
   public void setScopePriorities(String scopes) {
     LinkedHashSet<String> scopePriorities = Sets.newLinkedHashSet();

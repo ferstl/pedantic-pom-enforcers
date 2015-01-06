@@ -46,6 +46,7 @@ import static com.github.ferstl.maven.pomenforcers.ErrorReport.toList;
  * </pre>
  *
  * @id {@link PedanticEnforcerRule#MODULE_ORDER}
+ * @since 1.0.0
  */
 public class PedanticModuleOrderEnforcer extends AbstractPedanticEnforcer {
 
@@ -61,6 +62,7 @@ public class PedanticModuleOrderEnforcer extends AbstractPedanticEnforcer {
    * <code>modules</code> section.
    * @param ignoredModules Comma-separated list of ignored modules.
    * @configParam
+   * @since 1.0.0
    */
   public void setIgnoredModules(String ignoredModules) {
     CommaSeparatorUtils.splitAndAddToCollection(ignoredModules, this.ignoredModules);

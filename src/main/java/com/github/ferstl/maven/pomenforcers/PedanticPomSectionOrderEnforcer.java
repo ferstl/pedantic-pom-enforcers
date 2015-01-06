@@ -44,6 +44,7 @@ import static com.github.ferstl.maven.pomenforcers.model.PomSection.stringToPomS
  *     &lt;/rules&gt;
  * </pre>
  * @id {@link PedanticEnforcerRule#POM_SECTION_ORDER}
+ * @since 1.0.0
  */
 public class PedanticPomSectionOrderEnforcer extends AbstractPedanticEnforcer {
 
@@ -64,6 +65,7 @@ public class PedanticPomSectionOrderEnforcer extends AbstractPedanticEnforcer {
    *          developers ,contributors,scm,repositories,pluginRepositories
    *          ,distributionManagement ,modules,properties,dependencyManagement
    *          ,dependencies,build,profiles,reporting,reports
+   * @since 1.0.0
    */
   public void setSectionPriorities(String sectionPriorities) {
     CommaSeparatorUtils.splitAndAddToCollection(sectionPriorities, this.sectionPriorities, stringToPomSection());

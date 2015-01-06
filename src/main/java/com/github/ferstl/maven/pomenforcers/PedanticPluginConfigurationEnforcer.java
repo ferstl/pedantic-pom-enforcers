@@ -42,6 +42,7 @@ import static com.github.ferstl.maven.pomenforcers.ErrorReport.toList;
  *     &lt;/rules&gt;
  * </pre>
  * @id {@link PedanticEnforcerRule#PLUGIN_CONFIGURATION}
+ * @since 1.0.0
  */
 public class PedanticPluginConfigurationEnforcer extends AbstractPedanticEnforcer {
 
@@ -54,6 +55,7 @@ public class PedanticPluginConfigurationEnforcer extends AbstractPedanticEnforce
    * @param manageVersions Enforces plugin versions to be defined in <code>&lt;pluginManagement&gt;</code>.
    * @configParam
    * @default <code>true</code>
+   * @since 1.0.0
    */
   public void setManageVersions(boolean manageVersions) {
     this.manageVersions = manageVersions;
@@ -64,6 +66,7 @@ public class PedanticPluginConfigurationEnforcer extends AbstractPedanticEnforce
    * @param manageConfigurations Enforces plugin <code>configuration</code> to be defined in <code>&lt;pluginManagement&gt;</code>.
    * @configParam
    * @default <code>true</code>
+   * @since 1.0.0
    */
   public void setManageConfigurations(boolean manageConfigurations) {
     this.manageConfigurations = manageConfigurations;
@@ -75,6 +78,7 @@ public class PedanticPluginConfigurationEnforcer extends AbstractPedanticEnforce
    *        <code>&lt;pluginManagement&gt;</code>.
    * @configParam
    * @default <code>true</code>
+   * @since 1.0.0
    */
   public void setManageDependencies(boolean manageDependencies) {
     this.manageDependencies = manageDependencies;

@@ -40,6 +40,7 @@ import static com.github.ferstl.maven.pomenforcers.model.functions.StringToArtif
  *     &lt;/rules&gt;
  * </pre>
  * @id {@link PedanticEnforcerRule#PLUGIN_MANAGEMENT_LOCATION}
+ * @since 1.0.0
  */
 public class PedanticPluginManagementLocationEnforcer extends AbstractPedanticEnforcer {
 
@@ -74,6 +75,7 @@ public class PedanticPluginManagementLocationEnforcer extends AbstractPedanticEn
    * @param pluginManagingPoms Comma separated list of POMs that may declare plugin management.
    * @configParam
    * @default n/a
+   * @since 1.0.0
    */
   public void setPluginManagingPoms(String pluginManagingPoms) {
     CommaSeparatorUtils.splitAndAddToCollection(pluginManagingPoms, this.pluginManagingPoms, stringToArtifactModel());
