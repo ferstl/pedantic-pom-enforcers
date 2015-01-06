@@ -26,16 +26,14 @@ public final class SideBySideDiffUtil {
 
       switch(delta.getType()) {
         case INSERT:
-          context.expand(currentPosition, revised.size());
+          offset += context.expand(currentPosition, revised.size());
           context.setRightContent(currentPosition, revised.getLines());
-          offset += revised.size();
           break;
 
         case CHANGE:
           int difference = revised.size() - original.size();
           if (difference > 0) {
-            context.expand(currentPosition + original.size(), difference);
-            offset += difference;
+            offset += context.expand(currentPosition + original.size(), difference);
           } else {
             context.clearRightContent(currentPosition + revised.size(), Math.abs(difference));
           }
@@ -160,17 +158,15 @@ public final class SideBySideDiffUtil {
       return prefix + line;
     }
 
-    private void expand(int index, int size) {
-      if (size < 1) {
-        return;
-      }
-
+    private int expand(int index, int size) {
       String[] emptyLines = new String[size];
       Arrays.fill(emptyLines, "");
       List<String> emptyLinesAsList = Arrays.asList(emptyLines);
 
       this.left.addAll(index, emptyLinesAsList);
       this.right.addAll(index, emptyLinesAsList);
+
+      return size;
     }
 
     private void clearContent(List<String> l, int index, int size) {
