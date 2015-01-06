@@ -77,6 +77,7 @@ public class PedanticDependencyOrderEnforcer extends AbstractPedanticDependencyO
     Collection<String> sortedDependenciesAsString = Collections2.transform(sortedDependencies, toStringFunction());
 
     report.addLine("Your dependencies have to be sorted this way:")
-          .addLine(SideBySideDiffUtil.diff(resolvedDependenciesAsString, sortedDependenciesAsString));
+          .emptyLine()
+          .addLine(SideBySideDiffUtil.diff(resolvedDependenciesAsString, sortedDependenciesAsString, "Actual Order", "Required Order"));
   }
 }

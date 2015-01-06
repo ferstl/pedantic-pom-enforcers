@@ -102,7 +102,8 @@ public class PedanticModuleOrderEnforcer extends AbstractPedanticEnforcer {
 
   private ErrorReport reportError(ErrorReport report, Collection<String> declaredModules, Collection<String> orderedModules) {
     report.addLine("You have to sort your modules alphabetically:")
-          .addLine(SideBySideDiffUtil.diff(declaredModules, orderedModules));
+          .emptyLine()
+          .addLine(SideBySideDiffUtil.diff(declaredModules, orderedModules, "Actual Order", "Required Order"));
     if (!this.ignoredModules.isEmpty()) {
       report.emptyLine()
             .addLine("You may place these modules anywhere in your <modules> section:")

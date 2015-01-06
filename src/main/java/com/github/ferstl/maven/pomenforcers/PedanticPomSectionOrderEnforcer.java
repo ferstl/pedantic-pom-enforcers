@@ -103,7 +103,8 @@ public class PedanticPomSectionOrderEnforcer extends AbstractPedanticEnforcer {
       Collection<String> sortedPomSectionsAsString = Collections2.transform(sortedPomSections, pomSectionToString());
 
       report.addLine("Your POM has to be organized this way:")
-            .addLine(SideBySideDiffUtil.diff(pomSectionsAsString, sortedPomSectionsAsString));
+            .emptyLine()
+            .addLine(SideBySideDiffUtil.diff(pomSectionsAsString, sortedPomSectionsAsString, "Actual Order", "Required Order"));
     }
   }
 

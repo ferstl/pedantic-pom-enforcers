@@ -86,6 +86,7 @@ public class PedanticDependencyManagementOrderEnforcer extends AbstractPedanticD
     Collection<String> sortedDependenciesAsString = Collections2.transform(sortedDependencies, toStringFunction());
 
     report.addLine("Your dependency management has to be ordered this way:")
-          .addLine(SideBySideDiffUtil.diff(resolvedDependenciesAsString, sortedDependenciesAsString));
+          .emptyLine()
+          .addLine(SideBySideDiffUtil.diff(resolvedDependenciesAsString, sortedDependenciesAsString, "Actual Order", "Required Order"));
   }
 }

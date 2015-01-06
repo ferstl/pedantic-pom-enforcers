@@ -134,7 +134,8 @@ public class PedanticPluginManagementOrderEnforcer extends AbstractPedanticEnfor
       Collection<String> sortedPluginsAsString = Collections2.transform(sortedPlugins, toStringFunction());
 
       report.addLine("Your plugin management has to be ordered this way:")
-            .addLine(SideBySideDiffUtil.diff(resolvedPluginsAsString, sortedPluginsAsString));
+            .emptyLine()
+            .addLine(SideBySideDiffUtil.diff(resolvedPluginsAsString, sortedPluginsAsString, "Actual Order", "Required Order"));
     }
   }
 
