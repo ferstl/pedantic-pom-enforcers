@@ -113,8 +113,6 @@ public class SideBySideDiffUtilTest {
   public void titleShorterThanContent() {
     String diff = diff(Arrays.asList("abcdef", "ghijkl", "mnopqr"), Arrays.asList("stuvwx", "yz"), "L", "R");
 
-    System.out.println(diff);
-
     assertThat(diff, hasContent(
         "L        | R",
         "-------------------",
