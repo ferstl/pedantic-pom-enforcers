@@ -49,7 +49,7 @@ public class PedanticPluginManagementLocationEnforcer extends AbstractPedanticEn
   private final Set<ArtifactModel> pluginManagingPoms;
 
   public PedanticPluginManagementLocationEnforcer() {
-    this.allowParentPoms = true;
+    this.allowParentPoms = false;
     this.pluginManagingPoms = new HashSet<>();
   }
 
@@ -77,7 +77,7 @@ public class PedanticPluginManagementLocationEnforcer extends AbstractPedanticEn
    * Indicates whether parent POMs are generally allowed to manage plugins.
    * @param allowParentPoms
    * @configParam
-   * @default <code>true</code>
+   * @default <code>false</code>
    * @since 1.2.0
    */
   public void setAllowParentPoms(boolean allowParentPoms) {
