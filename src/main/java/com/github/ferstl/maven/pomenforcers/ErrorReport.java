@@ -18,11 +18,14 @@ package com.github.ferstl.maven.pomenforcers;
 import java.util.Collection;
 import java.util.LinkedList;
 
+import com.github.ferstl.maven.pomenforcers.util.SideBySideDiffUtil;
 import com.google.common.base.Function;
 import com.google.common.base.Functions;
 import com.google.common.base.Joiner;
 import com.google.common.base.Strings;
 import com.google.common.collect.Collections2;
+
+import static com.google.common.base.Functions.toStringFunction;
 
 
 public class ErrorReport {
@@ -57,6 +60,23 @@ public class ErrorReport {
   public ErrorReport addLine(Object line) {
     this.lines.add(line);
     return this;
+  }
+
+  public ErrorReport addDiff(Collection<String> actual, Collection<String> required, String leftTitle, String rightTitle) {
+    String diff = SideBySideDiffUtil.diff(actual, required, leftTitle, rightTitle);
+    this.lines.add(diff);
+    return this;
+  }
+
+  public <T> ErrorReport addDiff(Collection<T> actual, Collection<T> required, String leftTitle, String rightTitle, Function<? super T, String> toStringFunction) {
+    Collection<String> actualAsString = Collections2.transform(actual, toStringFunction);
+    Collection<String> requiredAsString = Collections2.transform(required, toStringFunction);
+
+    return addDiff(actualAsString, requiredAsString, leftTitle, rightTitle);
+  }
+
+  public <T> ErrorReport addDiffUsingToString(Collection<T> actual, Collection<T> required, String leftTitle, String rightTitle) {
+    return addDiff(actual, required, leftTitle, rightTitle, toStringFunction());
   }
 
   public ErrorReport formatLine(String line, Object... params) {

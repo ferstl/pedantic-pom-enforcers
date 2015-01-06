@@ -16,6 +16,7 @@
 package com.github.ferstl.maven.pomenforcers;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
@@ -90,7 +91,7 @@ public class PedanticModuleOrderEnforcer extends AbstractPedanticEnforcer {
     // Enforce the module order
     Ordering<String> moduleOrdering = Ordering.natural();
     if (!moduleOrdering.isOrdered(declaredModules)) {
-      reportError(report, moduleOrdering.immutableSortedCopy(declaredModules));
+      reportError(report, declaredModules, moduleOrdering.immutableSortedCopy(declaredModules));
     }
   }
 
@@ -98,9 +99,10 @@ public class PedanticModuleOrderEnforcer extends AbstractPedanticEnforcer {
     return "pom".equals(project.getPackaging());
   }
 
-  private ErrorReport reportError(ErrorReport report, List<String> orderedModules) {
+  private ErrorReport reportError(ErrorReport report, Collection<String> declaredModules, Collection<String> orderedModules) {
     report.addLine("You have to sort your modules alphabetically:")
-          .addLine(toList(orderedModules));
+          .emptyLine()
+          .addDiff(declaredModules, orderedModules, "Actual Order", "Required Order");
     if (!this.ignoredModules.isEmpty()) {
       report.emptyLine()
             .addLine("You may place these modules anywhere in your <modules> section:")

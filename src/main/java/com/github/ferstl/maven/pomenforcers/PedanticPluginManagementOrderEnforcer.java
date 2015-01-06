@@ -30,7 +30,6 @@ import com.github.ferstl.maven.pomenforcers.util.EnforcerRuleUtils;
 import com.google.common.collect.BiMap;
 import com.google.common.collect.Sets;
 
-import static com.github.ferstl.maven.pomenforcers.ErrorReport.toList;
 import static com.github.ferstl.maven.pomenforcers.model.PluginElement.ARTIFACT_ID;
 import static com.github.ferstl.maven.pomenforcers.model.PluginElement.GROUP_ID;
 import static com.github.ferstl.maven.pomenforcers.model.PluginElement.stringToPluginElement;
@@ -128,8 +127,10 @@ public class PedanticPluginManagementOrderEnforcer extends AbstractPedanticEnfor
     Set<PluginModel> resolvedPlugins = matchedPlugins.keySet();
     if (!this.pluginOrdering.isOrdered(resolvedPlugins)) {
       Collection<PluginModel> sortedPlugins = this.pluginOrdering.immutableSortedCopy(resolvedPlugins);
+
       report.addLine("Your plugin management has to be ordered this way:")
-            .addLine(toList(sortedPlugins));
+            .emptyLine()
+            .addDiffUsingToString(resolvedPlugins, sortedPlugins, "Actual Order", "Required Order");
     }
   }
 

@@ -21,8 +21,6 @@ import org.apache.maven.project.MavenProject;
 
 import com.github.ferstl.maven.pomenforcers.model.DependencyModel;
 
-import static com.github.ferstl.maven.pomenforcers.ErrorReport.toList;
-
 
 /**
  * This enforcer makes sure that all artifacts in your dependencies section are
@@ -70,8 +68,10 @@ public class PedanticDependencyOrderEnforcer extends AbstractPedanticDependencyO
   }
 
   @Override
-  protected void reportError(ErrorReport report, Collection<DependencyModel> sortedDependencies) {
+  protected void reportError(ErrorReport report, Collection<DependencyModel> resolvedDependencies, Collection<DependencyModel> sortedDependencies) {
+
     report.addLine("Your dependencies have to be sorted this way:")
-          .addLine(toList(sortedDependencies));
+          .emptyLine()
+          .addDiffUsingToString(resolvedDependencies, sortedDependencies, "Actual Order", "Required Order");
   }
 }

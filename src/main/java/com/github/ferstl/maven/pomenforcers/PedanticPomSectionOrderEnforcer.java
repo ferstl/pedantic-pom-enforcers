@@ -27,7 +27,6 @@ import com.github.ferstl.maven.pomenforcers.util.CommaSeparatorUtils;
 import com.google.common.collect.Ordering;
 import com.google.common.collect.Sets;
 
-import static com.github.ferstl.maven.pomenforcers.ErrorReport.toList;
 import static com.github.ferstl.maven.pomenforcers.model.PomSection.pomSectionToString;
 import static com.github.ferstl.maven.pomenforcers.model.PomSection.stringToPomSection;
 
@@ -98,11 +97,9 @@ public class PedanticPomSectionOrderEnforcer extends AbstractPedanticEnforcer {
     if (!ordering.isOrdered(pomSections)) {
       List<PomSection> sortedPomSections = ordering.immutableSortedCopy(pomSections);
 
-      report.addLine("Your POM is currently organized like this:")
-            .addLine(toList(pomSections, pomSectionToString()))
+      report.addLine("Your POM has to be organized this way:")
             .emptyLine()
-            .addLine("... but it has to be organized this way:")
-            .addLine(toList(sortedPomSections, pomSectionToString()));
+            .addDiff(pomSections, sortedPomSections, "Actual Order", "Required Order", pomSectionToString());
     }
   }
 

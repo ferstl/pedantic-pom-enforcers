@@ -109,7 +109,8 @@ abstract class AbstractPedanticDependencyOrderEnforcer extends AbstractPedanticE
 
   protected abstract Collection<Dependency> getMavenDependencies(MavenProject mavenProject);
 
-  protected abstract void reportError(ErrorReport report, Collection<DependencyModel> sortedDependencies);
+  protected abstract void reportError(
+      ErrorReport report, Collection<DependencyModel> resolvedDependencies, Collection<DependencyModel> sortedDependencies);
 
   @Override
   protected final void doEnforce(ErrorReport report) {
@@ -121,7 +122,7 @@ abstract class AbstractPedanticDependencyOrderEnforcer extends AbstractPedanticE
 
     Set<DependencyModel> resolvedDependencies = matchedDependencies.keySet();
     if (!this.artifactOrdering.isOrdered(resolvedDependencies)) {
-      reportError(report, this.artifactOrdering.immutableSortedCopy(resolvedDependencies));
+      reportError(report, resolvedDependencies, this.artifactOrdering.immutableSortedCopy(resolvedDependencies));
     }
   }
 }
