@@ -20,10 +20,6 @@ import org.apache.maven.model.Dependency;
 import org.apache.maven.project.MavenProject;
 
 import com.github.ferstl.maven.pomenforcers.model.DependencyModel;
-import com.github.ferstl.maven.pomenforcers.util.SideBySideDiffUtil;
-import com.google.common.collect.Collections2;
-
-import static com.google.common.base.Functions.toStringFunction;
 
 
 /**
@@ -73,11 +69,9 @@ public class PedanticDependencyOrderEnforcer extends AbstractPedanticDependencyO
 
   @Override
   protected void reportError(ErrorReport report, Collection<DependencyModel> resolvedDependencies, Collection<DependencyModel> sortedDependencies) {
-    Collection<String> resolvedDependenciesAsString = Collections2.transform(resolvedDependencies, toStringFunction());
-    Collection<String> sortedDependenciesAsString = Collections2.transform(sortedDependencies, toStringFunction());
 
     report.addLine("Your dependencies have to be sorted this way:")
           .emptyLine()
-          .addLine(SideBySideDiffUtil.diff(resolvedDependenciesAsString, sortedDependenciesAsString, "Actual Order", "Required Order"));
+          .addDiffUsingToString(resolvedDependencies, sortedDependencies, "Actual Order", "Required Order");
   }
 }
