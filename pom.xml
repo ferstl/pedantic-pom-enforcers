@@ -14,8 +14,7 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  -->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
   <prerequisites>
@@ -24,7 +23,7 @@
 
   <groupId>com.github.ferstl</groupId>
   <artifactId>pedantic-pom-enforcers</artifactId>
-  <version>1.1.3-SNAPSHOT</version>
+  <version>1.2.0</version>
   <packaging>jar</packaging>
   <name>Pedantic POM Enforcers</name>
   <description>
@@ -61,7 +60,7 @@
     <connection>scm:git:git@github.com:ferstl/pedantic-pom-enforcers.git</connection>
     <developerConnection>scm:git:git@github.com:ferstl/pedantic-pom-enforcers.git</developerConnection>
     <url>${project.url}</url>
-    <tag>HEAD</tag>
+    <tag>pedantic-pom-enforcers-1.2.0</tag>
   </scm>
 
   <distributionManagement>
