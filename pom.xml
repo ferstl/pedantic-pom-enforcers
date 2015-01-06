@@ -94,7 +94,7 @@
     <!-- Other settings. -->
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <maven.version>3.2.5</maven.version>
-    <pedantic-pom-enforcers-doclet.version>1.0.2</pedantic-pom-enforcers-doclet.version>
+    <pedantic-pom-enforcers-doclet.version>1.0.3</pedantic-pom-enforcers-doclet.version>
   </properties>
 
   <dependencies>
