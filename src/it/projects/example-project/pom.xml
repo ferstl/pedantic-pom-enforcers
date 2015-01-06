@@ -141,6 +141,7 @@
                 <!-- Plugin Management Location -->
                 <!-- Note that properties get resolved in sub modules as 
                   well. Defining ${groupId}:${artifactId} will allow each POM to declare pluginManagement -->
+                <allowParentPomsForPluginManagement>false</allowParentPomsForPluginManagement>
                 <pluginManagingPoms>${pluginManagingPoms}</pluginManagingPoms>
 
                 <!-- Plugin configuration -->

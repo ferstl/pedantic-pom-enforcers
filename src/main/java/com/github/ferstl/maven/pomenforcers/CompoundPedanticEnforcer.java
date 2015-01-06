@@ -83,6 +83,7 @@ import static com.github.ferstl.maven.pomenforcers.PedanticEnforcerRule.stringTo
  *         &lt;managePluginDependencies&gt;true&lt;/managePluginDependencies&gt;
  *
  *         &lt;!-- PLUGIN_MANAGEMENT_LOCATION configuration --&gt;
+ *         &lt;allowParentPomsForPluginManagement&gt;true&lt;/allowParentPomsForPluginManagement&gt;
  *         &lt;pluginManagingPoms&gt;com.myproject:parent-pom&lt;/pluginManagingPoms&gt;
  *       &lt;/compound&gt;
  *     &lt;/rules&gt;
@@ -267,6 +268,14 @@ public class CompoundPedanticEnforcer extends AbstractPedanticEnforcer {
    * @since 1.0.0
    */
   private String pluginManagementArtifactIdPriorities;
+
+
+  /**
+   * See {@link PedanticPluginManagementLocationEnforcer#setAllowParentPoms(boolean)}.
+   * @configParam
+   * @since 1.2.0
+   */
+  private Boolean allowParentPomsForPluginManagement;
 
   /**
    * See
@@ -476,6 +485,9 @@ public class CompoundPedanticEnforcer extends AbstractPedanticEnforcer {
 
     @Override
     public void visit(PedanticPluginManagementLocationEnforcer enforcer) {
+      if (CompoundPedanticEnforcer.this.allowParentPomsForPluginManagement != null) {
+        enforcer.setAllowParentPoms(CompoundPedanticEnforcer.this.allowParentPomsForPluginManagement);
+      }
       if (!Strings.isNullOrEmpty(CompoundPedanticEnforcer.this.pluginManagingPoms)) {
         enforcer.setPluginManagingPoms(CompoundPedanticEnforcer.this.pluginManagingPoms);
       }

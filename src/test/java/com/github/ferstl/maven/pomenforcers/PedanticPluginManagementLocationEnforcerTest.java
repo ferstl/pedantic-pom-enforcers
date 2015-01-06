@@ -76,4 +76,24 @@ public class PedanticPluginManagementLocationEnforcerTest extends AbstractPedant
 
     executeRuleAndCheckReport(true);
   }
+
+  public void pluginManagementAllowedInParentPom() {
+    when(this.mockMavenProject.getPackaging()).thenReturn("pom");
+
+    executeRuleAndCheckReport(true);
+  }
+
+  public void pluginManagementNotAllowedInParentPom() {
+    when(this.mockMavenProject.getPackaging()).thenReturn("pom");
+    this.testRule.setAllowParentPoms(false);
+
+    executeRuleAndCheckReport(true);
+  }
+
+  @Test
+  public void pluginManagementInNonParentPom() {
+    when(this.mockMavenProject.getPackaging()).thenReturn("jar");
+
+    executeRuleAndCheckReport(false);
+  }
 }

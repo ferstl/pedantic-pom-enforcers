@@ -15,6 +15,7 @@
  */
 package com.github.ferstl.maven.pomenforcers;
 
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -44,9 +45,11 @@ import static com.github.ferstl.maven.pomenforcers.model.functions.StringToArtif
  */
 public class PedanticPluginManagementLocationEnforcer extends AbstractPedanticEnforcer {
 
+  private boolean allowParentPoms;
   private final Set<ArtifactModel> pluginManagingPoms;
 
   public PedanticPluginManagementLocationEnforcer() {
+    this.allowParentPoms = true;
     this.pluginManagingPoms = new HashSet<>();
   }
 
@@ -65,8 +68,20 @@ public class PedanticPluginManagementLocationEnforcer extends AbstractPedanticEn
     MavenProject mavenProject = EnforcerRuleUtils.getMavenProject(getHelper());
     if (containsPluginManagement() && !isPluginManagementAllowed(mavenProject)) {
       report.addLine("Only these POMs are allowed to manage plugins:")
-            .addLine(toList(this.pluginManagingPoms));
+      .addLine(toList(Collections.singletonList("All parent POMs, i.e. POMs with <packaging>pom</packaging>")))
+      .addLine(toList(this.pluginManagingPoms));
     }
+  }
+
+  /**
+   * Indicates whether parent POMs are generally allowed to manage plugins.
+   * @param allowParentPoms
+   * @configParam
+   * @default <code>true</code>
+   * @since 1.2.0
+   */
+  public void setAllowParentPoms(boolean allowParentPoms) {
+    this.allowParentPoms = allowParentPoms;
   }
 
   /**
@@ -86,6 +101,15 @@ public class PedanticPluginManagementLocationEnforcer extends AbstractPedanticEn
   }
 
   private boolean isPluginManagementAllowed(MavenProject project) {
+    return isPluginManagementAllowedInParentPom(project)
+        || isPluginManagingProject(project);
+  }
+
+  private boolean isPluginManagementAllowedInParentPom(MavenProject project) {
+    return this.allowParentPoms && "pom".equals(project.getPackaging());
+  }
+
+  private boolean isPluginManagingProject(MavenProject project) {
     ArtifactModel projectInfo = new ArtifactModel(project.getGroupId(), project.getArtifactId(), project.getVersion());
     return this.pluginManagingPoms.isEmpty() || this.pluginManagingPoms.contains(projectInfo);
   }
