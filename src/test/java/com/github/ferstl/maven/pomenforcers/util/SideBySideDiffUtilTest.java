@@ -52,13 +52,13 @@ public class SideBySideDiffUtilTest {
 
     assertThat(diff, hasContent(
         "  abc |   abc",
-        "- zyx |      ",
+        "- zyx |",
         "  def |   def",
-        "- wvu |      ",
+        "- wvu |",
         "  ghi |   ghi",
-        "- tsr |      ",
+        "- tsr |",
         "  jkl |   jkl",
-        "- qpo |      "
+        "- qpo |"
         ));
   }
 
@@ -71,10 +71,10 @@ public class SideBySideDiffUtilTest {
     assertThat(diff, hasContent(
         "  abc |   abc",
         "- def | + zyx",
-        "- ghi |      ",
+        "- ghi |",
         "  jkl |   jkl",
         "- mno | + wvu",
-        "- pqr |      "
+        "- pqr |"
         ));
   }
 
@@ -108,8 +108,8 @@ public class SideBySideDiffUtilTest {
     String diff = diff(Collections.<String>emptyList(), Arrays.asList("abc", "def"));
 
     assertThat(diff, hasContent(
-        "      | + abc",
-        "      | + def"
+        "   | + abc",
+        "   | + def"
         ));
   }
 
@@ -118,8 +118,8 @@ public class SideBySideDiffUtilTest {
     String diff = diff(Arrays.asList("abc", "def"), Collections.<String>emptyList());
 
     assertThat(diff, hasContent(
-        "- abc |      ",
-        "- def |      "
+        "- abc |",
+        "- def |"
         ));
   }
 
@@ -128,9 +128,9 @@ public class SideBySideDiffUtilTest {
     String diff = diff(Arrays.asList("abc", "def", "ghi"), Arrays.asList("jklm", "nopq"));
 
     assertThat(diff, hasContent(
-        "- abc  | + jklm",
-        "- def  | + nopq",
-        "- ghi  |       "
+        "- abc | + jklm",
+        "- def | + nopq",
+        "- ghi |"
         ));
   }
 
@@ -151,9 +151,9 @@ public class SideBySideDiffUtilTest {
     String diff = diff(Arrays.asList("def", "ghi", "jkl", "abc"), Arrays.asList("abc"));
 
     assertThat(diff, hasContent(
-        "- def |      ",
-        "- ghi |      ",
-        "- jkl |      ",
+        "- def |",
+        "- ghi |",
+        "- jkl |",
         "  abc |   abc"
         ));
   }
@@ -177,50 +177,50 @@ public class SideBySideDiffUtilTest {
 
     String diff = diff(actual, required);
     assertThat(diff, hasContent(
-        "                         | + modelVersion          ",
-        "                         | + prerequisites         ",
-        "                         | + parent                ",
-        "                         | + groupId               ",
-        "  artifactId             |   artifactId            ",
-        "- build                  | + version               ",
-        "- ciManagement           | + packaging             ",
-        "- contributors           | + name                  ",
-        "- dependencies           |                         ",
-        "- dependencyManagement   |                         ",
-        "  description            |   description           ",
-        "- developers             | + url                   ",
-        "- distributionManagement |                         ",
-        "- groupId                |                         ",
-        "- inceptionYear          |                         ",
-        "- issueManagement        |                         ",
-        "  licenses               |   licenses              ",
-        "- mailingLists           |                         ",
-        "- modelVersion           |                         ",
-        "- modules                |                         ",
-        "- name                   |                         ",
-        "  organization           |   organization          ",
-        "- packaging              | + inceptionYear         ",
-        "- parent                 | + ciManagement          ",
-        "                         | + mailingLists          ",
-        "                         | + issueManagement       ",
-        "                         | + developers            ",
-        "                         | + contributors          ",
-        "                         | + scm                   ",
-        "                         | + repositories          ",
-        "  pluginRepositories     |   pluginRepositories    ",
+        "                         | + modelVersion",
+        "                         | + prerequisites",
+        "                         | + parent",
+        "                         | + groupId",
+        "  artifactId             |   artifactId",
+        "- build                  | + version",
+        "- ciManagement           | + packaging",
+        "- contributors           | + name",
+        "- dependencies           |",
+        "- dependencyManagement   |",
+        "  description            |   description",
+        "- developers             | + url",
+        "- distributionManagement |",
+        "- groupId                |",
+        "- inceptionYear          |",
+        "- issueManagement        |",
+        "  licenses               |   licenses",
+        "- mailingLists           |",
+        "- modelVersion           |",
+        "- modules                |",
+        "- name                   |",
+        "  organization           |   organization",
+        "- packaging              | + inceptionYear",
+        "- parent                 | + ciManagement",
+        "                         | + mailingLists",
+        "                         | + issueManagement",
+        "                         | + developers",
+        "                         | + contributors",
+        "                         | + scm",
+        "                         | + repositories",
+        "  pluginRepositories     |   pluginRepositories",
         "- prerequisites          | + distributionManagement",
-        "- profiles               | + modules               ",
-        "  properties             |   properties            ",
-        "                         | + dependencyManagement  ",
-        "                         | + dependencies          ",
-        "                         | + build                 ",
-        "                         | + profiles              ",
-        "  reporting              |   reporting             ",
-        "  reports                |   reports               ",
-        "- repositories           |                         ",
-        "- scm                    |                         ",
-        "- url                    |                         ",
-        "- version                |                         "
+        "- profiles               | + modules",
+        "  properties             |   properties",
+        "                         | + dependencyManagement",
+        "                         | + dependencies",
+        "                         | + build",
+        "                         | + profiles",
+        "  reporting              |   reporting",
+        "  reports                |   reports",
+        "- repositories           |",
+        "- scm                    |",
+        "- url                    |",
+        "- version                |"
         ));
   }
 

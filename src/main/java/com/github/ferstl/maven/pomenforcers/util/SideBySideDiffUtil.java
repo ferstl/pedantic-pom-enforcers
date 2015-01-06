@@ -78,7 +78,7 @@ public final class SideBySideDiffUtil {
       List<String> revisedList = revised instanceof List ? (List<String>) revised : new ArrayList<>(revised);
 
       this.deltas = DiffUtils.diff(originalList, revisedList).getDeltas();
-      int width = Math.max(getMaxWidth(original), getMaxWidth(revised));
+      int width = getMaxWidth(original);
       this.width = width + 2; // include the markers
 
       int length = Math.max(original.size(), revised.size());
@@ -113,12 +113,12 @@ public final class SideBySideDiffUtil {
         String rightLine = this.right.get(i);
 
         String leftPadded = Strings.padEnd(leftLine, this.width, ' ');
-        String rightPadded = Strings.padEnd(rightLine, this.width, ' ');
 
-        sb.append(leftPadded)
-        .append(" | ")
-        .append(rightPadded)
-        .append("\n");
+        sb.append(leftPadded).append(" |");
+        if (!rightLine.isEmpty()) {
+          sb.append(" ").append(rightLine);
+        }
+        sb.append("\n");
       }
 
       // Remove last newline
