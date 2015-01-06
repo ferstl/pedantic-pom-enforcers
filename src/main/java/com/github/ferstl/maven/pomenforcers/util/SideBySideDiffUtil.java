@@ -15,8 +15,12 @@ import difflib.DiffUtils;
 public final class SideBySideDiffUtil {
 
   public static String diff(Collection<String> actual, Collection<String> required) {
+    return diff(actual, required, "", "");
+  }
 
-    SideBySideContext context = new SideBySideContext(actual, required);
+  public static String diff(Collection<String> actual, Collection<String> required, String leftTitle, String rightTitle) {
+
+    SideBySideContext context = new SideBySideContext(actual, required, leftTitle, rightTitle);
     int offset = 0;
 
     for (Delta<String> delta : context.deltas) {
@@ -64,22 +68,28 @@ public final class SideBySideDiffUtil {
    * Context to manipulate both sides of the diff.
    */
   private static class SideBySideContext {
+    private static final String SIDE_SEPARATOR = " |";
     private static final String EMPTY_MARKER = "  ";
     private static final String DELETION_MARKER = "- ";
     private static final String INSERTION_MARKER = "+ ";
 
-    private final int width;
+    private final String leftTitle;
+    private final String rightTitle;
+    private final int leftWidth;
+    private final int rightWidth;
     private final Collection<Delta<String>> deltas;
     private final List<String> left;
     private final List<String> right;
 
-    public SideBySideContext(Collection<String> original, Collection<String> revised) {
+    public SideBySideContext(Collection<String> original, Collection<String> revised, String leftTitle, String rightTitle) {
+      this.leftTitle = leftTitle;
+      this.rightTitle = rightTitle;
       List<String> originalList = original instanceof List ? (List<String>) original : new ArrayList<>(original);
       List<String> revisedList = revised instanceof List ? (List<String>) revised : new ArrayList<>(revised);
 
       this.deltas = DiffUtils.diff(originalList, revisedList).getDeltas();
-      int width = getMaxWidth(original);
-      this.width = width + 2; // include the markers
+      this.leftWidth = Math.max(getMaxWidth(original) + 2, leftTitle.length()); // +2: include the markers
+      this.rightWidth = Math.max(getMaxWidth(revised) + 2, rightTitle.length()); // +2: include the markers
 
       int length = Math.max(original.size(), revised.size());
       length += getExpansionLength(this.deltas);
@@ -108,13 +118,20 @@ public final class SideBySideDiffUtil {
     @Override
     public String toString() {
       StringBuilder sb = new StringBuilder();
+
+      if (shouldPrintTitle()) {
+        String leftTitlePadded = Strings.padEnd(this.leftTitle, this.leftWidth, ' ');
+        sb.append(leftTitlePadded).append(SIDE_SEPARATOR).append(" ").append(this.rightTitle).append("\n");
+        sb.append(Strings.repeat("-", this.leftWidth + SIDE_SEPARATOR.length() + this.rightWidth + 1)).append("\n");
+      }
+
       for(int i = 0; i < this.left.size(); i++) {
         String leftLine = this.left.get(i);
         String rightLine = this.right.get(i);
 
-        String leftPadded = Strings.padEnd(leftLine, this.width, ' ');
+        String leftPadded = Strings.padEnd(leftLine, this.leftWidth, ' ');
 
-        sb.append(leftPadded).append(" |");
+        sb.append(leftPadded).append(SIDE_SEPARATOR);
         if (!rightLine.isEmpty()) {
           sb.append(" ").append(rightLine);
         }
@@ -126,6 +143,10 @@ public final class SideBySideDiffUtil {
         sb.deleteCharAt(sb.length() - 1);
       }
       return sb.toString();
+    }
+
+    public boolean shouldPrintTitle() {
+      return !(this.leftTitle.isEmpty() && this.rightTitle.isEmpty()) && !(this.left.isEmpty() && this.right.isEmpty());
     }
 
     private static int getMaxWidth(Collection<String> content) {

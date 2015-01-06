@@ -97,8 +97,43 @@ public class SideBySideDiffUtilTest {
   }
 
   @Test
+  public void titleLongerThanContent() {
+    String diff = diff(Arrays.asList("a", "b", "c"), Arrays.asList("a", "b"), "leftTitle", "rightTitle");
+
+    assertThat(diff, hasContent(
+        "leftTitle | rightTitle",
+        "----------------------",
+        "  a       |   a",
+        "  b       |   b",
+        "- c       |"
+        ));
+  }
+
+  @Test
+  public void titleShorterThanContent() {
+    String diff = diff(Arrays.asList("abcdef", "ghijkl", "mnopqr"), Arrays.asList("stuvwx", "yz"), "L", "R");
+
+    System.out.println(diff);
+
+    assertThat(diff, hasContent(
+        "L        | R",
+        "-------------------",
+        "- abcdef | + stuvwx",
+        "- ghijkl | + yz",
+        "- mnopqr |"
+        ));
+  }
+
+  @Test
   public void emptyTexts() {
     String diff = diff(Collections.<String>emptyList(), Collections.<String>emptyList());
+
+    assertEquals("", diff);
+  }
+
+  @Test
+  public void emptyTextsWithTitle() {
+    String diff = diff(Collections.<String>emptyList(), Collections.<String>emptyList(), "left", "right");
 
     assertEquals("", diff);
   }
@@ -176,6 +211,7 @@ public class SideBySideDiffUtilTest {
     List<String> actual = Ordering.usingToString().sortedCopy(required);
 
     String diff = diff(actual, required);
+
     assertThat(diff, hasContent(
         "                         | + modelVersion",
         "                         | + prerequisites",
