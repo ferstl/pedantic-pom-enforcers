@@ -23,7 +23,7 @@
 
   <groupId>com.github.ferstl</groupId>
   <artifactId>pedantic-pom-enforcers</artifactId>
-  <version>1.2.0</version>
+  <version>1.2.1-SNAPSHOT</version>
   <packaging>jar</packaging>
   <name>Pedantic POM Enforcers</name>
   <description>
@@ -60,7 +60,7 @@
     <connection>scm:git:git@github.com:ferstl/pedantic-pom-enforcers.git</connection>
     <developerConnection>scm:git:git@github.com:ferstl/pedantic-pom-enforcers.git</developerConnection>
     <url>${project.url}</url>
-    <tag>pedantic-pom-enforcers-1.2.0</tag>
+    <tag>HEAD</tag>
   </scm>
 
   <distributionManagement>
