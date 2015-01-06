@@ -33,6 +33,10 @@
     <system>travis-ci</system>
     <url>https://travis-ci.org/ferstl/pedantic-pom-enforcers</url>
   </ciManagement>
+  <issueManagement>
+    <system>github</system>
+    <url>${project.url}/issues</url>
+  </issueManagement>
 
   <developers>
     <developer>
