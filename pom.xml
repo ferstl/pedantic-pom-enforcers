@@ -29,6 +29,10 @@
       <distribution>repo</distribution>
     </license>
   </licenses>
+  <ciManagement>
+    <system>travis-ci</system>
+    <url>https://travis-ci.org/ferstl/pedantic-pom-enforcers</url>
+  </ciManagement>
 
   <developers>
     <developer>
