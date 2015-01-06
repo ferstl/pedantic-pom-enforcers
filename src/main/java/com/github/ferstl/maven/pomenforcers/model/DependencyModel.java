@@ -32,7 +32,7 @@ import static com.google.common.base.Objects.equal;
 @XmlRootElement(name = "dependency")
 public class DependencyModel extends ArtifactModel {
 
-  private static final Joiner TO_STRING_JOINER = Joiner.on(":");
+  private static final Joiner TO_STRING_JOINER = Joiner.on(":").skipNulls();
 
   @XmlJavaTypeAdapter(value = DependencyScopeAdapter.class)
   private DependencyScope scope;
@@ -75,10 +75,9 @@ public class DependencyModel extends ArtifactModel {
   public String toString() {
     return TO_STRING_JOINER.join(
         super.toString(),
-        this.type != null ? this.type : "<no type>",
+        getType(),
         getScope().getScopeName(),
-        this.classifier != null ? this.classifier : "<no classifier>",
-        this.exclusions != null ? "<contains exclusions>" : "<no exclusions>");
+        this.classifier);
   }
 
   // Note that this equals() implementation breaks the symmetry contract!

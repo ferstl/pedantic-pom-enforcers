@@ -23,7 +23,7 @@ import static com.google.common.base.Objects.equal;
 
 public class ArtifactModel {
 
-  private static final Joiner TO_STRING_JOINER = Joiner.on(":");
+  private static final Joiner TO_STRING_JOINER = Joiner.on(":").useForNull("");
 
   private String groupId;
   private String artifactId;
@@ -58,9 +58,9 @@ public class ArtifactModel {
   @Override
   public String toString() {
     return TO_STRING_JOINER.join(
-        this.groupId != null ? this.groupId : "<no groupId>",
+        this.groupId,
         this.artifactId,
-        this.version != null ? this.version : "<no version>");
+        this.version);
   }
 
   @Override

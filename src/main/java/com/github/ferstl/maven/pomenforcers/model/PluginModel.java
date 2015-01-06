@@ -24,11 +24,7 @@ import javax.xml.bind.annotation.XmlElementWrapper;
 
 import org.w3c.dom.Element;
 
-import com.google.common.base.Joiner;
-
 public class PluginModel extends ArtifactModel {
-
-  private static final Joiner TO_STRING_JOINER = Joiner.on(":").skipNulls();
 
   @XmlElementWrapper(name = "configuration")
   @XmlAnyElement
@@ -48,14 +44,6 @@ public class PluginModel extends ArtifactModel {
 
   public List<DependencyModel> getDependencies() {
     return this.dependencies != null ? this.dependencies.getDependencies() : Collections.<DependencyModel>emptyList();
-  }
-
-  @Override
-  public String toString() {
-    return TO_STRING_JOINER.join(
-        super.toString(),
-        isConfigured() ? "<no configuration>" : "<contains configuration>",
-        this.dependencies != null ? "<contains dependencies>" : "<no dependenices>");
   }
 
   @Override
