@@ -15,6 +15,7 @@
  */
 package com.github.ferstl.maven.pomenforcers;
 
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -43,10 +44,23 @@ import static com.github.ferstl.maven.pomenforcers.util.CommaSeparatorUtils.spli
  */
 public class PedanticDependencyManagementLocationEnforcer extends AbstractPedanticEnforcer {
 
+  private boolean allowParentPoms;
   private final Set<ArtifactModel> dependencyManagingPoms;
 
   public PedanticDependencyManagementLocationEnforcer() {
+    this.allowParentPoms = true;
     this.dependencyManagingPoms = new HashSet<>();
+  }
+
+  /**
+   * Indicates whether parent POMs are generally allowed to manage plugins.
+   * @param allowParentPoms
+   * @configParam
+   * @default <code>true</code>
+   * @since 1.2.0
+   */
+  public void setAllowParentPoms(boolean allowParentPoms) {
+    this.allowParentPoms = allowParentPoms;
   }
 
   /**
@@ -76,6 +90,7 @@ public class PedanticDependencyManagementLocationEnforcer extends AbstractPedant
     MavenProject mavenProject = EnforcerRuleUtils.getMavenProject(getHelper());
     if (containsDependencyManagement() && !isDependencyManagementAllowed(mavenProject)) {
       report.addLine("Only these POMs are allowed to manage dependencies:")
+            .addLine(toList(Collections.singletonList("All parent POMs, i.e. POMs with <packaging>pom</packaging>")))
             .addLine(toList(this.dependencyManagingPoms));
     }
   }
@@ -85,8 +100,18 @@ public class PedanticDependencyManagementLocationEnforcer extends AbstractPedant
   }
 
   private boolean isDependencyManagementAllowed(MavenProject project) {
+    return isDependencyManagementAllowedInParentPom(project)
+        || isDependencyManagingProject(project);
+  }
+
+  private boolean isDependencyManagementAllowedInParentPom(MavenProject project) {
+    return this.allowParentPoms && "pom".equals(project.getPackaging());
+  }
+
+  private boolean isDependencyManagingProject(MavenProject project) {
     ArtifactModel projectInfo = new ArtifactModel(project.getGroupId(), project.getArtifactId(), project.getVersion());
     return this.dependencyManagingPoms.isEmpty() || this.dependencyManagingPoms.contains(projectInfo);
+
   }
 
 }

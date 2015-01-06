@@ -84,4 +84,24 @@ public class PedanticDependencyManagementLocationEnforcerTest extends AbstractPe
     executeRuleAndCheckReport(true);
   }
 
+  public void dependencyManagementAllowedInParentPom() {
+    when(this.mockMavenProject.getPackaging()).thenReturn("pom");
+
+    executeRuleAndCheckReport(true);
+  }
+
+  public void dependencyManagementNotAllowedInParentPom() {
+    when(this.mockMavenProject.getPackaging()).thenReturn("pom");
+    this.testRule.setAllowParentPoms(false);
+
+    executeRuleAndCheckReport(true);
+  }
+
+  @Test
+  public void dependencyManagementInNonParentPom() {
+    when(this.mockMavenProject.getPackaging()).thenReturn("jar");
+
+    executeRuleAndCheckReport(false);
+  }
+
 }

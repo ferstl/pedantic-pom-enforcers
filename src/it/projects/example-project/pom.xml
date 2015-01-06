@@ -127,6 +127,7 @@
                 <allowUnmangedProjectVersions>true</allowUnmangedProjectVersions>
 
                 <!-- Dependency Management Location -->
+                <allowParentPomsForDependencyManagement>false</allowParentPomsForDependencyManagement>
                 <dependencyManagingPoms>com.github.ferstl:example-settings-it</dependencyManagingPoms>
 
                 <!-- Dependency Scopes -->

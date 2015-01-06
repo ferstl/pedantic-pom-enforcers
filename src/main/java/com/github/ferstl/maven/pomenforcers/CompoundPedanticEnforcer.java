@@ -69,6 +69,7 @@ import static com.github.ferstl.maven.pomenforcers.PedanticEnforcerRule.stringTo
  *         &lt;importDependencies&gt;org.jboss:jboss-as-client&lt;/importDependencies&gt;
  *
  *         &lt;!-- DEPENDENCY_MANAGEMENT_LOCATION configuration --&gt;
+ *         &lt;allowParentPomsForDependencyManagement&gt;true&lt;/allowParentPomsForDependencyManagement&gt;
  *         &lt;dependencyManagingPoms&gt;com.example.myproject:parent,com.example.myproject:subparent&lt;/dependencyManagingPoms&gt;
  *
  *         &lt;!-- PLUGIN_MANAGEMENT_ORDER configuration --&gt;
@@ -163,6 +164,13 @@ public class CompoundPedanticEnforcer extends AbstractPedanticEnforcer {
    * @since 1.0.0
    */
   private String dependencyManagementScopePriorities;
+
+  /**
+   * See {@link PedanticDependencyManagementLocationEnforcer#setAllowParentPoms(boolean)}.
+   * @configParam
+   * @since 1.2.0
+   */
+  private Boolean allowParentPomsForDependencyManagement;
 
   /**
    * See {@link PedanticDependencyManagementLocationEnforcer#setDependencyManagingPoms(String)}.
@@ -380,6 +388,9 @@ public class CompoundPedanticEnforcer extends AbstractPedanticEnforcer {
 
     @Override
     public void visit(PedanticDependencyManagementLocationEnforcer enforcer) {
+      if(CompoundPedanticEnforcer.this.allowParentPomsForDependencyManagement != null) {
+        enforcer.setAllowParentPoms(CompoundPedanticEnforcer.this.allowParentPomsForDependencyManagement);
+      }
       if (!Strings.isNullOrEmpty(CompoundPedanticEnforcer.this.dependencyManagingPoms)) {
         enforcer.setDependencyManagingPoms(CompoundPedanticEnforcer.this.dependencyManagingPoms);
       }
