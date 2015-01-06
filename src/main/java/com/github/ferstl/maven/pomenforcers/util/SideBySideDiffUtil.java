@@ -76,7 +76,7 @@ public final class SideBySideDiffUtil {
     private final String leftTitle;
     private final String rightTitle;
     private final int leftWidth;
-    private final int rightWidth;
+    private final int rightWidth; // Only used when titles are present
     private final Collection<Delta<String>> deltas;
     private final List<String> left;
     private final List<String> right;
