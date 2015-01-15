@@ -52,8 +52,8 @@ public class PriorityOrdering<P extends Comparable<? super P>, T> extends Orderi
 
 
   public PriorityOrdering(
-      Collection<P> priorizedItems, Function<T, P> transformer, Equivalence<P> priorityMatcher) {
-    this.priorityCollection = priorizedItems;
+      Collection<P> prioritizedItems, Function<T, P> transformer, Equivalence<P> priorityMatcher) {
+    this.priorityCollection = prioritizedItems;
     this.priorityMatcher = priorityMatcher;
     this.transformer = transformer;
   }
@@ -91,14 +91,14 @@ public class PriorityOrdering<P extends Comparable<? super P>, T> extends Orderi
   /**
    * Determine the priority of the given item by matching it against the priority collection.
    * The lower the rank, the higher the priority.
-   * @param item The item to priorize.
+   * @param item The item to prioritize.
    * @return The priority of the given item or {@link Integer#MAX_VALUE} if the given item does not
    *         match any element of the priority collection.
    */
   private int rank(P item) {
     int i = 0;
-    for (P priorizedItem : this.priorityCollection) {
-      if (this.priorityMatcher.equivalent(item, priorizedItem)) {
+    for (P prioritizedItem : this.priorityCollection) {
+      if (this.priorityMatcher.equivalent(item, prioritizedItem)) {
         return i;
       }
       i++;

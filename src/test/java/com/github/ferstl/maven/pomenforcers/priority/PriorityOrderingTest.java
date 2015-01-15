@@ -35,9 +35,9 @@ public class PriorityOrderingTest {
 
   @Test
   public void testCompare() {
-    ArrayList<String> priorizedItems = Lists.newArrayList("z", "y", "x");
+    ArrayList<String> prioritizedItems = Lists.newArrayList("z", "y", "x");
     Function<String, String> transformer = Functions.identity();
-    PriorityOrdering<String, String> testComparator = new PriorityOrdering<>(priorizedItems, transformer);
+    PriorityOrdering<String, String> testComparator = new PriorityOrdering<>(prioritizedItems, transformer);
 
     // x is in the priority list, a isn't -> a > x
     assertThat(testComparator.compare("a", "x"), greaterThan(0));
@@ -55,9 +55,9 @@ public class PriorityOrderingTest {
 
   @Test
   public void testCompareWithoutPriorities() {
-    ArrayList<String> priorizedItems = Lists.newArrayList();
+    ArrayList<String> prioritizedItems = Lists.newArrayList();
     Function<String, String> identity = Functions.identity();
-    PriorityOrdering<String, String> testComparator = new PriorityOrdering<>(priorizedItems, identity);
+    PriorityOrdering<String, String> testComparator = new PriorityOrdering<>(prioritizedItems, identity);
 
     assertThat(testComparator.compare("a", "b"), lessThan(0));
     assertThat(testComparator.compare("a", "a"), is(0));

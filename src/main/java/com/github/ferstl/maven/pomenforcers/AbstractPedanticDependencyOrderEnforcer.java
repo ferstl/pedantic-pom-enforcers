@@ -62,7 +62,7 @@ abstract class AbstractPedanticDependencyOrderEnforcer extends AbstractPedanticE
   /**
    * Comma-separated list of group IDs that should be listed first in the
    * dependencies declaration. All group IDs that <strong>start with</strong>
-   * any of the priorized group IDs in the given list, are required to be
+   * any of the prioritized group IDs in the given list, are required to be
    * located first in the dependencies section.
    *
    * @param groupIds Comma separated list of group IDs.
@@ -79,7 +79,7 @@ abstract class AbstractPedanticDependencyOrderEnforcer extends AbstractPedanticE
   /**
    * Comma-separated list of artifact IDs that should be listed first in the
    * dependencies declaration. All artifact IDs that <strong>start with</strong>
-   * any of the priorized IDs in the given list, are required to be located
+   * any of the prioritized IDs in the given list, are required to be located
    * first in the dependencies section.
    *
    * @param artifactIds Comma separated list of artifact IDs.
