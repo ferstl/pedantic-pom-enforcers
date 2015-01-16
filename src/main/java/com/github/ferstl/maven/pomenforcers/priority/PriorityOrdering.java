@@ -41,7 +41,7 @@ public class PriorityOrdering<P extends Comparable<? super P>, T> extends Orderi
   private final Collection<P> priorityCollection;
 
   /** Matches the values to be compared with the items in the priority collection. */
-  private final Equivalence<P> priorityMatcher;
+  private final Equivalence<? super P> priorityMatcher;
 
   /**
    * Transforms the type of the objects to be compared into the type of the priority collection. Use
@@ -51,26 +51,14 @@ public class PriorityOrdering<P extends Comparable<? super P>, T> extends Orderi
   private final Function<T, P> transformer;
 
 
-  public PriorityOrdering(
-      Collection<P> prioritizedItems, Function<T, P> transformer, Equivalence<P> priorityMatcher) {
+  public PriorityOrdering(Collection<P> prioritizedItems, Function<T, P> transformer, Equivalence<? super P> priorityMatcher) {
     this.priorityCollection = prioritizedItems;
     this.priorityMatcher = priorityMatcher;
     this.transformer = transformer;
   }
 
   public PriorityOrdering(Collection<P> priorityCollection, Function<T, P> transformer) {
-    // Equivalence.equals() would do the same job but it returns Equivalence<Object> which does not fit here.
-    this(priorityCollection, transformer, new Equivalence<P>() {
-      @Override
-      protected boolean doEquivalent(P a, P b) {
-        return a.equals(b);
-      }
-
-      @Override
-      protected int doHash(P t) {
-        return t.hashCode();
-      }
-    });
+    this(priorityCollection, transformer, Equivalence.equals());
   }
 
   @Override
