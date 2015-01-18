@@ -167,6 +167,7 @@ public class PedanticDependencyScopeEnforcer extends AbstractPedanticEnforcer {
     if (dependency.getScope() == null) {
       return COMPILE;
     }
+
     return DependencyScope.getByScopeName(dependency.getScope());
   }
 

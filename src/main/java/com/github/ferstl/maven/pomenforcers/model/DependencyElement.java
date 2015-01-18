@@ -24,6 +24,7 @@ import com.google.common.base.Function;
 import com.google.common.collect.Maps;
 
 import static com.github.ferstl.maven.pomenforcers.model.functions.StringStartsWithEquivalence.stringStartsWith;
+import static java.util.Objects.requireNonNull;
 
 
 public enum DependencyElement
@@ -74,9 +75,7 @@ implements PriorityOrderingFactory<String, DependencyModel>, Function<Dependency
   }
 
   public static DependencyElement getByElementName(String elementName) {
-    if (elementName == null) {
-      throw new NullPointerException("Element name is null");
-    }
+    requireNonNull(elementName, "Element name is null");
 
     DependencyElement result = elementMap.get(elementName);
     if (result == null) {

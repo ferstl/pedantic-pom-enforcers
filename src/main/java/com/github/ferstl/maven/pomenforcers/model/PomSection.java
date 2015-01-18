@@ -24,6 +24,8 @@ import com.google.common.base.Functions;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Ordering;
 
+import static java.util.Objects.requireNonNull;
+
 
 public enum PomSection {
   MODEL_VERSION("modelVersion"),
@@ -67,14 +69,13 @@ public enum PomSection {
   }
 
   public static PomSection getBySectionName(String sectionName) {
-    if (sectionName == null) {
-      throw new NullPointerException("Section name is null.");
-    }
+    requireNonNull(sectionName, "Section name is null.");
 
     PomSection value = pomSectionMap.get(sectionName);
     if (value == null) {
       throw new IllegalArgumentException("POM section " + sectionName + " does not exist.");
     }
+
     return value;
   }
 

@@ -24,9 +24,7 @@ import com.google.common.base.Function;
 import com.google.common.collect.Maps;
 
 import static com.github.ferstl.maven.pomenforcers.model.functions.StringStartsWithEquivalence.stringStartsWith;
-
-
-
+import static java.util.Objects.requireNonNull;
 
 public enum PluginElement implements PriorityOrderingFactory<String, PluginModel>, Function<PluginModel, String> {
 
@@ -67,9 +65,7 @@ public enum PluginElement implements PriorityOrderingFactory<String, PluginModel
   }
 
   private static PluginElement getByElementName(String elementName) {
-    if (elementName == null) {
-      throw new NullPointerException("Element name is null");
-    }
+    requireNonNull(elementName, "Element name is null");
 
     PluginElement result = elementMap.get(elementName);
     if (result == null) {

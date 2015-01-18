@@ -18,6 +18,8 @@ package com.github.ferstl.maven.pomenforcers.model;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import static java.util.Objects.requireNonNull;
+
 public enum DependencyScope {
 
   COMPILE("compile"),
@@ -37,14 +39,13 @@ public enum DependencyScope {
   }
 
   public static DependencyScope getByScopeName(String scopeName) {
-    if (scopeName == null) {
-      throw new NullPointerException("Scope name is null.");
-    }
+    requireNonNull(scopeName, "Scope name is null.");
 
     DependencyScope scope = dependencyScopeMap.get(scopeName);
     if (scope == null) {
       throw new IllegalArgumentException("Dependency scope'" + scopeName + "' does not exist.");
     }
+
     return scope;
   }
 
