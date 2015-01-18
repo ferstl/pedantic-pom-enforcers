@@ -72,6 +72,7 @@ public class PriorityOrdering<P extends Comparable<? super P>, T> extends Orderi
     if (rank1 == rank2) {
       return comparable1.compareTo(comparable2);
     }
+
     return rank1 - rank2;
 
   }
@@ -91,6 +92,7 @@ public class PriorityOrdering<P extends Comparable<? super P>, T> extends Orderi
       }
       i++;
     }
+
     return Integer.MAX_VALUE;
   }
 
