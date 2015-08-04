@@ -18,18 +18,14 @@ package com.github.ferstl.maven.pomenforcers.util;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-
 import org.hamcrest.Description;
-import org.hamcrest.Factory;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeDiagnosingMatcher;
 import org.junit.Test;
-
 import com.github.ferstl.maven.pomenforcers.model.PomSection;
 import com.google.common.base.Function;
 import com.google.common.collect.FluentIterable;
 import com.google.common.collect.Ordering;
-
 import static com.github.ferstl.maven.pomenforcers.util.SideBySideDiffUtil.diff;
 import static com.github.ferstl.maven.pomenforcers.util.SideBySideDiffUtilTest.SideBySideDiffMatcher.hasContent;
 import static org.junit.Assert.assertEquals;
@@ -277,7 +273,6 @@ public class SideBySideDiffUtilTest {
 
     private final String[] expectedContent;
 
-    @Factory
     public static Matcher<String> hasContent(String... expectedContent) {
       return new SideBySideDiffMatcher(expectedContent);
     }
