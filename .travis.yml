@@ -2,6 +2,10 @@ language: java
 jdk:
 - oraclejdk7
 - oraclejdk8
+
+after_success:
+- mvn jacoco:prepare-agent test jacoco:report coveralls:report
+
 cache:
   directories:
   - $HOME/.m2
