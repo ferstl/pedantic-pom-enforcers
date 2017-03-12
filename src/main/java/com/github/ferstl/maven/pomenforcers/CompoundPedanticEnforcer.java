@@ -38,7 +38,7 @@ import static com.github.ferstl.maven.pomenforcers.PedanticEnforcerRule.stringTo
  *         &lt;enforcers&gt;POM_SECTION_ORDER,MODULE_ORDER,DEPENDENCY_MANAGEMENT_ORDER,DEPENDENCY_ORDER,DEPENDENCY_CONFIGURATION,DEPENDENCY_SCOPE,DEPENDENCY_MANAGEMENT_LOCATION,PLUGIN_MANAGEMENT_ORDER,PLUGIN_CONFIGURATION,PLUGIN_MANAGEMENT_LOCATION&lt;/enforcers&gt;
  *
  *         &lt;!-- POM_SECTION configuration --&gt;
- *         &lt;pomSectionPriorities&gt;roupId,artifactId,version,packaging&lt;/pomSectionPriorities&gt;
+ *         &lt;pomSectionPriorities&gt;groupId,artifactId,version,packaging&lt;/pomSectionPriorities&gt;
  *
  *         &lt;!-- MODULE_ORDER configuration --&gt;
  *         &lt;moduleOrderIgnores&gt;&gt;dist-deb,dist-rpm&lt;/moduleOrderIgnores&gt;
