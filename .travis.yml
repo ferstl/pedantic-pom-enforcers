@@ -6,7 +6,7 @@ jdk:
 - oraclejdk9
 
 script:
-- mvn clean install
+- mvn clean install javadoc:javadoc
 
 after_success:
 - mvn jacoco:prepare-agent test jacoco:report coveralls:report
