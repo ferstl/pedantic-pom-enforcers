@@ -14,7 +14,8 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  -->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>com.github.ferstl</groupId>
@@ -79,15 +80,15 @@
     <maven-enforcer-plugin.version>1.4.1</maven-enforcer-plugin.version>
     <maven-gpg-plugin.version>1.6</maven-gpg-plugin.version>
     <maven-install-plugin.version>2.5.2</maven-install-plugin.version>
-    <maven-invoker-plugin.version>2.0.0</maven-invoker-plugin.version>
+    <maven-invoker-plugin.version>3.0.1</maven-invoker-plugin.version>
     <maven-jar-plugin.version>3.0.2</maven-jar-plugin.version>
     <maven-javadoc-plugin.version>3.0.0-M1</maven-javadoc-plugin.version>
-    <maven-release-plugin.version>2.5.1</maven-release-plugin.version>
+    <maven-release-plugin.version>2.5.3</maven-release-plugin.version>
     <maven-resources-plugin.version>3.0.2</maven-resources-plugin.version>
     <maven-source-plugin.version>3.0.1</maven-source-plugin.version>
     <maven-surefire-plugin.version>2.20.1</maven-surefire-plugin.version>
     <coveralls-maven-plugin.version>4.3.0</coveralls-maven-plugin.version>
-    <jacoco-mavan-plugin.version>0.7.7.201606060606</jacoco-mavan-plugin.version>
+    <jacoco-mavan-plugin.version>0.7.9</jacoco-mavan-plugin.version>
 
     <!-- Other settings. -->
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
