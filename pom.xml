@@ -89,6 +89,7 @@
     <maven-surefire-plugin.version>2.20.1</maven-surefire-plugin.version>
     <coveralls-maven-plugin.version>4.3.0</coveralls-maven-plugin.version>
     <jacoco-mavan-plugin.version>0.7.9</jacoco-mavan-plugin.version>
+    <takari-lifecycle-plugin.version>1.12.3</takari-lifecycle-plugin.version>
 
     <!-- Other settings. -->
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -152,6 +153,22 @@
         </exclusion>
       </exclusions>
     </dependency>
+
+    <dependency>
+      <groupId>io.takari.maven.plugins</groupId>
+      <artifactId>takari-plugin-integration-testing</artifactId>
+      <version>2.9.1</version>
+      <type>pom</type>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>io.takari.maven.plugins</groupId>
+      <artifactId>takari-plugin-testing</artifactId>
+      <version>2.9.1</version>
+      <scope>test</scope>
+    </dependency>
+
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
@@ -202,6 +219,12 @@
               <include>src/test/java/**</include>
             </includes>
           </configuration>
+        </plugin>
+
+        <plugin>
+          <groupId>io.takari.maven.plugins</groupId>
+          <artifactId>takari-lifecycle-plugin</artifactId>
+          <version>${takari-lifecycle-plugin.version}</version>
         </plugin>
 
         <plugin>
@@ -343,6 +366,19 @@
     </pluginManagement>
 
     <plugins>
+      <plugin>
+        <groupId>io.takari.maven.plugins</groupId>
+        <artifactId>takari-lifecycle-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>testProperties</id>
+            <phase>process-test-resources</phase>
+            <goals>
+              <goal>testProperties</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-invoker-plugin</artifactId>
