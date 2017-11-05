@@ -279,6 +279,7 @@
           <artifactId>maven-javadoc-plugin</artifactId>
           <version>${maven-javadoc-plugin.version}</version>
           <configuration>
+            <additionalparam>-Xdoclint:none</additionalparam>
             <tags>
               <tag>
                 <name>id</name>
@@ -373,24 +374,6 @@
   </build>
 
   <profiles>
-    <!-- Enable doclint starting from Java 1.8 -->
-    <profile>
-      <id>doclint</id>
-      <activation>
-        <jdk>[1.8,)</jdk>
-      </activation>
-      <build>
-        <plugins>
-          <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-javadoc-plugin</artifactId>
-            <configuration>
-              <additionalparam>-Xdoclint:none</additionalparam>
-            </configuration>
-          </plugin>
-        </plugins>
-      </build>
-    </profile>
     <profile>
       <id>generate-wiki</id>
       <build>
