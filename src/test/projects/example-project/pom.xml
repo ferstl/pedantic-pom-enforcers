@@ -1,5 +1,5 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.github.ferstl</groupId>
   <artifactId>example-settings-it</artifactId>
@@ -18,7 +18,7 @@
     <!-- artifact coordinates as properties. used to test property resolution -->
     <jboss.groupId>org.jboss.as</jboss.groupId>
     <jboss-as-clustering-common.artifactId>jboss-as-clustering-common</jboss-as-clustering-common.artifactId>
-    
+
     <dependencies.orderBy>scope,groupId,artifactId</dependencies.orderBy>
     <dependencies.groupIdPriorities>com.github.ferstl,commons-</dependencies.groupIdPriorities>
     <pluginManagingPoms>${project.groupId}:example-settings-it,${project.groupId}:module1</pluginManagingPoms>
@@ -106,16 +106,19 @@
           <configuration>
             <rules>
               <compound
-                implementation="com.github.ferstl.maven.pomenforcers.CompoundPedanticEnforcer">
+                  implementation="com.github.ferstl.maven.pomenforcers.CompoundPedanticEnforcer">
                 <!-- Enforcers -->
-                <enforcers>POM_SECTION_ORDER,MODULE_ORDER,DEPENDENCY_MANAGEMENT_ORDER,DEPENDENCY_ORDER,DEPENDENCY_CONFIGURATION,DEPENDENCY_SCOPE,DEPENDENCY_MANAGEMENT_LOCATION,PLUGIN_MANAGEMENT_ORDER,PLUGIN_CONFIGURATION,PLUGIN_MANAGEMENT_LOCATION</enforcers>
+                <enforcers>
+                  POM_SECTION_ORDER,MODULE_ORDER,DEPENDENCY_MANAGEMENT_ORDER,DEPENDENCY_ORDER,DEPENDENCY_CONFIGURATION,DEPENDENCY_SCOPE,DEPENDENCY_MANAGEMENT_LOCATION,PLUGIN_MANAGEMENT_ORDER,PLUGIN_CONFIGURATION,PLUGIN_MANAGEMENT_LOCATION
+                </enforcers>
 
                 <!-- Module order -->
                 <moduleOrderIgnores>module3,module4</moduleOrderIgnores>
 
                 <!-- Dependency Management Order -->
                 <dependencyManagementOrderBy>${dependencies.orderBy}</dependencyManagementOrderBy>
-                <dependencyManagementGroupIdPriorities>${dependencies.groupIdPriorities}</dependencyManagementGroupIdPriorities>
+                <dependencyManagementGroupIdPriorities>${dependencies.groupIdPriorities}
+                </dependencyManagementGroupIdPriorities>
 
                 <!-- Dependencies Order -->
                 <dependenciesOrderBy>${dependencies.orderBy}</dependenciesOrderBy>
@@ -139,7 +142,7 @@
                 <pluginManagementGroupIdPriorities>${plugins.groupIdPriorities}</pluginManagementGroupIdPriorities>
 
                 <!-- Plugin Management Location -->
-                <!-- Note that properties get resolved in sub modules as 
+                <!-- Note that properties get resolved in sub modules as
                   well. Defining ${groupId}:${artifactId} will allow each POM to declare pluginManagement -->
                 <allowParentPomsForPluginManagement>false</allowParentPomsForPluginManagement>
                 <pluginManagingPoms>${pluginManagingPoms}</pluginManagingPoms>
@@ -155,7 +158,7 @@
             <dependency>
               <groupId>com.github.ferstl</groupId>
               <artifactId>pedantic-pom-enforcers</artifactId>
-              <version>@project.version@</version>
+              <version>${it-plugin.version}</version>
             </dependency>
           </dependencies>
         </plugin>
