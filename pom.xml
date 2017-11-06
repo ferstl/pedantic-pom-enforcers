@@ -88,7 +88,7 @@
     <maven-surefire-plugin.version>2.20.1</maven-surefire-plugin.version>
     <coveralls-maven-plugin.version>4.3.0</coveralls-maven-plugin.version>
     <jacoco-mavan-plugin.version>0.7.9</jacoco-mavan-plugin.version>
-    <takari-lifecycle-plugin.version>1.12.3</takari-lifecycle-plugin.version>
+    <takari-lifecycle-plugin.version>1.13.3</takari-lifecycle-plugin.version>
 
     <!-- Other settings. -->
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
