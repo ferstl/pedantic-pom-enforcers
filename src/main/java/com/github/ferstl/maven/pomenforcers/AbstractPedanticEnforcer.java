@@ -39,6 +39,7 @@ public abstract class AbstractPedanticEnforcer implements EnforcerRule2 {
    * If set to <code>true</code>, the enforcer rule will only issue a warning in the log and not fail the build.
    * Enabling this option is a good way to start using the enforcer rules in an already existing project.
    *
+   * @configParam
    * @since 1.4.0
    */
   private boolean warnOnly;
