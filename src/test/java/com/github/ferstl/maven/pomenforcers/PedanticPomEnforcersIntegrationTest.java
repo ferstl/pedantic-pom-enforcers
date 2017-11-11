@@ -64,5 +64,7 @@ public class PedanticPomEnforcersIntegrationTest {
         .execute("enforcer:enforce");
 
     result.assertErrorFreeLog();
+    result.assertLogText("POM_SECTION_ORDER: ");
+    result.assertLogText("DEPENDENCY_ORDER: ");
   }
 }
