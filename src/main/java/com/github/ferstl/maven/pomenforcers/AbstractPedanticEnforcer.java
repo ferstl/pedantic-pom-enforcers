@@ -15,24 +15,34 @@
  */
 package com.github.ferstl.maven.pomenforcers;
 
+import org.apache.maven.enforcer.rule.api.EnforcerLevel;
 import org.apache.maven.enforcer.rule.api.EnforcerRule;
+import org.apache.maven.enforcer.rule.api.EnforcerRule2;
 import org.apache.maven.enforcer.rule.api.EnforcerRuleException;
 import org.apache.maven.enforcer.rule.api.EnforcerRuleHelper;
 import org.apache.maven.plugin.logging.Log;
 import org.apache.maven.project.MavenProject;
 import org.w3c.dom.Document;
-
 import com.github.ferstl.maven.pomenforcers.model.ProjectModel;
 import com.github.ferstl.maven.pomenforcers.serializer.PomSerializer;
 import com.github.ferstl.maven.pomenforcers.util.EnforcerRuleUtils;
 import com.github.ferstl.maven.pomenforcers.util.XmlUtils;
 
-public abstract class AbstractPedanticEnforcer implements EnforcerRule {
+public abstract class AbstractPedanticEnforcer implements EnforcerRule2 {
 
   private EnforcerRuleHelper helper;
   private Log log;
   private Document pom;
   private ProjectModel projectModel;
+
+  /**
+   * If set to <code>true</code>, the enforcer rule will only issue a warning in the log and not fail the build.
+   * Enabling this option is a good way to start using the enforcer rules in an already existing project.
+   *
+   * @configParam
+   * @since 1.4.0
+   */
+  private boolean warnOnly;
 
   @Override
   public final void execute(EnforcerRuleHelper helper) throws EnforcerRuleException {
@@ -54,6 +64,7 @@ public abstract class AbstractPedanticEnforcer implements EnforcerRule {
   /**
    * Initialization method. Use this method when the enforcer rule is not instantiated by the
    * maven-enforcer-plugin.
+   *
    * @param helper Enforcer rule helper.
    * @param pom POM Document.
    * @param projectModel Project model.
@@ -86,6 +97,11 @@ public abstract class AbstractPedanticEnforcer implements EnforcerRule {
   protected abstract void doEnforce(ErrorReport report);
 
   protected abstract void accept(PedanticEnforcerVisitor visitor);
+
+  @Override
+  public EnforcerLevel getLevel() {
+    return this.warnOnly ? EnforcerLevel.WARN : EnforcerLevel.ERROR;
+  }
 
   @Override
   public boolean isCacheable() {

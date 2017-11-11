@@ -55,4 +55,16 @@ public class PedanticPomEnforcersIntegrationTest {
 
     result.assertErrorFreeLog();
   }
+
+  @Test
+  public void warnOnly() throws Exception {
+    File basedir = this.resources.getBasedir("warn-only");
+    MavenExecutionResult result = this.mavenRuntime
+        .forProject(basedir)
+        .execute("enforcer:enforce");
+
+    result.assertErrorFreeLog();
+    result.assertLogText("POM_SECTION_ORDER: ");
+    result.assertLogText("DEPENDENCY_ORDER: ");
+  }
 }
