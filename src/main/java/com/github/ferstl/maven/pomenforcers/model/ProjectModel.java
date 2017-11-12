@@ -75,16 +75,15 @@ public class ProjectModel {
         .append(":")
         .append(this.artifactId)
         .append(" [\n");
-    return sb.toString();
-    //    return TO_STRING_JOINER
-    //        .appendTo(
-    //            sb,
-    //            CollectionToStringHelper.toString("Modules", this.modules),
-    //            this.dependencyManagement,
-    //            this.dependencies,
-    //            this.build)
-    //        .append("\n]")
-    //        .toString();
+    return TO_STRING_JOINER
+        .appendTo(
+            sb,
+            CollectionToStringHelper.toString("Modules", this.modules),
+            this.dependencyManagement,
+            this.dependencies,
+            this.build)
+        .append("\n]")
+        .toString();
   }
 
   @Override
