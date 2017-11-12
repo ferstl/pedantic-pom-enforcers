@@ -18,15 +18,20 @@ package com.github.ferstl.maven.pomenforcers.model;
 import com.google.common.base.Joiner;
 import com.google.common.collect.Iterables;
 
+import static java.util.Collections.emptyList;
+
 final class CollectionToStringHelper {
 
   private static final Joiner JOINER = Joiner.on(",\n");
 
   public static String toString(String prefix, Iterable<?> iterable) {
+    Iterable<?> theIterable = iterable != null ? iterable : emptyList();
+
     StringBuilder sb = new StringBuilder(prefix).append(" [\n");
-    JOINER.appendTo(sb, iterable).append((iterable != null && !Iterables.isEmpty(iterable)) ? "\n]" : "]");
+    JOINER.appendTo(sb, theIterable).append(!Iterables.isEmpty(theIterable) ? "\n]" : "]");
     return sb.toString();
   }
 
-  private CollectionToStringHelper() {}
+  private CollectionToStringHelper() {
+  }
 }

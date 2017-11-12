@@ -18,21 +18,22 @@ package com.github.ferstl.maven.pomenforcers.model;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
-
 import javax.xml.bind.annotation.XmlAnyElement;
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
-
 import org.w3c.dom.Element;
 
 public class PluginModel extends ArtifactModel {
 
-  @XmlElementWrapper(name = "configuration")
+  @XmlElementWrapper(name = "configuration", namespace = "http://maven.apache.org/POM/4.0.0")
   @XmlAnyElement
   private List<Element> configItems;
 
+  @XmlElement(namespace = "http://maven.apache.org/POM/4.0.0")
   private DependenciesModel dependencies;
 
-  PluginModel() {}
+  PluginModel() {
+  }
 
   public PluginModel(String groupId, String artifactId, String version) {
     super(groupId, artifactId, version);

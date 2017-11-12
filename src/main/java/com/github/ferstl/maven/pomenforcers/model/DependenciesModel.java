@@ -20,16 +20,16 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
-
 import javax.xml.bind.annotation.XmlElement;
 
 class DependenciesModel {
 
-  @XmlElement(name = "dependency")
+  @XmlElement(name = "dependency", namespace = "http://maven.apache.org/POM/4.0.0")
   private List<DependencyModel> dependencies;
 
   // Constructor used by JAXB
-  DependenciesModel() {}
+  DependenciesModel() {
+  }
 
   public DependenciesModel(Collection<DependencyModel> dependencies) {
     this.dependencies = new ArrayList<>();

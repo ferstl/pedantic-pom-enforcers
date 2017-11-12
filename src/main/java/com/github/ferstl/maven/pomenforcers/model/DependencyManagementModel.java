@@ -18,10 +18,12 @@ package com.github.ferstl.maven.pomenforcers.model;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
+import javax.xml.bind.annotation.XmlElement;
 
 
 class DependencyManagementModel {
 
+  @XmlElement(namespace = "http://maven.apache.org/POM/4.0.0")
   private DependenciesModel dependencies;
 
   public List<DependencyModel> getDependencies() {
