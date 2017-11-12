@@ -19,12 +19,10 @@ package com.github.ferstl.maven.pomenforcers.model;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
-
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
-
 import com.google.common.base.Joiner;
 
 import static com.google.common.base.Objects.equal;
@@ -34,17 +32,23 @@ public class DependencyModel extends ArtifactModel {
 
   private static final Joiner TO_STRING_JOINER = Joiner.on(":").skipNulls();
 
+  @XmlElement(namespace = "http://maven.apache.org/POM/4.0.0")
   @XmlJavaTypeAdapter(value = DependencyScopeAdapter.class)
   private DependencyScope scope;
+
+  @XmlElement(namespace = "http://maven.apache.org/POM/4.0.0")
   private String classifier;
+
+  @XmlElement(namespace = "http://maven.apache.org/POM/4.0.0")
   private String type;
 
   @XmlElementWrapper
-  @XmlElement(name = "exclusion")
+  @XmlElement(name = "exclusion", namespace = "http://maven.apache.org/POM/4.0.0")
   private List<ArtifactModel> exclusions;
 
   // Constructor used by JAXB
-  DependencyModel() {}
+  DependencyModel() {
+  }
 
   public DependencyModel(
       String groupId, String artifactId, String version, String scope, String classifier, String type) {
@@ -100,7 +104,7 @@ public class DependencyModel extends ArtifactModel {
 
   @Override
   public int hashCode() {
-   return Objects.hash(super.hashCode(), this.classifier, this.type, this.scope);
+    return Objects.hash(super.hashCode(), this.classifier, this.type, this.scope);
   }
 
 }
