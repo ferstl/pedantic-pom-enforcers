@@ -15,15 +15,14 @@
  */
 package com.github.ferstl.maven.pomenforcers;
 
+import javax.xml.bind.JAXB;
 import org.apache.maven.enforcer.rule.api.EnforcerRule;
 import org.apache.maven.enforcer.rule.api.EnforcerRuleException;
 import org.apache.maven.enforcer.rule.api.EnforcerRuleHelper;
 import org.apache.maven.plugin.logging.Log;
 import org.apache.maven.project.MavenProject;
 import org.w3c.dom.Document;
-
 import com.github.ferstl.maven.pomenforcers.model.ProjectModel;
-import com.github.ferstl.maven.pomenforcers.serializer.PomSerializer;
 import com.github.ferstl.maven.pomenforcers.util.EnforcerRuleUtils;
 import com.github.ferstl.maven.pomenforcers.util.XmlUtils;
 
@@ -38,8 +37,7 @@ public abstract class AbstractPedanticEnforcer implements EnforcerRule {
   public final void execute(EnforcerRuleHelper helper) throws EnforcerRuleException {
     MavenProject project = EnforcerRuleUtils.getMavenProject(helper);
     Document pom = XmlUtils.parseXml(project.getFile());
-    PomSerializer pomSerializer = new PomSerializer(pom);
-    ProjectModel model = pomSerializer.read();
+    ProjectModel model = JAXB.unmarshal(project.getFile(), ProjectModel.class);
 
     initialize(helper, pom, model);
 
@@ -54,6 +52,7 @@ public abstract class AbstractPedanticEnforcer implements EnforcerRule {
   /**
    * Initialization method. Use this method when the enforcer rule is not instantiated by the
    * maven-enforcer-plugin.
+   *
    * @param helper Enforcer rule helper.
    * @param pom POM Document.
    * @param projectModel Project model.

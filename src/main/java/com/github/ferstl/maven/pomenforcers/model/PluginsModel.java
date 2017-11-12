@@ -18,15 +18,15 @@ package com.github.ferstl.maven.pomenforcers.model;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
-
 import javax.xml.bind.annotation.XmlElement;
 
 class PluginsModel {
 
-  @XmlElement(name = "plugin")
+  @XmlElement(name = "plugin", namespace = "http://maven.apache.org/POM/4.0.0")
   private List<PluginModel> plugins;
 
-  public PluginsModel() {}
+  public PluginsModel() {
+  }
 
   public List<PluginModel> getPlugins() {
     return this.plugins != null ? this.plugins : Collections.<PluginModel>emptyList();

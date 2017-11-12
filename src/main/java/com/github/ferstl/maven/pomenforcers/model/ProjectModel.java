@@ -18,11 +18,9 @@ package com.github.ferstl.maven.pomenforcers.model;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
-
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
-
 import com.google.common.base.Joiner;
 
 @XmlRootElement(name = "project")
@@ -30,15 +28,23 @@ public class ProjectModel {
 
   private static final Joiner TO_STRING_JOINER = Joiner.on("\n").skipNulls();
 
-  private String groupId;
-  private String artifactId;
+  @XmlElement(namespace = "http://maven.apache.org/POM/4.0.0")
+  public String groupId;
+  @XmlElement(namespace = "http://maven.apache.org/POM/4.0.0")
+  public String artifactId;
 
-  @XmlElementWrapper
-  @XmlElement(name = "module")
-  private List<String> modules;
-  private DependencyManagementModel dependencyManagement;
-  private DependenciesModel dependencies;
-  private BuildModel build;
+  @XmlElementWrapper(namespace = "http://maven.apache.org/POM/4.0.0")
+  @XmlElement(name = "module", namespace = "http://maven.apache.org/POM/4.0.0")
+  public List<String> modules;
+
+  @XmlElement(namespace = "http://maven.apache.org/POM/4.0.0")
+  public DependencyManagementModel dependencyManagement;
+
+  @XmlElement(namespace = "http://maven.apache.org/POM/4.0.0")
+  public DependenciesModel dependencies;
+
+  @XmlElement(namespace = "http://maven.apache.org/POM/4.0.0")
+  public BuildModel build;
 
   public List<String> getModules() {
     return this.modules != null ? this.modules : Collections.<String>emptyList();
@@ -51,7 +57,7 @@ public class ProjectModel {
 
   public List<DependencyModel> getDependencies() {
     return this.dependencies != null ?
-           this.dependencies.getDependencies() : Collections.<DependencyModel>emptyList();
+        this.dependencies.getDependencies() : Collections.<DependencyModel>emptyList();
   }
 
   public List<PluginModel> getManagedPlugins() {
@@ -70,14 +76,14 @@ public class ProjectModel {
         .append(this.artifactId)
         .append(" [\n");
     return TO_STRING_JOINER
-             .appendTo(
-                 sb,
-                 CollectionToStringHelper.toString("Modules", this.modules),
-                 this.dependencyManagement,
-                 this.dependencies,
-                 this.build)
-             .append("\n]")
-             .toString();
+        .appendTo(
+            sb,
+            CollectionToStringHelper.toString("Modules", this.modules),
+            this.dependencyManagement,
+            this.dependencies,
+            this.build)
+        .append("\n]")
+        .toString();
   }
 
   @Override

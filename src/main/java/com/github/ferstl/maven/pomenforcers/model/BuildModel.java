@@ -18,17 +18,18 @@ package com.github.ferstl.maven.pomenforcers.model;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
-
+import javax.xml.bind.annotation.XmlElement;
 import com.google.common.base.Joiner;
 
 class BuildModel {
 
   private static final Joiner TO_STRING_JOINER = Joiner.on("\n");
 
+  @XmlElement(namespace = "http://maven.apache.org/POM/4.0.0")
   private PluginManagementModel pluginManagement;
 
+  @XmlElement(namespace = "http://maven.apache.org/POM/4.0.0")
   private PluginsModel plugins;
-
 
 
   public List<PluginModel> getManagedPlugins() {
