@@ -1,8 +1,9 @@
 package com.github.ferstl.maven.pomenforcers;
 
 
-import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -29,18 +30,19 @@ public class PedanticDependencyElementEnforcer extends AbstractPedanticEnforcer 
     for (int i = 0; i < dependencies.getLength(); i++) {
       Node dependency = dependencies.item(i);
       NodeList dependencyElements = dependency.getChildNodes();
-      List<String> dependencyElementNames = new ArrayList<>();
+      Map<String, String> dependencyContents = new LinkedHashMap<>();
       for (int j = 0; j < dependencyElements.getLength(); j++) {
         Node dependencyElement = dependencyElements.item(j);
 
         if (dependencyElement instanceof Element) {
-          dependencyElementNames.add(dependencyElement.getNodeName());
+          dependencyContents.put(dependencyElement.getNodeName(), dependencyElement.getTextContent());
         }
       }
 
-      if (!dependencyElementOrdering.isOrdered(dependencyElementNames)) {
-        List<String> requiredOrder = dependencyElementOrdering.sortedCopy(dependencyElementNames);
-        report.addDiff(dependencyElementNames, requiredOrder, "Actual Order", "Required Order");
+      if (!dependencyElementOrdering.isOrdered(dependencyContents.keySet())) {
+        List<String> requiredOrder = dependencyElementOrdering.sortedCopy(dependencyContents.keySet());
+        report.addDiff(dependencyContents.keySet(), requiredOrder, "Actual Order", "Required Order");
+        report.addLine("");
       }
     }
   }
