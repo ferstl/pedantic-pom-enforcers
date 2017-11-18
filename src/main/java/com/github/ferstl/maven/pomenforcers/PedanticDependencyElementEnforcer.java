@@ -39,7 +39,8 @@ public class PedanticDependencyElementEnforcer extends AbstractPedanticEnforcer 
       }
 
       if (!dependencyElementOrdering.isOrdered(dependencyElementNames)) {
-        report.addDiff(dependencyElementNames, orederedDependencyElements, "Actual Order", "Required Order");
+        List<String> requiredOrder = dependencyElementOrdering.sortedCopy(dependencyElementNames);
+        report.addDiff(dependencyElementNames, requiredOrder, "Actual Order", "Required Order");
       }
     }
   }
