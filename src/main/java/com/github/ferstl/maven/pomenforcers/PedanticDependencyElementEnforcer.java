@@ -1,6 +1,8 @@
 package com.github.ferstl.maven.pomenforcers;
 
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -20,7 +22,7 @@ public class PedanticDependencyElementEnforcer extends AbstractPedanticEnforcer 
   private final PriorityOrdering<String, String> dependencyElementOrdering;
 
   public PedanticDependencyElementEnforcer() {
-    this.orderedDependencyElements = asList("groupId", "artifactId", "version", "classifier", "type", "scope", "systemPath", "optional", "exclusions");
+    this.orderedDependencyElements = asList("artifactId", "groupId", "version", "classifier", "type", "scope", "systemPath", "optional", "exclusions");
     this.dependencyElementOrdering = new PriorityOrdering<>(this.orderedDependencyElements, Functions.<String>identity());
   }
 
@@ -46,11 +48,24 @@ public class PedanticDependencyElementEnforcer extends AbstractPedanticEnforcer 
       }
 
       if (!this.dependencyElementOrdering.isOrdered(dependencyContents.keySet())) {
-        List<String> requiredOrder = this.dependencyElementOrdering.sortedCopy(dependencyContents.keySet());
-        report.addDiff(dependencyContents.keySet(), requiredOrder, "Actual Order", "Required Order");
+        List<String> actualOrder = prepareForDiff(dependencyContents.keySet(), dependencyContents);
+        List<String> requiredOrder = prepareForDiff(this.dependencyElementOrdering.immutableSortedCopy(dependencyContents.keySet()), dependencyContents);
+
+        report.addDiff(actualOrder, requiredOrder, "Actual Order", "Required Order");
         report.addLine("");
       }
     }
+  }
+
+  private List<String> prepareForDiff(Collection<String> keys, Map<String, String> dependencyContentents) {
+    List<String> result = new ArrayList<>(keys.size());
+    result.add("<dependency>");
+    for (String key : keys) {
+      result.add("  <" + key + ">" + dependencyContentents.get(key) + "</" + key + ">");
+    }
+    result.add("</dependency>");
+
+    return result;
   }
 
   @Override
