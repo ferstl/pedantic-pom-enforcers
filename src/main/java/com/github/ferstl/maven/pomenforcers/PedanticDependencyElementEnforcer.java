@@ -6,6 +6,7 @@ import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -18,12 +19,12 @@ import static java.util.Arrays.asList;
 
 public class PedanticDependencyElementEnforcer extends AbstractPedanticEnforcer {
 
-  private final List<String> orderedDependencyElements;
-  private final PriorityOrdering<String, String> dependencyElementOrdering;
+  private final List<String> orderedElements;
+  private final PriorityOrdering<String, String> elementOrdering;
 
   public PedanticDependencyElementEnforcer() {
-    this.orderedDependencyElements = asList("artifactId", "groupId", "version", "classifier", "type", "scope", "systemPath", "optional", "exclusions");
-    this.dependencyElementOrdering = new PriorityOrdering<>(this.orderedDependencyElements, Functions.<String>identity());
+    this.orderedElements = asList("artifactId", "groupId", "version", "classifier", "type", "scope", "systemPath", "optional", "exclusions");
+    this.elementOrdering = new PriorityOrdering<>(this.orderedElements, Functions.<String>identity());
   }
 
   @Override
@@ -33,37 +34,45 @@ public class PedanticDependencyElementEnforcer extends AbstractPedanticEnforcer 
 
   @Override
   protected void doEnforce(ErrorReport report) {
-    NodeList dependencies = XmlUtils.evaluateXPathAsNodeList("/project/dependencies/dependency", getPom());
-    for (int i = 0; i < dependencies.getLength(); i++) {
-      Node dependency = dependencies.item(i);
-      NodeList dependencyElements = dependency.getChildNodes();
-      Map<String, String> dependencyContents = new LinkedHashMap<>();
+    NodeList nodes = XmlUtils.evaluateXPathAsNodeList("/project/dependencies/dependency", getPom());
 
-      for (int j = 0; j < dependencyElements.getLength(); j++) {
-        Node dependencyElement = dependencyElements.item(j);
+    for (int i = 0; i < nodes.getLength(); i++) {
+      Node node = nodes.item(i);
+      NodeList nodeElements = node.getChildNodes();
 
-        if (dependencyElement instanceof Element) {
-          dependencyContents.put(dependencyElement.getNodeName(), dependencyElement.getTextContent());
-        }
-      }
-
-      if (!this.dependencyElementOrdering.isOrdered(dependencyContents.keySet())) {
-        List<String> actualOrder = prepareForDiff(dependencyContents.keySet(), dependencyContents);
-        List<String> requiredOrder = prepareForDiff(this.dependencyElementOrdering.immutableSortedCopy(dependencyContents.keySet()), dependencyContents);
-
-        report.addDiff(actualOrder, requiredOrder, "Actual Order", "Required Order");
-        report.addLine("");
-      }
+      Map<String, String> nodeContents = analyzeElements(nodeElements);
+      reportIfUnordered(report, nodeContents);
     }
   }
 
-  private List<String> prepareForDiff(Collection<String> keys, Map<String, String> dependencyContentents) {
-    List<String> result = new ArrayList<>(keys.size());
-    result.add("<dependency>");
-    for (String key : keys) {
-      result.add("  <" + key + ">" + dependencyContentents.get(key) + "</" + key + ">");
+  private Map<String, String> analyzeElements(NodeList elements) {
+    Map<String, String> elementContents = new LinkedHashMap<>();
+    for (int j = 0; j < elements.getLength(); j++) {
+      Node element = elements.item(j);
+
+      if (element instanceof Element) {
+        elementContents.put(element.getNodeName(), element.getTextContent());
+      }
     }
-    result.add("</dependency>");
+    return elementContents;
+  }
+
+  private void reportIfUnordered(ErrorReport report, Map<String, String> elementContents) {
+    Set<String> elementNames = elementContents.keySet();
+    if (!this.elementOrdering.isOrdered(elementNames)) {
+      List<String> actualOrder = prepareForDiff(elementNames, elementContents);
+      List<String> requiredOrder = prepareForDiff(this.elementOrdering.immutableSortedCopy(elementNames), elementContents);
+
+      report.addDiff(actualOrder, requiredOrder, "Actual Order", "Required Order");
+      report.addLine("");
+    }
+  }
+
+  private List<String> prepareForDiff(Collection<String> keys, Map<String, String> elementContents) {
+    List<String> result = new ArrayList<>(keys.size());
+    for (String key : keys) {
+      result.add("  <" + key + ">" + elementContents.get(key) + "</" + key + ">");
+    }
 
     return result;
   }
