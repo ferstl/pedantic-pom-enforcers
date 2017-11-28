@@ -45,7 +45,7 @@ public class PedanticDependencyElementEnforcer extends AbstractPedanticEnforcer 
     splitAndAddToCollection(elements, elementPriorities);
     elementPriorities.addAll(DEFAULT_ORDER);
 
-    this.elementOrdering = new PriorityOrdering<String, String>(elementPriorities, Functions.<String>identity());
+    this.elementOrdering = new PriorityOrdering<>(elementPriorities, Functions.<String>identity());
   }
 
 
