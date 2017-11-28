@@ -13,21 +13,42 @@ import org.w3c.dom.NodeList;
 import com.github.ferstl.maven.pomenforcers.priority.PriorityOrdering;
 import com.github.ferstl.maven.pomenforcers.util.XmlUtils;
 import com.google.common.base.Functions;
-import com.google.common.collect.Sets;
 
 import static com.github.ferstl.maven.pomenforcers.PedanticEnforcerRule.DEPENDENCY_ELEMENT;
+import static com.github.ferstl.maven.pomenforcers.util.CommaSeparatorUtils.splitAndAddToCollection;
 import static com.google.common.collect.Sets.newLinkedHashSet;
 import static java.util.Arrays.asList;
 
 public class PedanticDependencyElementEnforcer extends AbstractPedanticEnforcer {
 
+  private static final List<String> DEFAULT_ORDER = asList("groupId", "artifactId", "version", "classifier", "type", "scope", "systemPath", "optional", "exclusions");
+
   private final Set<String> orderedElements;
   private final PriorityOrdering<String, String> elementOrdering;
 
   public PedanticDependencyElementEnforcer() {
-    this.orderedElements = newLinkedHashSet(asList("groupId", "artifactId", "version", "classifier", "type", "scope", "systemPath", "optional", "exclusions"));
+    this.orderedElements = newLinkedHashSet(DEFAULT_ORDER);
     this.elementOrdering = new PriorityOrdering<>(this.orderedElements, Functions.<String>identity());
   }
+
+
+  /**
+   * Comma-separated list of section elements in the order as they should appear. This will overwrite the default
+   * order by putting all unspecified elements at the end.
+   * *
+   *
+   * @param elements Comma separated list of elements as they should appear.
+   * @configParam
+   * @default n/a
+   * @since 1.4.0
+   */
+  public void setElementPriorities(String elements) {
+    Set<String> elementPriorities = newLinkedHashSet();
+    splitAndAddToCollection(elements, elementPriorities);
+    this.orderedElements.addAll(elementPriorities);
+    this.orderedElements.addAll(DEFAULT_ORDER);
+  }
+
 
   @Override
   protected PedanticEnforcerRule getDescription() {
