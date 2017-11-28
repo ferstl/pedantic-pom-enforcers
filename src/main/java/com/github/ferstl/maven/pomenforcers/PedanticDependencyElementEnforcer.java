@@ -23,7 +23,7 @@ public class PedanticDependencyElementEnforcer extends AbstractPedanticEnforcer 
   private final PriorityOrdering<String, String> elementOrdering;
 
   public PedanticDependencyElementEnforcer() {
-    this.orderedElements = asList("artifactId", "groupId", "version", "classifier", "type", "scope", "systemPath", "optional", "exclusions");
+    this.orderedElements = asList("groupId", "artifactId", "version", "classifier", "type", "scope", "systemPath", "optional", "exclusions");
     this.elementOrdering = new PriorityOrdering<>(this.orderedElements, Functions.<String>identity());
   }
 
