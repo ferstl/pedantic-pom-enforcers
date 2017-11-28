@@ -21,14 +21,12 @@ import static java.util.Arrays.asList;
 
 public class PedanticDependencyElementEnforcer extends AbstractPedanticEnforcer {
 
-  private static final List<String> DEFAULT_ORDER = asList("groupId", "artifactId", "version", "classifier", "type", "scope", "systemPath", "optional", "exclusions");
+  private static final Set<String> DEFAULT_ORDER = newLinkedHashSet(asList("groupId", "artifactId", "version", "classifier", "type", "scope", "systemPath", "optional", "exclusions"));
 
-  private final Set<String> orderedElements;
-  private final PriorityOrdering<String, String> elementOrdering;
+  private PriorityOrdering<String, String> elementOrdering;
 
   public PedanticDependencyElementEnforcer() {
-    this.orderedElements = newLinkedHashSet(DEFAULT_ORDER);
-    this.elementOrdering = new PriorityOrdering<>(this.orderedElements, Functions.<String>identity());
+    this.elementOrdering = new PriorityOrdering<>(DEFAULT_ORDER, Functions.<String>identity());
   }
 
 
@@ -45,8 +43,9 @@ public class PedanticDependencyElementEnforcer extends AbstractPedanticEnforcer 
   public void setElementPriorities(String elements) {
     Set<String> elementPriorities = newLinkedHashSet();
     splitAndAddToCollection(elements, elementPriorities);
-    this.orderedElements.addAll(elementPriorities);
-    this.orderedElements.addAll(DEFAULT_ORDER);
+    elementPriorities.addAll(DEFAULT_ORDER);
+
+    this.elementOrdering = new PriorityOrdering<String, String>(elementPriorities, Functions.<String>identity());
   }
 
 
