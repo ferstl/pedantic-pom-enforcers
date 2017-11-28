@@ -13,17 +13,19 @@ import org.w3c.dom.NodeList;
 import com.github.ferstl.maven.pomenforcers.priority.PriorityOrdering;
 import com.github.ferstl.maven.pomenforcers.util.XmlUtils;
 import com.google.common.base.Functions;
+import com.google.common.collect.Sets;
 
 import static com.github.ferstl.maven.pomenforcers.PedanticEnforcerRule.DEPENDENCY_ELEMENT;
+import static com.google.common.collect.Sets.newLinkedHashSet;
 import static java.util.Arrays.asList;
 
 public class PedanticDependencyElementEnforcer extends AbstractPedanticEnforcer {
 
-  private final List<String> orderedElements;
+  private final Set<String> orderedElements;
   private final PriorityOrdering<String, String> elementOrdering;
 
   public PedanticDependencyElementEnforcer() {
-    this.orderedElements = asList("groupId", "artifactId", "version", "classifier", "type", "scope", "systemPath", "optional", "exclusions");
+    this.orderedElements = newLinkedHashSet(asList("groupId", "artifactId", "version", "classifier", "type", "scope", "systemPath", "optional", "exclusions"));
     this.elementOrdering = new PriorityOrdering<>(this.orderedElements, Functions.<String>identity());
   }
 
