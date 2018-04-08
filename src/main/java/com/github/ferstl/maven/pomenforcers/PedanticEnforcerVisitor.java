@@ -28,4 +28,6 @@ public interface PedanticEnforcerVisitor {
   void visit(CompoundPedanticEnforcer compoundEnforcer);
   void visit(PedanticPluginConfigurationEnforcer pedanticPluginConfigurationEnforcer);
   void visit(PedanticPluginManagementLocationEnforcer pedanticPluginManagementLocationEnforcer);
+
+  void visit(PedanticDependencyElementEnforcer pedanticDependencyElementEnforcer);
 }

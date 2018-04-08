@@ -101,5 +101,6 @@ public class PedanticDependencyElementEnforcer extends AbstractPedanticEnforcer 
 
   @Override
   protected void accept(PedanticEnforcerVisitor visitor) {
+    visitor.visit(this);
   }
 }

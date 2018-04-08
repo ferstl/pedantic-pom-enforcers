@@ -306,6 +306,13 @@ public class CompoundPedanticEnforcer extends AbstractPedanticEnforcer {
    */
   private Boolean managePluginDependencies;
 
+  /**
+   * See {@link PedanticDependencyElementEnforcer#elementOrdering}.
+   *
+   * @configParam
+   * @since 1.4.0
+   */
+  private String dependencyElementOrdering;
 
   /** Collection of enforcers to execute. */
   private final Collection<PedanticEnforcerRule> enforcers;
@@ -490,6 +497,13 @@ public class CompoundPedanticEnforcer extends AbstractPedanticEnforcer {
       }
       if (!Strings.isNullOrEmpty(CompoundPedanticEnforcer.this.pluginManagingPoms)) {
         enforcer.setPluginManagingPoms(CompoundPedanticEnforcer.this.pluginManagingPoms);
+      }
+    }
+
+    @Override
+    public void visit(PedanticDependencyElementEnforcer enforcer) {
+      if (CompoundPedanticEnforcer.this.dependencyElementOrdering != null) {
+        enforcer.setElementPriorities(CompoundPedanticEnforcer.this.dependencyElementOrdering);
       }
     }
 
