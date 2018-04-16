@@ -24,16 +24,19 @@ public class PedanticDependencyElementEnforcer extends AbstractPedanticEnforcer 
   private static final Set<String> DEFAULT_ORDER = newLinkedHashSet(asList("groupId", "artifactId", "version", "classifier", "type", "scope", "systemPath", "optional", "exclusions"));
 
   private PriorityOrdering<String, String> elementOrdering;
+  private boolean checkDependencies;
+  private boolean checkDependencyManagement;
 
   public PedanticDependencyElementEnforcer() {
     this.elementOrdering = new PriorityOrdering<>(DEFAULT_ORDER, Functions.<String>identity());
+    this.checkDependencies = true;
+    this.checkDependencyManagement = true;
   }
 
 
   /**
    * Comma-separated list of section elements in the order as they should appear. This will overwrite the default
    * order by putting all unspecified elements at the end.
-   * *
    *
    * @param elements Comma separated list of elements as they should appear.
    * @configParam
@@ -48,6 +51,29 @@ public class PedanticDependencyElementEnforcer extends AbstractPedanticEnforcer 
     this.elementOrdering = new PriorityOrdering<>(elementPriorities, Functions.<String>identity());
   }
 
+  /**
+   * Check the &lt;dependencies&gt; section.
+   *
+   * @param checkDependencies <code>true</code> to check the &lt;dependencies&gt; section, <code>false</code> else.
+   * @configParam
+   * @default true
+   * @since 1.4.0
+   */
+  public void setCheckDependencies(boolean checkDependencies) {
+    this.checkDependencies = checkDependencies;
+  }
+
+  /**
+   * Check the &lt;dependencyManagement&gt; section.
+   *
+   * @param checkDependencyManagement <code>true</code> to check the &lt;dependencyManagement&gt; section, <code>false</code> else.
+   * @configParam
+   * @default true
+   * @since 1.4.0
+   */
+  public void setCheckDependencyManagement(boolean checkDependencyManagement) {
+    this.checkDependencyManagement = checkDependencyManagement;
+  }
 
   @Override
   protected PedanticEnforcerRule getDescription() {
@@ -56,7 +82,17 @@ public class PedanticDependencyElementEnforcer extends AbstractPedanticEnforcer 
 
   @Override
   protected void doEnforce(ErrorReport report) {
-    NodeList nodes = XmlUtils.evaluateXPathAsNodeList("/project/dependencies/dependency", getPom());
+    if (this.checkDependencyManagement) {
+      analyzeNodes("/project/dependencyManagement/dependencies/dependency", report);
+    }
+
+    if (this.checkDependencies) {
+      analyzeNodes("/project/dependencies/dependency", report);
+    }
+  }
+
+  private void analyzeNodes(String rootPath, ErrorReport report) {
+    NodeList nodes = XmlUtils.evaluateXPathAsNodeList(rootPath, getPom());
 
     for (int i = 0; i < nodes.getLength(); i++) {
       Node node = nodes.item(i);
