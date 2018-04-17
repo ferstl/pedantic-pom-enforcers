@@ -91,46 +91,64 @@ public class PedanticDependencyElementEnforcer extends AbstractPedanticEnforcer 
     }
   }
 
-  private void analyzeNodes(String rootPath, ErrorReport report) {
+  private void analyzeNodes(String rootPath, ErrorReport errorReport) {
     NodeList nodes = XmlUtils.evaluateXPathAsNodeList(rootPath, getPom());
 
+    List<Map<String, String>> unorderedNodes = new ArrayList<>();
     for (int i = 0; i < nodes.getLength(); i++) {
       Node node = nodes.item(i);
       NodeList nodeElements = node.getChildNodes();
 
-      Map<String, String> nodeContents = analyzeElements(nodeElements);
-      reportIfUnordered(report, nodeContents);
+      Map<String, String> elementMap = createElementMap(nodeElements);
+      if (!isOrdered(elementMap.keySet())) {
+        unorderedNodes.add(elementMap);
+      }
     }
+
+    report(errorReport, unorderedNodes);
   }
 
-  private Map<String, String> analyzeElements(NodeList elements) {
-    Map<String, String> elementContents = new LinkedHashMap<>();
+  private Map<String, String> createElementMap(NodeList elements) {
+    Map<String, String> elementMap = new LinkedHashMap<>();
     for (int j = 0; j < elements.getLength(); j++) {
       Node element = elements.item(j);
 
       if (element instanceof Element) {
-        elementContents.put(element.getNodeName(), element.getTextContent());
+        elementMap.put(element.getNodeName(), element.getTextContent());
       }
     }
-    return elementContents;
+
+    return elementMap;
   }
 
-  private void reportIfUnordered(ErrorReport report, Map<String, String> elementContents) {
-    Set<String> elementNames = elementContents.keySet();
-    if (!this.elementOrdering.isOrdered(elementNames)) {
-      List<String> actualOrder = prepareForDiff(elementNames, elementContents);
-      List<String> requiredOrder = prepareForDiff(this.elementOrdering.immutableSortedCopy(elementNames), elementContents);
+  private boolean isOrdered(Collection<String> keys) {
+    return this.elementOrdering.isOrdered(keys);
+  }
 
-      report.addDiff(actualOrder, requiredOrder, "Actual Order", "Required Order");
-      report.addLine("");
+  private void report(ErrorReport errorReport, List<Map<String, String>> unorderedNodes) {
+    if (unorderedNodes.isEmpty()) {
+      return;
     }
+
+    List<String> actualOrder = new ArrayList<>();
+    List<String> requiredOrder = new ArrayList<>();
+
+    for (Map<String, String> elements : unorderedNodes) {
+      actualOrder.addAll(prepareForDiff(elements.keySet(), elements));
+      requiredOrder.addAll(prepareForDiff(this.elementOrdering.immutableSortedCopy(elements.keySet()), elements));
+    }
+
+    errorReport.addDiff(actualOrder, requiredOrder, "Actual Order", "Required Order");
   }
 
   private List<String> prepareForDiff(Collection<String> keys, Map<String, String> elementContents) {
     List<String> result = new ArrayList<>(keys.size());
+    result.add("<dependency>");
     for (String key : keys) {
       result.add("  <" + key + ">" + elementContents.get(key) + "</" + key + ">");
     }
+    result.add("</dependency>");
+    result.add("");
 
     return result;
   }
