@@ -83,15 +83,15 @@ public class PedanticDependencyElementEnforcer extends AbstractPedanticEnforcer 
   @Override
   protected void doEnforce(ErrorReport report) {
     if (this.checkDependencyManagement) {
-      analyzeNodes("/project/dependencyManagement/dependencies/dependency", report);
+      analyzeNodes("dependencyManagement", "/project/dependencyManagement/dependencies/dependency", report);
     }
 
     if (this.checkDependencies) {
-      analyzeNodes("/project/dependencies/dependency", report);
+      analyzeNodes("dependencies", "/project/dependencies/dependency", report);
     }
   }
 
-  private void analyzeNodes(String rootPath, ErrorReport errorReport) {
+  private void analyzeNodes(String context, String rootPath, ErrorReport errorReport) {
     NodeList nodes = XmlUtils.evaluateXPathAsNodeList(rootPath, getPom());
 
     List<Map<String, String>> unorderedNodes = new ArrayList<>();
@@ -105,7 +105,7 @@ public class PedanticDependencyElementEnforcer extends AbstractPedanticEnforcer 
       }
     }
 
-    report(errorReport, unorderedNodes);
+    report(context, errorReport, unorderedNodes);
   }
 
   private Map<String, String> createElementMap(NodeList elements) {
@@ -125,7 +125,7 @@ public class PedanticDependencyElementEnforcer extends AbstractPedanticEnforcer 
     return this.elementOrdering.isOrdered(keys);
   }
 
-  private void report(ErrorReport errorReport, List<Map<String, String>> unorderedNodes) {
+  private void report(String context, ErrorReport errorReport, List<Map<String, String>> unorderedNodes) {
     if (unorderedNodes.isEmpty()) {
       return;
     }
@@ -138,6 +138,8 @@ public class PedanticDependencyElementEnforcer extends AbstractPedanticEnforcer 
       requiredOrder.addAll(prepareForDiff(this.elementOrdering.immutableSortedCopy(elements.keySet()), elements));
     }
 
+    errorReport.addLine("<" + context + ">: " + " Dependencies have to be declared this way:");
+    errorReport.emptyLine();
     errorReport.addDiff(actualOrder, requiredOrder, "Actual Order", "Required Order");
   }
 
