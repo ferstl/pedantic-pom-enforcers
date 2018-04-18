@@ -37,12 +37,27 @@ public class PedanticDependencyElementEnforcerTest {
   }
 
   @Test
-  public void customOrdering() {
+  public void customOrderingForDependencies() {
     // arrange
     Path pomFile = Paths.get("src/test/projects/example-project/module1/pom.xml");
     PedanticDependencyElementEnforcer enforcer = createEnforcer(pomFile);
 
     enforcer.setElementPriorities("artifactId,groupId");
+
+    // act
+    enforcer.doEnforce(this.errorReport);
+
+    // assert
+    assertThat(this.errorReport, hasErrors());
+  }
+
+  @Test
+  public void customOrderingForDependencyManagement() {
+    // arrange
+    Path pomFile = Paths.get("src/test/projects/example-project/pom.xml");
+    PedanticDependencyElementEnforcer enforcer = createEnforcer(pomFile);
+
+    enforcer.setElementPriorities("version");
 
     // act
     enforcer.doEnforce(this.errorReport);
