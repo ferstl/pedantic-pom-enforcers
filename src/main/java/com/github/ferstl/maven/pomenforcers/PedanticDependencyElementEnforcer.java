@@ -19,6 +19,25 @@ import static com.github.ferstl.maven.pomenforcers.util.CommaSeparatorUtils.spli
 import static com.google.common.collect.Sets.newLinkedHashSet;
 import static java.util.Arrays.asList;
 
+/**
+ * This enforcer makes sure that elements in the &lt;dependencyManagement&gt; and &lt;dependencies&gt; sections are ordered.
+ * <pre>
+ * ### Example
+ *     &lt;rules&gt;
+ *       &lt;dependencyElements implementation=&quot;com.github.ferstl.maven.pomenforcers.PedanticDependencyElementEnforcer&quot;&gt;
+ *         &lt;!-- Define the order within dependencies --&gt;
+ *         &lt;elementPriorities&gt;groupId,artifactId,version&lt;/elementPriorities&gt;
+ *         &lt;!-- Check the dependency management section --&gt;
+ *         &lt;checkDependencyManagement&gt;true&lt;/checkDependencyManagement&gt;
+ *         &lt;!-- Check the dependencies section --&gt;
+ *         &lt;checkDependencies&gt;true&lt;/checkDependencies&gt;
+ *       &lt;/dependencyElements&gt;
+ *     &lt;/rules&gt;
+ * </pre>
+ *
+ * @id {@link PedanticEnforcerRule#DEPENDENCY_ELEMENT}
+ * @since 1.4.0
+ */
 public class PedanticDependencyElementEnforcer extends AbstractPedanticEnforcer {
 
   private static final Set<String> DEFAULT_ORDER = newLinkedHashSet(asList("groupId", "artifactId", "version", "classifier", "type", "scope", "systemPath", "optional", "exclusions"));
@@ -40,7 +59,7 @@ public class PedanticDependencyElementEnforcer extends AbstractPedanticEnforcer 
    *
    * @param elements Comma separated list of elements as they should appear.
    * @configParam
-   * @default n/a
+   * @default groupId, artifactId, version, classifier, type, scope, systemPath, optional, exclusions
    * @since 1.4.0
    */
   public void setElementPriorities(String elements) {
