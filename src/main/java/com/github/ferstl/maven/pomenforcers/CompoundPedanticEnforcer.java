@@ -314,7 +314,25 @@ public class CompoundPedanticEnforcer extends AbstractPedanticEnforcer {
    */
   private String dependencyElementOrdering;
 
-  /** Collection of enforcers to execute. */
+  /**
+   * See {@link PedanticDependencyElementEnforcer#checkDependencies}.
+   *
+   * @configParam
+   * @since 1.4.0
+   */
+  private Boolean checkDependencyElements;
+
+  /**
+   * See {@link PedanticDependencyElementEnforcer#checkDependencyManagement}.
+   *
+   * @configParam
+   * @since 1.4.0
+   */
+  private Boolean checkDependencyManagementElements;
+
+  /**
+   * Collection of enforcers to execute.
+   */
   private final Collection<PedanticEnforcerRule> enforcers;
 
   private final PropertyInitializationVisitor propertyInitializer;
@@ -504,6 +522,12 @@ public class CompoundPedanticEnforcer extends AbstractPedanticEnforcer {
     public void visit(PedanticDependencyElementEnforcer enforcer) {
       if (CompoundPedanticEnforcer.this.dependencyElementOrdering != null) {
         enforcer.setElementPriorities(CompoundPedanticEnforcer.this.dependencyElementOrdering);
+      }
+      if (CompoundPedanticEnforcer.this.checkDependencyElements != null) {
+        enforcer.setCheckDependencies(CompoundPedanticEnforcer.this.checkDependencyElements);
+      }
+      if (CompoundPedanticEnforcer.this.checkDependencyManagementElements != null) {
+        enforcer.setCheckDependencyManagement(CompoundPedanticEnforcer.this.checkDependencyManagementElements);
       }
     }
 
