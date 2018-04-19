@@ -85,6 +85,10 @@ import static com.github.ferstl.maven.pomenforcers.PedanticEnforcerRule.stringTo
  *         &lt;!-- PLUGIN_MANAGEMENT_LOCATION configuration --&gt;
  *         &lt;allowParentPomsForPluginManagement&gt;true&lt;/allowParentPomsForPluginManagement&gt;
  *         &lt;pluginManagingPoms&gt;com.myproject:parent-pom&lt;/pluginManagingPoms&gt;
+ *         &lt;!-- DEPENDENCY_ELEMENT --&gt;
+ *         &lt;dependencyElementOrdering&gt;groupId,artifactid,version&lt;/dependencyElementOrdering&gt;
+ *         &lt;checkDependencyElements&gt;true&lt;/heckDependencyElements&gt;
+ *         &lt;checkDependencyManagementElements&gt;true&lt;/checkDependencyManagementElements&gt;
  *       &lt;/compound&gt;
  *     &lt;/rules&gt;
  * </pre>
