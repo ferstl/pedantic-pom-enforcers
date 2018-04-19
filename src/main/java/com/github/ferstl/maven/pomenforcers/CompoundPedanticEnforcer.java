@@ -85,6 +85,10 @@ import static com.github.ferstl.maven.pomenforcers.PedanticEnforcerRule.stringTo
  *         &lt;!-- PLUGIN_MANAGEMENT_LOCATION configuration --&gt;
  *         &lt;allowParentPomsForPluginManagement&gt;true&lt;/allowParentPomsForPluginManagement&gt;
  *         &lt;pluginManagingPoms&gt;com.myproject:parent-pom&lt;/pluginManagingPoms&gt;
+ *         &lt;!-- DEPENDENCY_ELEMENT --&gt;
+ *         &lt;dependencyElementOrdering&gt;groupId,artifactid,version&lt;/dependencyElementOrdering&gt;
+ *         &lt;checkDependencyElements&gt;true&lt;/heckDependencyElements&gt;
+ *         &lt;checkDependencyManagementElements&gt;true&lt;/checkDependencyManagementElements&gt;
  *       &lt;/compound&gt;
  *     &lt;/rules&gt;
  * </pre>
@@ -306,8 +310,33 @@ public class CompoundPedanticEnforcer extends AbstractPedanticEnforcer {
    */
   private Boolean managePluginDependencies;
 
+  /**
+   * See {@link PedanticDependencyElementEnforcer#elementOrdering}.
+   *
+   * @configParam
+   * @since 1.4.0
+   */
+  private String dependencyElementOrdering;
 
-  /** Collection of enforcers to execute. */
+  /**
+   * See {@link PedanticDependencyElementEnforcer#checkDependencies}.
+   *
+   * @configParam
+   * @since 1.4.0
+   */
+  private Boolean checkDependencyElements;
+
+  /**
+   * See {@link PedanticDependencyElementEnforcer#checkDependencyManagement}.
+   *
+   * @configParam
+   * @since 1.4.0
+   */
+  private Boolean checkDependencyManagementElements;
+
+  /**
+   * Collection of enforcers to execute.
+   */
   private final Collection<PedanticEnforcerRule> enforcers;
 
   private final PropertyInitializationVisitor propertyInitializer;
@@ -490,6 +519,19 @@ public class CompoundPedanticEnforcer extends AbstractPedanticEnforcer {
       }
       if (!Strings.isNullOrEmpty(CompoundPedanticEnforcer.this.pluginManagingPoms)) {
         enforcer.setPluginManagingPoms(CompoundPedanticEnforcer.this.pluginManagingPoms);
+      }
+    }
+
+    @Override
+    public void visit(PedanticDependencyElementEnforcer enforcer) {
+      if (CompoundPedanticEnforcer.this.dependencyElementOrdering != null) {
+        enforcer.setElementPriorities(CompoundPedanticEnforcer.this.dependencyElementOrdering);
+      }
+      if (CompoundPedanticEnforcer.this.checkDependencyElements != null) {
+        enforcer.setCheckDependencies(CompoundPedanticEnforcer.this.checkDependencyElements);
+      }
+      if (CompoundPedanticEnforcer.this.checkDependencyManagementElements != null) {
+        enforcer.setCheckDependencyManagement(CompoundPedanticEnforcer.this.checkDependencyManagementElements);
       }
     }
 

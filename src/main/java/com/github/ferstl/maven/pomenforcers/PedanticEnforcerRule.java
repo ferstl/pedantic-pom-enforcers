@@ -30,7 +30,7 @@ public enum PedanticEnforcerRule {
     public AbstractPedanticEnforcer createEnforcerRule() {
       throw new UnsupportedOperationException(
           "The " + CompoundPedanticEnforcer.class.getSimpleName()
-        + " is not supposed to be instantiated outside the maven-enforcer-plugin.");
+              + " is not supposed to be instantiated outside the maven-enforcer-plugin.");
     }
   },
 
@@ -88,6 +88,17 @@ public enum PedanticEnforcerRule {
       return new PedanticDependencyConfigurationEnforcer();
     }
   },
+
+  /**
+   * @see PedanticDependencyElementEnforcer
+   */
+  DEPENDENCY_ELEMENT("One does not simply declare a dependency!") {
+    @Override
+    public AbstractPedanticEnforcer createEnforcerRule() {
+      return new PedanticDependencyElementEnforcer();
+    }
+  },
+
   /**
    * @see PedanticDependencyScopeEnforcer
    */

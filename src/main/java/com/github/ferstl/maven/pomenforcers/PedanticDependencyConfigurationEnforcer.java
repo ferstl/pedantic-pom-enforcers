@@ -17,7 +17,6 @@ package com.github.ferstl.maven.pomenforcers;
 
 import java.util.Collection;
 import java.util.List;
-
 import com.github.ferstl.maven.pomenforcers.model.DependencyModel;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
@@ -27,7 +26,6 @@ import static com.github.ferstl.maven.pomenforcers.ErrorReport.toList;
 /**
  * This enforcer makes sure that dependency versions and exclusions are declared in the
  * <code>&lt;dependencyManagement&gt;</code> section.
- *
  * <pre>
  * ### Example
  *     &lt;rules&gt;
@@ -42,22 +40,29 @@ import static com.github.ferstl.maven.pomenforcers.ErrorReport.toList;
  *     &lt;/rules&gt;
  * </pre>
  *
- * @id {@link PedanticEnforcerRule#DEPENDENCY_ORDER}
+ * @id {@link PedanticEnforcerRule#DEPENDENCY_CONFIGURATION}
  * @since 1.0.0
  */
 public class PedanticDependencyConfigurationEnforcer extends AbstractPedanticEnforcer {
 
-  /** If enabled, dependency versions have to be declared in <code>&lt;dependencyManagement&gt;</code>. */
+  /**
+   * If enabled, dependency versions have to be declared in <code>&lt;dependencyManagement&gt;</code>.
+   */
   private boolean manageVersions = true;
 
-  /** Allow <code>${project.version}</code> or <code>${version}</code> as dependency version. */
+  /**
+   * Allow <code>${project.version}</code> or <code>${version}</code> as dependency version.
+   */
   private boolean allowUnmangedProjectVersions = true;
 
-  /** If enabled, dependency exclusions have to be declared in <code>&lt;dependencyManagement&gt;</code>. */
+  /**
+   * If enabled, dependency exclusions have to be declared in <code>&lt;dependencyManagement&gt;</code>.
+   */
   private boolean manageExclusions = true;
 
   /**
    * If set to <code>true</code>, all dependency versions have to be defined in the dependency management.
+   *
    * @param manageVersions Manage dependency versions in the dependency management.
    * @configParam
    * @default <code>true</code>
@@ -70,6 +75,7 @@ public class PedanticDependencyConfigurationEnforcer extends AbstractPedanticEnf
   /**
    * If set to <code>true</code>, <code><version>${project.version}</version></code> may be used within
    * the dependencies section.
+   *
    * @param allowUnmangedProjectVersions Allow project versions outside of the dependencies section.
    * @configParam
    * @default <code>true</code>
@@ -81,6 +87,7 @@ public class PedanticDependencyConfigurationEnforcer extends AbstractPedanticEnf
 
   /**
    * If set to <code>true</code>, all dependency exclusions must be declared in the dependency management.
+   *
    * @param manageExclusions Manage exclusion in dependency management.
    * @configParam
    * @default <code>true</code>
@@ -120,7 +127,7 @@ public class PedanticDependencyConfigurationEnforcer extends AbstractPedanticEnf
 
     if (!versionedDependencies.isEmpty()) {
       report.addLine("Dependency versions have to be declared in <dependencyManagement>:")
-            .addLine(toList(versionedDependencies));
+          .addLine(toList(versionedDependencies));
     }
   }
 
@@ -129,7 +136,7 @@ public class PedanticDependencyConfigurationEnforcer extends AbstractPedanticEnf
 
     if (!depsWithExclusions.isEmpty()) {
       report.addLine("Dependency exclusions have to be declared in <dependencyManagement>:")
-            .addLine(toList(depsWithExclusions));
+          .addLine(toList(depsWithExclusions));
     }
   }
 
