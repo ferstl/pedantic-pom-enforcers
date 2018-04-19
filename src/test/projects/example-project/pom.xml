@@ -109,7 +109,7 @@
                   implementation="com.github.ferstl.maven.pomenforcers.CompoundPedanticEnforcer">
                 <!-- Enforcers -->
                 <enforcers>
-                  POM_SECTION_ORDER,MODULE_ORDER,DEPENDENCY_MANAGEMENT_ORDER,DEPENDENCY_ORDER,DEPENDENCY_CONFIGURATION,DEPENDENCY_SCOPE,DEPENDENCY_MANAGEMENT_LOCATION,PLUGIN_MANAGEMENT_ORDER,PLUGIN_CONFIGURATION,PLUGIN_MANAGEMENT_LOCATION
+                  POM_SECTION_ORDER,MODULE_ORDER,DEPENDENCY_MANAGEMENT_ORDER,DEPENDENCY_ORDER,DEPENDENCY_CONFIGURATION,DEPENDENCY_SCOPE,DEPENDENCY_MANAGEMENT_LOCATION,PLUGIN_MANAGEMENT_ORDER,PLUGIN_CONFIGURATION,PLUGIN_MANAGEMENT_LOCATION,DEPENDENCY_ELEMENT
                 </enforcers>
 
                 <!-- Module order -->
@@ -141,6 +141,9 @@
                 <pluginManagementOrderBy>${plugins.orderBy}</pluginManagementOrderBy>
                 <pluginManagementGroupIdPriorities>${plugins.groupIdPriorities}</pluginManagementGroupIdPriorities>
 
+                <dependencyElementOrdering>groupId,artifactId,version</dependencyElementOrdering>
+                <checkDependencyElements>true</checkDependencyElements>
+                <checkDependencyManagementElements>true</checkDependencyManagementElements>
                 <!-- Plugin Management Location -->
                 <!-- Note that properties get resolved in sub modules as
                   well. Defining ${groupId}:${artifactId} will allow each POM to declare pluginManagement -->
