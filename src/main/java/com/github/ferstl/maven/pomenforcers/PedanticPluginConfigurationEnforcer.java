@@ -35,7 +35,7 @@ import static com.github.ferstl.maven.pomenforcers.ErrorReport.toList;
  *         &lt;!-- all plugin versions have to be defined in plugin managment --&gt;
  *         &lt;manageVersions&gt;true&lt;/manageVersions&gt;
  *         &lt;!-- plugin configuration (except execution configuration) has to be defined in plugin management. --&gt;
- *         &lt;manageConfigurations&gt;true&lt;/anageConfigurations&gt;
+ *         &lt;manageConfigurations&gt;true&lt;/manageConfigurations&gt;
  *         &lt;!-- plugin dependencies may be defined in the &lt;plugins&gt; section. --&gt;
  *         &lt;manageDependencies&gt;false&lt;/manageDependencies&gt;
  *       &lt;/pluginConfiguration&gt;
