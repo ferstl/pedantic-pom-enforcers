@@ -73,21 +73,21 @@
   <properties>
     <!-- Plugin versions. -->
     <license-maven-plugin.version>2.11</license-maven-plugin.version>
-    <maven-clean-plugin.version>3.0.0</maven-clean-plugin.version>
-    <maven-compiler-plugin.version>3.7.0</maven-compiler-plugin.version>
+    <maven-clean-plugin.version>3.1.0</maven-clean-plugin.version>
+    <maven-compiler-plugin.version>3.8.0</maven-compiler-plugin.version>
     <maven-deploy-plugin.version>2.8.2</maven-deploy-plugin.version>
     <maven-enforcer-plugin.version>1.4.1</maven-enforcer-plugin.version>
     <maven-gpg-plugin.version>1.6</maven-gpg-plugin.version>
     <maven-install-plugin.version>2.5.2</maven-install-plugin.version>
-    <maven-jar-plugin.version>3.0.2</maven-jar-plugin.version>
-    <maven-javadoc-plugin.version>3.0.0-M1</maven-javadoc-plugin.version>
+    <maven-jar-plugin.version>3.1.1</maven-jar-plugin.version>
+    <maven-javadoc-plugin.version>3.0.1</maven-javadoc-plugin.version>
     <maven-release-plugin.version>2.5.3</maven-release-plugin.version>
-    <maven-resources-plugin.version>3.0.2</maven-resources-plugin.version>
+    <maven-resources-plugin.version>3.1.0</maven-resources-plugin.version>
     <maven-source-plugin.version>3.0.1</maven-source-plugin.version>
-    <maven-surefire-plugin.version>2.20.1</maven-surefire-plugin.version>
+    <maven-surefire-plugin.version>2.22.1</maven-surefire-plugin.version>
     <coveralls-maven-plugin.version>4.3.0</coveralls-maven-plugin.version>
-    <jacoco-mavan-plugin.version>0.7.9</jacoco-mavan-plugin.version>
-    <takari-lifecycle-plugin.version>1.13.3</takari-lifecycle-plugin.version>
+    <jacoco-maven-plugin.version>0.8.2</jacoco-maven-plugin.version>
+    <takari-lifecycle-plugin.version>1.13.9</takari-lifecycle-plugin.version>
 
     <!-- Other settings. -->
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -278,7 +278,7 @@
           <artifactId>maven-javadoc-plugin</artifactId>
           <version>${maven-javadoc-plugin.version}</version>
           <configuration>
-            <additionalparam>-Xdoclint:none</additionalparam>
+            <doclint>none</doclint>
             <tags>
               <tag>
                 <name>id</name>
@@ -390,7 +390,7 @@
                 <configuration>
                   <doclet>com.github.ferstl.doclet.PedanticEnforcerDoclet</doclet>
                   <useStandardDocletOptions>false</useStandardDocletOptions>
-                  <additionalparam>-outputDirectory "${project.basedir}/../${project.artifactId}.wiki"</additionalparam>
+                  <additionalOptions>-outputDirectory "${project.basedir}/../${project.artifactId}.wiki"</additionalOptions>
                   <reportOutputDirectory>${project.basedir}/../${project.artifactId}.wiki</reportOutputDirectory>
                   <destDir>..</destDir>
                   <docletArtifact>
