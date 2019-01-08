@@ -11,7 +11,7 @@ import io.takari.maven.testing.executor.MavenVersions;
 import io.takari.maven.testing.executor.junit.MavenJUnitTestRunner;
 
 @RunWith(MavenJUnitTestRunner.class)
-@MavenVersions({"3.5.2", "3.3.9"})
+@MavenVersions({"3.6.0", "3.3.9"})
 public class PedanticPomEnforcersIntegrationTest {
 
   @Rule
@@ -54,6 +54,17 @@ public class PedanticPomEnforcersIntegrationTest {
         .execute("enforcer:enforce");
 
     result.assertErrorFreeLog();
+  }
+
+  @Test
+  public void issue23() throws Exception {
+    File basedir = this.resources.getBasedir("issue-23");
+    MavenExecutionResult result = this.mavenRuntime
+        .forProject(basedir)
+        .execute("enforcer:enforce");
+
+    result.assertLogText("Dependency exclusions have to be declared in <dependencyManagement>");
+    result.assertLogText("BUILD FAILURE");
   }
 
   @Test
