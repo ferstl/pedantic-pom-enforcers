@@ -42,7 +42,7 @@ public class DependencyModel extends ArtifactModel {
   @XmlElement(namespace = "http://maven.apache.org/POM/4.0.0")
   private String type;
 
-  @XmlElementWrapper
+  @XmlElementWrapper(namespace = "http://maven.apache.org/POM/4.0.0")
   @XmlElement(name = "exclusion", namespace = "http://maven.apache.org/POM/4.0.0")
   private List<ArtifactModel> exclusions;
 
