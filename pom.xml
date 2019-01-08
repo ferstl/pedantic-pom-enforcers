@@ -92,7 +92,7 @@
 
     <!-- Other settings. -->
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <maven.version>3.3.9</maven.version>
+    <maven.version>3.6.0</maven.version>
     <pedantic-pom-enforcers-doclet.version>1.0.5-SNAPSHOT</pedantic-pom-enforcers-doclet.version>
   </properties>
 
@@ -100,7 +100,8 @@
     <dependency>
       <groupId>com.google.guava</groupId>
       <artifactId>guava</artifactId>
-      <version>20.0</version>
+      <!-- Java 7 compatible -->
+      <version>27.0.1-android</version>
     </dependency>
     <dependency>
       <groupId>com.googlecode.java-diff-utils</groupId>
@@ -110,7 +111,7 @@
     <dependency>
       <groupId>org.glassfish.jaxb</groupId>
       <artifactId>jaxb-runtime</artifactId>
-      <version>2.3.0</version>
+      <version>2.3.1</version>
     </dependency>
     <dependency>
       <groupId>org.apache.maven</groupId>
@@ -140,7 +141,7 @@
     <dependency>
       <groupId>io.takari.maven.plugins</groupId>
       <artifactId>takari-plugin-integration-testing</artifactId>
-      <version>2.9.1</version>
+      <version>2.9.2</version>
       <type>pom</type>
       <scope>test</scope>
     </dependency>
@@ -148,7 +149,7 @@
     <dependency>
       <groupId>io.takari.maven.plugins</groupId>
       <artifactId>takari-plugin-testing</artifactId>
-      <version>2.9.1</version>
+      <version>2.9.2</version>
       <scope>test</scope>
     </dependency>
 
@@ -173,7 +174,7 @@
     <dependency>
       <groupId>org.mockito</groupId>
       <artifactId>mockito-core</artifactId>
-      <version>2.2.22</version>
+      <version>2.23.4</version>
       <scope>test</scope>
       <exclusions>
         <exclusion>
