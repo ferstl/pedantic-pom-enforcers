@@ -100,8 +100,7 @@
     <dependency>
       <groupId>com.google.guava</groupId>
       <artifactId>guava</artifactId>
-      <!-- Java 7 compatible -->
-      <version>27.0.1-android</version>
+      <version>27.0.1-jre</version>
     </dependency>
     <dependency>
       <groupId>com.googlecode.java-diff-utils</groupId>
