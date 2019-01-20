@@ -38,7 +38,7 @@ class DependenciesModel {
 
 
   public List<DependencyModel> getDependencies() {
-    return this.dependencies != null ? this.dependencies : Collections.<DependencyModel>emptyList();
+    return this.dependencies != null ? this.dependencies : Collections.emptyList();
   }
 
   @Override

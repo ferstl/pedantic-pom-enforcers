@@ -24,7 +24,6 @@ import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import com.google.common.base.Joiner;
-
 import static com.google.common.base.Objects.equal;
 
 @XmlRootElement(name = "dependency")
@@ -72,7 +71,7 @@ public class DependencyModel extends ArtifactModel {
   }
 
   public List<ArtifactModel> getExclusions() {
-    return this.exclusions != null ? this.exclusions : Collections.<ArtifactModel>emptyList();
+    return this.exclusions != null ? this.exclusions : Collections.emptyList();
   }
 
   @Override

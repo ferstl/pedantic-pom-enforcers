@@ -47,25 +47,25 @@ public class ProjectModel {
   public BuildModel build;
 
   public List<String> getModules() {
-    return this.modules != null ? this.modules : Collections.<String>emptyList();
+    return this.modules != null ? this.modules : Collections.emptyList();
   }
 
   public List<DependencyModel> getManagedDependencies() {
     return this.dependencyManagement != null ?
-        this.dependencyManagement.getDependencies() : Collections.<DependencyModel>emptyList();
+        this.dependencyManagement.getDependencies() : Collections.emptyList();
   }
 
   public List<DependencyModel> getDependencies() {
     return this.dependencies != null ?
-        this.dependencies.getDependencies() : Collections.<DependencyModel>emptyList();
+        this.dependencies.getDependencies() : Collections.emptyList();
   }
 
   public List<PluginModel> getManagedPlugins() {
-    return this.build != null ? this.build.getManagedPlugins() : Collections.<PluginModel>emptyList();
+    return this.build != null ? this.build.getManagedPlugins() : Collections.emptyList();
   }
 
   public List<PluginModel> getPlugins() {
-    return this.build != null ? this.build.getPlugins() : Collections.<PluginModel>emptyList();
+    return this.build != null ? this.build.getPlugins() : Collections.emptyList();
   }
 
   @Override

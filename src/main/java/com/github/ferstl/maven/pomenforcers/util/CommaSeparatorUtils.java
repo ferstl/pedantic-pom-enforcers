@@ -16,7 +16,6 @@
 package com.github.ferstl.maven.pomenforcers.util;
 
 import java.util.Collection;
-
 import com.google.common.base.Function;
 import com.google.common.base.Functions;
 import com.google.common.base.Joiner;
@@ -30,7 +29,7 @@ public final class CommaSeparatorUtils {
 
   public static void splitAndAddToCollection(
       String commaSeparatedItems, Collection<String> collection) {
-    splitAndAddToCollection(commaSeparatedItems, collection, Functions.<String>identity());
+    splitAndAddToCollection(commaSeparatedItems, collection, Functions.identity());
   }
 
   public static <T> void splitAndAddToCollection(
@@ -52,5 +51,6 @@ public final class CommaSeparatorUtils {
     return COMMA_JOINER.join(convertedParts);
   }
 
-  private CommaSeparatorUtils() {}
+  private CommaSeparatorUtils() {
+  }
 }

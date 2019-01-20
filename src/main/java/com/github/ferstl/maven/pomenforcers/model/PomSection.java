@@ -17,13 +17,11 @@ package com.github.ferstl.maven.pomenforcers.model;
 
 import java.util.Collection;
 import java.util.Map;
-
 import com.github.ferstl.maven.pomenforcers.priority.PriorityOrdering;
 import com.google.common.base.Function;
 import com.google.common.base.Functions;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Ordering;
-
 import static java.util.Objects.requireNonNull;
 
 
@@ -90,7 +88,7 @@ public enum PomSection {
   private final String sectionName;
 
   public static Ordering<PomSection> createPriorityOrdering(Collection<PomSection> priorityCollection) {
-    return new PriorityOrdering<>(priorityCollection, Functions.<PomSection>identity());
+    return new PriorityOrdering<>(priorityCollection, Functions.identity());
   }
 
   private PomSection(String sectionName) {

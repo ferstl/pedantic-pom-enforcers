@@ -17,18 +17,17 @@ package com.github.ferstl.maven.pomenforcers;
 
 import java.util.Collection;
 import java.util.LinkedList;
-
 import com.github.ferstl.maven.pomenforcers.util.SideBySideDiffUtil;
 import com.google.common.base.Function;
 import com.google.common.base.Functions;
 import com.google.common.base.Joiner;
 import com.google.common.base.Strings;
 import com.google.common.collect.Collections2;
-
 import static com.google.common.base.Functions.toStringFunction;
 
 
 public class ErrorReport {
+
   private static final String LIST_ITEM = "- ";
   private static final String LINE_SEPARATOR = System.getProperty("line.separator", "\n");
   private static final Joiner LINE_JOINER = Joiner.on(LINE_SEPARATOR);
@@ -40,7 +39,7 @@ public class ErrorReport {
   private boolean useLargeTitle;
 
   public static <T> String toList(Collection<T> collection) {
-    return toList(collection, Functions.<T>identity());
+    return toList(collection, Functions.identity());
   }
 
   public static <T> String toList(Collection<T> collection, Function<T, ?> toStringFunction) {
@@ -96,8 +95,8 @@ public class ErrorReport {
   @Override
   public String toString() {
     return LINE_JOINER.join(
-      formatTitle(),
-      LINE_JOINER.join(this.lines));
+        formatTitle(),
+        LINE_JOINER.join(this.lines));
   }
 
   private String formatTitle() {

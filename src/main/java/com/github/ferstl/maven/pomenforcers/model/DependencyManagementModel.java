@@ -27,7 +27,7 @@ class DependencyManagementModel {
   private DependenciesModel dependencies;
 
   public List<DependencyModel> getDependencies() {
-    return this.dependencies != null ? this.dependencies.getDependencies() : Collections.<DependencyModel>emptyList();
+    return this.dependencies != null ? this.dependencies.getDependencies() : Collections.emptyList();
   }
 
   @Override

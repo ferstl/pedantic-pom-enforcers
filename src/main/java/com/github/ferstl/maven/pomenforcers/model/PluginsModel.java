@@ -29,7 +29,7 @@ class PluginsModel {
   }
 
   public List<PluginModel> getPlugins() {
-    return this.plugins != null ? this.plugins : Collections.<PluginModel>emptyList();
+    return this.plugins != null ? this.plugins : Collections.emptyList();
   }
 
   @Override

@@ -28,7 +28,6 @@ import org.w3c.dom.NodeList;
 import com.github.ferstl.maven.pomenforcers.priority.PriorityOrdering;
 import com.github.ferstl.maven.pomenforcers.util.XmlUtils;
 import com.google.common.base.Functions;
-
 import static com.github.ferstl.maven.pomenforcers.PedanticEnforcerRule.DEPENDENCY_ELEMENT;
 import static com.github.ferstl.maven.pomenforcers.util.CommaSeparatorUtils.splitAndAddToCollection;
 import static com.google.common.collect.Sets.newLinkedHashSet;
@@ -62,7 +61,7 @@ public class PedanticDependencyElementEnforcer extends AbstractPedanticEnforcer 
   private boolean checkDependencyManagement;
 
   public PedanticDependencyElementEnforcer() {
-    this.elementOrdering = new PriorityOrdering<>(DEFAULT_ORDER, Functions.<String>identity());
+    this.elementOrdering = new PriorityOrdering<>(DEFAULT_ORDER, Functions.identity());
     this.checkDependencies = true;
     this.checkDependencyManagement = true;
   }
@@ -82,7 +81,7 @@ public class PedanticDependencyElementEnforcer extends AbstractPedanticEnforcer 
     splitAndAddToCollection(elements, elementPriorities);
     elementPriorities.addAll(DEFAULT_ORDER);
 
-    this.elementOrdering = new PriorityOrdering<>(elementPriorities, Functions.<String>identity());
+    this.elementOrdering = new PriorityOrdering<>(elementPriorities, Functions.identity());
   }
 
   /**

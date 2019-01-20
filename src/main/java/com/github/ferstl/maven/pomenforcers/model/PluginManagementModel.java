@@ -26,7 +26,7 @@ class PluginManagementModel {
   private PluginsModel plugins;
 
   public List<PluginModel> getPlugins() {
-    return this.plugins != null ? this.plugins.getPlugins() : Collections.<PluginModel>emptyList();
+    return this.plugins != null ? this.plugins.getPlugins() : Collections.emptyList();
   }
 
   @Override

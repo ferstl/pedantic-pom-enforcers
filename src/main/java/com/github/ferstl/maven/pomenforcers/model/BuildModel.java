@@ -33,11 +33,11 @@ class BuildModel {
 
 
   public List<PluginModel> getManagedPlugins() {
-    return this.pluginManagement != null ? this.pluginManagement.getPlugins() : Collections.<PluginModel>emptyList();
+    return this.pluginManagement != null ? this.pluginManagement.getPlugins() : Collections.emptyList();
   }
 
   public List<PluginModel> getPlugins() {
-    return this.plugins != null ? this.plugins.getPlugins() : Collections.<PluginModel>emptyList();
+    return this.plugins != null ? this.plugins.getPlugins() : Collections.emptyList();
   }
 
   @Override
