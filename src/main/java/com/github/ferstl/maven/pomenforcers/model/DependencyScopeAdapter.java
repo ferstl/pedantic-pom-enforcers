@@ -21,12 +21,12 @@ import javax.xml.bind.annotation.adapters.XmlAdapter;
 class DependencyScopeAdapter extends XmlAdapter<String, DependencyScope> {
 
   @Override
-  public DependencyScope unmarshal(String v) throws Exception {
+  public DependencyScope unmarshal(String v) {
     return DependencyScope.getByScopeName(v);
   }
 
   @Override
-  public String marshal(DependencyScope v) throws Exception {
+  public String marshal(DependencyScope v) {
     return v.getScopeName();
   }
 
