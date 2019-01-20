@@ -16,20 +16,19 @@
 package com.github.ferstl.maven.pomenforcers;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Set;
-
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-
 import com.github.ferstl.maven.pomenforcers.model.PomSection;
+import com.github.ferstl.maven.pomenforcers.priority.PriorityOrdering;
 import com.github.ferstl.maven.pomenforcers.util.CommaSeparatorUtils;
+import com.google.common.base.Functions;
 import com.google.common.collect.Ordering;
 import com.google.common.collect.Sets;
-
 import static com.github.ferstl.maven.pomenforcers.model.PomSection.pomSectionToString;
 import static com.github.ferstl.maven.pomenforcers.model.PomSection.stringToPomSection;
-
 
 
 /**
@@ -94,7 +93,7 @@ public class PedanticPomSectionOrderEnforcer extends AbstractPedanticEnforcer {
     }
 
     // The default ordering is the order of the PomSection enum.
-    Ordering<PomSection> ordering = PomSection.createPriorityOrdering(this.sectionPriorities);
+    Ordering<PomSection> ordering = createPriorityOrdering(this.sectionPriorities);
 
     if (!ordering.isOrdered(pomSections)) {
       List<PomSection> sortedPomSections = ordering.immutableSortedCopy(pomSections);
@@ -103,6 +102,10 @@ public class PedanticPomSectionOrderEnforcer extends AbstractPedanticEnforcer {
             .emptyLine()
             .addDiff(pomSections, sortedPomSections, "Actual Order", "Required Order", pomSectionToString());
     }
+  }
+
+  private static Ordering<PomSection> createPriorityOrdering(Collection<PomSection> priorityCollection) {
+    return new PriorityOrdering<>(priorityCollection, Functions.identity());
   }
 
 }
