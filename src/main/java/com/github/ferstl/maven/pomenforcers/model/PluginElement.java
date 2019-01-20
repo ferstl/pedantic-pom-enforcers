@@ -17,12 +17,10 @@ package com.github.ferstl.maven.pomenforcers.model;
 
 import java.util.Collection;
 import java.util.Map;
-
 import com.github.ferstl.maven.pomenforcers.priority.PriorityOrdering;
 import com.github.ferstl.maven.pomenforcers.priority.PriorityOrderingFactory;
 import com.google.common.base.Function;
 import com.google.common.collect.Maps;
-
 import static com.github.ferstl.maven.pomenforcers.model.functions.StringStartsWithEquivalence.stringStartsWith;
 import static java.util.Objects.requireNonNull;
 
@@ -64,17 +62,6 @@ public enum PluginElement implements PriorityOrderingFactory<String, PluginModel
     }
   }
 
-  private static PluginElement getByElementName(String elementName) {
-    requireNonNull(elementName, "Element name is null");
-
-    PluginElement result = elementMap.get(elementName);
-    if (result == null) {
-      throw new IllegalArgumentException("No plugin element with name " + elementName);
-    }
-
-    return result;
-  }
-
   public static Function<String, PluginElement> stringToPluginElement() {
     return STRING_TO_PLUGIN_ELEMENT;
   }
@@ -90,9 +77,21 @@ public enum PluginElement implements PriorityOrderingFactory<String, PluginModel
   }
 
   private static class StringToPluginElementTransformer implements Function<String, PluginElement> {
+
     @Override
     public PluginElement apply(String input) {
       return getByElementName(input);
+    }
+
+    private static PluginElement getByElementName(String elementName) {
+      requireNonNull(elementName, "Element name is null");
+
+      PluginElement result = elementMap.get(elementName);
+      if (result == null) {
+        throw new IllegalArgumentException("No plugin element with name " + elementName);
+      }
+
+      return result;
     }
   }
 }
