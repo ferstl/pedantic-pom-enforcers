@@ -20,7 +20,6 @@ import java.util.List;
 import com.github.ferstl.maven.pomenforcers.model.DependencyModel;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
-
 import static com.github.ferstl.maven.pomenforcers.ErrorReport.toList;
 
 /**
@@ -145,7 +144,7 @@ public class PedanticDependencyConfigurationEnforcer extends AbstractPedanticEnf
     return Collections2.filter(dependencies, predicate);
   }
 
-  private static enum DependencyPredicate implements Predicate<DependencyModel> {
+  private enum DependencyPredicate implements Predicate<DependencyModel> {
     WITH_VERSION {
       @Override
       public boolean apply(DependencyModel input) {

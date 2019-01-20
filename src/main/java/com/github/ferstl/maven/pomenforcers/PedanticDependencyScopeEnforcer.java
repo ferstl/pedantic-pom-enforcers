@@ -17,9 +17,7 @@ package com.github.ferstl.maven.pomenforcers;
 
 import java.util.Collection;
 import java.util.Set;
-
 import org.apache.maven.model.Dependency;
-
 import com.github.ferstl.maven.pomenforcers.model.ArtifactModel;
 import com.github.ferstl.maven.pomenforcers.model.DependencyScope;
 import com.github.ferstl.maven.pomenforcers.util.CommaSeparatorUtils;
@@ -29,7 +27,6 @@ import com.google.common.base.Joiner;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.Sets;
-
 import static com.github.ferstl.maven.pomenforcers.model.DependencyScope.COMPILE;
 import static com.github.ferstl.maven.pomenforcers.model.DependencyScope.IMPORT;
 import static com.github.ferstl.maven.pomenforcers.model.DependencyScope.PROVIDED;
@@ -47,7 +44,6 @@ import static com.github.ferstl.maven.pomenforcers.model.functions.StringToArtif
  *       &lt;dependencyScope implementation=&quot;com.github.ferstl.maven.pomenforcers.PedanticDependencyScopeEnforcer&quot;&gt;
  *         &lt;!-- These dependencies can only be defined in test scope --&gt;
  *         &lt;testDependencies&gt;junit:junit,org.hamcrest:hamcrest-library,org.mockito:mockito-core&lt;/testDependencies&gt;
- *
  *         &lt;!-- These dependencies can only be defined in provided scope --&gt;
  *         &lt;providedDependencies&gt;javax.servlet:servlet-api&lt;/providedDependencies&gt;
  *       &lt;/dependencyScope&gt;
@@ -67,6 +63,7 @@ public class PedanticDependencyScopeEnforcer extends AbstractPedanticEnforcer {
 
   /**
    * Comma-separated list of <code>compile</code> scope dependencies in the format <code>groupId:artifactId</code>.
+   *
    * @param compileDependencies Comma-separated list of <code>compile</code> scope dependencies.
    * @configParam
    * @since 1.0.0
@@ -77,6 +74,7 @@ public class PedanticDependencyScopeEnforcer extends AbstractPedanticEnforcer {
 
   /**
    * Comma-separated list of <code>provided</code> scope dependencies in the format <code>groupId:artifactId</code>.
+   *
    * @param providedDependencies Comma-separated list of <code>provided</code> scope dependencies.
    * @configParam
    * @since 1.0.0
@@ -87,6 +85,7 @@ public class PedanticDependencyScopeEnforcer extends AbstractPedanticEnforcer {
 
   /**
    * Comma-separated list of <code>runtime</code> scope dependencies in the format <code>groupId:artifactId</code>.
+   *
    * @param runtimeDependencies Comma-separated list of <code>runtime</code> scope dependencies.
    * @configParam
    * @since 1.0.0
@@ -97,6 +96,7 @@ public class PedanticDependencyScopeEnforcer extends AbstractPedanticEnforcer {
 
   /**
    * Comma-separated list of <code>system</code> scope dependencies in the format <code>groupId:artifactId</code>.
+   *
    * @param systemDependencies Comma-separated list of <code>system</code> scope dependencies.
    * @configParam
    * @since 1.0.0
@@ -107,6 +107,7 @@ public class PedanticDependencyScopeEnforcer extends AbstractPedanticEnforcer {
 
   /**
    * Comma-separated list of <code>test</code> scope dependencies in the format <code>groupId:artifactId</code>.
+   *
    * @param testDependencies Comma-separated list of <code>test</code> scope dependencies.
    * @configParam
    * @since 1.0.0
@@ -117,6 +118,7 @@ public class PedanticDependencyScopeEnforcer extends AbstractPedanticEnforcer {
 
   /**
    * Comma-separated list of <code>import</code> scope dependencies in the format <code>groupId:artifactId</code>.
+   *
    * @param importDependencies Comma-separated list of <code>import</code> scope dependencies.
    * @configParam
    * @since 1.0.0
@@ -171,7 +173,7 @@ public class PedanticDependencyScopeEnforcer extends AbstractPedanticEnforcer {
     return DependencyScope.getByScopeName(dependency.getScope());
   }
 
-  private static enum DependencyToArtifactTransformer implements Function<Dependency, ArtifactModel> {
+  private enum DependencyToArtifactTransformer implements Function<Dependency, ArtifactModel> {
     INSTANCE;
 
     @Override

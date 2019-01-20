@@ -83,7 +83,7 @@ public enum PomSection {
 
   private final String sectionName;
 
-  private PomSection(String sectionName) {
+  PomSection(String sectionName) {
     this.sectionName = sectionName;
   }
 
@@ -91,7 +91,7 @@ public enum PomSection {
     return this.sectionName;
   }
 
-  private static enum StringToPomSectionTransformer implements Function<String, PomSection> {
+  private enum StringToPomSectionTransformer implements Function<String, PomSection> {
     INSTANCE;
 
     @Override
@@ -100,7 +100,7 @@ public enum PomSection {
     }
   }
 
-  private static enum PomSectionToStringTransformer implements Function<PomSection, String> {
+  private enum PomSectionToStringTransformer implements Function<PomSection, String> {
     INSTANCE;
 
     @Override

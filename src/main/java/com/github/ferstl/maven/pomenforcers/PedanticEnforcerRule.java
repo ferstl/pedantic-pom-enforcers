@@ -138,7 +138,7 @@ public enum PedanticEnforcerRule {
 
   private final String slogan;
 
-  private PedanticEnforcerRule(String slogan) {
+  PedanticEnforcerRule(String slogan) {
     this.slogan = slogan;
   }
 
@@ -152,7 +152,7 @@ public enum PedanticEnforcerRule {
 
   public abstract AbstractPedanticEnforcer createEnforcerRule();
 
-  private static enum StringToEnforcerRuleTransformer implements Function<String, PedanticEnforcerRule> {
+  private enum StringToEnforcerRuleTransformer implements Function<String, PedanticEnforcerRule> {
     INSTANCE;
 
     @Override

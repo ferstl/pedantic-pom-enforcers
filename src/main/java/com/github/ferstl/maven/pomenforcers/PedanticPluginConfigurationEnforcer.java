@@ -17,11 +17,9 @@ package com.github.ferstl.maven.pomenforcers;
 
 import java.util.Collection;
 import java.util.List;
-
 import com.github.ferstl.maven.pomenforcers.model.PluginModel;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
-
 import static com.github.ferstl.maven.pomenforcers.ErrorReport.toList;
 
 /**
@@ -41,6 +39,7 @@ import static com.github.ferstl.maven.pomenforcers.ErrorReport.toList;
  *       &lt;/pluginConfiguration&gt;
  *     &lt;/rules&gt;
  * </pre>
+ *
  * @id {@link PedanticEnforcerRule#PLUGIN_CONFIGURATION}
  * @since 1.0.0
  */
@@ -52,6 +51,7 @@ public class PedanticPluginConfigurationEnforcer extends AbstractPedanticEnforce
 
   /**
    * Enforces plugin versions to be defined in <code>&lt;pluginManagement&gt;</code>.
+   *
    * @param manageVersions Enforces plugin versions to be defined in <code>&lt;pluginManagement&gt;</code>.
    * @configParam
    * @default <code>true</code>
@@ -63,6 +63,7 @@ public class PedanticPluginConfigurationEnforcer extends AbstractPedanticEnforce
 
   /**
    * Enforces plugin <code>configuration</code> to be defined in <code>&lt;pluginManagement&gt;</code>.
+   *
    * @param manageConfigurations Enforces plugin <code>configuration</code> to be defined in <code>&lt;pluginManagement&gt;</code>.
    * @configParam
    * @default <code>true</code>
@@ -74,8 +75,9 @@ public class PedanticPluginConfigurationEnforcer extends AbstractPedanticEnforce
 
   /**
    * Enforces plugin dependencies to be defined in <code>&lt;pluginManagement&gt;</code>.
+   *
    * @param manageDependencies Enforces plugin <code>&lt;dependencies&gt;</code> to be defined in
-   *        <code>&lt;pluginManagement&gt;</code>.
+   * <code>&lt;pluginManagement&gt;</code>.
    * @configParam
    * @default <code>true</code>
    * @since 1.0.0
@@ -114,7 +116,7 @@ public class PedanticPluginConfigurationEnforcer extends AbstractPedanticEnforce
     if (!versionedPlugins.isEmpty()) {
 
       report.addLine("Plugin versions have to be declared in <pluginManagement>:")
-            .addLine(toList(versionedPlugins));
+          .addLine(toList(versionedPlugins));
     }
 
   }
@@ -123,7 +125,7 @@ public class PedanticPluginConfigurationEnforcer extends AbstractPedanticEnforce
     Collection<PluginModel> configuredPlugins = searchForPlugins(PluginPredicate.WITH_CONFIGURATION);
     if (!configuredPlugins.isEmpty()) {
       report.addLine("Use <pluginManagement> to configure these plugins or configure them for a specific <execution>:")
-            .addLine(toList(configuredPlugins));
+          .addLine(toList(configuredPlugins));
     }
   }
 
@@ -131,7 +133,7 @@ public class PedanticPluginConfigurationEnforcer extends AbstractPedanticEnforce
     Collection<PluginModel> pluginsWithDependencies = searchForPlugins(PluginPredicate.WITH_DEPENDENCIES);
     if (!pluginsWithDependencies.isEmpty()) {
       report.addLine("Use <pluginManagement> to configure plugin dependencies:")
-            .addLine(toList(pluginsWithDependencies));
+          .addLine(toList(pluginsWithDependencies));
     }
   }
 
@@ -140,7 +142,7 @@ public class PedanticPluginConfigurationEnforcer extends AbstractPedanticEnforce
     return Collections2.filter(plugins, predicate);
   }
 
-  static enum PluginPredicate implements Predicate<PluginModel> {
+  enum PluginPredicate implements Predicate<PluginModel> {
     WITH_DEPENDENCIES {
       @Override
       public boolean apply(PluginModel input) {

@@ -17,7 +17,6 @@ package com.github.ferstl.maven.pomenforcers.model;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
-
 import static java.util.Objects.requireNonNull;
 
 public enum DependencyScope {
@@ -51,7 +50,7 @@ public enum DependencyScope {
 
   private final String scopeName;
 
-  private DependencyScope(String name) {
+  DependencyScope(String name) {
     this.scopeName = name;
   }
 

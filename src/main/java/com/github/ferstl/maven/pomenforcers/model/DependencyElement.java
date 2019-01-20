@@ -17,18 +17,16 @@ package com.github.ferstl.maven.pomenforcers.model;
 
 import java.util.Collection;
 import java.util.Map;
-
 import com.github.ferstl.maven.pomenforcers.priority.PriorityOrdering;
 import com.github.ferstl.maven.pomenforcers.priority.PriorityOrderingFactory;
 import com.google.common.base.Function;
 import com.google.common.collect.Maps;
-
 import static com.github.ferstl.maven.pomenforcers.model.functions.StringStartsWithEquivalence.stringStartsWith;
 import static java.util.Objects.requireNonNull;
 
 
 public enum DependencyElement
-implements PriorityOrderingFactory<String, DependencyModel>, Function<DependencyModel, String> {
+    implements PriorityOrderingFactory<String, DependencyModel>, Function<DependencyModel, String> {
   GROUP_ID("groupId") {
     @Override
     public PriorityOrdering<String, DependencyModel> createPriorityOrdering(Collection<String> priorityCollection) {
@@ -91,7 +89,7 @@ implements PriorityOrderingFactory<String, DependencyModel>, Function<Dependency
 
   private final String elementName;
 
-  private DependencyElement(String elementName) {
+  DependencyElement(String elementName) {
     this.elementName = elementName;
   }
 
@@ -99,7 +97,7 @@ implements PriorityOrderingFactory<String, DependencyModel>, Function<Dependency
     return this.elementName;
   }
 
-  private static enum StringToDependencyElementFunction implements Function<String, DependencyElement> {
+  private enum StringToDependencyElementFunction implements Function<String, DependencyElement> {
     INSTANCE;
 
     @Override

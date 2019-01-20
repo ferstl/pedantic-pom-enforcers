@@ -68,7 +68,7 @@ public enum PluginElement implements PriorityOrderingFactory<String, PluginModel
 
   private final String elementName;
 
-  private PluginElement(String elementName) {
+  PluginElement(String elementName) {
     this.elementName = elementName;
   }
 
