@@ -16,15 +16,12 @@
 package com.github.ferstl.maven.pomenforcers;
 
 import java.util.LinkedList;
-
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
-
 import org.apache.maven.enforcer.rule.api.EnforcerRuleHelper;
 import org.apache.maven.model.Dependency;
 import org.apache.maven.model.DependencyManagement;
-import org.apache.maven.model.Plugin;
 import org.apache.maven.model.PluginManagement;
 import org.apache.maven.monitor.logging.DefaultLog;
 import org.apache.maven.project.MavenProject;
@@ -34,12 +31,9 @@ import org.junit.Before;
 import org.junit.Test;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-
 import com.github.ferstl.maven.pomenforcers.model.DependencyModel;
 import com.github.ferstl.maven.pomenforcers.model.DependencyScope;
-import com.github.ferstl.maven.pomenforcers.model.PluginModel;
 import com.github.ferstl.maven.pomenforcers.model.ProjectModel;
-
 import static com.github.ferstl.maven.pomenforcers.ErrorReportMatcher.hasErrors;
 import static com.github.ferstl.maven.pomenforcers.ErrorReportMatcher.hasNoErrors;
 import static org.junit.Assert.assertThat;
@@ -63,15 +57,15 @@ public abstract class AbstractPedanticEnforcerTest<T extends AbstractPedanticEnf
     this.projectModel = mock(ProjectModel.class);
     this.mockMavenProject = mock(MavenProject.class);
 
-    when(this.projectModel.getDependencies()).thenReturn(new LinkedList<DependencyModel>());
-    when(this.projectModel.getManagedDependencies()).thenReturn(new LinkedList<DependencyModel>());
-    when(this.projectModel.getPlugins()).thenReturn(new LinkedList<PluginModel>());
-    when(this.projectModel.getManagedPlugins()).thenReturn(new LinkedList<PluginModel>());
-    when(this.mockMavenProject.getDependencies()).thenReturn(new LinkedList<Dependency>());
+    when(this.projectModel.getDependencies()).thenReturn(new LinkedList<>());
+    when(this.projectModel.getManagedDependencies()).thenReturn(new LinkedList<>());
+    when(this.projectModel.getPlugins()).thenReturn(new LinkedList<>());
+    when(this.projectModel.getManagedPlugins()).thenReturn(new LinkedList<>());
+    when(this.mockMavenProject.getDependencies()).thenReturn(new LinkedList<>());
     DependencyManagement depMgmtMock = mock(DependencyManagement.class);
     PluginManagement pluginMgmtMock = mock(PluginManagement.class);
-    when(depMgmtMock.getDependencies()).thenReturn(new LinkedList<Dependency>());
-    when(pluginMgmtMock.getPlugins()).thenReturn(new LinkedList<Plugin>());
+    when(depMgmtMock.getDependencies()).thenReturn(new LinkedList<>());
+    when(pluginMgmtMock.getPlugins()).thenReturn(new LinkedList<>());
     when(this.mockMavenProject.getDependencyManagement()).thenReturn(depMgmtMock);
     when(this.mockMavenProject.getPluginManagement()).thenReturn(pluginMgmtMock);
 
