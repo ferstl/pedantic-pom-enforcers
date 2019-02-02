@@ -27,6 +27,8 @@ import com.github.ferstl.maven.pomenforcers.model.PomSection;
 import com.google.common.collect.Ordering;
 import static com.github.ferstl.maven.pomenforcers.util.SideBySideDiffUtil.diff;
 import static com.github.ferstl.maven.pomenforcers.util.SideBySideDiffUtilTest.SideBySideDiffMatcher.hasContent;
+import static java.util.Arrays.asList;
+import static java.util.Collections.singletonList;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 
@@ -38,8 +40,8 @@ public class SideBySideDiffUtilTest {
   @Test
   public void insertion() {
     String diff = diff(
-        Arrays.asList("abc", "def", "ghi", "jkl"),
-        Arrays.asList("abc", "zyx", "def", "wvu", "ghi", "tsr", "jkl", "qpo"));
+        asList("abc", "def", "ghi", "jkl"),
+        asList("abc", "zyx", "def", "wvu", "ghi", "tsr", "jkl", "qpo"));
 
     assertThat(diff, hasContent(
         "  abc |   abc",
@@ -57,8 +59,8 @@ public class SideBySideDiffUtilTest {
   @Test
   public void deletion() {
     String diff = diff(
-        Arrays.asList("abc", "zyx", "def", "wvu", "ghi", "tsr", "jkl", "qpo"),
-        Arrays.asList("abc", "def", "ghi", "jkl"));
+        asList("abc", "zyx", "def", "wvu", "ghi", "tsr", "jkl", "qpo"),
+        asList("abc", "def", "ghi", "jkl"));
 
     assertThat(diff, hasContent(
         "  abc |   abc",
@@ -75,8 +77,8 @@ public class SideBySideDiffUtilTest {
   @Test
   public void changeWithBiggerLeftSide() {
     String diff = diff(
-        Arrays.asList("abc", "def", "ghi", "jkl", "mno", "pqr"),
-        Arrays.asList("abc", "zyx", "jkl", "wvu"));
+        asList("abc", "def", "ghi", "jkl", "mno", "pqr"),
+        asList("abc", "zyx", "jkl", "wvu"));
 
     assertThat(diff, hasContent(
         "  abc |   abc",
@@ -91,8 +93,8 @@ public class SideBySideDiffUtilTest {
   @Test
   public void changeWithBiggerRightSide() {
     String diff = diff(
-        Arrays.asList("abc", "def", "ghi", "jkl", "mno", "pqr"),
-        Arrays.asList("zyx", "wvu", "def", "ghi", "wvu", "tsr", "mno", "pqr"));
+        asList("abc", "def", "ghi", "jkl", "mno", "pqr"),
+        asList("zyx", "wvu", "def", "ghi", "wvu", "tsr", "mno", "pqr"));
 
     assertThat(diff, hasContent(
         "- abc | + zyx",
@@ -108,7 +110,7 @@ public class SideBySideDiffUtilTest {
 
   @Test
   public void titleLongerThanContent() {
-    String diff = diff(Arrays.asList("a", "b", "c"), Arrays.asList("a", "b"), "leftTitle", "rightTitle");
+    String diff = diff(asList("a", "b", "c"), asList("a", "b"), "leftTitle", "rightTitle");
 
     assertThat(diff, hasContent(
         "leftTitle | rightTitle",
@@ -121,7 +123,7 @@ public class SideBySideDiffUtilTest {
 
   @Test
   public void titleShorterThanContent() {
-    String diff = diff(Arrays.asList("abcdef", "ghijkl", "mnopqr"), Arrays.asList("stuvwx", "yz"), "L", "R");
+    String diff = diff(asList("abcdef", "ghijkl", "mnopqr"), asList("stuvwx", "yz"), "L", "R");
 
     assertThat(diff, hasContent(
         "L        | R",
@@ -134,21 +136,21 @@ public class SideBySideDiffUtilTest {
 
   @Test
   public void emptyTexts() {
-    String diff = diff(Collections.<String>emptyList(), Collections.<String>emptyList());
+    String diff = diff(Collections.emptyList(), Collections.emptyList());
 
     assertEquals("", diff);
   }
 
   @Test
   public void emptyTextsWithTitle() {
-    String diff = diff(Collections.<String>emptyList(), Collections.<String>emptyList(), "left", "right");
+    String diff = diff(Collections.emptyList(), Collections.emptyList(), "left", "right");
 
     assertEquals("", diff);
   }
 
   @Test
   public void originalTextEmpty() {
-    String diff = diff(Collections.<String>emptyList(), Arrays.asList("abc", "def"));
+    String diff = diff(Collections.emptyList(), asList("abc", "def"));
 
     assertThat(diff, hasContent(
         "   | + abc",
@@ -158,7 +160,7 @@ public class SideBySideDiffUtilTest {
 
   @Test
   public void revisedTextEmpty() {
-    String diff = diff(Arrays.asList("abc", "def"), Collections.<String>emptyList());
+    String diff = diff(asList("abc", "def"), Collections.emptyList());
 
     assertThat(diff, hasContent(
         "- abc |",
@@ -168,7 +170,7 @@ public class SideBySideDiffUtilTest {
 
   @Test
   public void differentTexts() {
-    String diff = diff(Arrays.asList("abc", "def", "ghi"), Arrays.asList("jklm", "nopq"));
+    String diff = diff(asList("abc", "def", "ghi"), asList("jklm", "nopq"));
 
     assertThat(diff, hasContent(
         "- abc | + jklm",
@@ -179,7 +181,7 @@ public class SideBySideDiffUtilTest {
 
   @Test
   public void differentLengthsShortOriginal() {
-    String diff = diff(Arrays.asList("abc"), Arrays.asList("def", "ghi", "jkl", "abc"));
+    String diff = diff(singletonList("abc"), asList("def", "ghi", "jkl", "abc"));
 
     assertThat(diff, hasContent(
         "      | + def",
@@ -191,7 +193,7 @@ public class SideBySideDiffUtilTest {
 
   @Test
   public void differentLengthsShortRevised() {
-    String diff = diff(Arrays.asList("def", "ghi", "jkl", "abc"), Arrays.asList("abc"));
+    String diff = diff(asList("def", "ghi", "jkl", "abc"), singletonList("abc"));
 
     assertThat(diff, hasContent(
         "- def |",

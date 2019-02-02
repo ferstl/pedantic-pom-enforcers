@@ -59,7 +59,7 @@ public class PedanticDependencyScopeEnforcerTest extends AbstractPedanticEnforce
       ruleConfig.add(new RuleConfiguration(configMethod, createCorrectConfiguration(scope), false));
       ruleConfig.add(new RuleConfiguration(configMethod, createWrongConfiguration(scope), true));
     }
-    return ruleConfig.toArray(new RuleConfiguration[ruleConfig.size()]);
+    return ruleConfig.toArray(new RuleConfiguration[0]);
   }
 
   @Override

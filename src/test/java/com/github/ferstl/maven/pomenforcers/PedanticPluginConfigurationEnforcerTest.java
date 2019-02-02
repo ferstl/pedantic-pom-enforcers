@@ -15,13 +15,10 @@
  */
 package com.github.ferstl.maven.pomenforcers;
 
-import java.util.Arrays;
-
+import java.util.Collections;
 import org.junit.Test;
-
 import com.github.ferstl.maven.pomenforcers.model.DependencyModel;
 import com.github.ferstl.maven.pomenforcers.model.PluginModel;
-
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;
@@ -124,7 +121,7 @@ public class PedanticPluginConfigurationEnforcerTest extends AbstractPedanticEnf
 
     if (withDependencies) {
       when(plugin.getDependencies()).thenReturn(
-          Arrays.asList(new DependencyModel("x.y.z", "z", "1.0", null, null, null)));
+          Collections.singletonList(new DependencyModel("x.y.z", "z", "1.0", null, null, null)));
     }
 
     this.testRule.getProjectModel().getPlugins().add(plugin);

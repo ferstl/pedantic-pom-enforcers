@@ -17,16 +17,14 @@ package com.github.ferstl.maven.pomenforcers.util;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
 import org.apache.maven.enforcer.rule.api.EnforcerRuleHelper;
 import org.apache.maven.project.MavenProject;
 import org.codehaus.plexus.component.configurator.expression.ExpressionEvaluationException;
-
 import com.google.common.base.Strings;
 
 public final class EnforcerRuleUtils {
 
-  private static final Pattern PROPERTY_PATTERN = Pattern.compile("\\$\\{.*?\\}");
+  private static final Pattern PROPERTY_PATTERN = Pattern.compile("\\$\\{.*?}");
 
   public static MavenProject getMavenProject(EnforcerRuleHelper helper) {
     try {
@@ -40,7 +38,7 @@ public final class EnforcerRuleUtils {
     if (!Strings.isNullOrEmpty(input)) {
       Matcher matcher = PROPERTY_PATTERN.matcher(input);
       StringBuffer substituted = new StringBuffer();
-      while(matcher.find()) {
+      while (matcher.find()) {
         String property = matcher.group();
         matcher.appendReplacement(substituted, evaluateStringProperty(property, helper));
       }
@@ -60,5 +58,6 @@ public final class EnforcerRuleUtils {
     }
   }
 
-  private EnforcerRuleUtils() {}
+  private EnforcerRuleUtils() {
+  }
 }
