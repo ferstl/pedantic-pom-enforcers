@@ -22,12 +22,12 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Function;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import com.github.ferstl.maven.pomenforcers.priority.PriorityOrdering;
 import com.github.ferstl.maven.pomenforcers.util.XmlUtils;
-import com.google.common.base.Functions;
 import static com.github.ferstl.maven.pomenforcers.PedanticEnforcerRule.DEPENDENCY_ELEMENT;
 import static com.github.ferstl.maven.pomenforcers.util.CommaSeparatorUtils.splitAndAddToCollection;
 import static com.google.common.collect.Sets.newLinkedHashSet;
@@ -61,7 +61,7 @@ public class PedanticDependencyElementEnforcer extends AbstractPedanticEnforcer 
   private boolean checkDependencyManagement;
 
   public PedanticDependencyElementEnforcer() {
-    this.elementOrdering = new PriorityOrdering<>(DEFAULT_ORDER, Functions.identity());
+    this.elementOrdering = new PriorityOrdering<>(DEFAULT_ORDER, Function.identity());
     this.checkDependencies = true;
     this.checkDependencyManagement = true;
   }
@@ -81,7 +81,7 @@ public class PedanticDependencyElementEnforcer extends AbstractPedanticEnforcer 
     splitAndAddToCollection(elements, elementPriorities);
     elementPriorities.addAll(DEFAULT_ORDER);
 
-    this.elementOrdering = new PriorityOrdering<>(elementPriorities, Functions.identity());
+    this.elementOrdering = new PriorityOrdering<>(elementPriorities, Function.identity());
   }
 
   /**

@@ -15,7 +15,7 @@
  */
 package com.github.ferstl.maven.pomenforcers;
 
-import com.google.common.base.Function;
+import java.util.function.Function;
 
 /**
  * Each pedantic enforcer rule is identified by an ID. These IDs can be used within the
@@ -147,17 +147,8 @@ public enum PedanticEnforcerRule {
   }
 
   public static Function<String, PedanticEnforcerRule> stringToEnforcerRule() {
-    return StringToEnforcerRuleTransformer.INSTANCE;
+    return PedanticEnforcerRule::valueOf;
   }
 
   public abstract AbstractPedanticEnforcer createEnforcerRule();
-
-  private enum StringToEnforcerRuleTransformer implements Function<String, PedanticEnforcerRule> {
-    INSTANCE;
-
-    @Override
-    public PedanticEnforcerRule apply(String input) {
-      return PedanticEnforcerRule.valueOf(input);
-    }
-  }
 }

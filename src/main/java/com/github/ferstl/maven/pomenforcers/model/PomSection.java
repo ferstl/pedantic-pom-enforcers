@@ -16,7 +16,6 @@
 package com.github.ferstl.maven.pomenforcers.model;
 
 import java.util.Map;
-import com.google.common.base.Function;
 import com.google.common.collect.Maps;
 import static java.util.Objects.requireNonNull;
 
@@ -73,14 +72,6 @@ public enum PomSection {
     return value;
   }
 
-  public static Function<String, PomSection> stringToPomSection() {
-    return StringToPomSectionTransformer.INSTANCE;
-  }
-
-  public static Function<PomSection, String> pomSectionToString() {
-    return PomSectionToStringTransformer.INSTANCE;
-  }
-
   private final String sectionName;
 
   PomSection(String sectionName) {
@@ -90,23 +81,4 @@ public enum PomSection {
   public String getSectionName() {
     return this.sectionName;
   }
-
-  private enum StringToPomSectionTransformer implements Function<String, PomSection> {
-    INSTANCE;
-
-    @Override
-    public PomSection apply(String input) {
-      return getBySectionName(input);
-    }
-  }
-
-  private enum PomSectionToStringTransformer implements Function<PomSection, String> {
-    INSTANCE;
-
-    @Override
-    public String apply(PomSection input) {
-      return input.getSectionName();
-    }
-  }
-
 }

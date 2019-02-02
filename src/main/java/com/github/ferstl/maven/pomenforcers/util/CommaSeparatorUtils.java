@@ -16,8 +16,7 @@
 package com.github.ferstl.maven.pomenforcers.util;
 
 import java.util.Collection;
-import com.google.common.base.Function;
-import com.google.common.base.Functions;
+import java.util.function.Function;
 import com.google.common.base.Joiner;
 import com.google.common.base.Splitter;
 import com.google.common.collect.Iterables;
@@ -29,17 +28,16 @@ public final class CommaSeparatorUtils {
 
   public static void splitAndAddToCollection(
       String commaSeparatedItems, Collection<String> collection) {
-    splitAndAddToCollection(commaSeparatedItems, collection, Functions.identity());
+    splitAndAddToCollection(commaSeparatedItems, collection, Function.identity());
   }
 
-  public static <T> void splitAndAddToCollection(
-      String commaSeparatedItems, Collection<T> collection, Function<String, T> transformer) {
+  public static <T> void splitAndAddToCollection(String commaSeparatedItems, Collection<T> collection, Function<String, T> transformer) {
     Iterable<String> items = COMMA_SPLITTER.split(commaSeparatedItems);
     // Don't touch the collection if there is nothing to add.
     if (items.iterator().hasNext()) {
       collection.clear();
     }
-    Iterables.addAll(collection, Iterables.transform(items, transformer));
+    Iterables.addAll(collection, Iterables.transform(items, transformer::apply));
   }
 
   public static String join(Iterable<?> parts) {
@@ -47,7 +45,7 @@ public final class CommaSeparatorUtils {
   }
 
   public static <T> String join(Iterable<T> parts, Function<T, String> transformer) {
-    Iterable<String> convertedParts = Iterables.transform(parts, transformer);
+    Iterable<String> convertedParts = Iterables.transform(parts, transformer::apply);
     return COMMA_JOINER.join(convertedParts);
   }
 

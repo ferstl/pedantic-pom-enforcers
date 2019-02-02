@@ -16,32 +16,24 @@
 package com.github.ferstl.maven.pomenforcers.model.functions;
 
 import java.util.ArrayList;
-
 import com.github.ferstl.maven.pomenforcers.model.ArtifactModel;
-import com.google.common.base.Function;
 import com.google.common.base.Splitter;
 import com.google.common.collect.Lists;
 
-public class StringToArtifactTransformer implements Function<String, ArtifactModel> {
+public final class StringToArtifactTransformer {
 
   private static final Splitter COLON_SPLITTER = Splitter.on(":");
-  public static final StringToArtifactTransformer INSTANCE = new StringToArtifactTransformer();
 
-  public static Function<String, ArtifactModel> stringToArtifactModel() {
-    return INSTANCE;
+  public static ArtifactModel toArtifactModel(String input) {
+    ArrayList<String> artifactElements = Lists.newArrayList(COLON_SPLITTER.split(input));
+
+    if (artifactElements.size() != 2) {
+      throw new IllegalArgumentException("Cannot read POM information: " + input);
+    }
+
+    return new ArtifactModel(artifactElements.get(0), artifactElements.get(1));
   }
 
- @Override
- public ArtifactModel apply(String input) {
-   ArrayList<String> artifactElements = Lists.newArrayList(COLON_SPLITTER.split(input));
-
-   if(artifactElements.size() != 2) {
-     throw new IllegalArgumentException("Cannot read POM information: " + input);
-   }
-
-   return new ArtifactModel(artifactElements.get(0), artifactElements.get(1));
+  private StringToArtifactTransformer() {
   }
-
-
-  private StringToArtifactTransformer() {}
 }

@@ -16,14 +16,11 @@
 package com.github.ferstl.maven.pomenforcers.priority;
 
 import java.util.ArrayList;
-
+import java.util.function.Function;
 import org.hamcrest.Matchers;
 import org.junit.Test;
-
-import com.google.common.base.Function;
 import com.google.common.base.Functions;
 import com.google.common.collect.Lists;
-
 import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.lessThan;
@@ -56,7 +53,7 @@ public class PriorityOrderingTest {
   @Test
   public void testCompareWithoutPriorities() {
     ArrayList<String> prioritizedItems = Lists.newArrayList();
-    Function<String, String> identity = Functions.identity();
+    Function<String, String> identity = Function.identity();
     PriorityOrdering<String, String> testComparator = new PriorityOrdering<>(prioritizedItems, identity);
 
     assertThat(testComparator.compare("a", "b"), lessThan(0));

@@ -18,14 +18,11 @@ package com.github.ferstl.maven.pomenforcers;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
-
 import org.apache.maven.project.MavenProject;
-
 import com.github.ferstl.maven.pomenforcers.model.ArtifactModel;
+import com.github.ferstl.maven.pomenforcers.model.functions.StringToArtifactTransformer;
 import com.github.ferstl.maven.pomenforcers.util.EnforcerRuleUtils;
-
 import static com.github.ferstl.maven.pomenforcers.ErrorReport.toList;
-import static com.github.ferstl.maven.pomenforcers.model.functions.StringToArtifactTransformer.stringToArtifactModel;
 import static com.github.ferstl.maven.pomenforcers.util.CommaSeparatorUtils.splitAndAddToCollection;
 
 /**
@@ -39,6 +36,7 @@ import static com.github.ferstl.maven.pomenforcers.util.CommaSeparatorUtils.spli
  *       &lt;/dependencyManagementLocation&gt;
  *     &lt;/rules&gt;
  * </pre>
+ *
  * @id {@link PedanticEnforcerRule#DEPENDENCY_MANAGEMENT_LOCATION}
  * @since 1.0.0
  */
@@ -54,6 +52,7 @@ public class PedanticDependencyManagementLocationEnforcer extends AbstractPedant
 
   /**
    * Indicates whether parent POMs are generally allowed to manage plugins.
+   *
    * @param allowParentPoms
    * @configParam
    * @default <code>false</code>
@@ -66,13 +65,14 @@ public class PedanticDependencyManagementLocationEnforcer extends AbstractPedant
   /**
    * Comma separated list of POMs that may declare <code>&lt;dependencyManagement&gt;</code>.
    * Each POM has to be defined in the format <code>groupId:artifactId</code>.
+   *
    * @param dependencyManagingPoms Comma separated list of POMs that may declare plugin management.
    * @configParam
    * @default n/a
    * @since 1.0.0
    */
   public void setDependencyManagingPoms(String dependencyManagingPoms) {
-    splitAndAddToCollection(dependencyManagingPoms, this.dependencyManagingPoms, stringToArtifactModel());
+    splitAndAddToCollection(dependencyManagingPoms, this.dependencyManagingPoms, StringToArtifactTransformer::toArtifactModel);
   }
 
   @Override
@@ -90,8 +90,8 @@ public class PedanticDependencyManagementLocationEnforcer extends AbstractPedant
     MavenProject mavenProject = EnforcerRuleUtils.getMavenProject(getHelper());
     if (containsDependencyManagement() && !isDependencyManagementAllowed(mavenProject)) {
       report.addLine("Only these POMs are allowed to manage dependencies:")
-            .addLine(toList(Collections.singletonList("All parent POMs, i.e. POMs with <packaging>pom</packaging>")))
-            .addLine(toList(this.dependencyManagingPoms));
+          .addLine(toList(Collections.singletonList("All parent POMs, i.e. POMs with <packaging>pom</packaging>")))
+          .addLine(toList(this.dependencyManagingPoms));
     }
   }
 

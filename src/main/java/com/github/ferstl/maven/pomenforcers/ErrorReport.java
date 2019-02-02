@@ -17,9 +17,8 @@ package com.github.ferstl.maven.pomenforcers;
 
 import java.util.Collection;
 import java.util.LinkedList;
+import java.util.function.Function;
 import com.github.ferstl.maven.pomenforcers.util.SideBySideDiffUtil;
-import com.google.common.base.Function;
-import com.google.common.base.Functions;
 import com.google.common.base.Joiner;
 import com.google.common.base.Strings;
 import com.google.common.collect.Collections2;
@@ -39,11 +38,11 @@ public class ErrorReport {
   private boolean useLargeTitle;
 
   public static <T> String toList(Collection<T> collection) {
-    return toList(collection, Functions.identity());
+    return toList(collection, Function.identity());
   }
 
   public static <T> String toList(Collection<T> collection, Function<T, ?> toStringFunction) {
-    return LIST_ITEM + LIST_JOINER.join(Collections2.transform(collection, toStringFunction));
+    return LIST_ITEM + LIST_JOINER.join(Collections2.transform(collection, toStringFunction::apply));
   }
 
   public ErrorReport(PedanticEnforcerRule rule) {
@@ -68,8 +67,8 @@ public class ErrorReport {
   }
 
   public <T> ErrorReport addDiff(Collection<T> actual, Collection<T> required, String leftTitle, String rightTitle, Function<? super T, String> toStringFunction) {
-    Collection<String> actualAsString = Collections2.transform(actual, toStringFunction);
-    Collection<String> requiredAsString = Collections2.transform(required, toStringFunction);
+    Collection<String> actualAsString = Collections2.transform(actual, toStringFunction::apply);
+    Collection<String> requiredAsString = Collections2.transform(required, toStringFunction::apply);
 
     return addDiff(actualAsString, requiredAsString, leftTitle, rightTitle);
   }

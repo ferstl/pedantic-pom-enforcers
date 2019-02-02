@@ -21,7 +21,6 @@ import java.lang.invoke.MethodType;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
 import org.codehaus.plexus.util.StringUtils;
 import org.junit.Before;
 import org.junit.Test;
@@ -29,12 +28,9 @@ import org.junit.experimental.theories.DataPoints;
 import org.junit.experimental.theories.Theories;
 import org.junit.experimental.theories.Theory;
 import org.junit.runner.RunWith;
-
 import com.github.ferstl.maven.pomenforcers.model.DependencyScope;
-import com.google.common.base.Function;
 import com.google.common.base.Joiner;
 import com.google.common.collect.Collections2;
-
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;
@@ -128,34 +124,31 @@ public class PedanticDependencyScopeEnforcerTest extends AbstractPedanticEnforce
     ArrayList<DependencyScope> scopes = new ArrayList<>(Arrays.asList(DependencyScope.values()));
     scopes.remove(scope);
 
-    return Joiner.on(",").join(Collections2.transform(scopes, ScopeToDependencyString.INSTANCE));
+    return Joiner.on(",").join(Collections2.transform(scopes, PedanticDependencyScopeEnforcerTest::createDependencyString));
   }
 
   private static String createCorrectConfiguration(DependencyScope scope) {
-    return ScopeToDependencyString.INSTANCE.apply(scope);
+    return createDependencyString(scope);
   }
 
-  static enum ScopeToDependencyString implements Function<DependencyScope, String> {
-    INSTANCE;
-
-    @Override
-    public String apply(DependencyScope input) {
-      return "a.b.c:dep-" + input.getScopeName();
-    }
+  private static String createDependencyString(DependencyScope scope) {
+    return "a.b.c:dep-" + scope.getScopeName();
   }
+
 
   static class RuleConfiguration {
+
     private final MethodHandle configMethod;
     private final String configArgument;
     private final boolean resultHasErrors;
 
-    public RuleConfiguration(MethodHandle configMethod, String configArgument, boolean resultHasErrors) {
+    RuleConfiguration(MethodHandle configMethod, String configArgument, boolean resultHasErrors) {
       this.configMethod = configMethod;
       this.configArgument = configArgument;
       this.resultHasErrors = resultHasErrors;
     }
 
-    public void configureRule(PedanticDependencyScopeEnforcer rule) throws Throwable {
+    void configureRule(PedanticDependencyScopeEnforcer rule) throws Throwable {
       this.configMethod.invoke(rule, this.configArgument);
     }
   }

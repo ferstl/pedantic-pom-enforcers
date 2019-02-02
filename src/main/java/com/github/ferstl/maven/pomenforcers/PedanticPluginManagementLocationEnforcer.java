@@ -18,15 +18,12 @@ package com.github.ferstl.maven.pomenforcers;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
-
 import org.apache.maven.project.MavenProject;
-
 import com.github.ferstl.maven.pomenforcers.model.ArtifactModel;
+import com.github.ferstl.maven.pomenforcers.model.functions.StringToArtifactTransformer;
 import com.github.ferstl.maven.pomenforcers.util.CommaSeparatorUtils;
 import com.github.ferstl.maven.pomenforcers.util.EnforcerRuleUtils;
-
 import static com.github.ferstl.maven.pomenforcers.ErrorReport.toList;
-import static com.github.ferstl.maven.pomenforcers.model.functions.StringToArtifactTransformer.stringToArtifactModel;
 
 
 /**
@@ -40,6 +37,7 @@ import static com.github.ferstl.maven.pomenforcers.model.functions.StringToArtif
  *       &lt;/pluginManagemenLocation&gt;
  *     &lt;/rules&gt;
  * </pre>
+ *
  * @id {@link PedanticEnforcerRule#PLUGIN_MANAGEMENT_LOCATION}
  * @since 1.0.0
  */
@@ -68,13 +66,14 @@ public class PedanticPluginManagementLocationEnforcer extends AbstractPedanticEn
     MavenProject mavenProject = EnforcerRuleUtils.getMavenProject(getHelper());
     if (containsPluginManagement() && !isPluginManagementAllowed(mavenProject)) {
       report.addLine("Only these POMs are allowed to manage plugins:")
-      .addLine(toList(Collections.singletonList("All parent POMs, i.e. POMs with <packaging>pom</packaging>")))
-      .addLine(toList(this.pluginManagingPoms));
+          .addLine(toList(Collections.singletonList("All parent POMs, i.e. POMs with <packaging>pom</packaging>")))
+          .addLine(toList(this.pluginManagingPoms));
     }
   }
 
   /**
    * Indicates whether parent POMs are generally allowed to manage plugins.
+   *
    * @param allowParentPoms
    * @configParam
    * @default <code>false</code>
@@ -87,13 +86,14 @@ public class PedanticPluginManagementLocationEnforcer extends AbstractPedanticEn
   /**
    * Comma separated list of POMs that may declare <code>&lt;pluginManagement&gt;</code>. Each POM has
    * to be defined in the format <code>groupId:artifactId</code>.
+   *
    * @param pluginManagingPoms Comma separated list of POMs that may declare plugin management.
    * @configParam
    * @default n/a
    * @since 1.0.0
    */
   public void setPluginManagingPoms(String pluginManagingPoms) {
-    CommaSeparatorUtils.splitAndAddToCollection(pluginManagingPoms, this.pluginManagingPoms, stringToArtifactModel());
+    CommaSeparatorUtils.splitAndAddToCollection(pluginManagingPoms, this.pluginManagingPoms, StringToArtifactTransformer::toArtifactModel);
   }
 
   private boolean containsPluginManagement() {

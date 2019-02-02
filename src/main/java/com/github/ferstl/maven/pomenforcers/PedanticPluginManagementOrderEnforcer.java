@@ -14,13 +14,12 @@
  * limitations under the License.
  */
 package com.github.ferstl.maven.pomenforcers;
+
 import java.util.Collection;
 import java.util.LinkedHashSet;
 import java.util.Set;
-
 import org.apache.maven.model.Plugin;
 import org.apache.maven.project.MavenProject;
-
 import com.github.ferstl.maven.pomenforcers.model.PluginElement;
 import com.github.ferstl.maven.pomenforcers.model.PluginModel;
 import com.github.ferstl.maven.pomenforcers.model.functions.PluginMatcher;
@@ -29,10 +28,8 @@ import com.github.ferstl.maven.pomenforcers.util.CommaSeparatorUtils;
 import com.github.ferstl.maven.pomenforcers.util.EnforcerRuleUtils;
 import com.google.common.collect.BiMap;
 import com.google.common.collect.Sets;
-
 import static com.github.ferstl.maven.pomenforcers.model.PluginElement.ARTIFACT_ID;
 import static com.github.ferstl.maven.pomenforcers.model.PluginElement.GROUP_ID;
-import static com.github.ferstl.maven.pomenforcers.model.PluginElement.stringToPluginElement;
 
 
 /**
@@ -52,6 +49,7 @@ import static com.github.ferstl.maven.pomenforcers.model.PluginElement.stringToP
  *       &lt;/pluginManagementOrder&gt;
  *     &lt;/rules&gt;
  * </pre>
+ *
  * @id {@link PedanticEnforcerRule#PLUGIN_MANAGEMENT_ORDER}
  * @since 1.0.0
  */
@@ -65,14 +63,15 @@ public class PedanticPluginManagementOrderEnforcer extends AbstractPedanticEnfor
 
   /**
    * Comma-separated list of plugin elements that defines the ordering.
+   *
    * @param pluginElements Comma-separated list of plugin elements that defines the ordering.
    * @configParam
-   * @default groupId,artifactId
+   * @default groupId, artifactId
    * @since 1.0.0
    */
   public void setOrderBy(String pluginElements) {
     Set<PluginElement> orderBy = Sets.newLinkedHashSet();
-    CommaSeparatorUtils.splitAndAddToCollection(pluginElements, orderBy, stringToPluginElement());
+    CommaSeparatorUtils.splitAndAddToCollection(pluginElements, orderBy, PluginElement::getByElementName);
     this.pluginOrdering.redefineOrderBy(orderBy);
   }
 
@@ -133,8 +132,8 @@ public class PedanticPluginManagementOrderEnforcer extends AbstractPedanticEnfor
       Collection<PluginModel> sortedPlugins = this.pluginOrdering.immutableSortedCopy(resolvedPlugins);
 
       report.addLine("Your plugin management has to be ordered this way:")
-            .emptyLine()
-            .addDiffUsingToString(resolvedPlugins, sortedPlugins, "Actual Order", "Required Order");
+          .emptyLine()
+          .addDiffUsingToString(resolvedPlugins, sortedPlugins, "Actual Order", "Required Order");
     }
   }
 

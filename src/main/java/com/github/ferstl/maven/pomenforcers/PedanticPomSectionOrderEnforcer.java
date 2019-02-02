@@ -19,16 +19,14 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
+import java.util.function.Function;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import com.github.ferstl.maven.pomenforcers.model.PomSection;
 import com.github.ferstl.maven.pomenforcers.priority.PriorityOrdering;
 import com.github.ferstl.maven.pomenforcers.util.CommaSeparatorUtils;
-import com.google.common.base.Functions;
 import com.google.common.collect.Ordering;
 import com.google.common.collect.Sets;
-import static com.github.ferstl.maven.pomenforcers.model.PomSection.pomSectionToString;
-import static com.github.ferstl.maven.pomenforcers.model.PomSection.stringToPomSection;
 
 
 /**
@@ -42,6 +40,7 @@ import static com.github.ferstl.maven.pomenforcers.model.PomSection.stringToPomS
  *       &lt;/pomSectionOrder&gt;
  *     &lt;/rules&gt;
  * </pre>
+ *
  * @id {@link PedanticEnforcerRule#POM_SECTION_ORDER}
  * @since 1.0.0
  */
@@ -58,16 +57,16 @@ public class PedanticPomSectionOrderEnforcer extends AbstractPedanticEnforcer {
    *
    * @param sectionPriorities Comma separated list of section priorities.
    * @configParam
-   * @default modelVersion,prerequisites,parent,groupId,artifactId,version
-   *          ,packaging,name,description,url,licenses,organization
-   *          ,inceptionYear,ciManagement,mailingLists,issueManagement,
-   *          developers ,contributors,scm,repositories,pluginRepositories
-   *          ,distributionManagement ,modules,properties,dependencyManagement
-   *          ,dependencies,build,profiles,reporting,reports
+   * @default modelVersion, prerequisites, parent, groupId, artifactId, version
+   * ,packaging,name,description,url,licenses,organization
+   * ,inceptionYear,ciManagement,mailingLists,issueManagement,
+   * developers ,contributors,scm,repositories,pluginRepositories
+   * ,distributionManagement ,modules,properties,dependencyManagement
+   * ,dependencies,build,profiles,reporting,reports
    * @since 1.0.0
    */
   public void setSectionPriorities(String sectionPriorities) {
-    CommaSeparatorUtils.splitAndAddToCollection(sectionPriorities, this.sectionPriorities, stringToPomSection());
+    CommaSeparatorUtils.splitAndAddToCollection(sectionPriorities, this.sectionPriorities, PomSection::getBySectionName);
   }
 
   @Override
@@ -99,13 +98,13 @@ public class PedanticPomSectionOrderEnforcer extends AbstractPedanticEnforcer {
       List<PomSection> sortedPomSections = ordering.immutableSortedCopy(pomSections);
 
       report.addLine("Your POM has to be organized this way:")
-            .emptyLine()
-            .addDiff(pomSections, sortedPomSections, "Actual Order", "Required Order", pomSectionToString());
+          .emptyLine()
+          .addDiff(pomSections, sortedPomSections, "Actual Order", "Required Order", PomSection::getSectionName);
     }
   }
 
   private static Ordering<PomSection> createPriorityOrdering(Collection<PomSection> priorityCollection) {
-    return new PriorityOrdering<>(priorityCollection, Functions.identity());
+    return new PriorityOrdering<>(priorityCollection, Function.identity());
   }
 
 }
