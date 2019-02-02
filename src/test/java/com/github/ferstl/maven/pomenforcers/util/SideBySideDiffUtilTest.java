@@ -23,7 +23,6 @@ import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeDiagnosingMatcher;
 import org.junit.Test;
 import com.github.ferstl.maven.pomenforcers.model.PomSection;
-import com.google.common.base.Function;
 import com.google.common.collect.FluentIterable;
 import com.google.common.collect.Ordering;
 import static com.github.ferstl.maven.pomenforcers.util.SideBySideDiffUtil.diff;
@@ -51,7 +50,7 @@ public class SideBySideDiffUtilTest {
         "      | + tsr",
         "  jkl |   jkl",
         "      | + qpo"
-        ));
+    ));
   }
 
 
@@ -70,7 +69,7 @@ public class SideBySideDiffUtilTest {
         "- tsr |",
         "  jkl |   jkl",
         "- qpo |"
-        ));
+    ));
   }
 
   @Test
@@ -86,7 +85,7 @@ public class SideBySideDiffUtilTest {
         "  jkl |   jkl",
         "- mno | + wvu",
         "- pqr |"
-        ));
+    ));
   }
 
   @Test
@@ -104,7 +103,7 @@ public class SideBySideDiffUtilTest {
         "      | + tsr",
         "  mno |   mno",
         "  pqr |   pqr"
-        ));
+    ));
   }
 
   @Test
@@ -117,7 +116,7 @@ public class SideBySideDiffUtilTest {
         "  a       |   a",
         "  b       |   b",
         "- c       |"
-        ));
+    ));
   }
 
   @Test
@@ -130,7 +129,7 @@ public class SideBySideDiffUtilTest {
         "- abcdef | + stuvwx",
         "- ghijkl | + yz",
         "- mnopqr |"
-        ));
+    ));
   }
 
   @Test
@@ -154,7 +153,7 @@ public class SideBySideDiffUtilTest {
     assertThat(diff, hasContent(
         "   | + abc",
         "   | + def"
-        ));
+    ));
   }
 
   @Test
@@ -164,7 +163,7 @@ public class SideBySideDiffUtilTest {
     assertThat(diff, hasContent(
         "- abc |",
         "- def |"
-        ));
+    ));
   }
 
   @Test
@@ -175,7 +174,7 @@ public class SideBySideDiffUtilTest {
         "- abc | + jklm",
         "- def | + nopq",
         "- ghi |"
-        ));
+    ));
   }
 
   @Test
@@ -187,7 +186,7 @@ public class SideBySideDiffUtilTest {
         "      | + ghi",
         "      | + jkl",
         "  abc |   abc"
-        ));
+    ));
   }
 
   @Test
@@ -199,7 +198,7 @@ public class SideBySideDiffUtilTest {
         "- ghi |",
         "- jkl |",
         "  abc |   abc"
-        ));
+    ));
   }
 
   /**
@@ -209,13 +208,8 @@ public class SideBySideDiffUtilTest {
   @Test
   public void combinations() {
     List<String> required = FluentIterable.from(Arrays.asList(PomSection.values()))
-    .transform(new Function<PomSection, String>() {
-
-      @Override
-      public String apply(PomSection input) {
-        return input.getSectionName();
-      }})
-    .toList();
+        .transform(input -> input.getSectionName())
+        .toList();
 
     List<String> actual = Ordering.usingToString().sortedCopy(required);
 
@@ -266,7 +260,7 @@ public class SideBySideDiffUtilTest {
         "- scm                    |",
         "- url                    |",
         "- version                |"
-        ));
+    ));
   }
 
   static class SideBySideDiffMatcher extends TypeSafeDiagnosingMatcher<String> {
@@ -300,11 +294,11 @@ public class SideBySideDiffUtilTest {
       }
 
       int minLength = Math.min(this.expectedContent.length, lines.length);
-      for(int i = 0; i < minLength; i++) {
+      for (int i = 0; i < minLength; i++) {
         if (!this.expectedContent[i].equals(lines[i])) {
           mismatchDescription.appendText("Mismatch in line").appendValue(i + 1).appendText(":\n")
-          .appendText("Expected: '").appendText(this.expectedContent[i]).appendText("'\n")
-          .appendText("but was : '").appendText(lines[i]).appendText("'\n");
+              .appendText("Expected: '").appendText(this.expectedContent[i]).appendText("'\n")
+              .appendText("but was : '").appendText(lines[i]).appendText("'\n");
 
           result = false;
         }

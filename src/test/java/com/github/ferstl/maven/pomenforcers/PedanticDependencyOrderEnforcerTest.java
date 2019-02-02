@@ -16,9 +16,6 @@
 package com.github.ferstl.maven.pomenforcers;
 
 import org.junit.Test;
-
-import com.github.ferstl.maven.pomenforcers.model.DependencyScope;
-
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;
@@ -51,12 +48,7 @@ public class PedanticDependencyOrderEnforcerTest extends AbstractPedanticDepende
 
   @Override
   public DependencyAdder createDependencyAdder() {
-    return new DependencyAdder() {
-
-      @Override
-      public void addDependency(String groupId, String artifactId, DependencyScope scope) {
-        PedanticDependencyOrderEnforcerTest.this.addDependency(groupId, artifactId, scope);
-      }};
+    return this::addDependency;
   }
 
 }

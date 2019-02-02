@@ -17,7 +17,6 @@ package com.github.ferstl.maven.pomenforcers;
 
 import org.junit.Before;
 import org.junit.Test;
-
 import com.github.ferstl.maven.pomenforcers.model.DependencyScope;
 
 
@@ -29,7 +28,7 @@ import com.github.ferstl.maven.pomenforcers.model.DependencyScope;
  * </p>
  */
 public abstract class AbstractPedanticDependencyOrderEnforcerTest<T extends AbstractPedanticDependencyOrderEnforcer>
-extends AbstractPedanticEnforcerTest<T> {
+    extends AbstractPedanticEnforcerTest<T> {
 
   private DependencyAdder dependencyAdder;
 
@@ -128,7 +127,9 @@ extends AbstractPedanticEnforcerTest<T> {
     executeRuleAndCheckReport(false);
   }
 
-  static interface DependencyAdder {
+  @FunctionalInterface
+  interface DependencyAdder {
+
     void addDependency(String groupId, String artifactId, DependencyScope scope);
   }
 }

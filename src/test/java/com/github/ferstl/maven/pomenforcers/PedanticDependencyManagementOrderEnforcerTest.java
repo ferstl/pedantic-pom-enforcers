@@ -16,9 +16,6 @@
 package com.github.ferstl.maven.pomenforcers;
 
 import org.junit.Test;
-
-import com.github.ferstl.maven.pomenforcers.model.DependencyScope;
-
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;
@@ -27,8 +24,7 @@ import static org.mockito.Mockito.verify;
 /**
  * JUnit tests for {@link PedanticDependencyManagementOrderEnforcer}:
  */
-public class PedanticDependencyManagementOrderEnforcerTest
-extends AbstractPedanticDependencyOrderEnforcerTest<PedanticDependencyManagementOrderEnforcer> {
+public class PedanticDependencyManagementOrderEnforcerTest extends AbstractPedanticDependencyOrderEnforcerTest<PedanticDependencyManagementOrderEnforcer> {
 
   @Override
   PedanticDependencyManagementOrderEnforcer createRule() {
@@ -52,13 +48,6 @@ extends AbstractPedanticDependencyOrderEnforcerTest<PedanticDependencyManagement
 
   @Override
   public DependencyAdder createDependencyAdder() {
-    return new DependencyAdder() {
-
-      @Override
-      public void addDependency(String groupId, String artifactId, DependencyScope scope) {
-        PedanticDependencyManagementOrderEnforcerTest.this.addManagedDependency(groupId, artifactId, scope);
-      }
-
-    };
+    return this::addManagedDependency;
   }
 }
