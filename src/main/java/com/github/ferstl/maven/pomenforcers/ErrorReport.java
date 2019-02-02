@@ -18,6 +18,7 @@ package com.github.ferstl.maven.pomenforcers;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 import com.github.ferstl.maven.pomenforcers.util.SideBySideDiffUtil;
 import com.google.common.base.Joiner;
 import com.google.common.base.Strings;
@@ -67,8 +68,8 @@ public class ErrorReport {
   }
 
   public <T> ErrorReport addDiff(Collection<T> actual, Collection<T> required, String leftTitle, String rightTitle, Function<? super T, String> toStringFunction) {
-    Collection<String> actualAsString = Collections2.transform(actual, toStringFunction::apply);
-    Collection<String> requiredAsString = Collections2.transform(required, toStringFunction::apply);
+    Collection<String> actualAsString = actual.stream().map(toStringFunction).collect(Collectors.toList());
+    Collection<String> requiredAsString = required.stream().map(toStringFunction).collect(Collectors.toList());
 
     return addDiff(actualAsString, requiredAsString, leftTitle, rightTitle);
   }

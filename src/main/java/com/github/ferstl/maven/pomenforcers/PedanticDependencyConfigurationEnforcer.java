@@ -17,9 +17,9 @@ package com.github.ferstl.maven.pomenforcers;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 import com.github.ferstl.maven.pomenforcers.model.DependencyModel;
-import com.google.common.base.Predicate;
-import com.google.common.collect.Collections2;
 import static com.github.ferstl.maven.pomenforcers.ErrorReport.toList;
 
 /**
@@ -121,7 +121,7 @@ public class PedanticDependencyConfigurationEnforcer extends AbstractPedanticEnf
 
     // Filter all project versions if allowed
     if (this.allowUnmangedProjectVersions) {
-      versionedDependencies = Collections2.filter(versionedDependencies, DependencyPredicate.WITH_PROJECT_VERSION);
+      versionedDependencies = versionedDependencies.stream().filter(DependencyPredicate.WITH_PROJECT_VERSION).collect(Collectors.toList());
     }
 
     if (!versionedDependencies.isEmpty()) {
@@ -141,26 +141,26 @@ public class PedanticDependencyConfigurationEnforcer extends AbstractPedanticEnf
 
   private Collection<DependencyModel> searchForDependencies(Predicate<DependencyModel> predicate) {
     List<DependencyModel> dependencies = getProjectModel().getDependencies();
-    return Collections2.filter(dependencies, predicate);
+    return dependencies.stream().filter(predicate).collect(Collectors.toList());
   }
 
   private enum DependencyPredicate implements Predicate<DependencyModel> {
     WITH_VERSION {
       @Override
-      public boolean apply(DependencyModel input) {
+      public boolean test(DependencyModel input) {
         return input.getVersion() != null;
       }
     },
     WITH_PROJECT_VERSION {
       @Override
-      public boolean apply(DependencyModel input) {
+      public boolean test(DependencyModel input) {
         return !"${project.version}".equals(input.getVersion())
             && !"${version}".equals(input.getVersion());
       }
     },
     WITH_EXCLUSION {
       @Override
-      public boolean apply(DependencyModel input) {
+      public boolean test(DependencyModel input) {
         return !input.getExclusions().isEmpty();
       }
     }

@@ -17,9 +17,9 @@ package com.github.ferstl.maven.pomenforcers;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 import com.github.ferstl.maven.pomenforcers.model.PluginModel;
-import com.google.common.base.Predicate;
-import com.google.common.collect.Collections2;
 import static com.github.ferstl.maven.pomenforcers.ErrorReport.toList;
 
 /**
@@ -139,27 +139,27 @@ public class PedanticPluginConfigurationEnforcer extends AbstractPedanticEnforce
 
   private Collection<PluginModel> searchForPlugins(Predicate<PluginModel> predicate) {
     List<PluginModel> plugins = getProjectModel().getPlugins();
-    return Collections2.filter(plugins, predicate);
+    return plugins.stream().filter(predicate).collect(Collectors.toList());
   }
 
   enum PluginPredicate implements Predicate<PluginModel> {
     WITH_DEPENDENCIES {
       @Override
-      public boolean apply(PluginModel input) {
+      public boolean test(PluginModel input) {
         return !input.getDependencies().isEmpty();
       }
     },
 
     WITH_CONFIGURATION {
       @Override
-      public boolean apply(PluginModel input) {
+      public boolean test(PluginModel input) {
         return input.isConfigured();
       }
     },
 
     WITH_VERSION {
       @Override
-      public boolean apply(PluginModel input) {
+      public boolean test(PluginModel input) {
         return input.getVersion() != null;
       }
     }

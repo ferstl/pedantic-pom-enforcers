@@ -18,12 +18,12 @@ package com.github.ferstl.maven.pomenforcers.util;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeDiagnosingMatcher;
 import org.junit.Test;
 import com.github.ferstl.maven.pomenforcers.model.PomSection;
-import com.google.common.collect.FluentIterable;
 import com.google.common.collect.Ordering;
 import static com.github.ferstl.maven.pomenforcers.util.SideBySideDiffUtil.diff;
 import static com.github.ferstl.maven.pomenforcers.util.SideBySideDiffUtilTest.SideBySideDiffMatcher.hasContent;
@@ -207,9 +207,7 @@ public class SideBySideDiffUtilTest {
    */
   @Test
   public void combinations() {
-    List<String> required = FluentIterable.from(Arrays.asList(PomSection.values()))
-        .transform(input -> input.getSectionName())
-        .toList();
+    List<String> required = Arrays.stream(PomSection.values()).map(PomSection::getSectionName).collect(Collectors.toList());
 
     List<String> actual = Ordering.usingToString().sortedCopy(required);
 

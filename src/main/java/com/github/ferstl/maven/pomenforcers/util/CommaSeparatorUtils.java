@@ -17,17 +17,15 @@ package com.github.ferstl.maven.pomenforcers.util;
 
 import java.util.Collection;
 import java.util.function.Function;
-import com.google.common.base.Joiner;
+import java.util.stream.StreamSupport;
 import com.google.common.base.Splitter;
-import com.google.common.collect.Iterables;
+import static java.util.stream.Collectors.toCollection;
 
 public final class CommaSeparatorUtils {
 
   private static final Splitter COMMA_SPLITTER = Splitter.on(",");
-  private static final Joiner COMMA_JOINER = Joiner.on(",");
 
-  public static void splitAndAddToCollection(
-      String commaSeparatedItems, Collection<String> collection) {
+  public static void splitAndAddToCollection(String commaSeparatedItems, Collection<String> collection) {
     splitAndAddToCollection(commaSeparatedItems, collection, Function.identity());
   }
 
@@ -37,18 +35,9 @@ public final class CommaSeparatorUtils {
     if (items.iterator().hasNext()) {
       collection.clear();
     }
-    Iterables.addAll(collection, Iterables.transform(items, transformer::apply));
+    StreamSupport.stream(items.spliterator(), false)
+        .map(transformer)
+        .collect(toCollection(() -> collection));
   }
 
-  public static String join(Iterable<?> parts) {
-    return COMMA_JOINER.join(parts);
-  }
-
-  public static <T> String join(Iterable<T> parts, Function<T, String> transformer) {
-    Iterable<String> convertedParts = Iterables.transform(parts, transformer::apply);
-    return COMMA_JOINER.join(convertedParts);
-  }
-
-  private CommaSeparatorUtils() {
-  }
 }
