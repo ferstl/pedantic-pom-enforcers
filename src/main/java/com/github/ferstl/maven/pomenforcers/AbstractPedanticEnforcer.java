@@ -21,7 +21,6 @@ import org.apache.maven.enforcer.rule.api.EnforcerRule;
 import org.apache.maven.enforcer.rule.api.EnforcerRule2;
 import org.apache.maven.enforcer.rule.api.EnforcerRuleException;
 import org.apache.maven.enforcer.rule.api.EnforcerRuleHelper;
-import org.apache.maven.plugin.logging.Log;
 import org.apache.maven.project.MavenProject;
 import org.w3c.dom.Document;
 import com.github.ferstl.maven.pomenforcers.model.ProjectModel;
@@ -31,7 +30,6 @@ import com.github.ferstl.maven.pomenforcers.util.XmlUtils;
 public abstract class AbstractPedanticEnforcer implements EnforcerRule2 {
 
   private EnforcerRuleHelper helper;
-  private Log log;
   private Document pom;
   private ProjectModel projectModel;
 
@@ -70,17 +68,12 @@ public abstract class AbstractPedanticEnforcer implements EnforcerRule2 {
    */
   void initialize(EnforcerRuleHelper helper, Document pom, ProjectModel projectModel) {
     this.helper = helper;
-    this.log = helper.getLog();
     this.pom = pom;
     this.projectModel = projectModel;
   }
 
   protected EnforcerRuleHelper getHelper() {
     return this.helper;
-  }
-
-  protected Log getLog() {
-    return this.log;
   }
 
   protected Document getPom() {

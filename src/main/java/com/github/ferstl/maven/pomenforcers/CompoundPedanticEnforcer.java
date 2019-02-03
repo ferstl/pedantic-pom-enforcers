@@ -18,48 +18,38 @@ package com.github.ferstl.maven.pomenforcers;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-
 import com.github.ferstl.maven.pomenforcers.util.CommaSeparatorUtils;
 import com.google.common.base.Strings;
 import com.google.common.collect.Sets;
-
-import static com.github.ferstl.maven.pomenforcers.PedanticEnforcerRule.stringToEnforcerRule;
 
 /**
  * The compound enforcer aggregates any combination of the available pedantic
  * enforcer rules. Besides that it is easier to configure than the single rules,
  * it is also more efficient because it has to parse the POM file of each Maven
  * module only once.
- *
  * <pre>
  * ### Example
  *     &lt;rules&gt;
  *       &lt;compound implementation=&quot;com.github.ferstl.maven.pomenforcers.CompoundPedanticEnforcer&quot;&gt;
  *         &lt;enforcers&gt;POM_SECTION_ORDER,MODULE_ORDER,DEPENDENCY_MANAGEMENT_ORDER,DEPENDENCY_ORDER,DEPENDENCY_CONFIGURATION,DEPENDENCY_SCOPE,DEPENDENCY_MANAGEMENT_LOCATION,PLUGIN_MANAGEMENT_ORDER,PLUGIN_CONFIGURATION,PLUGIN_MANAGEMENT_LOCATION&lt;/enforcers&gt;
- *
  *         &lt;!-- POM_SECTION configuration --&gt;
  *         &lt;pomSectionPriorities&gt;groupId,artifactId,version,packaging&lt;/pomSectionPriorities&gt;
- *
  *         &lt;!-- MODULE_ORDER configuration --&gt;
  *         &lt;moduleOrderIgnores&gt;&gt;dist-deb,dist-rpm&lt;/moduleOrderIgnores&gt;
- *
  *         &lt;!-- DEPENDENCY_ORDER configuration --&gt;
  *         &lt;dependenciesOrderBy&gt;scope,groupId,artifactId&lt;/dependenciesOrderBy&gt;
  *         &lt;dependenciesScopePriorities&gt;compile,runtime,provided&lt;/dependenciesScopePriorities&gt;
  *         &lt;dependenciesGroupIdPriorities&gt;com.myproject,com.mylibs&lt;/dependenciesGroupIdPriorities&gt;
  *         &lt;dependenciesArtifactIdPriorities&gt;commons-,utils-&lt;/dependenciesArtifactIdPriorities&gt;
- *
  *         &lt;!-- DEPENDENCY_MANAGEMENT_ORDER configuration --&gt;
  *         &lt;dependencyManagementOrderBy&gt;scope,groupId,artifactId&lt;/dependencyManagementOrderBy&gt;
  *         &lt;dependencyManagementScopePriorities&gt;compile,runtime,provided&lt;/dependencyManagementScopePriorities&gt;
  *         &lt;dependencyManagementGroupIdPriorities&gt;com.myproject,com.mylibs&lt;/dependencyManagementGroupIdPriorities&gt;
  *         &lt;dependencyManagementArtifactIdPriorities&gt;commons-,utils-&lt;/dependencyManagementArtifactIdPriorities&gt;
- *
  *         &lt;!-- DEPENDENCY_CONFIGURATION configuration --&gt;
  *         &lt;manageDependencyVersions&gt;true&lt;/manageDependencyVersions&gt;
  *         &lt;allowUnmangedProjectVersions&gt;true&lt;/allowUnmangedProjectVersions&gt;
  *         &lt;manageDependencyExclusions&gt;true&lt;/manageDependencyExclusions&gt;
- *
  *         &lt;!-- DEPENDENCY_SCOPE configuration --&gt;
  *         &lt;compileDependencies&gt;com.example:mylib1,com.example:mylib2&lt;/compileDependencies&gt;
  *         &lt;providedDependencies&gt;javax.servlet:servlet-api&lt;/providedDependencies&gt;
@@ -67,21 +57,17 @@ import static com.github.ferstl.maven.pomenforcers.PedanticEnforcerRule.stringTo
  *         &lt;systemDependencies&gt;com.sun:tools&lt;/systemDependencies&gt;
  *         &lt;testDependencies&gt;org.junit:junit,org.hamcrest:hamcrest-library&lt;/testDependencies&gt;
  *         &lt;importDependencies&gt;org.jboss:jboss-as-client&lt;/importDependencies&gt;
- *
  *         &lt;!-- DEPENDENCY_MANAGEMENT_LOCATION configuration --&gt;
  *         &lt;allowParentPomsForDependencyManagement&gt;true&lt;/allowParentPomsForDependencyManagement&gt;
  *         &lt;dependencyManagingPoms&gt;com.example.myproject:parent,com.example.myproject:subparent&lt;/dependencyManagingPoms&gt;
- *
  *         &lt;!-- PLUGIN_MANAGEMENT_ORDER configuration --&gt;
  *         &lt;pluginManagementOrderBy&gt;groupId,artifactId&lt;/pluginManagementOrderBy&gt;
  *         &lt;pluginManagementGroupIdPriorities&gt;com.myproject.plugins,com.myproject.testplugins&lt;/pluginManagementGroupIdPriorities&gt;
  *         &lt;pluginManagementArtifactIdPriorities&gt;mytest-,myintegrationtest-&lt;/pluginManagementArtifactIdPriorities&gt;
- *
  *         &lt;!-- PLUGIN_CONFIGURATION configuration --&gt;
  *         &lt;managePluginVersions&gt;true&lt;/managePluginVersions&gt;
  *         &lt;managePluginConfigurations&gt;true&lt;/managePluginConfigurations&gt;
  *         &lt;managePluginDependencies&gt;true&lt;/managePluginDependencies&gt;
- *
  *         &lt;!-- PLUGIN_MANAGEMENT_LOCATION configuration --&gt;
  *         &lt;allowParentPomsForPluginManagement&gt;true&lt;/allowParentPomsForPluginManagement&gt;
  *         &lt;pluginManagingPoms&gt;com.myproject:parent-pom&lt;/pluginManagingPoms&gt;
@@ -92,6 +78,7 @@ import static com.github.ferstl.maven.pomenforcers.PedanticEnforcerRule.stringTo
  *       &lt;/compound&gt;
  *     &lt;/rules&gt;
  * </pre>
+ *
  * @id n/a
  * @since 1.0.0
  */
@@ -99,6 +86,7 @@ public class CompoundPedanticEnforcer extends AbstractPedanticEnforcer {
 
   /**
    * See {@link PedanticPomSectionOrderEnforcer#setSectionPriorities(String)}.
+   *
    * @configParam
    * @since 1.0.0
    */
@@ -106,6 +94,7 @@ public class CompoundPedanticEnforcer extends AbstractPedanticEnforcer {
 
   /**
    * See {@link PedanticModuleOrderEnforcer#setIgnoredModules(String)}.
+   *
    * @configParam
    * @since 1.0.0
    */
@@ -113,6 +102,7 @@ public class CompoundPedanticEnforcer extends AbstractPedanticEnforcer {
 
   /**
    * See {@link PedanticDependencyOrderEnforcer#setOrderBy(String)}.
+   *
    * @configParam
    * @since 1.0.0
    */
@@ -120,6 +110,7 @@ public class CompoundPedanticEnforcer extends AbstractPedanticEnforcer {
 
   /**
    * See {@link PedanticDependencyOrderEnforcer#setGroupIdPriorities(String)}.
+   *
    * @configParam
    * @since 1.0.0
    */
@@ -127,6 +118,7 @@ public class CompoundPedanticEnforcer extends AbstractPedanticEnforcer {
 
   /**
    * See {@link PedanticDependencyOrderEnforcer#setArtifactIdPriorities(String)}.
+   *
    * @configParam
    * @since 1.0.0
    */
@@ -134,6 +126,7 @@ public class CompoundPedanticEnforcer extends AbstractPedanticEnforcer {
 
   /**
    * See {@link PedanticDependencyOrderEnforcer#setScopePriorities(String)}.
+   *
    * @configParam
    * @since 1.0.0
    */
@@ -141,6 +134,7 @@ public class CompoundPedanticEnforcer extends AbstractPedanticEnforcer {
 
   /**
    * See {@link PedanticDependencyManagementOrderEnforcer#setOrderBy(String)}.
+   *
    * @configParam
    * @since 1.0.0
    */
@@ -149,6 +143,7 @@ public class CompoundPedanticEnforcer extends AbstractPedanticEnforcer {
   /**
    * See
    * {@link PedanticDependencyManagementOrderEnforcer#setGroupIdPriorities(String)}.
+   *
    * @configParam
    * @since 1.0.0
    */
@@ -157,6 +152,7 @@ public class CompoundPedanticEnforcer extends AbstractPedanticEnforcer {
   /**
    * See
    * {@link PedanticDependencyManagementOrderEnforcer#setArtifactIdPriorities(String)}.
+   *
    * @configParam
    * @since 1.0.0
    */
@@ -165,6 +161,7 @@ public class CompoundPedanticEnforcer extends AbstractPedanticEnforcer {
   /**
    * See
    * {@link PedanticDependencyManagementOrderEnforcer#setScopePriorities(String)}.
+   *
    * @configParam
    * @since 1.0.0
    */
@@ -172,6 +169,7 @@ public class CompoundPedanticEnforcer extends AbstractPedanticEnforcer {
 
   /**
    * See {@link PedanticDependencyManagementLocationEnforcer#setAllowParentPoms(boolean)}.
+   *
    * @configParam
    * @since 1.2.0
    */
@@ -179,6 +177,7 @@ public class CompoundPedanticEnforcer extends AbstractPedanticEnforcer {
 
   /**
    * See {@link PedanticDependencyManagementLocationEnforcer#setDependencyManagingPoms(String)}.
+   *
    * @configParam
    * @since 1.0.0
    */
@@ -187,6 +186,7 @@ public class CompoundPedanticEnforcer extends AbstractPedanticEnforcer {
   /**
    * See
    * {@link PedanticDependencyConfigurationEnforcer#setManageVersions(boolean)}.
+   *
    * @configParam
    * @since 1.0.0
    */
@@ -195,6 +195,7 @@ public class CompoundPedanticEnforcer extends AbstractPedanticEnforcer {
   /**
    * See
    * {@link PedanticDependencyConfigurationEnforcer#setAllowUnmanagedProjectVersions(boolean)}.
+   *
    * @configParam
    * @since 1.0.0
    */
@@ -203,6 +204,7 @@ public class CompoundPedanticEnforcer extends AbstractPedanticEnforcer {
   /**
    * See
    * {@link PedanticDependencyConfigurationEnforcer#setManageExclusions(boolean)}.
+   *
    * @configParam
    * @since 1.0.0
    */
@@ -210,6 +212,7 @@ public class CompoundPedanticEnforcer extends AbstractPedanticEnforcer {
 
   /**
    * See {@link PedanticDependencyScopeEnforcer#setCompileDependencies(String)}.
+   *
    * @configParam
    * @since 1.0.0
    */
@@ -217,6 +220,7 @@ public class CompoundPedanticEnforcer extends AbstractPedanticEnforcer {
 
   /**
    * See {@link PedanticDependencyScopeEnforcer#setProvidedDependencies(String)}.
+   *
    * @configParam
    * @since 1.0.0
    */
@@ -224,6 +228,7 @@ public class CompoundPedanticEnforcer extends AbstractPedanticEnforcer {
 
   /**
    * See {@link PedanticDependencyScopeEnforcer#setRuntimeDependencies(String)}.
+   *
    * @configParam
    * @since 1.0.0
    */
@@ -231,6 +236,7 @@ public class CompoundPedanticEnforcer extends AbstractPedanticEnforcer {
 
   /**
    * See {@link PedanticDependencyScopeEnforcer#setSystemDependencies(String)}.
+   *
    * @configParam
    * @since 1.0.0
    */
@@ -238,6 +244,7 @@ public class CompoundPedanticEnforcer extends AbstractPedanticEnforcer {
 
   /**
    * See {@link PedanticDependencyScopeEnforcer#setTestDependencies(String)}.
+   *
    * @configParam
    * @since 1.0.0
    */
@@ -245,6 +252,7 @@ public class CompoundPedanticEnforcer extends AbstractPedanticEnforcer {
 
   /**
    * See {@link PedanticDependencyScopeEnforcer#setImportDependencies(String)}.
+   *
    * @configParam
    * @since 1.0.0
    */
@@ -252,6 +260,7 @@ public class CompoundPedanticEnforcer extends AbstractPedanticEnforcer {
 
   /**
    * See {@link PedanticPluginManagementOrderEnforcer#setOrderBy(String)}.
+   *
    * @configParam
    * @since 1.0.0
    */
@@ -260,6 +269,7 @@ public class CompoundPedanticEnforcer extends AbstractPedanticEnforcer {
   /**
    * See
    * {@link PedanticPluginManagementOrderEnforcer#setGroupIdPriorities(String)}.
+   *
    * @configParam
    * @since 1.0.0
    */
@@ -268,6 +278,7 @@ public class CompoundPedanticEnforcer extends AbstractPedanticEnforcer {
   /**
    * See
    * {@link PedanticPluginManagementOrderEnforcer#setArtifactIdPriorities(String)}.
+   *
    * @configParam
    * @since 1.0.0
    */
@@ -276,6 +287,7 @@ public class CompoundPedanticEnforcer extends AbstractPedanticEnforcer {
 
   /**
    * See {@link PedanticPluginManagementLocationEnforcer#setAllowParentPoms(boolean)}.
+   *
    * @configParam
    * @since 1.2.0
    */
@@ -284,6 +296,7 @@ public class CompoundPedanticEnforcer extends AbstractPedanticEnforcer {
   /**
    * See
    * {@link PedanticPluginManagementLocationEnforcer#setPluginManagingPoms(String)}.
+   *
    * @configParam
    * @since 1.0.0
    */
@@ -291,6 +304,7 @@ public class CompoundPedanticEnforcer extends AbstractPedanticEnforcer {
 
   /**
    * See {@link PedanticPluginConfigurationEnforcer#managePluginVersions}.
+   *
    * @configParam
    * @since 1.0.0
    */
@@ -298,6 +312,7 @@ public class CompoundPedanticEnforcer extends AbstractPedanticEnforcer {
 
   /**
    * See {@link PedanticPluginConfigurationEnforcer#managePluginConfigurations}
+   *
    * @configParam
    * @since 1.0.0
    */
@@ -305,6 +320,7 @@ public class CompoundPedanticEnforcer extends AbstractPedanticEnforcer {
 
   /**
    * See {@link PedanticPluginConfigurationEnforcer#managePluginDependencies}
+   *
    * @configParam
    * @since 1.0.0
    */
@@ -347,7 +363,7 @@ public class CompoundPedanticEnforcer extends AbstractPedanticEnforcer {
   }
 
   public void setEnforcers(String enforcers) {
-    CommaSeparatorUtils.splitAndAddToCollection(enforcers, this.enforcers, stringToEnforcerRule());
+    CommaSeparatorUtils.splitAndAddToCollection(enforcers, this.enforcers, PedanticEnforcerRule::valueOf);
   }
 
   @Override
@@ -383,9 +399,9 @@ public class CompoundPedanticEnforcer extends AbstractPedanticEnforcer {
   private void collectErrors(ErrorReport compundReport, List<ErrorReport> ruleErrors) {
     if (!ruleErrors.isEmpty()) {
       compundReport
-        .useLargeTitle()
-        .addLine("Please fix these problems:")
-        .emptyLine();
+          .useLargeTitle()
+          .addLine("Please fix these problems:")
+          .emptyLine();
       for (ErrorReport ruleError : ruleErrors) {
         compundReport.addLine(ruleError.toString()).emptyLine().emptyLine();
       }
@@ -426,7 +442,7 @@ public class CompoundPedanticEnforcer extends AbstractPedanticEnforcer {
 
     @Override
     public void visit(PedanticDependencyManagementLocationEnforcer enforcer) {
-      if(CompoundPedanticEnforcer.this.allowParentPomsForDependencyManagement != null) {
+      if (CompoundPedanticEnforcer.this.allowParentPomsForDependencyManagement != null) {
         enforcer.setAllowParentPoms(CompoundPedanticEnforcer.this.allowParentPomsForDependencyManagement);
       }
       if (!Strings.isNullOrEmpty(CompoundPedanticEnforcer.this.dependencyManagingPoms)) {

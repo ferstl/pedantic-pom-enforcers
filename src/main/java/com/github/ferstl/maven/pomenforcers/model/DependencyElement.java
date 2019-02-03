@@ -82,10 +82,6 @@ public enum DependencyElement implements PriorityOrderingFactory<String, Depende
     return result;
   }
 
-  public static Function<String, DependencyElement> stringToDependencyElement() {
-    return DependencyElement::getByElementName;
-  }
-
   private final String elementName;
 
   DependencyElement(String elementName) {

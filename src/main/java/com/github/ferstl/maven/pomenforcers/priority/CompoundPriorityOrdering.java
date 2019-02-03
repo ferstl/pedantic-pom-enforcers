@@ -17,12 +17,9 @@ package com.github.ferstl.maven.pomenforcers.priority;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
-
 import com.google.common.collect.Iterables;
 import com.google.common.collect.LinkedHashMultimap;
 import com.google.common.collect.Lists;
@@ -40,8 +37,7 @@ public class CompoundPriorityOrdering<T, P extends Comparable<P>, F extends Prio
   private final Set<F> orderBy;
   private final Multimap<F, P> priorityMap;
 
-  public static <T, P extends Comparable<P>, F extends PriorityOrderingFactory<P, T>>
-  CompoundPriorityOrdering<T, P, F> orderBy(Iterable<F> artifactElements) {
+  public static <T, P extends Comparable<P>, F extends PriorityOrderingFactory<P, T>> CompoundPriorityOrdering<T, P, F> orderBy(Iterable<F> artifactElements) {
     if (Iterables.isEmpty(artifactElements)) {
       throw new IllegalArgumentException("No order specified.");
     }
@@ -66,14 +62,6 @@ public class CompoundPriorityOrdering<T, P extends Comparable<P>, F extends Prio
 
   public void setPriorities(F artifactElement, Iterable<P> priorities) {
     this.priorityMap.putAll(artifactElement, priorities);
-  }
-
-  public Collection<F> getOrderBy() {
-    return Collections.unmodifiableCollection(this.orderBy);
-  }
-
-  public Collection<P> getPriorities(F artifactElement) {
-    return this.priorityMap.get(artifactElement);
   }
 
   @Override

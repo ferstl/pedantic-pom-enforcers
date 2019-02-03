@@ -15,8 +15,6 @@
  */
 package com.github.ferstl.maven.pomenforcers;
 
-import java.util.function.Function;
-
 /**
  * Each pedantic enforcer rule is identified by an ID. These IDs can be used within the
  * {@link CompoundPedanticEnforcer} to enable specific rules. The compound enforcer is more efficient
@@ -144,10 +142,6 @@ public enum PedanticEnforcerRule {
 
   public String getSlogan() {
     return this.slogan;
-  }
-
-  public static Function<String, PedanticEnforcerRule> stringToEnforcerRule() {
-    return PedanticEnforcerRule::valueOf;
   }
 
   public abstract AbstractPedanticEnforcer createEnforcerRule();

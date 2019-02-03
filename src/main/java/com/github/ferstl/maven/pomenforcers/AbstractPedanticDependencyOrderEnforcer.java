@@ -18,10 +18,8 @@ package com.github.ferstl.maven.pomenforcers;
 import java.util.Collection;
 import java.util.LinkedHashSet;
 import java.util.Set;
-
 import org.apache.maven.model.Dependency;
 import org.apache.maven.project.MavenProject;
-
 import com.github.ferstl.maven.pomenforcers.model.DependencyElement;
 import com.github.ferstl.maven.pomenforcers.model.DependencyModel;
 import com.github.ferstl.maven.pomenforcers.model.functions.DependencyMatcher;
@@ -30,12 +28,9 @@ import com.github.ferstl.maven.pomenforcers.util.CommaSeparatorUtils;
 import com.github.ferstl.maven.pomenforcers.util.EnforcerRuleUtils;
 import com.google.common.collect.BiMap;
 import com.google.common.collect.Sets;
-
 import static com.github.ferstl.maven.pomenforcers.model.DependencyElement.ARTIFACT_ID;
 import static com.github.ferstl.maven.pomenforcers.model.DependencyElement.GROUP_ID;
 import static com.github.ferstl.maven.pomenforcers.model.DependencyElement.SCOPE;
-import static com.github.ferstl.maven.pomenforcers.model.DependencyElement.stringToDependencyElement;
-
 
 
 abstract class AbstractPedanticDependencyOrderEnforcer extends AbstractPedanticEnforcer {
@@ -48,14 +43,15 @@ abstract class AbstractPedanticDependencyOrderEnforcer extends AbstractPedanticE
 
   /**
    * Comma-separated list of dependency elements that defines the ordering.
+   *
    * @param dependencyElements Comma-separated list of dependency elements that defines the ordering.
    * @configParam
-   * @default scope,groupId,artifactId
+   * @default scope, groupId, artifactId
    * @since 1.0.0
    */
   public void setOrderBy(String dependencyElements) {
     Set<DependencyElement> orderBy = new LinkedHashSet<>();
-    CommaSeparatorUtils.splitAndAddToCollection(dependencyElements, orderBy, stringToDependencyElement());
+    CommaSeparatorUtils.splitAndAddToCollection(dependencyElements, orderBy, DependencyElement::getByElementName);
     this.artifactOrdering.redefineOrderBy(orderBy);
   }
 

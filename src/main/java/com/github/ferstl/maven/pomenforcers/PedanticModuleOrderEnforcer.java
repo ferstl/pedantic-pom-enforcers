@@ -19,14 +19,11 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
-
 import org.apache.maven.project.MavenProject;
-
 import com.github.ferstl.maven.pomenforcers.util.CommaSeparatorUtils;
 import com.github.ferstl.maven.pomenforcers.util.EnforcerRuleUtils;
 import com.google.common.collect.Ordering;
 import com.google.common.collect.Sets;
-
 import static com.github.ferstl.maven.pomenforcers.ErrorReport.toList;
 
 
@@ -34,7 +31,6 @@ import static com.github.ferstl.maven.pomenforcers.ErrorReport.toList;
  * This enforcer makes sure that your <code>modules</code> section is sorted
  * alphabetically. Modules that should occur at a specific position in the
  * <code>&lt;modules&gt;</code> section can be ignored.
- *
  * <pre>
  * ### Example
  *     &lt;rules&gt;
@@ -50,7 +46,9 @@ import static com.github.ferstl.maven.pomenforcers.ErrorReport.toList;
  */
 public class PedanticModuleOrderEnforcer extends AbstractPedanticEnforcer {
 
-  /** All modules in this set won't be checked for the correct order. */
+  /**
+   * All modules in this set won't be checked for the correct order.
+   */
   private final Set<String> ignoredModules;
 
   public PedanticModuleOrderEnforcer() {
@@ -60,6 +58,7 @@ public class PedanticModuleOrderEnforcer extends AbstractPedanticEnforcer {
   /**
    * Comma-separated list of ignored modules. All modules in this list may occur at any place in the
    * <code>modules</code> section.
+   *
    * @param ignoredModules Comma-separated list of ignored modules.
    * @configParam
    * @since 1.0.0
@@ -101,15 +100,14 @@ public class PedanticModuleOrderEnforcer extends AbstractPedanticEnforcer {
     return "pom".equals(project.getPackaging());
   }
 
-  private ErrorReport reportError(ErrorReport report, Collection<String> declaredModules, Collection<String> orderedModules) {
+  private void reportError(ErrorReport report, Collection<String> declaredModules, Collection<String> orderedModules) {
     report.addLine("You have to sort your modules alphabetically:")
-          .emptyLine()
-          .addDiff(declaredModules, orderedModules, "Actual Order", "Required Order");
+        .emptyLine()
+        .addDiff(declaredModules, orderedModules, "Actual Order", "Required Order");
     if (!this.ignoredModules.isEmpty()) {
       report.emptyLine()
-            .addLine("You may place these modules anywhere in your <modules> section:")
-            .addLine(toList(this.ignoredModules));
+          .addLine("You may place these modules anywhere in your <modules> section:")
+          .addLine(toList(this.ignoredModules));
     }
-    return report;
   }
 }

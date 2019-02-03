@@ -26,7 +26,6 @@ import org.junit.Test;
 import com.github.ferstl.maven.pomenforcers.model.PomSection;
 import com.google.common.collect.Ordering;
 import static com.github.ferstl.maven.pomenforcers.util.SideBySideDiffUtil.diff;
-import static com.github.ferstl.maven.pomenforcers.util.SideBySideDiffUtilTest.SideBySideDiffMatcher.hasContent;
 import static java.util.Arrays.asList;
 import static java.util.Collections.singletonList;
 import static org.junit.Assert.assertEquals;
@@ -41,7 +40,8 @@ public class SideBySideDiffUtilTest {
   public void insertion() {
     String diff = diff(
         asList("abc", "def", "ghi", "jkl"),
-        asList("abc", "zyx", "def", "wvu", "ghi", "tsr", "jkl", "qpo"));
+        asList("abc", "zyx", "def", "wvu", "ghi", "tsr", "jkl", "qpo"),
+        "", "");
 
     assertThat(diff, hasContent(
         "  abc |   abc",
@@ -60,7 +60,8 @@ public class SideBySideDiffUtilTest {
   public void deletion() {
     String diff = diff(
         asList("abc", "zyx", "def", "wvu", "ghi", "tsr", "jkl", "qpo"),
-        asList("abc", "def", "ghi", "jkl"));
+        asList("abc", "def", "ghi", "jkl"),
+        "", "");
 
     assertThat(diff, hasContent(
         "  abc |   abc",
@@ -78,7 +79,8 @@ public class SideBySideDiffUtilTest {
   public void changeWithBiggerLeftSide() {
     String diff = diff(
         asList("abc", "def", "ghi", "jkl", "mno", "pqr"),
-        asList("abc", "zyx", "jkl", "wvu"));
+        asList("abc", "zyx", "jkl", "wvu"),
+        "", "");
 
     assertThat(diff, hasContent(
         "  abc |   abc",
@@ -94,7 +96,8 @@ public class SideBySideDiffUtilTest {
   public void changeWithBiggerRightSide() {
     String diff = diff(
         asList("abc", "def", "ghi", "jkl", "mno", "pqr"),
-        asList("zyx", "wvu", "def", "ghi", "wvu", "tsr", "mno", "pqr"));
+        asList("zyx", "wvu", "def", "ghi", "wvu", "tsr", "mno", "pqr"),
+        "", "");
 
     assertThat(diff, hasContent(
         "- abc | + zyx",
@@ -136,7 +139,7 @@ public class SideBySideDiffUtilTest {
 
   @Test
   public void emptyTexts() {
-    String diff = diff(Collections.emptyList(), Collections.emptyList());
+    String diff = diff(Collections.emptyList(), Collections.emptyList(), "", "");
 
     assertEquals("", diff);
   }
@@ -150,7 +153,7 @@ public class SideBySideDiffUtilTest {
 
   @Test
   public void originalTextEmpty() {
-    String diff = diff(Collections.emptyList(), asList("abc", "def"));
+    String diff = diff(Collections.emptyList(), asList("abc", "def"), "", "");
 
     assertThat(diff, hasContent(
         "   | + abc",
@@ -160,7 +163,7 @@ public class SideBySideDiffUtilTest {
 
   @Test
   public void revisedTextEmpty() {
-    String diff = diff(asList("abc", "def"), Collections.emptyList());
+    String diff = diff(asList("abc", "def"), Collections.emptyList(), "", "");
 
     assertThat(diff, hasContent(
         "- abc |",
@@ -170,7 +173,7 @@ public class SideBySideDiffUtilTest {
 
   @Test
   public void differentTexts() {
-    String diff = diff(asList("abc", "def", "ghi"), asList("jklm", "nopq"));
+    String diff = diff(asList("abc", "def", "ghi"), asList("jklm", "nopq"), "", "");
 
     assertThat(diff, hasContent(
         "- abc | + jklm",
@@ -181,7 +184,7 @@ public class SideBySideDiffUtilTest {
 
   @Test
   public void differentLengthsShortOriginal() {
-    String diff = diff(singletonList("abc"), asList("def", "ghi", "jkl", "abc"));
+    String diff = diff(singletonList("abc"), asList("def", "ghi", "jkl", "abc"), "", "");
 
     assertThat(diff, hasContent(
         "      | + def",
@@ -193,7 +196,7 @@ public class SideBySideDiffUtilTest {
 
   @Test
   public void differentLengthsShortRevised() {
-    String diff = diff(asList("def", "ghi", "jkl", "abc"), singletonList("abc"));
+    String diff = diff(asList("def", "ghi", "jkl", "abc"), singletonList("abc"), "", "");
 
     assertThat(diff, hasContent(
         "- def |",
@@ -213,7 +216,7 @@ public class SideBySideDiffUtilTest {
 
     List<String> actual = Ordering.usingToString().sortedCopy(required);
 
-    String diff = diff(actual, required);
+    String diff = diff(actual, required, "", "");
 
     assertThat(diff, hasContent(
         "                         | + modelVersion",
@@ -263,15 +266,15 @@ public class SideBySideDiffUtilTest {
     ));
   }
 
+  private static Matcher<String> hasContent(String... expectedContent) {
+    return new SideBySideDiffMatcher(expectedContent);
+  }
+
   static class SideBySideDiffMatcher extends TypeSafeDiagnosingMatcher<String> {
 
     private final String[] expectedContent;
 
-    public static Matcher<String> hasContent(String... expectedContent) {
-      return new SideBySideDiffMatcher(expectedContent);
-    }
-
-    public SideBySideDiffMatcher(String[] expectedContent) {
+    SideBySideDiffMatcher(String[] expectedContent) {
       this.expectedContent = expectedContent;
     }
 
@@ -306,6 +309,5 @@ public class SideBySideDiffUtilTest {
 
       return result;
     }
-
   }
 }

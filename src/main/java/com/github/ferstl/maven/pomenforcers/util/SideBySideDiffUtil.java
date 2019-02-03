@@ -19,19 +19,13 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
-
 import com.google.common.base.Strings;
-
 import difflib.Chunk;
 import difflib.Delta;
 import difflib.DiffUtils;
 
 
 public final class SideBySideDiffUtil {
-
-  public static String diff(Collection<String> actual, Collection<String> required) {
-    return diff(actual, required, "", "");
-  }
 
   public static String diff(Collection<String> actual, Collection<String> required, String leftTitle, String rightTitle) {
 
@@ -43,7 +37,7 @@ public final class SideBySideDiffUtil {
       Chunk<String> revised = delta.getRevised();
       int currentPosition = original.getPosition() + offset;
 
-      switch(delta.getType()) {
+      switch (delta.getType()) {
         case INSERT:
           offset += context.expand(currentPosition, revised.size());
           context.setRightContent(currentPosition, revised.getLines());
@@ -83,6 +77,7 @@ public final class SideBySideDiffUtil {
    * Context to manipulate both sides of the diff.
    */
   private static class SideBySideContext {
+
     private static final String SIDE_SEPARATOR = " |";
     private static final String EMPTY_MARKER = "  ";
     private static final String DELETION_MARKER = "- ";
@@ -140,7 +135,7 @@ public final class SideBySideDiffUtil {
         sb.append(Strings.repeat("-", this.leftWidth + SIDE_SEPARATOR.length() + this.rightWidth + 1)).append("\n");
       }
 
-      for(int i = 0; i < this.left.size(); i++) {
+      for (int i = 0; i < this.left.size(); i++) {
         String leftLine = this.left.get(i);
         String rightLine = this.right.get(i);
 
@@ -175,8 +170,8 @@ public final class SideBySideDiffUtil {
 
     private static int getExpansionLength(Collection<Delta<String>> deltas) {
       int length = 0;
-      for(Delta<?> delta : deltas) {
-        switch(delta.getType()) {
+      for (Delta<?> delta : deltas) {
+        switch (delta.getType()) {
           case INSERT:
           case CHANGE:
             int expansion = delta.getRevised().size() - delta.getOriginal().size();
@@ -210,7 +205,7 @@ public final class SideBySideDiffUtil {
         return;
       }
 
-      for(int i = 0; i < size; i++) {
+      for (int i = 0; i < size; i++) {
         l.set(i + index, "");
       }
     }

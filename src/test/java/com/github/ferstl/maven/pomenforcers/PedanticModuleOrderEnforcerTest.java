@@ -16,10 +16,8 @@
 package com.github.ferstl.maven.pomenforcers;
 
 import java.util.Arrays;
-
 import org.junit.Before;
 import org.junit.Test;
-
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;
@@ -37,7 +35,7 @@ public class PedanticModuleOrderEnforcerTest extends AbstractPedanticEnforcerTes
   }
 
   @Before
-  public void before() throws Exception {
+  public void before() {
     when(this.mockMavenProject.getPackaging()).thenReturn("pom");
   }
 

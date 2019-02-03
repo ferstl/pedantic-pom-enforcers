@@ -45,7 +45,6 @@ public abstract class AbstractPedanticEnforcerTest<T extends AbstractPedanticEnf
 
   private static final String DEFAULT_VERSION = "1.0";
 
-  private EnforcerRuleHelper mockHelper;
   ProjectModel projectModel;
   MavenProject mockMavenProject;
   T testRule;
@@ -53,7 +52,7 @@ public abstract class AbstractPedanticEnforcerTest<T extends AbstractPedanticEnf
 
   @Before
   public void setup() throws Exception {
-    this.mockHelper = mock(EnforcerRuleHelper.class);
+    EnforcerRuleHelper mockHelper = mock(EnforcerRuleHelper.class);
     this.projectModel = mock(ProjectModel.class);
     this.mockMavenProject = mock(MavenProject.class);
 
@@ -70,12 +69,12 @@ public abstract class AbstractPedanticEnforcerTest<T extends AbstractPedanticEnf
     when(this.mockMavenProject.getPluginManagement()).thenReturn(pluginMgmtMock);
 
     ConsoleLogger plexusLogger = new ConsoleLogger(Logger.LEVEL_DEBUG, "testLogger");
-    when(this.mockHelper.getLog()).thenReturn(new DefaultLog(plexusLogger));
+    when(mockHelper.getLog()).thenReturn(new DefaultLog(plexusLogger));
 
-    when(this.mockHelper.evaluate("${project}")).thenReturn(this.mockMavenProject);
+    when(mockHelper.evaluate("${project}")).thenReturn(this.mockMavenProject);
 
     this.testRule = createRule();
-    this.testRule.initialize(this.mockHelper, createEmptyPom(), this.projectModel);
+    this.testRule.initialize(mockHelper, createEmptyPom(), this.projectModel);
     this.report = new ErrorReport(this.testRule.getDescription());
   }
 

@@ -19,7 +19,6 @@ import java.util.ArrayList;
 import java.util.function.Function;
 import org.hamcrest.Matchers;
 import org.junit.Test;
-import com.google.common.base.Functions;
 import com.google.common.collect.Lists;
 import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.is;
@@ -33,7 +32,7 @@ public class PriorityOrderingTest {
   @Test
   public void testCompare() {
     ArrayList<String> prioritizedItems = Lists.newArrayList("z", "y", "x");
-    Function<String, String> transformer = Functions.identity();
+    Function<String, String> transformer = Function.identity();
     PriorityOrdering<String, String> testComparator = new PriorityOrdering<>(prioritizedItems, transformer);
 
     // x is in the priority list, a isn't -> a > x
