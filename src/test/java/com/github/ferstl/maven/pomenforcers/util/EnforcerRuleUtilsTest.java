@@ -18,12 +18,11 @@ package com.github.ferstl.maven.pomenforcers.util;
 import org.apache.maven.enforcer.rule.api.EnforcerRuleHelper;
 import org.junit.Before;
 import org.junit.Test;
-
 import static com.github.ferstl.maven.pomenforcers.util.EnforcerRuleUtils.evaluateProperties;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
 import static org.junit.Assert.assertThat;
-import static org.mockito.Matchers.anyString;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
