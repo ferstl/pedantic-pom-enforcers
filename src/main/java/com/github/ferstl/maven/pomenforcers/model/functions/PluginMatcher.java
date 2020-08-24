@@ -16,18 +16,18 @@
 package com.github.ferstl.maven.pomenforcers.model.functions;
 
 import java.util.Objects;
-
 import org.apache.maven.enforcer.rule.api.EnforcerRuleHelper;
 import org.apache.maven.model.Plugin;
-
 import com.github.ferstl.maven.pomenforcers.model.PluginModel;
-
 import static com.github.ferstl.maven.pomenforcers.util.EnforcerRuleUtils.evaluateProperties;
+import static com.google.common.base.Strings.isNullOrEmpty;
 
 /**
  * Matches Maven {@link Plugin} objects with {@link PluginModel} objects.
  */
 public class PluginMatcher extends AbstractOneToOneMatcher<Plugin, PluginModel> {
+
+  private static final String DEFAULT_GROUP_ID = "org.apache.maven.plugins";
 
   public PluginMatcher(EnforcerRuleHelper helper) {
     super(helper);
@@ -40,11 +40,16 @@ public class PluginMatcher extends AbstractOneToOneMatcher<Plugin, PluginModel> 
 
   @Override
   protected boolean matches(PluginModel supersetItem, PluginModel subsetItem) {
-    String groupId = evaluateProperties(subsetItem.getGroupId(), getHelper());
+    String groupId = getGroupId(subsetItem);
     String artifactId = evaluateProperties(subsetItem.getArtifactId(), getHelper());
 
     return Objects.equals(supersetItem.getGroupId(), groupId)
         && Objects.equals(supersetItem.getArtifactId(), artifactId);
+  }
+
+  private String getGroupId(PluginModel plugin) {
+    String groupId = evaluateProperties(plugin.getGroupId(), getHelper());
+    return !isNullOrEmpty(groupId) ? groupId : DEFAULT_GROUP_ID;
   }
 
 }
