@@ -61,6 +61,7 @@ public class CompoundPriorityOrdering<T, P extends Comparable<P>, F extends Prio
   }
 
   public void setPriorities(F artifactElement, Iterable<P> priorities) {
+    this.priorityMap.removeAll(artifactElement);
     this.priorityMap.putAll(artifactElement, priorities);
   }
 
