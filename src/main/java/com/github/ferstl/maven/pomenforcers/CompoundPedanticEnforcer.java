@@ -330,7 +330,7 @@ public class CompoundPedanticEnforcer extends AbstractPedanticEnforcer {
    * See {@link PedanticDependencyElementEnforcer#elementOrdering}.
    *
    * @configParam
-   * @since 1.4.0
+   * @since 2.0.0
    */
   private String dependencyElementOrdering;
 
@@ -338,7 +338,7 @@ public class CompoundPedanticEnforcer extends AbstractPedanticEnforcer {
    * See {@link PedanticDependencyElementEnforcer#checkDependencies}.
    *
    * @configParam
-   * @since 1.4.0
+   * @since 2.0.0
    */
   private Boolean checkDependencyElements;
 
@@ -346,7 +346,7 @@ public class CompoundPedanticEnforcer extends AbstractPedanticEnforcer {
    * See {@link PedanticDependencyElementEnforcer#checkDependencyManagement}.
    *
    * @configParam
-   * @since 1.4.0
+   * @since 2.0.0
    */
   private Boolean checkDependencyManagementElements;
 

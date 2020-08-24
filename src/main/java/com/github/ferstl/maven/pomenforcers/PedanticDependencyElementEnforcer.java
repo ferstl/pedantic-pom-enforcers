@@ -50,7 +50,7 @@ import static java.util.Arrays.asList;
  * </pre>
  *
  * @id {@link PedanticEnforcerRule#DEPENDENCY_ELEMENT}
- * @since 1.4.0
+ * @since 2.0.0
  */
 public class PedanticDependencyElementEnforcer extends AbstractPedanticEnforcer {
 
@@ -74,7 +74,7 @@ public class PedanticDependencyElementEnforcer extends AbstractPedanticEnforcer 
    * @param elements Comma separated list of elements as they should appear.
    * @configParam
    * @default groupId, artifactId, version, classifier, type, scope, systemPath, optional, exclusions
-   * @since 1.4.0
+   * @since 2.0.0
    */
   public void setElementPriorities(String elements) {
     Set<String> elementPriorities = newLinkedHashSet();
@@ -90,7 +90,7 @@ public class PedanticDependencyElementEnforcer extends AbstractPedanticEnforcer 
    * @param checkDependencies <code>true</code> to check the &lt;dependencies&gt; section, <code>false</code> else.
    * @configParam
    * @default true
-   * @since 1.4.0
+   * @since 2.0.0
    */
   public void setCheckDependencies(boolean checkDependencies) {
     this.checkDependencies = checkDependencies;
@@ -102,7 +102,7 @@ public class PedanticDependencyElementEnforcer extends AbstractPedanticEnforcer 
    * @param checkDependencyManagement <code>true</code> to check the &lt;dependencyManagement&gt; section, <code>false</code> else.
    * @configParam
    * @default true
-   * @since 1.4.0
+   * @since 2.0.0
    */
   public void setCheckDependencyManagement(boolean checkDependencyManagement) {
     this.checkDependencyManagement = checkDependencyManagement;
