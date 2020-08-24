@@ -21,12 +21,12 @@ import static java.util.Objects.requireNonNull;
 
 public enum DependencyScope {
 
+  IMPORT("import"),
   COMPILE("compile"),
   PROVIDED("provided"),
   RUNTIME("runtime"),
-  TEST("test"),
   SYSTEM("system"),
-  IMPORT("import");
+  TEST("test");
 
   private static final Map<String, DependencyScope> dependencyScopeMap;
 

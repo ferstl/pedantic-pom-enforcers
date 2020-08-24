@@ -41,11 +41,11 @@ public abstract class AbstractPedanticDependencyOrderEnforcerTest<T extends Abst
 
   @Test
   public void defaultSettingsCorrect() {
-    this.dependencyAdder.addDependency("a.b.c", "a", DependencyScope.COMPILE);
-    this.dependencyAdder.addDependency("a.b.c", "b", DependencyScope.COMPILE);
-
     this.dependencyAdder.addDependency("d.e.f", "a", DependencyScope.IMPORT);
     this.dependencyAdder.addDependency("d.e.f", "b", DependencyScope.IMPORT);
+
+    this.dependencyAdder.addDependency("a.b.c", "a", DependencyScope.COMPILE);
+    this.dependencyAdder.addDependency("a.b.c", "b", DependencyScope.COMPILE);
 
     this.dependencyAdder.addDependency("g.h.i", "a", DependencyScope.PROVIDED);
     this.dependencyAdder.addDependency("g.h.i", "b", DependencyScope.PROVIDED);
