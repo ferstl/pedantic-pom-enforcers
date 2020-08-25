@@ -73,7 +73,7 @@ public class PedanticPluginElementEnforcer extends AbstractPedanticEnforcer {
    *
    * @param elements Comma separated list of elements as they should appear.
    * @configParam
-   * @default groupId, artifactId, version, classifier, type, scope, systemPath, optional, exclusions
+   * @default groupId, artifactId, version, extensions, inherited, configuration, dependencies, executions
    * @since 2.0.0
    */
   public void setElementPriorities(String elements) {
