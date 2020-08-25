@@ -18,16 +18,28 @@ package com.github.ferstl.maven.pomenforcers;
 public interface PedanticEnforcerVisitor {
 
   void visit(PedanticPomSectionOrderEnforcer sectionOrderEnforcer);
+
   void visit(PedanticModuleOrderEnforcer moduleOrderEnforcer);
+
   void visit(PedanticDependencyManagementOrderEnforcer dependencyManagementOrderEnforcer);
+
   void visit(PedanticDependencyManagementLocationEnforcer pedanticDependencyManagementLocationEnforcer);
+
   void visit(PedanticDependencyOrderEnforcer dependencyOrderEnforcer);
+
   void visit(PedanticDependencyConfigurationEnforcer pedanticDependencyConfigurationEnforcer);
+
   void visit(PedanticDependencyScopeEnforcer pedanticDependencyScopeEnforcer);
+
   void visit(PedanticPluginManagementOrderEnforcer pluginManagementOrderEnforcer);
+
   void visit(CompoundPedanticEnforcer compoundEnforcer);
+
   void visit(PedanticPluginConfigurationEnforcer pedanticPluginConfigurationEnforcer);
+
   void visit(PedanticPluginManagementLocationEnforcer pedanticPluginManagementLocationEnforcer);
 
   void visit(PedanticDependencyElementEnforcer pedanticDependencyElementEnforcer);
+
+  void visit(PedanticPluginElementEnforcer pedanticPluginElementEnforcer);
 }
