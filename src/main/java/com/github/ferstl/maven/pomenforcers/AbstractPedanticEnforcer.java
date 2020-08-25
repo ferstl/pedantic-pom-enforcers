@@ -38,6 +38,7 @@ public abstract class AbstractPedanticEnforcer implements EnforcerRule2 {
    * Enabling this option is a good way to start using the enforcer rules in an already existing project.
    *
    * @configParam
+   * @default false
    * @since 2.0.0
    */
   private boolean warnOnly;
