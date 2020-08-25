@@ -104,7 +104,7 @@ abstract class AbstractPedanticDependencyOrderEnforcer extends AbstractPedanticE
    *
    * @param scopes Comma separated list of scopes.
    * @configParam
-   * @default n/a
+   * @default import, compile, provided, runtime, system, test
    * @since 1.0.0
    */
   public void setScopePriorities(String scopes) {
