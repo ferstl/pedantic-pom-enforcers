@@ -124,6 +124,13 @@ public enum PedanticEnforcerRule {
       return new PedanticPluginConfigurationEnforcer();
     }
   },
+
+  PLUGIN_ELEMENT("One does not simple declare a plugin!") {
+    @Override
+    public AbstractPedanticEnforcer createEnforcerRule() {
+      return new PedanticPluginElementEnforcer();
+    }
+  },
   /**
    * @see PedanticPluginManagementLocationEnforcer
    */

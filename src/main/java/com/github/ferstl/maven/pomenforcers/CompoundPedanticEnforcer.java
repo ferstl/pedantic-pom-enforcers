@@ -31,7 +31,7 @@ import com.google.common.collect.Sets;
  * ### Example
  *     &lt;rules&gt;
  *       &lt;compound implementation=&quot;com.github.ferstl.maven.pomenforcers.CompoundPedanticEnforcer&quot;&gt;
- *         &lt;enforcers&gt;POM_SECTION_ORDER,MODULE_ORDER,DEPENDENCY_MANAGEMENT_ORDER,DEPENDENCY_ORDER,DEPENDENCY_CONFIGURATION,DEPENDENCY_ELEMENT,DEPENDENCY_SCOPE,DEPENDENCY_MANAGEMENT_LOCATION,PLUGIN_MANAGEMENT_ORDER,PLUGIN_CONFIGURATION,PLUGIN_MANAGEMENT_LOCATION&lt;/enforcers&gt;
+ *         &lt;enforcers&gt;POM_SECTION_ORDER,MODULE_ORDER,DEPENDENCY_MANAGEMENT_ORDER,DEPENDENCY_ORDER,DEPENDENCY_CONFIGURATION,DEPENDENCY_ELEMENT,DEPENDENCY_SCOPE,DEPENDENCY_MANAGEMENT_LOCATION,PLUGIN_MANAGEMENT_ORDER,PLUGIN_CONFIGURATION,PLUGIN_ELEMENT,PLUGIN_MANAGEMENT_LOCATION&lt;/enforcers&gt;
  *         &lt;!-- POM_SECTION configuration --&gt;
  *         &lt;pomSectionPriorities&gt;groupId,artifactId,version,packaging&lt;/pomSectionPriorities&gt;
  *         &lt;!-- MODULE_ORDER configuration --&gt;
@@ -72,6 +72,10 @@ import com.google.common.collect.Sets;
  *         &lt;managePluginVersions&gt;true&lt;/managePluginVersions&gt;
  *         &lt;managePluginConfigurations&gt;true&lt;/managePluginConfigurations&gt;
  *         &lt;managePluginDependencies&gt;true&lt;/managePluginDependencies&gt;
+ *         &lt;!-- PLUGIN_ELEMENT configuration --&gt;
+ *         &lt;pluginElementOrdering&gt;true&lt;/pluginElementOrdering&gt;
+ *         &lt;checkPluginElements&gt;true&lt;/checkPluginElements&gt;
+ *         &lt;checkPluginManagementElements&gt;true&lt;/checkPluginManagementElements&gt;
  *         &lt;!-- PLUGIN_MANAGEMENT_LOCATION configuration --&gt;
  *         &lt;allowParentPomsForPluginManagement&gt;true&lt;/allowParentPomsForPluginManagement&gt;
  *         &lt;pluginManagingPoms&gt;com.myproject:parent-pom&lt;/pluginManagingPoms&gt;
@@ -354,6 +358,32 @@ public class CompoundPedanticEnforcer extends AbstractPedanticEnforcer {
    */
   private Boolean checkDependencyManagementElements;
 
+
+  /**
+   * See {@link PedanticPluginElementEnforcer#elementOrdering}.
+   *
+   * @configParam
+   * @since 2.0.0
+   */
+  private String pluginElementOrdering;
+
+
+  /**
+   * See {@link PedanticPluginElementEnforcer#checkPlugins}.
+   *
+   * @configParam
+   * @since 2.0.0
+   */
+  private Boolean checkPluginElements;
+
+  /**
+   * See {@link PedanticPluginElementEnforcer#checkPluginManagement}.
+   *
+   * @configParam
+   * @since 2.0.0
+   */
+  private Boolean checkPluginManagementElements;
+
   /**
    * Collection of enforcers to execute.
    */
@@ -552,6 +582,19 @@ public class CompoundPedanticEnforcer extends AbstractPedanticEnforcer {
       }
       if (CompoundPedanticEnforcer.this.checkDependencyManagementElements != null) {
         enforcer.setCheckDependencyManagement(CompoundPedanticEnforcer.this.checkDependencyManagementElements);
+      }
+    }
+
+    @Override
+    public void visit(PedanticPluginElementEnforcer pedanticPluginElementEnforcer) {
+      if (CompoundPedanticEnforcer.this.pluginElementOrdering != null) {
+        pedanticPluginElementEnforcer.setElementPriorities(CompoundPedanticEnforcer.this.pluginElementOrdering);
+      }
+      if (CompoundPedanticEnforcer.this.checkPluginElements != null) {
+        pedanticPluginElementEnforcer.setCheckPlugins(CompoundPedanticEnforcer.this.checkPluginElements);
+      }
+      if (CompoundPedanticEnforcer.this.checkPluginManagementElements != null) {
+        pedanticPluginElementEnforcer.setCheckPluginManagement(CompoundPedanticEnforcer.this.checkPluginManagementElements);
       }
     }
 
