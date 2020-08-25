@@ -125,6 +125,9 @@ public enum PedanticEnforcerRule {
     }
   },
 
+  /**
+   * @see PedanticPluginElementEnforcer
+   */
   PLUGIN_ELEMENT("One does not simple declare a plugin!") {
     @Override
     public AbstractPedanticEnforcer createEnforcerRule() {
