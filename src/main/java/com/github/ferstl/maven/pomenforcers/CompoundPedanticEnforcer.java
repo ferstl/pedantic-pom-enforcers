@@ -430,14 +430,14 @@ public class CompoundPedanticEnforcer extends AbstractPedanticEnforcer {
     collectErrors(report, ruleErrors);
   }
 
-  private void collectErrors(ErrorReport compundReport, List<ErrorReport> ruleErrors) {
+  private void collectErrors(ErrorReport compoundReport, List<ErrorReport> ruleErrors) {
     if (!ruleErrors.isEmpty()) {
-      compundReport
+      compoundReport
           .useLargeTitle()
           .addLine("Please fix these problems:")
           .emptyLine();
       for (ErrorReport ruleError : ruleErrors) {
-        compundReport.addLine(ruleError.toString()).emptyLine().emptyLine();
+        compoundReport.addLine(ruleError.toString()).emptyLine().emptyLine();
       }
     }
   }
