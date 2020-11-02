@@ -33,18 +33,7 @@ To activate the enforcer rules, just declare them in the configuration of the [`
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-enforcer-plugin</artifactId>
           <version>1.4.1</version>
-          <configuration>
-            <rules>
-              <compound implementation="com.github.ferstl.maven.pomenforcers.CompoundPedanticEnforcer">
-                <!-- Enforcers -->
-                <enforcers>POM_SECTION_ORDER,MODULE_ORDER,DEPENDENCY_MANAGEMENT_ORDER,DEPENDENCY_ORDER,PLUGIN_MANAGEMENT_ORDER</enforcers>
-              
-                <!-- Further configuration of the declared enforcer rules -->
-                ...
-              </compound>
-            </rules>
-            <fail>true</fail>
-          </configuration>
+          <!-- Add the pedantic-pom-enforcers as dependency -->
           <dependencies>
             <dependency>
               <groupId>com.github.ferstl</groupId>
@@ -52,6 +41,28 @@ To activate the enforcer rules, just declare them in the configuration of the [`
               <version>2.0.0</version>
             </dependency>
           </dependencies>
+          <!-- Configure the enforcer rules -->
+          <executions>
+            <execution>
+              <id>pedantic-pom-enforcers</id>
+              <phase>validate</phase>
+              <goals>
+                <goal>enforce</goal>
+              </goals>
+              <configuration>
+                <rules>
+                  <compound implementation="com.github.ferstl.maven.pomenforcers.CompoundPedanticEnforcer">
+                    <!-- Enforcers -->
+                    <enforcers>POM_SECTION_ORDER,MODULE_ORDER,DEPENDENCY_MANAGEMENT_ORDER,DEPENDENCY_ORDER,PLUGIN_MANAGEMENT_ORDER</enforcers>
+                  
+                    <!-- Further configuration of the declared enforcer rules -->
+                    ...
+                  </compound>
+                </rules>
+                <fail>true</fail>
+              </configuration>
+            </execution>
+          </executions>
         </plugin>
         ...
       </plugins>
