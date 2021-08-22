@@ -23,7 +23,7 @@ import static java.util.stream.Collectors.toCollection;
 
 public final class CommaSeparatorUtils {
 
-  private static final Splitter COMMA_SPLITTER = Splitter.on(",");
+  private static final Splitter COMMA_SPLITTER = Splitter.on(",").trimResults().omitEmptyStrings();
 
   public static void splitAndAddToCollection(String commaSeparatedItems, Collection<String> collection) {
     splitAndAddToCollection(commaSeparatedItems, collection, Function.identity());
