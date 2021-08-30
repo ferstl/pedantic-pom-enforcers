@@ -35,7 +35,7 @@ import com.google.common.collect.Sets;
  *         &lt;!-- POM_SECTION configuration --&gt;
  *         &lt;pomSectionPriorities&gt;groupId,artifactId,version,packaging&lt;/pomSectionPriorities&gt;
  *         &lt;!-- MODULE_ORDER configuration --&gt;
- *         &lt;moduleOrderIgnores&gt;&gt;dist-deb,dist-rpm&lt;/moduleOrderIgnores&gt;
+ *         &lt;moduleOrderIgnores;&gt;dist-deb,dist-rpm&lt;/moduleOrderIgnores&gt;
  *         &lt;!-- DEPENDENCY_ORDER configuration --&gt;
  *         &lt;dependenciesOrderBy&gt;scope,groupId,artifactId&lt;/dependenciesOrderBy&gt;
  *         &lt;dependenciesScopePriorities&gt;compile,runtime,provided&lt;/dependenciesScopePriorities&gt;
