@@ -16,6 +16,7 @@
 package com.github.ferstl.maven.pomenforcers;
 
 import java.util.Collection;
+import java.util.Map.Entry;
 import java.util.Set;
 import org.apache.maven.model.Dependency;
 import com.github.ferstl.maven.pomenforcers.model.ArtifactModel;
@@ -33,16 +34,22 @@ import static com.github.ferstl.maven.pomenforcers.model.DependencyScope.PROVIDE
 import static com.github.ferstl.maven.pomenforcers.model.DependencyScope.RUNTIME;
 import static com.github.ferstl.maven.pomenforcers.model.DependencyScope.SYSTEM;
 import static com.github.ferstl.maven.pomenforcers.model.DependencyScope.TEST;
+import static java.util.stream.Collectors.toSet;
 
 
 /**
  * Enforces that the configured dependencies have to be defined within a specific scope.
+ * Wildcards are supported in the following formats (see example below):
+ * - Full wildcard: &quot;*&quot;, matches everything
+ * - Leading wildcard: &quot;*foo&quot;, matches everything that ends with &quot;foo&quot;
+ * - Trailing wildcard: &quot;foo*&quot;, matches everything that starts with &quot;foo&quot;
+ * - Containing wildcard: &quot;*foo*&quot;, matches everything that contains with &quot;foo&quot;
  * <pre>
  * ### Example
  *     &lt;rules&gt;
  *       &lt;dependencyScope implementation=&quot;com.github.ferstl.maven.pomenforcers.PedanticDependencyScopeEnforcer&quot;&gt;
  *         &lt;!-- These dependencies can only be defined in test scope --&gt;
- *         &lt;testDependencies&gt;junit:junit,org.hamcrest:hamcrest-library,org.mockito:mockito-core&lt;/testDependencies&gt;
+ *         &lt;testDependencies&gt;junit:junit,org.hamcrest:*,org.mockito:mockito-core&lt;/testDependencies&gt;
  *         &lt;!-- These dependencies can only be defined in provided scope --&gt;
  *         &lt;providedDependencies&gt;javax.servlet:servlet-api&lt;/providedDependencies&gt;
  *       &lt;/dependencyScope&gt;
@@ -54,7 +61,7 @@ import static com.github.ferstl.maven.pomenforcers.model.DependencyScope.TEST;
  */
 public class PedanticDependencyScopeEnforcer extends AbstractPedanticEnforcer {
 
-  private final Multimap<ArtifactModel, DependencyScope> scopedDependencies;
+  private final Multimap<DependencyScope, ArtifactModel> scopedDependencies;
 
   public PedanticDependencyScopeEnforcer() {
     this.scopedDependencies = HashMultimap.create();
@@ -142,11 +149,15 @@ public class PedanticDependencyScopeEnforcer extends AbstractPedanticEnforcer {
 
     for (Dependency dependency : dependencies) {
       ArtifactModel artifactModel = new ArtifactModel(dependency.getGroupId(), dependency.getArtifactId(), dependency.getVersion());
-      Collection<DependencyScope> allowedScopes = this.scopedDependencies.get(artifactModel);
       DependencyScope dependencyScope = getScope(dependency);
 
+      Set<DependencyScope> allowedScopes = this.scopedDependencies.entries().stream()
+          .filter(entry -> artifactModel.matches(entry.getValue()))
+          .map(Entry::getKey)
+          .collect(toSet());
+
       if (!allowedScopes.isEmpty() && !allowedScopes.contains(dependencyScope)) {
-        report.formatLine("%s -> %s", dependency, Joiner.on(", ").join(allowedScopes));
+        report.formatLine("Allowed Scopes for %s: %s", dependency, Joiner.on(", ").join(allowedScopes));
       }
     }
   }
@@ -160,7 +171,7 @@ public class PedanticDependencyScopeEnforcer extends AbstractPedanticEnforcer {
 
   private void addToArtifactMap(Iterable<ArtifactModel> artifactModels, DependencyScope scope) {
     for (ArtifactModel artifactModel : artifactModels) {
-      this.scopedDependencies.put(artifactModel, scope);
+      this.scopedDependencies.put(scope, artifactModel);
     }
   }
 
