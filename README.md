@@ -1,7 +1,7 @@
 # Pedantic POM Enforcers
 *- One does not simply write a POM file*
 
-[![Build Status](https://travis-ci.org/ferstl/pedantic-pom-enforcers.svg?branch=master)](https://travis-ci.org/ferstl/pedantic-pom-enforcers) [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.github.ferstl/pedantic-pom-enforcers/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.github.ferstl/pedantic-pom-enforcers) [![Coverage Status](https://coveralls.io/repos/github/ferstl/pedantic-pom-enforcers/badge.svg?branch=master)](https://coveralls.io/github/ferstl/pedantic-pom-enforcers?branch=master) [![license](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
+[![Build Status](https://github.com/ferstl/pedantic-pom-enforcers/actions/workflows/maven.yml/badge.svg)](https://github.com/ferstl/pedantic-pom-enforcers/actions/workflows/maven.yml) [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.github.ferstl/pedantic-pom-enforcers/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.github.ferstl/pedantic-pom-enforcers) [![Coverage Status](https://coveralls.io/repos/github/ferstl/pedantic-pom-enforcers/badge.svg?branch=master)](https://coveralls.io/github/ferstl/pedantic-pom-enforcers?branch=master) [![license](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
 Have you ever experienced symptoms like headaches, unfocused anger or a feeling of total resignation when looking at a Maven project where everybody adds and changes stuff just as they need? Do people call you a "POM-Nazi" if you show them how to setup proper and well organized projects?
 
