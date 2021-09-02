@@ -32,7 +32,7 @@ import com.github.ferstl.maven.pomenforcers.model.DependencyScope;
 import com.google.common.base.Joiner;
 import com.google.common.collect.Collections2;
 import static org.hamcrest.Matchers.equalTo;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
@@ -117,7 +117,7 @@ public class PedanticDependencyScopeEnforcerTest extends AbstractPedanticEnforce
   @Test
   public void wildcardGroupId() {
     this.testRule.setCompileDependencies("a.b.c:*-runtime");
-    
+
     executeRuleAndCheckReport(true);
   }
 

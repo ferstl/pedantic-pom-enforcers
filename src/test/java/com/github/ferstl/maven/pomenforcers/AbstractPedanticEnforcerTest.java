@@ -36,7 +36,7 @@ import com.github.ferstl.maven.pomenforcers.model.DependencyScope;
 import com.github.ferstl.maven.pomenforcers.model.ProjectModel;
 import static com.github.ferstl.maven.pomenforcers.ErrorReportMatcher.hasErrors;
 import static com.github.ferstl.maven.pomenforcers.ErrorReportMatcher.hasNoErrors;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 

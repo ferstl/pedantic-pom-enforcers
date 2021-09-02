@@ -25,7 +25,7 @@ import com.github.ferstl.maven.pomenforcers.model.ProjectModel;
 import com.github.ferstl.maven.pomenforcers.util.XmlUtils;
 import static com.github.ferstl.maven.pomenforcers.ErrorReportMatcher.hasErrors;
 import static com.github.ferstl.maven.pomenforcers.ErrorReportMatcher.hasNoErrors;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.mockito.Mockito.mock;
 
 public class PedanticPluginElementEnforcerTest {

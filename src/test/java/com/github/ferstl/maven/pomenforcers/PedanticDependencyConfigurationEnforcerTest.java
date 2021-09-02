@@ -16,12 +16,9 @@
 package com.github.ferstl.maven.pomenforcers;
 
 import java.util.Collections;
-
 import org.junit.Test;
-
 import com.github.ferstl.maven.pomenforcers.model.ArtifactModel;
 import com.github.ferstl.maven.pomenforcers.model.DependencyModel;
-
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;
