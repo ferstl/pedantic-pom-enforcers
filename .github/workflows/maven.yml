@@ -12,9 +12,6 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        java: [ '8', '11', '16' ]
     steps:
       - uses: actions/checkout@v2
       - name: Set up JDK 11
@@ -25,3 +22,5 @@ jobs:
           cache: maven
       - name: Maven Build
         run: mvn clean install javadoc:javadoc
+      - name: Coveralls Report
+        run: mvn org.jacoco:jacoco-maven-plugin:prepare-agent test org.jacoco:jacoco-maven-plugin:report org.eluder.coveralls:coveralls-maven-plugin:report -DrepoToken=${{ secrets.COVERALLS_TOKEN }}
