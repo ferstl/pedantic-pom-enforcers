@@ -100,7 +100,7 @@ public abstract class AbstractPedanticEnforcerTest<T extends AbstractPedanticEnf
     String version = DEFAULT_VERSION;
 
     Dependency mavenDependency = createMavenDependency(groupId, artifactId, scope, version);
-    DependencyModel dependency = createDependencyModel(groupId, artifactId, version);
+    DependencyModel dependency = createDependencyModel(groupId, artifactId, scope, version);
 
     this.mockMavenProject.getDependencies().add(mavenDependency);
     this.projectModel.getDependencies().add(dependency);
@@ -117,7 +117,11 @@ public abstract class AbstractPedanticEnforcerTest<T extends AbstractPedanticEnf
   }
 
   private static DependencyModel createDependencyModel(String groupId, String artifactId, String version) {
-    return new DependencyModel(groupId, artifactId, version, null, null, null);
+    return createDependencyModel(groupId, artifactId, null, version);
+  }
+
+  private static DependencyModel createDependencyModel(String groupId, String artifactId, DependencyScope scope, String version) {
+    return new DependencyModel(groupId, artifactId, version, scope != null ? scope.getScopeName() : null, null, null);
   }
 
   private static Dependency createMavenDependency(String groupId, String artifactId, DependencyScope scope, String version) {

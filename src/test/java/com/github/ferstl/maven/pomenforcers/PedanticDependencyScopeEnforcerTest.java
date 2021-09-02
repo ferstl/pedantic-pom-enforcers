@@ -109,7 +109,15 @@ public class PedanticDependencyScopeEnforcerTest extends AbstractPedanticEnforce
   @Test
   public void wrongCompileDependencies() {
     this.testRule.setCompileDependencies("a.b.c:dep-test,a.b.c:dep-runtime");
+    this.testRule.setRuntimeDependencies("a.b.c:dep-test");
 
+    executeRuleAndCheckReport(true);
+  }
+
+  @Test
+  public void wildcardGroupId() {
+    this.testRule.setCompileDependencies("a.b.c:*-runtime");
+    
     executeRuleAndCheckReport(true);
   }
 
