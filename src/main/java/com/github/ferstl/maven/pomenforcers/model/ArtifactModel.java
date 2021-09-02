@@ -18,12 +18,13 @@ package com.github.ferstl.maven.pomenforcers.model;
 import java.util.Objects;
 import javax.xml.bind.annotation.XmlElement;
 import com.google.common.base.Joiner;
-
 import static com.google.common.base.Objects.equal;
 
 public class ArtifactModel {
 
   private static final Joiner TO_STRING_JOINER = Joiner.on(":").useForNull("");
+  private static final String WILDCARD = "*";
+  private static final char WILDCARD_CHAR = WILDCARD.charAt(0);
 
   @XmlElement(namespace = "http://maven.apache.org/POM/4.0.0")
   private String groupId;
@@ -36,15 +37,18 @@ public class ArtifactModel {
   }
 
   public ArtifactModel(String groupId, String artifactId, String version) {
+    // Make sure that wildcards are valid
+    determineWildcardMode(groupId);
+    determineWildcardMode(artifactId);
+
     this.groupId = groupId;
     this.artifactId = artifactId;
     this.version = version;
+
   }
 
   public ArtifactModel(String groupId, String artifactId) {
-    this.groupId = groupId;
-    this.artifactId = artifactId;
-    this.version = null;
+    this(groupId, artifactId, null);
   }
 
   public String getGroupId() {
@@ -57,6 +61,19 @@ public class ArtifactModel {
 
   public String getVersion() {
     return this.version;
+  }
+
+  public boolean matches(ArtifactModel pattern) {
+    if (pattern == this) {
+      return true;
+    }
+
+    if (pattern == null) {
+      return false;
+    }
+
+    return match(this.groupId, pattern.groupId)
+        && match(this.artifactId, pattern.artifactId);
   }
 
   @Override
@@ -84,5 +101,53 @@ public class ArtifactModel {
   @Override
   public int hashCode() {
     return Objects.hash(this.groupId, this.artifactId);
+  }
+
+  private static WildcardMode determineWildcardMode(String string) {
+    if (string == null) {
+      return WildcardMode.NONE;
+    }
+
+    int wildcardCount = 0;
+    for (int i = 0; i < string.length(); i++) {
+      if (string.charAt(i) == WILDCARD_CHAR) {
+        wildcardCount++;
+      }
+    }
+
+    if (wildcardCount == 0) {
+      return WildcardMode.NONE;
+    } else if (wildcardCount == 1 && string.length() == 1) {
+      return WildcardMode.FULL;
+    } else if (wildcardCount == 1 && string.startsWith(WILDCARD)) {
+      return WildcardMode.LEADING;
+    } else if (wildcardCount == 1 && string.endsWith(WILDCARD)) {
+      return WildcardMode.TRAILING;
+    } else if (wildcardCount == 2 && string.startsWith(WILDCARD) && string.endsWith(WILDCARD)) {
+      return WildcardMode.CONTAINS;
+    } else {
+      throw new IllegalArgumentException("Invalid wildcard pattern '" + string + "'");
+    }
+  }
+
+  private static boolean match(String string, String pattern) {
+    switch (determineWildcardMode(pattern)) {
+      case NONE:
+        return string.equals(pattern);
+      case LEADING:
+        return string.endsWith(pattern.substring(1));
+      case TRAILING:
+        return string.startsWith(pattern.substring(0, pattern.length() - 1));
+      case CONTAINS:
+        return string.contains(pattern.substring(1, pattern.length() - 1));
+      case FULL:
+        return true;
+      default:
+        return false;
+    }
+  }
+
+  private enum WildcardMode {
+    NONE, LEADING, TRAILING, CONTAINS, FULL
   }
 }
