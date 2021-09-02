@@ -138,7 +138,7 @@
                 <dependencyManagingPoms>com.github.ferstl:example-settings-it</dependencyManagingPoms>
 
                 <!-- Dependency Scopes -->
-                <testDependencies>junit:junit,org.hamcrest:hamcrest-library</testDependencies>
+                <testDependencies>junit:junit,org.hamcrest:*</testDependencies>
                 <providedDependencies>javax.servlet:servlet-api</providedDependencies>
 
                 <!-- Plugin Management Order -->
