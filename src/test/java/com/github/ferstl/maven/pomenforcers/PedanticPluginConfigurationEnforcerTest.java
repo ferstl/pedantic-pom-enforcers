@@ -105,7 +105,33 @@ public class PedanticPluginConfigurationEnforcerTest extends AbstractPedanticEnf
     executeRuleAndCheckReport(true);
   }
 
-  private void addPlugin(boolean withVersion, boolean withConfiguration, boolean withDependencies) {
+  @Test
+  public void allowedProjectVersion1() {
+    this.testRule.setAllowUnmanagedProjectVersions(true);
+    PluginModel plugin = addPlugin(false, false, false);
+    when(plugin.getVersion()).thenReturn("${project.version}");
+
+    executeRuleAndCheckReport(false);
+  }
+
+  @Test
+  public void allowedProjectVersion2() {
+    PluginModel plugin = addPlugin(false, false, false);
+    when(plugin.getVersion()).thenReturn("${version}");
+
+    executeRuleAndCheckReport(false);
+  }
+
+  @Test
+  public void forbiddenProjectVersion() {
+    this.testRule.setAllowUnmanagedProjectVersions(false);
+    PluginModel plugin = addPlugin(false, false, false);
+    when(plugin.getVersion()).thenReturn("${project.version}");
+
+    executeRuleAndCheckReport(true);
+  }
+
+  private PluginModel addPlugin(boolean withVersion, boolean withConfiguration, boolean withDependencies) {
     PluginModel plugin = mock(PluginModel.class);
 
     when(plugin.getGroupId()).thenReturn("a.b.c");
@@ -125,5 +151,6 @@ public class PedanticPluginConfigurationEnforcerTest extends AbstractPedanticEnf
     }
 
     this.testRule.getProjectModel().getPlugins().add(plugin);
+    return plugin;
   }
 }
