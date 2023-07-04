@@ -15,11 +15,15 @@
  */
 package com.github.ferstl.maven.pomenforcers;
 
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import com.github.ferstl.maven.pomenforcers.model.PluginModel;
+import com.github.ferstl.maven.pomenforcers.util.CommaSeparatorUtils;
 import static com.github.ferstl.maven.pomenforcers.ErrorReport.toList;
 
 /**
@@ -32,8 +36,10 @@ import static com.github.ferstl.maven.pomenforcers.ErrorReport.toList;
  *       &lt;pluginConfiguration implementation=&quot;com.github.ferstl.maven.pomenforcers.PedanticPluginConfigurationEnforcer&quot;&gt;
  *         &lt;!-- all plugin versions have to be defined in plugin managment. --&gt;
  *         &lt;manageVersions&gt;true&lt;/manageVersions&gt;
- *         &lt;!-- allow ${project.version} for plugins outside plugin management. --&gt;
+ *         &lt;!-- allow property references such as ${project.version} as versions outside plugin management --&gt;
  *         &lt;allowUnmanagedProjectVersions&gt;true&lt;/allowUnmanagedProjectVersions&gt;
+ *         &lt;!-- set the allowed property names for the allowUnmanagedProjectVersions option --&gt;
+ *         &lt;allowedUnmanagedProjectVersionProps&gt;some-property.version,some-other.version&lt;/allowedUnmanagedProjectVersionProps&gt;
  *         &lt;!-- plugin configuration (except execution configuration) has to be defined in plugin management. --&gt;
  *         &lt;manageConfigurations&gt;true&lt;/manageConfigurations&gt;
  *         &lt;!-- plugin dependencies may be defined in the &lt;plugins&gt; section. --&gt;
@@ -50,22 +56,40 @@ public class PedanticPluginConfigurationEnforcer extends AbstractPedanticEnforce
   /**
    * If enabled, plugin versions have to be declared in <code>&lt;pluginManagement&gt;</code>.
    */
-  private boolean manageVersions = true;
+  private boolean manageVersions;
 
   /**
-   * Allow <code>${project.version}</code> or <code>${version}</code> as plugin version.
+   * Allow property references such as <code>${project.version}</code> or <code>${version}</code> as plugin version.
    */
-  private boolean allowUnmangedProjectVersions = true;
+  private boolean allowUnmanagedProjectVersions;
+
+  /**
+   * Controls the allowed property references for the allowUnmanagedProjectVersions option.
+   */
+  private final Set<String> allowedUnmanagedProjectVersionProps;
+
+  /**
+   * A sane default set of allowed property references for the allowUnmanagedProjectVersions option.
+   */
+  private static final Set<String> DEFAULT_ALLOWED_PROPS = new HashSet<>(Arrays.asList("${version}", "${project.version}"));
 
   /**
    * If enabled, non-execution-bound plugin configurations have to be declared in <code>&lt;pluginManagement&gt;</code>.
    */
-  private boolean manageConfigurations = true;
+  private boolean manageConfigurations;
 
   /**
    * If enabled, plugin dependencies have to be declared in <code>&lt;pluginManagement&gt;</code>.
    */
-  private boolean manageDependencies = true;
+  private boolean manageDependencies;
+
+  public PedanticPluginConfigurationEnforcer() {
+    this.manageVersions = true;
+    this.allowUnmanagedProjectVersions = true;
+    this.allowedUnmanagedProjectVersionProps = new HashSet<>(DEFAULT_ALLOWED_PROPS);
+    this.manageConfigurations = true;
+    this.manageDependencies = true;
+  }
 
   /**
    * Enforces plugin versions to be defined in <code>&lt;pluginManagement&gt;</code>.
@@ -83,13 +107,30 @@ public class PedanticPluginConfigurationEnforcer extends AbstractPedanticEnforce
    * If set to <code>true</code>, <code><version>${project.version}</version></code> may be used within
    * the <code>pluginManagement</code> section.
    *
-   * @param allowUnmangedProjectVersions Allow project versions outside of the <code>&lt;pluginManagement&gt;</code> section.
+   * @param allowUnmanagedProjectVersions Allow project versions outside of the <code>&lt;pluginManagement&gt;</code> section.
    * @configParam
    * @default <code>true</code>
    * @since 2.2.0
    */
-  public void setAllowUnmanagedProjectVersions(boolean allowUnmangedProjectVersions) {
-    this.allowUnmangedProjectVersions = allowUnmangedProjectVersions;
+  public void setAllowUnmanagedProjectVersions(boolean allowUnmanagedProjectVersions) {
+    this.allowUnmanagedProjectVersions = allowUnmanagedProjectVersions;
+  }
+
+  /**
+   * Comma-separated list of Maven property variable names (without the ${...} decorators) which are allowed to be used
+   * as version references outside <code>pluginManagement</code>. Has no effect if <code>allowUnmanagedProjectVersions</code>
+   * is set to <code>false</code>.
+   *
+   * @param allowedUnmanagedProjectVersionProps Set allowed property references for allowUnmanagedProjectVersions option.
+   * @configParam
+   * @default <code>version,project-version</code>
+   * @since 2.2.0
+   */
+  public void setAllowedUnmanagedProjectVersionProps(String allowedUnmanagedProjectVersionProps) {
+    CommaSeparatorUtils.splitAndAddToCollection(
+            allowedUnmanagedProjectVersionProps,
+            this.allowedUnmanagedProjectVersionProps,
+            prop -> String.format("${%s}", prop));
   }
 
   /**
@@ -143,11 +184,13 @@ public class PedanticPluginConfigurationEnforcer extends AbstractPedanticEnforce
   }
 
   private void enforceManagedVersions(ErrorReport report) {
-    Collection<PluginModel> versionedPlugins = searchForPlugins(PluginPredicate.WITH_VERSION);
+    Collection<PluginModel> versionedPlugins = searchForPlugins(plugin -> plugin.getVersion() != null);
 
     // Filter all project versions if allowed
-    if (this.allowUnmangedProjectVersions) {
-      versionedPlugins = versionedPlugins.stream().filter(PluginPredicate.WITH_PROJECT_VERSION).collect(Collectors.toList());
+    if (this.allowUnmanagedProjectVersions) {
+      versionedPlugins = versionedPlugins.stream()
+              .filter(plugin -> !allowedUnmanagedProjectVersionProps.contains(plugin.getVersion()))
+              .collect(Collectors.toList());
     }
 
     if (!versionedPlugins.isEmpty()) {
@@ -158,7 +201,7 @@ public class PedanticPluginConfigurationEnforcer extends AbstractPedanticEnforce
   }
 
   private void enforceManagedConfiguration(ErrorReport report) {
-    Collection<PluginModel> configuredPlugins = searchForPlugins(PluginPredicate.WITH_CONFIGURATION);
+    Collection<PluginModel> configuredPlugins = searchForPlugins(plugin -> plugin.isConfigured());
     if (!configuredPlugins.isEmpty()) {
       report.addLine("Use <pluginManagement> to configure these plugins or configure them for a specific <execution>:")
           .addLine(toList(configuredPlugins));
@@ -166,7 +209,7 @@ public class PedanticPluginConfigurationEnforcer extends AbstractPedanticEnforce
   }
 
   private void enforceManagedDependencies(ErrorReport report) {
-    Collection<PluginModel> pluginsWithDependencies = searchForPlugins(PluginPredicate.WITH_DEPENDENCIES);
+    Collection<PluginModel> pluginsWithDependencies = searchForPlugins(plugin -> !plugin.getDependencies().isEmpty());
     if (!pluginsWithDependencies.isEmpty()) {
       report.addLine("Use <pluginManagement> to configure plugin dependencies:")
           .addLine(toList(pluginsWithDependencies));
@@ -176,35 +219,5 @@ public class PedanticPluginConfigurationEnforcer extends AbstractPedanticEnforce
   private Collection<PluginModel> searchForPlugins(Predicate<PluginModel> predicate) {
     List<PluginModel> plugins = getProjectModel().getPlugins();
     return plugins.stream().filter(predicate).collect(Collectors.toList());
-  }
-
-  enum PluginPredicate implements Predicate<PluginModel> {
-    WITH_DEPENDENCIES {
-      @Override
-      public boolean test(PluginModel input) {
-        return !input.getDependencies().isEmpty();
-      }
-    },
-
-    WITH_CONFIGURATION {
-      @Override
-      public boolean test(PluginModel input) {
-        return input.isConfigured();
-      }
-    },
-
-    WITH_VERSION {
-      @Override
-      public boolean test(PluginModel input) {
-        return input.getVersion() != null;
-      }
-    },
-
-    WITH_PROJECT_VERSION {
-      @Override
-      public boolean test(PluginModel input) {
-        return !"${project.version}".equals(input.getVersion()) && !"${version}".equals(input.getVersion());
-      }
-    }
   }
 }

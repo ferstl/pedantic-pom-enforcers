@@ -48,7 +48,8 @@ import com.google.common.collect.Sets;
  *         &lt;dependencyManagementArtifactIdPriorities&gt;commons-,utils-&lt;/dependencyManagementArtifactIdPriorities&gt;
  *         &lt;!-- DEPENDENCY_CONFIGURATION configuration --&gt;
  *         &lt;manageDependencyVersions&gt;true&lt;/manageDependencyVersions&gt;
- *         &lt;allowDependencyUnmangedProjectVersions&gt;true&lt;/allowDependencyUnmangedProjectVersions&gt;
+ *         &lt;allowDependencyUnmanagedProjectVersions&gt;true&lt;/allowDependencyUnmanagedProjectVersions&gt;
+ *         &lt;allowedDependencyUnmanagedProjectVersionProps&gt;version,project.version&lt;/allowedDependencyUnmanagedProjectVersionProps&gt;
  *         &lt;manageDependencyExclusions&gt;true&lt;/manageDependencyExclusions&gt;
  *         &lt;!-- DEPENDENCY_ELEMENT configuration --&gt;
  *         &lt;dependencyElementOrdering&gt;true&lt;/dependencyElementOrdering&gt;
@@ -70,7 +71,8 @@ import com.google.common.collect.Sets;
  *         &lt;pluginManagementArtifactIdPriorities&gt;mytest-,myintegrationtest-&lt;/pluginManagementArtifactIdPriorities&gt;
  *         &lt;!-- PLUGIN_CONFIGURATION configuration --&gt;
  *         &lt;managePluginVersions&gt;true&lt;/managePluginVersions&gt;
- *         &lt;allowPluginUnmangedProjectVersions&gt;true&lt;/allowPluginUnmangedProjectVersions&gt;
+ *         &lt;allowPluginUnmanagedProjectVersions&gt;true&lt;/allowPluginUnmanagedProjectVersions&gt;
+ *         &lt;allowedPluginUnmanagedProjectVersionProps&gt;version,project.version&lt;/allowedPluginUnmanagedProjectVersionProps&gt;
  *         &lt;managePluginConfigurations&gt;true&lt;/managePluginConfigurations&gt;
  *         &lt;managePluginDependencies&gt;true&lt;/managePluginDependencies&gt;
  *         &lt;!-- PLUGIN_ELEMENT configuration --&gt;
@@ -218,7 +220,16 @@ public class CompoundPedanticEnforcer extends AbstractPedanticEnforcer {
    * @configParam
    * @since 2.2.0
    */
-  private Boolean allowDependencyUnmangedProjectVersions;
+  private Boolean allowDependencyUnmanagedProjectVersions;
+
+  /**
+   * See
+   * {@link PedanticDependencyConfigurationEnforcer#setAllowedUnmanagedProjectVersionProps(String)}.
+   *
+   * @configParam
+   * @since 2.2.0
+   */
+  private String allowedDependencyUnmanagedProjectVersionProps;
 
   /**
    * See
@@ -335,7 +346,16 @@ public class CompoundPedanticEnforcer extends AbstractPedanticEnforcer {
    * @configParam
    * @since 2.2.0
    */
-  private Boolean allowPluginUnmangedProjectVersions;
+  private Boolean allowPluginUnmanagedProjectVersions;
+
+  /**
+   * See
+   * {@link PedanticPluginConfigurationEnforcer#setAllowedUnmanagedProjectVersionProps(String)}.
+   *
+   * @configParam
+   * @since 2.2.0
+   */
+  private String allowedPluginUnmanagedProjectVersionProps;
 
   /**
    * See {@link PedanticPluginConfigurationEnforcer#setManageConfigurations(boolean)}
@@ -527,8 +547,11 @@ public class CompoundPedanticEnforcer extends AbstractPedanticEnforcer {
       if (CompoundPedanticEnforcer.this.allowUnmangedProjectVersions != null) { // deprecated but kept for compatibility
         dependencyConfigurationEnforcer.setAllowUnmanagedProjectVersions(CompoundPedanticEnforcer.this.allowUnmangedProjectVersions);
       }
-      if (CompoundPedanticEnforcer.this.allowDependencyUnmangedProjectVersions != null) {
-        dependencyConfigurationEnforcer.setAllowUnmanagedProjectVersions(CompoundPedanticEnforcer.this.allowDependencyUnmangedProjectVersions);
+      if (CompoundPedanticEnforcer.this.allowDependencyUnmanagedProjectVersions != null) {
+        dependencyConfigurationEnforcer.setAllowUnmanagedProjectVersions(CompoundPedanticEnforcer.this.allowDependencyUnmanagedProjectVersions);
+      }
+      if (!Strings.isNullOrEmpty(CompoundPedanticEnforcer.this.allowedDependencyUnmanagedProjectVersionProps)) {
+        dependencyConfigurationEnforcer.setAllowedUnmanagedProjectVersionProps(CompoundPedanticEnforcer.this.allowedDependencyUnmanagedProjectVersionProps);
       }
       if (CompoundPedanticEnforcer.this.manageDependencyExclusions != null) {
         dependencyConfigurationEnforcer.setManageExclusions(CompoundPedanticEnforcer.this.manageDependencyExclusions);
@@ -575,8 +598,11 @@ public class CompoundPedanticEnforcer extends AbstractPedanticEnforcer {
       if (CompoundPedanticEnforcer.this.managePluginVersions != null) {
         enforcer.setManageVersions(CompoundPedanticEnforcer.this.managePluginVersions);
       }
-      if (CompoundPedanticEnforcer.this.allowPluginUnmangedProjectVersions != null) {
-        enforcer.setAllowUnmanagedProjectVersions(CompoundPedanticEnforcer.this.allowPluginUnmangedProjectVersions);
+      if (CompoundPedanticEnforcer.this.allowPluginUnmanagedProjectVersions != null) {
+        enforcer.setAllowUnmanagedProjectVersions(CompoundPedanticEnforcer.this.allowPluginUnmanagedProjectVersions);
+      }
+      if (!Strings.isNullOrEmpty(CompoundPedanticEnforcer.this.allowedPluginUnmanagedProjectVersionProps)) {
+        enforcer.setAllowedUnmanagedProjectVersionProps(CompoundPedanticEnforcer.this.allowedPluginUnmanagedProjectVersionProps);
       }
       if (CompoundPedanticEnforcer.this.managePluginConfigurations != null) {
         enforcer.setManageConfigurations(CompoundPedanticEnforcer.this.managePluginConfigurations);
