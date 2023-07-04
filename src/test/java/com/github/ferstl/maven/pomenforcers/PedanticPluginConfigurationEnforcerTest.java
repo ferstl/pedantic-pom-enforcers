@@ -131,6 +131,66 @@ public class PedanticPluginConfigurationEnforcerTest extends AbstractPedanticEnf
     executeRuleAndCheckReport(true);
   }
 
+  @Test
+  public void allowedVersionWithProps() {
+    this.testRule.setAllowedUnmanagedProjectVersionProps("some.version");
+    addPlugin(false, false, false);
+
+    executeRuleAndCheckReport(false);
+  }
+
+  @Test
+  public void allowedVersionWithDisabledProps1() {
+    this.testRule.setManageVersions(false);
+    this.testRule.setAllowedUnmanagedProjectVersionProps("some.version");
+    addPlugin(true, false, false);
+
+    executeRuleAndCheckReport(false);
+  }
+
+  @Test
+  public void allowedVersionWithDisabledProps2() {
+    this.testRule.setAllowUnmanagedProjectVersions(false);
+    this.testRule.setAllowedUnmanagedProjectVersionProps("some.version");
+    addPlugin(false, false, false);
+
+    executeRuleAndCheckReport(false);
+  }
+
+  @Test
+  public void forbiddenVersionWithCustomProps1() {
+    this.testRule.setAllowedUnmanagedProjectVersionProps("some.version");
+    addPlugin(true, false, false);
+
+    executeRuleAndCheckReport(true);
+  }
+
+  @Test
+  public void forbiddenVersionWithCustomProps2() {
+    this.testRule.setAllowedUnmanagedProjectVersionProps("some.version");
+    PluginModel plugin = addPlugin(true, false, false);
+    when(plugin.getVersion()).thenReturn("${project.version}");
+
+    executeRuleAndCheckReport(true);
+  }
+
+  @Test
+  public void allowedVersionWithActiveCustomProps1() {
+    this.testRule.setAllowedUnmanagedProjectVersionProps("some.version");
+    PluginModel plugin = addPlugin(true, false, false);
+    when(plugin.getVersion()).thenReturn("${some.version}");
+
+    executeRuleAndCheckReport(false);
+  }
+  @Test
+  public void allowedVersionWithActiveCustomProps2() {
+    this.testRule.setAllowedUnmanagedProjectVersionProps("some.version,some.other.version");
+    PluginModel plugin = addPlugin(true, false, false);
+    when(plugin.getVersion()).thenReturn("${some.other.version}");
+
+    executeRuleAndCheckReport(false);
+  }
+
   private PluginModel addPlugin(boolean withVersion, boolean withConfiguration, boolean withDependencies) {
     PluginModel plugin = mock(PluginModel.class);
 

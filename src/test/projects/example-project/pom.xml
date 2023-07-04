@@ -127,7 +127,8 @@
                 <!-- Dependency Configuration -->
                 <manageDependencyVersions>true</manageDependencyVersions>
                 <manageDependencyExclusions>true</manageDependencyExclusions>
-                <allowUnmangedProjectVersions>true</allowUnmangedProjectVersions>
+                <allowDependencyUnmanagedProjectVersions>true</allowDependencyUnmanagedProjectVersions>
+                <allowedDependencyUnmanagedProjectVersionProps>version,project.version</allowedDependencyUnmanagedProjectVersionProps>
 
                 <!-- Dependency Elements -->
                 <checkDependencyElements>true</checkDependencyElements>
@@ -157,6 +158,8 @@
                 <!-- Plugin configuration -->
                 <managePluginVersions>true</managePluginVersions>
                 <managePluginConfigurations>true</managePluginConfigurations>
+                <allowPluginUnmanagedProjectVersions>true</allowPluginUnmanagedProjectVersions>
+                <allowedPluginUnmanagedProjectVersionProps>version,project.version</allowedPluginUnmanagedProjectVersionProps>
 
                 <!-- Plugin elements -->
                 <checkPluginElements>true</checkPluginElements>
