@@ -15,7 +15,6 @@
  */
 package com.github.ferstl.maven.pomenforcers;
 
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
@@ -24,6 +23,7 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import com.github.ferstl.maven.pomenforcers.model.PluginModel;
 import com.github.ferstl.maven.pomenforcers.util.CommaSeparatorUtils;
+import com.google.common.collect.ImmutableSet;
 import static com.github.ferstl.maven.pomenforcers.ErrorReport.toList;
 
 /**
@@ -39,7 +39,7 @@ import static com.github.ferstl.maven.pomenforcers.ErrorReport.toList;
  *         &lt;!-- allow property references such as ${project.version} as versions outside plugin management --&gt;
  *         &lt;allowUnmanagedProjectVersions&gt;true&lt;/allowUnmanagedProjectVersions&gt;
  *         &lt;!-- set the allowed property names for the allowUnmanagedProjectVersions option --&gt;
- *         &lt;allowedUnmanagedProjectVersionProps&gt;some-property.version,some-other.version&lt;/allowedUnmanagedProjectVersionProps&gt;
+ *         &lt;allowedUnmanagedProjectVersionProperties&gt;some-property.version,some-other.version&lt;/allowedUnmanagedProjectVersionProperties&gt;
  *         &lt;!-- plugin configuration (except execution configuration) has to be defined in plugin management. --&gt;
  *         &lt;manageConfigurations&gt;true&lt;/manageConfigurations&gt;
  *         &lt;!-- plugin dependencies may be defined in the &lt;plugins&gt; section. --&gt;
@@ -56,40 +56,32 @@ public class PedanticPluginConfigurationEnforcer extends AbstractPedanticEnforce
   /**
    * If enabled, plugin versions have to be declared in <code>&lt;pluginManagement&gt;</code>.
    */
-  private boolean manageVersions;
+  private boolean manageVersions = true;
 
   /**
    * Allow property references such as <code>${project.version}</code> or <code>${version}</code> as plugin version.
    */
-  private boolean allowUnmanagedProjectVersions;
+  private boolean allowUnmanagedProjectVersions = true;
 
   /**
    * Controls the allowed property references for the allowUnmanagedProjectVersions option.
    */
-  private final Set<String> allowedUnmanagedProjectVersionProps;
+  private final Set<String> allowedUnmanagedProjectVersionProperties = new HashSet<>(DEFAULT_ALLOWED_VERSION_PROPERTIES);
 
   /**
    * A sane default set of allowed property references for the allowUnmanagedProjectVersions option.
    */
-  private static final Set<String> DEFAULT_ALLOWED_PROPS = new HashSet<>(Arrays.asList("${version}", "${project.version}"));
+  private static final Set<String> DEFAULT_ALLOWED_VERSION_PROPERTIES = ImmutableSet.of("${version}", "${project.version}");
 
   /**
    * If enabled, non-execution-bound plugin configurations have to be declared in <code>&lt;pluginManagement&gt;</code>.
    */
-  private boolean manageConfigurations;
+  private boolean manageConfigurations = true;
 
   /**
    * If enabled, plugin dependencies have to be declared in <code>&lt;pluginManagement&gt;</code>.
    */
-  private boolean manageDependencies;
-
-  public PedanticPluginConfigurationEnforcer() {
-    this.manageVersions = true;
-    this.allowUnmanagedProjectVersions = true;
-    this.allowedUnmanagedProjectVersionProps = new HashSet<>(DEFAULT_ALLOWED_PROPS);
-    this.manageConfigurations = true;
-    this.manageDependencies = true;
-  }
+  private boolean manageDependencies = true;
 
   /**
    * Enforces plugin versions to be defined in <code>&lt;pluginManagement&gt;</code>.
@@ -117,20 +109,20 @@ public class PedanticPluginConfigurationEnforcer extends AbstractPedanticEnforce
   }
 
   /**
-   * Comma-separated list of Maven property variable names (without the ${...} decorators) which are allowed to be used
+   * Comma-separated list of Maven property variable names (without ${...}) which are allowed to be used
    * as version references outside <code>pluginManagement</code>. Has no effect if <code>allowUnmanagedProjectVersions</code>
    * is set to <code>false</code>.
    *
-   * @param allowedUnmanagedProjectVersionProps Set allowed property references for allowUnmanagedProjectVersions option.
+   * @param allowedUnmanagedProjectVersionProperties Set allowed property references for allowUnmanagedProjectVersions option.
    * @configParam
-   * @default <code>version,project-version</code>
+   * @default <code>project.version,version</code>
    * @since 2.2.0
    */
-  public void setAllowedUnmanagedProjectVersionProps(String allowedUnmanagedProjectVersionProps) {
+  public void setAllowedUnmanagedProjectVersionProperties(String allowedUnmanagedProjectVersionProperties) {
     CommaSeparatorUtils.splitAndAddToCollection(
-            allowedUnmanagedProjectVersionProps,
-            this.allowedUnmanagedProjectVersionProps,
-            prop -> String.format("${%s}", prop));
+        allowedUnmanagedProjectVersionProperties,
+            this.allowedUnmanagedProjectVersionProperties,
+            property -> String.format("${%s}", property));
   }
 
   /**
@@ -189,7 +181,7 @@ public class PedanticPluginConfigurationEnforcer extends AbstractPedanticEnforce
     // Filter all project versions if allowed
     if (this.allowUnmanagedProjectVersions) {
       versionedPlugins = versionedPlugins.stream()
-              .filter(plugin -> !allowedUnmanagedProjectVersionProps.contains(plugin.getVersion()))
+              .filter(plugin -> !this.allowedUnmanagedProjectVersionProperties.contains(plugin.getVersion()))
               .collect(Collectors.toList());
     }
 
@@ -201,7 +193,7 @@ public class PedanticPluginConfigurationEnforcer extends AbstractPedanticEnforce
   }
 
   private void enforceManagedConfiguration(ErrorReport report) {
-    Collection<PluginModel> configuredPlugins = searchForPlugins(plugin -> plugin.isConfigured());
+    Collection<PluginModel> configuredPlugins = searchForPlugins(PluginModel::isConfigured);
     if (!configuredPlugins.isEmpty()) {
       report.addLine("Use <pluginManagement> to configure these plugins or configure them for a specific <execution>:")
           .addLine(toList(configuredPlugins));

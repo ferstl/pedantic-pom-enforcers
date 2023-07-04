@@ -117,7 +117,7 @@ public class PedanticDependencyConfigurationEnforcerTest extends AbstractPedanti
 
   @Test
   public void allowedVersionWithProps() {
-    this.testRule.setAllowedUnmanagedProjectVersionProps("some.version");
+    this.testRule.setAllowedUnmanagedProjectVersionProperties("some.version");
     this.projectModel.getDependencies().add(createDependency(false, false));
 
     executeRuleAndCheckReport(false);
@@ -126,7 +126,7 @@ public class PedanticDependencyConfigurationEnforcerTest extends AbstractPedanti
   @Test
   public void allowedVersionWithDisabledProps1() {
     this.testRule.setManageVersions(false);
-    this.testRule.setAllowedUnmanagedProjectVersionProps("some.version");
+    this.testRule.setAllowedUnmanagedProjectVersionProperties("some.version");
     this.projectModel.getDependencies().add(createDependency(true, false));
 
     executeRuleAndCheckReport(false);
@@ -135,7 +135,7 @@ public class PedanticDependencyConfigurationEnforcerTest extends AbstractPedanti
   @Test
   public void allowedVersionWithDisabledProps2() {
     this.testRule.setAllowUnmanagedProjectVersions(false);
-    this.testRule.setAllowedUnmanagedProjectVersionProps("some.version");
+    this.testRule.setAllowedUnmanagedProjectVersionProperties("some.version");
     this.projectModel.getDependencies().add(createDependency(false, false));
 
     executeRuleAndCheckReport(false);
@@ -143,7 +143,7 @@ public class PedanticDependencyConfigurationEnforcerTest extends AbstractPedanti
 
   @Test
   public void forbiddenVersionWithCustomProps1() {
-    this.testRule.setAllowedUnmanagedProjectVersionProps("some.version");
+    this.testRule.setAllowedUnmanagedProjectVersionProperties("some.version");
     this.projectModel.getDependencies().add(createDependency(true, false));
 
     executeRuleAndCheckReport(true);
@@ -151,7 +151,7 @@ public class PedanticDependencyConfigurationEnforcerTest extends AbstractPedanti
 
   @Test
   public void forbiddenVersionWithCustomProps2() {
-    this.testRule.setAllowedUnmanagedProjectVersionProps("some.version");
+    this.testRule.setAllowedUnmanagedProjectVersionProperties("some.version");
     DependencyModel dependency = createDependency(true, false);
     when(dependency.getVersion()).thenReturn("${project.version}");
     this.projectModel.getDependencies().add(dependency);
@@ -161,7 +161,7 @@ public class PedanticDependencyConfigurationEnforcerTest extends AbstractPedanti
 
   @Test
   public void allowedVersionWithActiveCustomProps1() {
-    this.testRule.setAllowedUnmanagedProjectVersionProps("some.version");
+    this.testRule.setAllowedUnmanagedProjectVersionProperties("some.version");
     DependencyModel dependency = createDependency(true, false);
     when(dependency.getVersion()).thenReturn("${some.version}");
     this.projectModel.getDependencies().add(dependency);
@@ -170,7 +170,7 @@ public class PedanticDependencyConfigurationEnforcerTest extends AbstractPedanti
   }
   @Test
   public void allowedVersionWithActiveCustomProps2() {
-    this.testRule.setAllowedUnmanagedProjectVersionProps("some.version,some.other.version");
+    this.testRule.setAllowedUnmanagedProjectVersionProperties("some.version,some.other.version");
     DependencyModel dependency = createDependency(true, false);
     when(dependency.getVersion()).thenReturn("${some.other.version}");
     this.projectModel.getDependencies().add(dependency);

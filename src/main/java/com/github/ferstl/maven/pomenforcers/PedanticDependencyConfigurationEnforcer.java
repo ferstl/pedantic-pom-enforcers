@@ -15,7 +15,6 @@
  */
 package com.github.ferstl.maven.pomenforcers;
 
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
@@ -24,6 +23,7 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import com.github.ferstl.maven.pomenforcers.model.DependencyModel;
 import com.github.ferstl.maven.pomenforcers.util.CommaSeparatorUtils;
+import com.google.common.collect.ImmutableSet;
 import static com.github.ferstl.maven.pomenforcers.ErrorReport.toList;
 
 /**
@@ -38,7 +38,7 @@ import static com.github.ferstl.maven.pomenforcers.ErrorReport.toList;
  *         &lt;!-- allow property references such as ${project.version} as versions outside dependency management --&gt;
  *         &lt;allowUnmanagedProjectVersions&gt;true&lt;/allowUnmanagedProjectVersions&gt;
  *         &lt;!-- set the allowed property names for the allowUnmanagedProjectVersions option --&gt;
- *         &lt;allowedUnmanagedProjectVersionProps&gt;some-property.version,some-other.version&lt;/allowedUnmanagedProjectVersionProps&gt;
+ *         &lt;allowedUnmanagedProjectVersionProperties&gt;some-property.version,some-other.version&lt;/allowedUnmanagedProjectVersionProperties&gt;
  *         &lt;!-- all dependency exclusions must be defined in dependency managment --&gt;
  *         &lt;manageExclusions&gt;true&lt;/manageExclusions&gt;
  *       &lt;/dependencyConfiguration&gt;
@@ -53,34 +53,28 @@ public class PedanticDependencyConfigurationEnforcer extends AbstractPedanticEnf
   /**
    * If enabled, dependency versions have to be declared in <code>&lt;dependencyManagement&gt;</code>.
    */
-  private boolean manageVersions;
+  private boolean manageVersions = true;
 
   /**
    * Allow property references such as <code>${project.version}</code> or <code>${version}</code> as dependency version.
    */
-  private boolean allowUnmanagedProjectVersions;
+  private boolean allowUnmanagedProjectVersions = true;
 
   /**
    * Controls the allowed property references for the allowUnmanagedProjectVersions option.
    */
-  private final Set<String> allowedUnmanagedProjectVersionProps;
+  private final Set<String> allowedUnmanagedProjectVersionProperties = new HashSet<>(DEFAULT_ALLOWED_VERSION_PROPERTIES);
 
   /**
    * A sane default set of allowed property references for the allowUnmanagedProjectVersions option.
    */
-  private static final Set<String> DEFAULT_ALLOWED_PROPS = new HashSet<>(Arrays.asList("${version}", "${project.version}"));
+  private static final Set<String> DEFAULT_ALLOWED_VERSION_PROPERTIES = ImmutableSet.of("${version}", "${project.version}");
 
   /**
    * If enabled, dependency exclusions have to be declared in <code>&lt;dependencyManagement&gt;</code>.
    */
-  private boolean manageExclusions;
+  private boolean manageExclusions = true;
 
-  public PedanticDependencyConfigurationEnforcer() {
-    this.manageVersions = true;
-    this.allowUnmanagedProjectVersions = true;
-    this.allowedUnmanagedProjectVersionProps = new HashSet<>(DEFAULT_ALLOWED_PROPS);
-    this.manageExclusions = true;
-  }
 
   /**
    * If set to <code>true</code>, all dependency versions have to be defined in the dependency management.
@@ -112,16 +106,16 @@ public class PedanticDependencyConfigurationEnforcer extends AbstractPedanticEnf
    * as version references outside dependency management. Has no effect if <code>allowUnmanagedProjectVersions</code>
    * is set to <code>false</code>.
    *
-   * @param allowedUnmanagedProjectVersionProps Set allowed property references for allowUnmanagedProjectVersions option.
+   * @param allowedUnmanagedProjectVersionProperties Set allowed property references for allowUnmanagedProjectVersions option.
    * @configParam
-   * @default <code>version,project-version</code>
+   * @default <code>project.version,version</code>
    * @since 2.2.0
    */
-  public void setAllowedUnmanagedProjectVersionProps(String allowedUnmanagedProjectVersionProps) {
+  public void setAllowedUnmanagedProjectVersionProperties(String allowedUnmanagedProjectVersionProperties) {
     CommaSeparatorUtils.splitAndAddToCollection(
-            allowedUnmanagedProjectVersionProps,
-            this.allowedUnmanagedProjectVersionProps,
-            prop -> String.format("${%s}", prop));
+        allowedUnmanagedProjectVersionProperties,
+            this.allowedUnmanagedProjectVersionProperties,
+            property -> String.format("${%s}", property));
   }
 
   /**
@@ -163,7 +157,7 @@ public class PedanticDependencyConfigurationEnforcer extends AbstractPedanticEnf
     // Filter all project versions if allowed
     if (this.allowUnmanagedProjectVersions) {
       versionedDependencies = versionedDependencies.stream()
-              .filter(dep -> !allowedUnmanagedProjectVersionProps.contains(dep.getVersion()))
+              .filter(dep -> !this.allowedUnmanagedProjectVersionProperties.contains(dep.getVersion()))
               .collect(Collectors.toList());
     }
 
