@@ -34,7 +34,7 @@ To activate the enforcer rules, just declare them in the configuration of the [`
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-enforcer-plugin</artifactId>
-          <version>1.4.1</version>
+          <version>3.3.0</version>
           <!-- Add the pedantic-pom-enforcers as dependency -->
           <dependencies>
             <dependency>
