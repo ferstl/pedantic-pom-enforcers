@@ -23,7 +23,7 @@
   <packaging>jar</packaging>
   <name>Pedantic POM Enforcers</name>
   <description>
-    The Pedantic POM Enforcers consist of serveral Maven enforcer rules that help you keep your
+    The Pedantic POM Enforcers consist of several Maven enforcer rules that help you keep your
     project setup consistent and organized.
   </description>
   <url>https://github.com/ferstl/pedantic-pom-enforcers</url>

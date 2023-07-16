@@ -105,7 +105,93 @@ public class PedanticPluginConfigurationEnforcerTest extends AbstractPedanticEnf
     executeRuleAndCheckReport(true);
   }
 
-  private void addPlugin(boolean withVersion, boolean withConfiguration, boolean withDependencies) {
+  @Test
+  public void allowedProjectVersion1() {
+    this.testRule.setAllowUnmanagedProjectVersions(true);
+    PluginModel plugin = addPlugin(false, false, false);
+    when(plugin.getVersion()).thenReturn("${project.version}");
+
+    executeRuleAndCheckReport(false);
+  }
+
+  @Test
+  public void allowedProjectVersion2() {
+    PluginModel plugin = addPlugin(false, false, false);
+    when(plugin.getVersion()).thenReturn("${version}");
+
+    executeRuleAndCheckReport(false);
+  }
+
+  @Test
+  public void forbiddenProjectVersion() {
+    this.testRule.setAllowUnmanagedProjectVersions(false);
+    PluginModel plugin = addPlugin(false, false, false);
+    when(plugin.getVersion()).thenReturn("${project.version}");
+
+    executeRuleAndCheckReport(true);
+  }
+
+  @Test
+  public void allowedVersionWithProps() {
+    this.testRule.setAllowedUnmanagedProjectVersionProperties("some.version");
+    addPlugin(false, false, false);
+
+    executeRuleAndCheckReport(false);
+  }
+
+  @Test
+  public void allowedVersionWithDisabledProps1() {
+    this.testRule.setManageVersions(false);
+    this.testRule.setAllowedUnmanagedProjectVersionProperties("some.version");
+    addPlugin(true, false, false);
+
+    executeRuleAndCheckReport(false);
+  }
+
+  @Test
+  public void allowedVersionWithDisabledProps2() {
+    this.testRule.setAllowUnmanagedProjectVersions(false);
+    this.testRule.setAllowedUnmanagedProjectVersionProperties("some.version");
+    addPlugin(false, false, false);
+
+    executeRuleAndCheckReport(false);
+  }
+
+  @Test
+  public void forbiddenVersionWithCustomProps1() {
+    this.testRule.setAllowedUnmanagedProjectVersionProperties("some.version");
+    addPlugin(true, false, false);
+
+    executeRuleAndCheckReport(true);
+  }
+
+  @Test
+  public void forbiddenVersionWithCustomProps2() {
+    this.testRule.setAllowedUnmanagedProjectVersionProperties("some.version");
+    PluginModel plugin = addPlugin(true, false, false);
+    when(plugin.getVersion()).thenReturn("${project.version}");
+
+    executeRuleAndCheckReport(true);
+  }
+
+  @Test
+  public void allowedVersionWithActiveCustomProps1() {
+    this.testRule.setAllowedUnmanagedProjectVersionProperties("some.version");
+    PluginModel plugin = addPlugin(true, false, false);
+    when(plugin.getVersion()).thenReturn("${some.version}");
+
+    executeRuleAndCheckReport(false);
+  }
+  @Test
+  public void allowedVersionWithActiveCustomProps2() {
+    this.testRule.setAllowedUnmanagedProjectVersionProperties("some.version,some.other.version");
+    PluginModel plugin = addPlugin(true, false, false);
+    when(plugin.getVersion()).thenReturn("${some.other.version}");
+
+    executeRuleAndCheckReport(false);
+  }
+
+  private PluginModel addPlugin(boolean withVersion, boolean withConfiguration, boolean withDependencies) {
     PluginModel plugin = mock(PluginModel.class);
 
     when(plugin.getGroupId()).thenReturn("a.b.c");
@@ -125,5 +211,6 @@ public class PedanticPluginConfigurationEnforcerTest extends AbstractPedanticEnf
     }
 
     this.testRule.getProjectModel().getPlugins().add(plugin);
+    return plugin;
   }
 }

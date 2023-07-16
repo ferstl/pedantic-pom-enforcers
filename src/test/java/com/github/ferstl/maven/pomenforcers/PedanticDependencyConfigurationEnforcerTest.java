@@ -115,6 +115,69 @@ public class PedanticDependencyConfigurationEnforcerTest extends AbstractPedanti
     executeRuleAndCheckReport(false);
   }
 
+  @Test
+  public void allowedVersionWithProps() {
+    this.testRule.setAllowedUnmanagedProjectVersionProperties("some.version");
+    this.projectModel.getDependencies().add(createDependency(false, false));
+
+    executeRuleAndCheckReport(false);
+  }
+
+  @Test
+  public void allowedVersionWithDisabledProps1() {
+    this.testRule.setManageVersions(false);
+    this.testRule.setAllowedUnmanagedProjectVersionProperties("some.version");
+    this.projectModel.getDependencies().add(createDependency(true, false));
+
+    executeRuleAndCheckReport(false);
+  }
+
+  @Test
+  public void allowedVersionWithDisabledProps2() {
+    this.testRule.setAllowUnmanagedProjectVersions(false);
+    this.testRule.setAllowedUnmanagedProjectVersionProperties("some.version");
+    this.projectModel.getDependencies().add(createDependency(false, false));
+
+    executeRuleAndCheckReport(false);
+  }
+
+  @Test
+  public void forbiddenVersionWithCustomProps1() {
+    this.testRule.setAllowedUnmanagedProjectVersionProperties("some.version");
+    this.projectModel.getDependencies().add(createDependency(true, false));
+
+    executeRuleAndCheckReport(true);
+  }
+
+  @Test
+  public void forbiddenVersionWithCustomProps2() {
+    this.testRule.setAllowedUnmanagedProjectVersionProperties("some.version");
+    DependencyModel dependency = createDependency(true, false);
+    when(dependency.getVersion()).thenReturn("${project.version}");
+    this.projectModel.getDependencies().add(dependency);
+
+    executeRuleAndCheckReport(true);
+  }
+
+  @Test
+  public void allowedVersionWithActiveCustomProps1() {
+    this.testRule.setAllowedUnmanagedProjectVersionProperties("some.version");
+    DependencyModel dependency = createDependency(true, false);
+    when(dependency.getVersion()).thenReturn("${some.version}");
+    this.projectModel.getDependencies().add(dependency);
+
+    executeRuleAndCheckReport(false);
+  }
+  @Test
+  public void allowedVersionWithActiveCustomProps2() {
+    this.testRule.setAllowedUnmanagedProjectVersionProperties("some.version,some.other.version");
+    DependencyModel dependency = createDependency(true, false);
+    when(dependency.getVersion()).thenReturn("${some.other.version}");
+    this.projectModel.getDependencies().add(dependency);
+
+    executeRuleAndCheckReport(false);
+  }
+
   private DependencyModel createDependency(boolean withVersion, boolean withExclusion) {
     DependencyModel dependency = mock(DependencyModel.class);
 

@@ -48,7 +48,8 @@ import com.google.common.collect.Sets;
  *         &lt;dependencyManagementArtifactIdPriorities&gt;commons-,utils-&lt;/dependencyManagementArtifactIdPriorities&gt;
  *         &lt;!-- DEPENDENCY_CONFIGURATION configuration --&gt;
  *         &lt;manageDependencyVersions&gt;true&lt;/manageDependencyVersions&gt;
- *         &lt;allowUnmangedProjectVersions&gt;true&lt;/allowUnmangedProjectVersions&gt;
+ *         &lt;allowUnmanagedProjectVersionsInDependencies&gt;true&lt;/allowUnmanagedProjectVersionsInDependencies&gt;
+ *         &lt;allowedUnmanagedProjectVersionPropertiesForDependencies&gt;version,project.version&lt;/allowedUnmanagedProjectVersionPropertiesForDependencies&gt;
  *         &lt;manageDependencyExclusions&gt;true&lt;/manageDependencyExclusions&gt;
  *         &lt;!-- DEPENDENCY_ELEMENT configuration --&gt;
  *         &lt;dependencyElementOrdering&gt;true&lt;/dependencyElementOrdering&gt;
@@ -70,6 +71,8 @@ import com.google.common.collect.Sets;
  *         &lt;pluginManagementArtifactIdPriorities&gt;mytest-,myintegrationtest-&lt;/pluginManagementArtifactIdPriorities&gt;
  *         &lt;!-- PLUGIN_CONFIGURATION configuration --&gt;
  *         &lt;managePluginVersions&gt;true&lt;/managePluginVersions&gt;
+ *         &lt;allowUnmanagedProjectVersionsInPlugins&gt;true&lt;/allowUnmanagedProjectVersionsInPlugins&gt;
+ *         &lt;allowedUnmanagedProjectVersionPropertiesForPlugins&gt;version,project.version&lt;/allowedUnmanagedProjectVersionPropertiesForPlugins&gt;
  *         &lt;managePluginConfigurations&gt;true&lt;/managePluginConfigurations&gt;
  *         &lt;managePluginDependencies&gt;true&lt;/managePluginDependencies&gt;
  *         &lt;!-- PLUGIN_ELEMENT configuration --&gt;
@@ -81,7 +84,7 @@ import com.google.common.collect.Sets;
  *         &lt;pluginManagingPoms&gt;com.myproject:parent-pom&lt;/pluginManagingPoms&gt;
  *         &lt;!-- DEPENDENCY_ELEMENT --&gt;
  *         &lt;dependencyElementOrdering&gt;groupId,artifactid,version&lt;/dependencyElementOrdering&gt;
- *         &lt;checkDependencyElements&gt;true&lt;/heckDependencyElements&gt;
+ *         &lt;checkDependencyElements&gt;true&lt;/checkDependencyElements&gt;
  *         &lt;checkDependencyManagementElements&gt;true&lt;/checkDependencyManagementElements&gt;
  *       &lt;/compound&gt;
  *     &lt;/rules&gt;
@@ -202,12 +205,55 @@ public class CompoundPedanticEnforcer extends AbstractPedanticEnforcer {
 
   /**
    * See
-   * {@link PedanticDependencyConfigurationEnforcer#setAllowUnmanagedProjectVersions(boolean)}.
+   * {@link PedanticDependencyConfigurationEnforcer#setAllowUnmanagedProjectVersions(boolean)} and
+   * @link PedanticPluginConfigurationEnforcer#setAllowUnmanagedProjectVersions(boolean)}. This property configures both.
+   * Note that this property contains a typo since the very beginning. Don't use it anymore!
+   * Use <code>allowUnmanagedProjectVersions</code> instead.
    *
    * @configParam
    * @since 1.0.0
+   * @deprecated Since 2.2.0. Will be removed in 3.x . Use <code>allowUnmanagedProjectVersions</code>.
    */
+  @Deprecated
   private Boolean allowUnmangedProjectVersions;
+
+  /**
+   * See
+   * {@link PedanticDependencyConfigurationEnforcer#setAllowUnmanagedProjectVersions(boolean)} and
+   * @link PedanticPluginConfigurationEnforcer#setAllowUnmanagedProjectVersions(boolean)}. This property configures both.
+   *
+   * @configParam
+   * @since 2.2.0
+   */
+  private Boolean allowUnmanagedProjectVersions;
+
+  /**
+   * See
+   * {@link PedanticDependencyConfigurationEnforcer#setAllowedUnmanagedProjectVersionProperties(String)} and
+   * @link PedanticPluginConfigurationEnforcer#setAllowedUnmanagedProjectVersionProperties(String)}. This property configures both.
+   *
+   * @configParam
+   * @since 2.2.0
+   */
+  private String allowedUnmanagedProjectVersionProperties;
+
+  /**
+   * See
+   * {@link PedanticDependencyConfigurationEnforcer#setAllowUnmanagedProjectVersions(boolean)}.
+   *
+   * @configParam
+   * @since 2.2.0
+   */
+  private Boolean allowUnmanagedProjectVersionsInDependencies;
+
+  /**
+   * See
+   * {@link PedanticDependencyConfigurationEnforcer#setAllowedUnmanagedProjectVersionProperties(String)}.
+   *
+   * @configParam
+   * @since 2.2.0
+   */
+  private String allowedUnmanagedProjectVersionPropertiesForDependencies;
 
   /**
    * See
@@ -311,7 +357,7 @@ public class CompoundPedanticEnforcer extends AbstractPedanticEnforcer {
   private String pluginManagingPoms;
 
   /**
-   * See {@link PedanticPluginConfigurationEnforcer#managePluginVersions}.
+   * See {@link PedanticPluginConfigurationEnforcer#setManageVersions(boolean)}.
    *
    * @configParam
    * @since 1.0.0
@@ -319,7 +365,24 @@ public class CompoundPedanticEnforcer extends AbstractPedanticEnforcer {
   private Boolean managePluginVersions;
 
   /**
-   * See {@link PedanticPluginConfigurationEnforcer#managePluginConfigurations}
+   * See {@link PedanticPluginConfigurationEnforcer#setAllowUnmanagedProjectVersions(boolean)}.
+   *
+   * @configParam
+   * @since 2.2.0
+   */
+  private Boolean allowUnmanagedProjectVersionsInPlugins;
+
+  /**
+   * See
+   * {@link PedanticPluginConfigurationEnforcer#setAllowedUnmanagedProjectVersionProperties(String)}.
+   *
+   * @configParam
+   * @since 2.2.0
+   */
+  private String allowedUnmanagedProjectVersionPropertiesForPlugins;
+
+  /**
+   * See {@link PedanticPluginConfigurationEnforcer#setManageConfigurations(boolean)}
    *
    * @configParam
    * @since 1.0.0
@@ -327,7 +390,7 @@ public class CompoundPedanticEnforcer extends AbstractPedanticEnforcer {
   private Boolean managePluginConfigurations;
 
   /**
-   * See {@link PedanticPluginConfigurationEnforcer#managePluginDependencies}
+   * See {@link PedanticPluginConfigurationEnforcer#setManageDependencies(boolean)}
    *
    * @configParam
    * @since 1.0.0
@@ -335,7 +398,7 @@ public class CompoundPedanticEnforcer extends AbstractPedanticEnforcer {
   private Boolean managePluginDependencies;
 
   /**
-   * See {@link PedanticDependencyElementEnforcer#elementOrdering}.
+   * See {@link PedanticDependencyElementEnforcer#setElementPriorities(String)}.
    *
    * @configParam
    * @since 2.0.0
@@ -343,7 +406,7 @@ public class CompoundPedanticEnforcer extends AbstractPedanticEnforcer {
   private String dependencyElementOrdering;
 
   /**
-   * See {@link PedanticDependencyElementEnforcer#checkDependencies}.
+   * See {@link PedanticDependencyElementEnforcer#setCheckDependencies(boolean)}.
    *
    * @configParam
    * @since 2.0.0
@@ -351,7 +414,7 @@ public class CompoundPedanticEnforcer extends AbstractPedanticEnforcer {
   private Boolean checkDependencyElements;
 
   /**
-   * See {@link PedanticDependencyElementEnforcer#checkDependencyManagement}.
+   * See {@link PedanticDependencyElementEnforcer#setCheckDependencyManagement(boolean)}.
    *
    * @configParam
    * @since 2.0.0
@@ -360,7 +423,7 @@ public class CompoundPedanticEnforcer extends AbstractPedanticEnforcer {
 
 
   /**
-   * See {@link PedanticPluginElementEnforcer#elementOrdering}.
+   * See {@link PedanticPluginElementEnforcer#setElementPriorities(String)}.
    *
    * @configParam
    * @since 2.0.0
@@ -369,7 +432,7 @@ public class CompoundPedanticEnforcer extends AbstractPedanticEnforcer {
 
 
   /**
-   * See {@link PedanticPluginElementEnforcer#checkPlugins}.
+   * See {@link PedanticPluginElementEnforcer#setCheckPlugins(boolean)}.
    *
    * @configParam
    * @since 2.0.0
@@ -377,7 +440,7 @@ public class CompoundPedanticEnforcer extends AbstractPedanticEnforcer {
   private Boolean checkPluginElements;
 
   /**
-   * See {@link PedanticPluginElementEnforcer#checkPluginManagement}.
+   * See {@link PedanticPluginElementEnforcer#setCheckPluginManagement(boolean)}.
    *
    * @configParam
    * @since 2.0.0
@@ -506,8 +569,19 @@ public class CompoundPedanticEnforcer extends AbstractPedanticEnforcer {
         dependencyConfigurationEnforcer.setManageVersions(CompoundPedanticEnforcer.this.manageDependencyVersions);
       }
       if (CompoundPedanticEnforcer.this.allowUnmangedProjectVersions != null) {
-        dependencyConfigurationEnforcer.setAllowUnmanagedProjectVersions(
-            CompoundPedanticEnforcer.this.allowUnmangedProjectVersions);
+        dependencyConfigurationEnforcer.setAllowUnmanagedProjectVersions(CompoundPedanticEnforcer.this.allowUnmangedProjectVersions);
+      }
+      if (CompoundPedanticEnforcer.this.allowUnmanagedProjectVersions != null) {
+        dependencyConfigurationEnforcer.setAllowUnmanagedProjectVersions(CompoundPedanticEnforcer.this.allowUnmanagedProjectVersions);
+      }
+      if (CompoundPedanticEnforcer.this.allowUnmanagedProjectVersionsInDependencies != null) {
+        dependencyConfigurationEnforcer.setAllowUnmanagedProjectVersions(CompoundPedanticEnforcer.this.allowUnmanagedProjectVersionsInDependencies);
+      }
+      if (!Strings.isNullOrEmpty(CompoundPedanticEnforcer.this.allowedUnmanagedProjectVersionProperties)) {
+        dependencyConfigurationEnforcer.setAllowedUnmanagedProjectVersionProperties(CompoundPedanticEnforcer.this.allowedUnmanagedProjectVersionProperties);
+      }
+      if (!Strings.isNullOrEmpty(CompoundPedanticEnforcer.this.allowedUnmanagedProjectVersionPropertiesForDependencies)) {
+        dependencyConfigurationEnforcer.setAllowedUnmanagedProjectVersionProperties(CompoundPedanticEnforcer.this.allowedUnmanagedProjectVersionPropertiesForDependencies);
       }
       if (CompoundPedanticEnforcer.this.manageDependencyExclusions != null) {
         dependencyConfigurationEnforcer.setManageExclusions(CompoundPedanticEnforcer.this.manageDependencyExclusions);
@@ -553,6 +627,21 @@ public class CompoundPedanticEnforcer extends AbstractPedanticEnforcer {
     public void visit(PedanticPluginConfigurationEnforcer enforcer) {
       if (CompoundPedanticEnforcer.this.managePluginVersions != null) {
         enforcer.setManageVersions(CompoundPedanticEnforcer.this.managePluginVersions);
+      }
+      if (CompoundPedanticEnforcer.this.allowUnmangedProjectVersions != null) {
+        enforcer.setAllowUnmanagedProjectVersions(CompoundPedanticEnforcer.this.allowUnmangedProjectVersions);
+      }
+      if (CompoundPedanticEnforcer.this.allowUnmanagedProjectVersions != null) {
+        enforcer.setAllowUnmanagedProjectVersions(CompoundPedanticEnforcer.this.allowUnmanagedProjectVersions);
+      }
+      if (CompoundPedanticEnforcer.this.allowUnmanagedProjectVersionsInPlugins != null) {
+        enforcer.setAllowUnmanagedProjectVersions(CompoundPedanticEnforcer.this.allowUnmanagedProjectVersionsInPlugins);
+      }
+      if (!Strings.isNullOrEmpty(CompoundPedanticEnforcer.this.allowedUnmanagedProjectVersionProperties)) {
+        enforcer.setAllowedUnmanagedProjectVersionProperties(CompoundPedanticEnforcer.this.allowedUnmanagedProjectVersionProperties);
+      }
+      if (!Strings.isNullOrEmpty(CompoundPedanticEnforcer.this.allowedUnmanagedProjectVersionPropertiesForPlugins)) {
+        enforcer.setAllowedUnmanagedProjectVersionProperties(CompoundPedanticEnforcer.this.allowedUnmanagedProjectVersionPropertiesForPlugins);
       }
       if (CompoundPedanticEnforcer.this.managePluginConfigurations != null) {
         enforcer.setManageConfigurations(CompoundPedanticEnforcer.this.managePluginConfigurations);

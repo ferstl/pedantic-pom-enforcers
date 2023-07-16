@@ -16,10 +16,14 @@
 package com.github.ferstl.maven.pomenforcers;
 
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import com.github.ferstl.maven.pomenforcers.model.DependencyModel;
+import com.github.ferstl.maven.pomenforcers.util.CommaSeparatorUtils;
+import com.google.common.collect.ImmutableSet;
 import static com.github.ferstl.maven.pomenforcers.ErrorReport.toList;
 
 /**
@@ -31,8 +35,10 @@ import static com.github.ferstl.maven.pomenforcers.ErrorReport.toList;
  *       &lt;dependencConfiguration implementation=&quot;com.github.ferstl.maven.pomenforcers.PedanticDependencyConfigurationEnforcer&quot;&gt;
  *         &lt;!-- Manage dependency versions in dependency management --&gt;
  *         &lt;manageVersions&gt;true&lt;/manageVersions&gt;
- *         &lt;!-- allow ${project.version} outside dependency management --&gt;
+ *         &lt;!-- allow property references such as ${project.version} as versions outside dependency management --&gt;
  *         &lt;allowUnmanagedProjectVersions&gt;true&lt;/allowUnmanagedProjectVersions&gt;
+ *         &lt;!-- set the allowed property names for the allowUnmanagedProjectVersions option --&gt;
+ *         &lt;allowedUnmanagedProjectVersionProperties&gt;some-property.version,some-other.version&lt;/allowedUnmanagedProjectVersionProperties&gt;
  *         &lt;!-- all dependency exclusions must be defined in dependency managment --&gt;
  *         &lt;manageExclusions&gt;true&lt;/manageExclusions&gt;
  *       &lt;/dependencyConfiguration&gt;
@@ -50,14 +56,25 @@ public class PedanticDependencyConfigurationEnforcer extends AbstractPedanticEnf
   private boolean manageVersions = true;
 
   /**
-   * Allow <code>${project.version}</code> or <code>${version}</code> as dependency version.
+   * Allow property references such as <code>${project.version}</code> or <code>${version}</code> as dependency version.
    */
-  private boolean allowUnmangedProjectVersions = true;
+  private boolean allowUnmanagedProjectVersions = true;
+
+  /**
+   * Controls the allowed property references for the allowUnmanagedProjectVersions option.
+   */
+  private final Set<String> allowedUnmanagedProjectVersionProperties = new HashSet<>(DEFAULT_ALLOWED_VERSION_PROPERTIES);
+
+  /**
+   * A sane default set of allowed property references for the allowUnmanagedProjectVersions option.
+   */
+  private static final Set<String> DEFAULT_ALLOWED_VERSION_PROPERTIES = ImmutableSet.of("${version}", "${project.version}");
 
   /**
    * If enabled, dependency exclusions have to be declared in <code>&lt;dependencyManagement&gt;</code>.
    */
   private boolean manageExclusions = true;
+
 
   /**
    * If set to <code>true</code>, all dependency versions have to be defined in the dependency management.
@@ -75,13 +92,30 @@ public class PedanticDependencyConfigurationEnforcer extends AbstractPedanticEnf
    * If set to <code>true</code>, <code><version>${project.version}</version></code> may be used within
    * the dependencies section.
    *
-   * @param allowUnmangedProjectVersions Allow project versions outside of the dependencies section.
+   * @param allowUnmanagedProjectVersions Allow project versions outside of the dependencies section.
    * @configParam
    * @default <code>true</code>
    * @since 1.0.0
    */
-  public void setAllowUnmanagedProjectVersions(boolean allowUnmangedProjectVersions) {
-    this.allowUnmangedProjectVersions = allowUnmangedProjectVersions;
+  public void setAllowUnmanagedProjectVersions(boolean allowUnmanagedProjectVersions) {
+    this.allowUnmanagedProjectVersions = allowUnmanagedProjectVersions;
+  }
+
+  /**
+   * Comma-separated list of Maven property variable names (without the ${...} decorators) which are allowed to be used
+   * as version references outside dependency management. Has no effect if <code>allowUnmanagedProjectVersions</code>
+   * is set to <code>false</code>.
+   *
+   * @param allowedUnmanagedProjectVersionProperties Set allowed property references for allowUnmanagedProjectVersions option.
+   * @configParam
+   * @default <code>project.version,version</code>
+   * @since 2.2.0
+   */
+  public void setAllowedUnmanagedProjectVersionProperties(String allowedUnmanagedProjectVersionProperties) {
+    CommaSeparatorUtils.splitAndAddToCollection(
+        allowedUnmanagedProjectVersionProperties,
+            this.allowedUnmanagedProjectVersionProperties,
+            property -> String.format("${%s}", property));
   }
 
   /**
@@ -111,17 +145,20 @@ public class PedanticDependencyConfigurationEnforcer extends AbstractPedanticEnf
     if (this.manageVersions) {
       enforceManagedVersions(report);
     }
+
     if (this.manageExclusions) {
       enforceManagedExclusion(report);
     }
   }
 
   private void enforceManagedVersions(ErrorReport report) {
-    Collection<DependencyModel> versionedDependencies = searchForDependencies(DependencyPredicate.WITH_VERSION);
+    Collection<DependencyModel> versionedDependencies = searchForDependencies(dep -> dep.getVersion() != null);
 
     // Filter all project versions if allowed
-    if (this.allowUnmangedProjectVersions) {
-      versionedDependencies = versionedDependencies.stream().filter(DependencyPredicate.WITH_PROJECT_VERSION).collect(Collectors.toList());
+    if (this.allowUnmanagedProjectVersions) {
+      versionedDependencies = versionedDependencies.stream()
+              .filter(dep -> !this.allowedUnmanagedProjectVersionProperties.contains(dep.getVersion()))
+              .collect(Collectors.toList());
     }
 
     if (!versionedDependencies.isEmpty()) {
@@ -131,7 +168,7 @@ public class PedanticDependencyConfigurationEnforcer extends AbstractPedanticEnf
   }
 
   private void enforceManagedExclusion(ErrorReport report) {
-    Collection<DependencyModel> depsWithExclusions = searchForDependencies(DependencyPredicate.WITH_EXCLUSION);
+    Collection<DependencyModel> depsWithExclusions = searchForDependencies(dep -> !dep.getExclusions().isEmpty());
 
     if (!depsWithExclusions.isEmpty()) {
       report.addLine("Dependency exclusions have to be declared in <dependencyManagement>:")
@@ -142,27 +179,5 @@ public class PedanticDependencyConfigurationEnforcer extends AbstractPedanticEnf
   private Collection<DependencyModel> searchForDependencies(Predicate<DependencyModel> predicate) {
     List<DependencyModel> dependencies = getProjectModel().getDependencies();
     return dependencies.stream().filter(predicate).collect(Collectors.toList());
-  }
-
-  private enum DependencyPredicate implements Predicate<DependencyModel> {
-    WITH_VERSION {
-      @Override
-      public boolean test(DependencyModel input) {
-        return input.getVersion() != null;
-      }
-    },
-    WITH_PROJECT_VERSION {
-      @Override
-      public boolean test(DependencyModel input) {
-        return !"${project.version}".equals(input.getVersion())
-            && !"${version}".equals(input.getVersion());
-      }
-    },
-    WITH_EXCLUSION {
-      @Override
-      public boolean test(DependencyModel input) {
-        return !input.getExclusions().isEmpty();
-      }
-    }
   }
 }
