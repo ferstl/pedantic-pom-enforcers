@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 
-    Copyright (c) 2012 - 2020 the original author or authors.
+    Copyright (c) 2012 - 2023 the original author or authors.
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -16,7 +16,6 @@
     limitations under the License.
 
 -->
-<!-- The original XSD declares elementFormDefault="qualified" which will not work with JAXB. -->
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="unqualified" targetNamespace="http://maven.apache.org/POM/4.0.0" xmlns="http://maven.apache.org/POM/4.0.0">
   <xs:element name="project">
     <xs:annotation>
