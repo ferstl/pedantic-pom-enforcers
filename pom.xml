@@ -72,26 +72,26 @@
 
   <properties>
     <!-- Plugin versions. -->
-    <license-maven-plugin.version>4.1</license-maven-plugin.version>
+    <license-maven-plugin.version>4.2</license-maven-plugin.version>
     <maven-clean-plugin.version>3.1.0</maven-clean-plugin.version>
-    <maven-compiler-plugin.version>3.8.1</maven-compiler-plugin.version>
-    <maven-deploy-plugin.version>2.8.2</maven-deploy-plugin.version>
-    <maven-enforcer-plugin.version>3.0.0</maven-enforcer-plugin.version>
-    <maven-gpg-plugin.version>3.0.1</maven-gpg-plugin.version>
-    <maven-install-plugin.version>2.5.2</maven-install-plugin.version>
-    <maven-jar-plugin.version>3.2.0</maven-jar-plugin.version>
-    <maven-javadoc-plugin.version>3.3.0</maven-javadoc-plugin.version>
-    <maven-release-plugin.version>2.5.3</maven-release-plugin.version>
-    <maven-resources-plugin.version>3.2.0</maven-resources-plugin.version>
-    <maven-source-plugin.version>3.2.1</maven-source-plugin.version>
-    <maven-surefire-plugin.version>2.22.2</maven-surefire-plugin.version>
+    <maven-compiler-plugin.version>3.11.0</maven-compiler-plugin.version>
+    <maven-deploy-plugin.version>3.1.1</maven-deploy-plugin.version>
+    <maven-enforcer-plugin.version>3.3.0</maven-enforcer-plugin.version>
+    <maven-gpg-plugin.version>3.1.0</maven-gpg-plugin.version>
+    <maven-install-plugin.version>3.1.1</maven-install-plugin.version>
+    <maven-jar-plugin.version>3.3.0</maven-jar-plugin.version>
+    <maven-javadoc-plugin.version>3.5.0</maven-javadoc-plugin.version>
+    <maven-release-plugin.version>3.0.1</maven-release-plugin.version>
+    <maven-resources-plugin.version>3.3.1</maven-resources-plugin.version>
+    <maven-source-plugin.version>3.3.0</maven-source-plugin.version>
+    <maven-surefire-plugin.version>3.1.2</maven-surefire-plugin.version>
     <coveralls-maven-plugin.version>4.3.0</coveralls-maven-plugin.version>
-    <jacoco-maven-plugin.version>0.8.7</jacoco-maven-plugin.version>
+    <jacoco-maven-plugin.version>0.8.10</jacoco-maven-plugin.version>
     <takari-lifecycle-plugin.version>2.0.0</takari-lifecycle-plugin.version>
 
     <!-- Other settings. -->
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <maven.version>3.8.2</maven.version>
+    <maven.version>3.9.3</maven.version>
     <pedantic-pom-enforcers-doclet.version>1.0.5-SNAPSHOT</pedantic-pom-enforcers-doclet.version>
   </properties>
 
@@ -99,7 +99,7 @@
     <dependency>
       <groupId>com.google.guava</groupId>
       <artifactId>guava</artifactId>
-      <version>30.1.1-jre</version>
+      <version>32.1.1-jre</version>
     </dependency>
     <dependency>
       <groupId>com.googlecode.java-diff-utils</groupId>
