@@ -32,15 +32,15 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-enforcer-plugin</artifactId>
-          <version>1.4.1</version>
+          <version>3.6.0</version>
           <configuration>
             <rules>
               <pomSection implementation="com.github.ferstl.maven.pomenforcers.PedanticPomSectionOrderEnforcer">
                 <warnOnly>true</warnOnly>
               </pomSection>
-              <pomSection implementation="com.github.ferstl.maven.pomenforcers.PedanticDependencyOrderEnforcer">
+              <dependencyOrder implementation="com.github.ferstl.maven.pomenforcers.PedanticDependencyOrderEnforcer">
                 <warnOnly>true</warnOnly>
-              </pomSection>
+              </dependencyOrder>
             </rules>
           </configuration>
           <dependencies>

@@ -15,15 +15,17 @@
  */
 package com.github.ferstl.maven.pomenforcers;
 
-import java.util.Collections;
-import org.junit.Test;
-import com.github.ferstl.maven.pomenforcers.model.ArtifactModel;
-import com.github.ferstl.maven.pomenforcers.model.DependencyModel;
-import static org.hamcrest.Matchers.equalTo;
-import static org.junit.Assert.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+
+import java.util.Collections;
+
+import org.junit.jupiter.api.Test;
+
+import com.github.ferstl.maven.pomenforcers.model.ArtifactModel;
+import com.github.ferstl.maven.pomenforcers.model.DependencyModel;
 
 /**
  * JUnit tests for {@link PedanticDependencyConfigurationEnforcer}.
@@ -32,13 +34,13 @@ public class PedanticDependencyConfigurationEnforcerTest extends AbstractPedanti
 
   @Override
   PedanticDependencyConfigurationEnforcer createRule() {
-    return new PedanticDependencyConfigurationEnforcer();
+    return new PedanticDependencyConfigurationEnforcer(mockMavenProject, mockHelper);
   }
 
   @Override
   @Test
   public void getDescription() {
-    assertThat(this.testRule.getDescription(), equalTo(PedanticEnforcerRule.DEPENDENCY_CONFIGURATION));
+    assertThat(this.testRule.getDescription()).isEqualTo(PedanticEnforcerRule.DEPENDENCY_CONFIGURATION);
   }
 
   @Override

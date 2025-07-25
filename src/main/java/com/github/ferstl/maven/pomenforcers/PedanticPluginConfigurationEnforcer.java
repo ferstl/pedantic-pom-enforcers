@@ -21,6 +21,13 @@ import java.util.List;
 import java.util.Set;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
+
+import javax.inject.Inject;
+import javax.inject.Named;
+
+import org.apache.maven.project.MavenProject;
+import org.codehaus.plexus.component.configurator.expression.ExpressionEvaluator;
+
 import com.github.ferstl.maven.pomenforcers.model.PluginModel;
 import com.github.ferstl.maven.pomenforcers.util.CommaSeparatorUtils;
 import com.google.common.collect.ImmutableSet;
@@ -51,6 +58,7 @@ import static com.github.ferstl.maven.pomenforcers.ErrorReport.toList;
  * @id {@link PedanticEnforcerRule#PLUGIN_CONFIGURATION}
  * @since 1.0.0
  */
+@Named("pluginConfiguration")
 public class PedanticPluginConfigurationEnforcer extends AbstractPedanticEnforcer {
 
   /**
@@ -82,6 +90,11 @@ public class PedanticPluginConfigurationEnforcer extends AbstractPedanticEnforce
    * If enabled, plugin dependencies have to be declared in <code>&lt;pluginManagement&gt;</code>.
    */
   private boolean manageDependencies = true;
+  
+  @Inject
+  public PedanticPluginConfigurationEnforcer(final MavenProject project, final ExpressionEvaluator helper) {
+	super(project, helper);
+  }
 
   /**
    * Enforces plugin versions to be defined in <code>&lt;pluginManagement&gt;</code>.

@@ -15,39 +15,38 @@
  */
 package com.github.ferstl.maven.pomenforcers;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+
 import java.lang.invoke.MethodHandle;
 import java.lang.invoke.MethodHandles;
 import java.lang.invoke.MethodType;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
 import org.codehaus.plexus.util.StringUtils;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.experimental.theories.DataPoints;
-import org.junit.experimental.theories.Theories;
-import org.junit.experimental.theories.Theory;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
+
 import com.github.ferstl.maven.pomenforcers.model.DependencyScope;
 import com.google.common.base.Joiner;
 import com.google.common.collect.Collections2;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
 
 /**
  * JUnit tests for {@link PedanticDependencyScopeEnforcer}.
  */
-@RunWith(Theories.class)
 public class PedanticDependencyScopeEnforcerTest extends AbstractPedanticEnforcerTest<PedanticDependencyScopeEnforcer> {
 
   /**
    * Creates test data for each possible dependency scope. The data will be used as theory to test the enforcer rule
    * with different settings. This prevents writing a test method for each dependency scope.
    */
-  @DataPoints
-  public static RuleConfiguration[] ruleConfigurations() throws Exception {
+  private static RuleConfiguration[] ruleConfigurations() throws Exception {
     List<RuleConfiguration> ruleConfig = new ArrayList<>(2 * DependencyScope.values().length);
 
     for (DependencyScope scope : DependencyScope.values()) {
@@ -64,10 +63,10 @@ public class PedanticDependencyScopeEnforcerTest extends AbstractPedanticEnforce
 
   @Override
   PedanticDependencyScopeEnforcer createRule() {
-    return new PedanticDependencyScopeEnforcer();
+    return new PedanticDependencyScopeEnforcer(mockMavenProject, mockHelper);
   }
 
-  @Before
+  @BeforeEach
   public void before() {
     addDependenciesForAllScopes();
   }
@@ -92,7 +91,8 @@ public class PedanticDependencyScopeEnforcerTest extends AbstractPedanticEnforce
     executeRuleAndCheckReport(false);
   }
 
-  @Theory
+  @ParameterizedTest
+  @MethodSource("ruleConfigurations")
   public void allConfigurations(RuleConfiguration param) throws Throwable {
     param.configureRule(this.testRule);
 

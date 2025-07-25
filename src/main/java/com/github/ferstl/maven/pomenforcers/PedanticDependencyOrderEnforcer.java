@@ -16,8 +16,12 @@
 package com.github.ferstl.maven.pomenforcers;
 import java.util.Collection;
 
+import javax.inject.Inject;
+import javax.inject.Named;
+
 import org.apache.maven.model.Dependency;
 import org.apache.maven.project.MavenProject;
+import org.codehaus.plexus.component.configurator.expression.ExpressionEvaluator;
 
 import com.github.ferstl.maven.pomenforcers.model.DependencyModel;
 
@@ -46,7 +50,13 @@ import com.github.ferstl.maven.pomenforcers.model.DependencyModel;
  * @id {@link PedanticEnforcerRule#DEPENDENCY_ORDER}
  * @since 1.0.0
  */
+@Named("dependencyOrder")
 public class PedanticDependencyOrderEnforcer extends AbstractPedanticDependencyOrderEnforcer {
+	
+  @Inject
+  public PedanticDependencyOrderEnforcer(final MavenProject project, final ExpressionEvaluator helper) {
+	super(project, helper);
+  }
 
   @Override
   protected void accept(PedanticEnforcerVisitor visitor) {

@@ -15,15 +15,21 @@
  */
 package com.github.ferstl.maven.pomenforcers;
 
+import static com.github.ferstl.maven.pomenforcers.ErrorReport.toList;
+
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
+
+import javax.inject.Inject;
+import javax.inject.Named;
+
 import org.apache.maven.project.MavenProject;
+import org.codehaus.plexus.component.configurator.expression.ExpressionEvaluator;
+
 import com.github.ferstl.maven.pomenforcers.model.ArtifactModel;
 import com.github.ferstl.maven.pomenforcers.model.functions.StringToArtifactTransformer;
 import com.github.ferstl.maven.pomenforcers.util.CommaSeparatorUtils;
-import com.github.ferstl.maven.pomenforcers.util.EnforcerRuleUtils;
-import static com.github.ferstl.maven.pomenforcers.ErrorReport.toList;
 
 
 /**
@@ -41,12 +47,15 @@ import static com.github.ferstl.maven.pomenforcers.ErrorReport.toList;
  * @id {@link PedanticEnforcerRule#PLUGIN_MANAGEMENT_LOCATION}
  * @since 1.0.0
  */
+@Named("pluginManagemenLocation")
 public class PedanticPluginManagementLocationEnforcer extends AbstractPedanticEnforcer {
 
   private boolean allowParentPoms;
   private final Set<ArtifactModel> pluginManagingPoms;
 
-  public PedanticPluginManagementLocationEnforcer() {
+  @Inject
+  public PedanticPluginManagementLocationEnforcer(final MavenProject project, final ExpressionEvaluator helper) {
+	super(project, helper);
     this.allowParentPoms = false;
     this.pluginManagingPoms = new HashSet<>();
   }
@@ -63,7 +72,7 @@ public class PedanticPluginManagementLocationEnforcer extends AbstractPedanticEn
 
   @Override
   protected void doEnforce(ErrorReport report) {
-    MavenProject mavenProject = EnforcerRuleUtils.getMavenProject(getHelper());
+    MavenProject mavenProject = getMavenProject();
     if (containsPluginManagement() && !isPluginManagementAllowed(mavenProject)) {
       report.addLine("Only these POMs are allowed to manage plugins:")
           .addLine(toList(Collections.singletonList("All parent POMs, i.e. POMs with <packaging>pom</packaging>")))

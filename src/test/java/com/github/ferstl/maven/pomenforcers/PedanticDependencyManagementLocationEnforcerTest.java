@@ -15,14 +15,16 @@
  */
 package com.github.ferstl.maven.pomenforcers;
 
-import org.junit.Before;
-import org.junit.Test;
-import com.github.ferstl.maven.pomenforcers.model.DependencyModel;
-import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import com.github.ferstl.maven.pomenforcers.model.DependencyModel;
 
 /**
  * JUnit tests for {@link PedanticDependencyManagementLocationEnforcer}.
@@ -31,10 +33,10 @@ public class PedanticDependencyManagementLocationEnforcerTest extends AbstractPe
 
   @Override
   PedanticDependencyManagementLocationEnforcer createRule() {
-    return new PedanticDependencyManagementLocationEnforcer();
+    return new PedanticDependencyManagementLocationEnforcer(mockMavenProject, mockHelper);
   }
 
-  @Before
+  @BeforeEach
   public void before() {
     when(this.mockMavenProject.getGroupId()).thenReturn("a.b.c");
     when(this.mockMavenProject.getArtifactId()).thenReturn("parent");

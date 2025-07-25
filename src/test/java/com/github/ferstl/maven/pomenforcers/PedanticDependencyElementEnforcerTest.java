@@ -15,26 +15,34 @@
  */
 package com.github.ferstl.maven.pomenforcers;
 
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import org.apache.maven.enforcer.rule.api.EnforcerRuleHelper;
-import org.junit.Before;
-import org.junit.Test;
-import org.w3c.dom.Document;
-import com.github.ferstl.maven.pomenforcers.model.ProjectModel;
-import com.github.ferstl.maven.pomenforcers.util.XmlUtils;
 import static com.github.ferstl.maven.pomenforcers.ErrorReportMatcher.hasErrors;
 import static com.github.ferstl.maven.pomenforcers.ErrorReportMatcher.hasNoErrors;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.mockito.Mockito.mock;
 
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
+import org.apache.maven.project.MavenProject;
+import org.codehaus.plexus.component.configurator.expression.ExpressionEvaluator;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.w3c.dom.Document;
+
+import com.github.ferstl.maven.pomenforcers.model.ProjectModel;
+import com.github.ferstl.maven.pomenforcers.util.XmlUtils;
+
 public class PedanticDependencyElementEnforcerTest {
 
   private ErrorReport errorReport;
+  MavenProject mockMavenProject;
+  ExpressionEvaluator mockHelper;
 
-  @Before
+  @BeforeEach
   public void before() {
     this.errorReport = new ErrorReport(PedanticEnforcerRule.DEPENDENCY_ELEMENT);
+	this.mockHelper = mock(ExpressionEvaluator.class);
+    this.mockMavenProject = mock(MavenProject.class);
   }
 
   @Test
@@ -82,9 +90,9 @@ public class PedanticDependencyElementEnforcerTest {
 
   private PedanticDependencyElementEnforcer createEnforcer(Path pomFile) {
     Document document = XmlUtils.parseXml(pomFile.toFile());
-    PedanticDependencyElementEnforcer enforcer = new PedanticDependencyElementEnforcer();
+    PedanticDependencyElementEnforcer enforcer = new PedanticDependencyElementEnforcer(mockMavenProject, mockHelper);
 
-    enforcer.initialize(mock(EnforcerRuleHelper.class), document, new ProjectModel());
+    enforcer.initialize(document, new ProjectModel());
     return enforcer;
   }
 

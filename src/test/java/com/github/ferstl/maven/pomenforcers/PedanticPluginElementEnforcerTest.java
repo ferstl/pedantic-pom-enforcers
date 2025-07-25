@@ -15,25 +15,34 @@
  */
 package com.github.ferstl.maven.pomenforcers;
 
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import org.apache.maven.enforcer.rule.api.EnforcerRuleHelper;
-import org.junit.Before;
-import org.junit.Test;
-import org.w3c.dom.Document;
-import com.github.ferstl.maven.pomenforcers.model.ProjectModel;
-import com.github.ferstl.maven.pomenforcers.util.XmlUtils;
 import static com.github.ferstl.maven.pomenforcers.ErrorReportMatcher.hasErrors;
 import static com.github.ferstl.maven.pomenforcers.ErrorReportMatcher.hasNoErrors;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.mockito.Mockito.mock;
 
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
+import org.apache.maven.project.MavenProject;
+import org.codehaus.plexus.component.configurator.expression.ExpressionEvaluationException;
+import org.codehaus.plexus.component.configurator.expression.ExpressionEvaluator;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.w3c.dom.Document;
+
+import com.github.ferstl.maven.pomenforcers.model.ProjectModel;
+import com.github.ferstl.maven.pomenforcers.util.XmlUtils;
+
 public class PedanticPluginElementEnforcerTest {
 
   private ErrorReport errorReport;
+  private MavenProject mockMavenProject;
+  private ExpressionEvaluator mockHelper;
 
-  @Before
-  public void before() {
+  @BeforeEach
+  public void before() throws ExpressionEvaluationException {
+	this.mockHelper = mock(ExpressionEvaluator.class);
+    this.mockMavenProject = mock(MavenProject.class);
     this.errorReport = new ErrorReport(PedanticEnforcerRule.PLUGIN_ELEMENT);
   }
 
@@ -62,7 +71,7 @@ public class PedanticPluginElementEnforcerTest {
     enforcer.doEnforce(this.errorReport);
 
     // assert
-    assertThat(this.errorReport, hasErrors());
+    assertThat(this.errorReport, hasErrors());    
   }
 
   @Test
@@ -82,9 +91,9 @@ public class PedanticPluginElementEnforcerTest {
 
   private PedanticPluginElementEnforcer createEnforcer(Path pomFile) {
     Document document = XmlUtils.parseXml(pomFile.toFile());
-    PedanticPluginElementEnforcer enforcer = new PedanticPluginElementEnforcer();
+    PedanticPluginElementEnforcer enforcer = new PedanticPluginElementEnforcer(mockMavenProject, mockHelper);
 
-    enforcer.initialize(mock(EnforcerRuleHelper.class), document, new ProjectModel());
+    enforcer.initialize(document, new ProjectModel());
     return enforcer;
   }
 

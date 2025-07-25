@@ -15,11 +15,12 @@
  */
 package com.github.ferstl.maven.pomenforcers;
 
-import org.junit.Test;
-import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
+
+import org.junit.jupiter.api.Test;
 
 /**
  * JUnit tests for {@link PedanticDependencyOrderEnforcer}.
@@ -28,7 +29,7 @@ public class PedanticDependencyOrderEnforcerTest extends AbstractPedanticDepende
 
   @Override
   PedanticDependencyOrderEnforcer createRule() {
-    return new PedanticDependencyOrderEnforcer();
+    return new PedanticDependencyOrderEnforcer(mockMavenProject, mockHelper);
   }
 
   @Override

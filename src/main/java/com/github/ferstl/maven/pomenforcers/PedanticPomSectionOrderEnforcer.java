@@ -20,6 +20,12 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Function;
+
+import javax.inject.Inject;
+import javax.inject.Named;
+
+import org.apache.maven.project.MavenProject;
+import org.codehaus.plexus.component.configurator.expression.ExpressionEvaluator;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import com.github.ferstl.maven.pomenforcers.model.PomSection;
@@ -44,11 +50,14 @@ import com.google.common.collect.Sets;
  * @id {@link PedanticEnforcerRule#POM_SECTION_ORDER}
  * @since 1.0.0
  */
+@Named("pomSection")
 public class PedanticPomSectionOrderEnforcer extends AbstractPedanticEnforcer {
 
   private final Set<PomSection> sectionPriorities;
 
-  public PedanticPomSectionOrderEnforcer() {
+  @Inject
+  public PedanticPomSectionOrderEnforcer(final MavenProject project, final ExpressionEvaluator helper) {
+	super(project, helper);
     this.sectionPriorities = Sets.newLinkedHashSet();
   }
 

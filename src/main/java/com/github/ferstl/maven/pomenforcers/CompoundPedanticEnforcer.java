@@ -18,6 +18,13 @@ package com.github.ferstl.maven.pomenforcers;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+
+import javax.inject.Inject;
+import javax.inject.Named;
+
+import org.apache.maven.project.MavenProject;
+import org.codehaus.plexus.component.configurator.expression.ExpressionEvaluator;
+
 import com.github.ferstl.maven.pomenforcers.util.CommaSeparatorUtils;
 import com.google.common.base.Strings;
 import com.google.common.collect.Sets;
@@ -93,6 +100,7 @@ import com.google.common.collect.Sets;
  * @id n/a
  * @since 1.0.0
  */
+@Named("compound")
 public class CompoundPedanticEnforcer extends AbstractPedanticEnforcer {
 
   /**
@@ -454,7 +462,9 @@ public class CompoundPedanticEnforcer extends AbstractPedanticEnforcer {
 
   private final PropertyInitializationVisitor propertyInitializer;
 
-  public CompoundPedanticEnforcer() {
+  @Inject
+  public CompoundPedanticEnforcer(final MavenProject project, final ExpressionEvaluator helper) {
+	super(project, helper);
     this.enforcers = Sets.newLinkedHashSet();
     this.propertyInitializer = new PropertyInitializationVisitor();
   }
@@ -479,8 +489,8 @@ public class CompoundPedanticEnforcer extends AbstractPedanticEnforcer {
 
     List<ErrorReport> ruleErrors = new ArrayList<>();
     for (PedanticEnforcerRule pedanticEnforcer : this.enforcers) {
-      AbstractPedanticEnforcer rule = pedanticEnforcer.createEnforcerRule();
-      rule.initialize(getHelper(), getPom(), getProjectModel());
+      AbstractPedanticEnforcer rule = pedanticEnforcer.createEnforcerRule(getMavenProject(), getHelper());
+      rule.initialize(getPom(), getProjectModel());
       rule.accept(this.propertyInitializer);
 
       ErrorReport ruleReport = new ErrorReport(rule.getDescription());

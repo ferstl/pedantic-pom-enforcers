@@ -15,18 +15,20 @@
  */
 package com.github.ferstl.maven.pomenforcers;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
-import org.junit.Test;
+
+import org.junit.jupiter.api.Test;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+
 import com.github.ferstl.maven.pomenforcers.model.PomSection;
-import static org.hamcrest.Matchers.equalTo;
-import static org.junit.Assert.assertThat;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
 
 /**
  * JUnit tests for {@link PedanticPomSectionOrderEnforcer}.
@@ -35,13 +37,13 @@ public class PedanticPomSectionOrderEnforcerTest extends AbstractPedanticEnforce
 
   @Override
   PedanticPomSectionOrderEnforcer createRule() {
-    return new PedanticPomSectionOrderEnforcer();
+    return new PedanticPomSectionOrderEnforcer(mockMavenProject, mockHelper);
   }
 
   @Override
   @Test
   public void getDescription() {
-    assertThat(this.testRule.getDescription(), equalTo(PedanticEnforcerRule.POM_SECTION_ORDER));
+    assertThat(this.testRule.getDescription()).isSameAs(PedanticEnforcerRule.POM_SECTION_ORDER);
   }
 
   @Override

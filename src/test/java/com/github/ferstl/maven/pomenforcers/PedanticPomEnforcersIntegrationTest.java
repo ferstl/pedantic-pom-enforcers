@@ -16,21 +16,20 @@
 package com.github.ferstl.maven.pomenforcers;
 
 import java.io.File;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import io.takari.maven.testing.TestResources;
+
+import org.junit.jupiter.api.extension.RegisterExtension;
+
+import io.takari.maven.testing.TestResources5;
 import io.takari.maven.testing.executor.MavenExecutionResult;
 import io.takari.maven.testing.executor.MavenRuntime;
 import io.takari.maven.testing.executor.MavenVersions;
-import io.takari.maven.testing.executor.junit.MavenJUnitTestRunner;
+import io.takari.maven.testing.executor.junit.MavenPluginTest;
 
-@RunWith(MavenJUnitTestRunner.class)
-@MavenVersions({"3.8.2", "3.3.9"})
+@MavenVersions({"3.8.2", "3.6.3"})
 public class PedanticPomEnforcersIntegrationTest {
 
-  @Rule
-  public final TestResources resources = new TestResources();
+  @RegisterExtension
+  public final TestResources5 resources = new TestResources5();
 
   private final MavenRuntime mavenRuntime;
 
@@ -41,7 +40,7 @@ public class PedanticPomEnforcersIntegrationTest {
         .build();
   }
 
-  @Test
+  @MavenPluginTest
   public void simpleProject() throws Exception {
     File basedir = this.resources.getBasedir("simple-project");
     MavenExecutionResult result = this.mavenRuntime
@@ -51,7 +50,7 @@ public class PedanticPomEnforcersIntegrationTest {
     result.assertErrorFreeLog();
   }
 
-  @Test
+  @MavenPluginTest
   public void exampleProject() throws Exception {
     File basedir = this.resources.getBasedir("example-project");
     MavenExecutionResult result = this.mavenRuntime
@@ -61,7 +60,7 @@ public class PedanticPomEnforcersIntegrationTest {
     result.assertErrorFreeLog();
   }
 
-  @Test
+  @MavenPluginTest
   public void issue2() throws Exception {
     File basedir = this.resources.getBasedir("issue-2");
     MavenExecutionResult result = this.mavenRuntime
@@ -71,7 +70,7 @@ public class PedanticPomEnforcersIntegrationTest {
     result.assertErrorFreeLog();
   }
 
-  @Test
+  @MavenPluginTest
   public void issue23() throws Exception {
     File basedir = this.resources.getBasedir("issue-23");
     MavenExecutionResult result = this.mavenRuntime
@@ -82,7 +81,7 @@ public class PedanticPomEnforcersIntegrationTest {
     result.assertLogText("BUILD FAILURE");
   }
 
-  @Test
+  @MavenPluginTest
   public void warnOnly() throws Exception {
     File basedir = this.resources.getBasedir("warn-only");
     MavenExecutionResult result = this.mavenRuntime

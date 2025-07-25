@@ -15,21 +15,26 @@
  */
 package com.github.ferstl.maven.pomenforcers;
 
+import java.util.Objects;
+
 import javax.xml.bind.JAXB;
+
+import org.apache.maven.enforcer.rule.api.AbstractEnforcerRule;
 import org.apache.maven.enforcer.rule.api.EnforcerLevel;
-import org.apache.maven.enforcer.rule.api.EnforcerRule;
-import org.apache.maven.enforcer.rule.api.EnforcerRule2;
 import org.apache.maven.enforcer.rule.api.EnforcerRuleException;
-import org.apache.maven.enforcer.rule.api.EnforcerRuleHelper;
 import org.apache.maven.project.MavenProject;
+import org.codehaus.plexus.component.configurator.expression.ExpressionEvaluator;
 import org.w3c.dom.Document;
+
 import com.github.ferstl.maven.pomenforcers.model.ProjectModel;
-import com.github.ferstl.maven.pomenforcers.util.EnforcerRuleUtils;
 import com.github.ferstl.maven.pomenforcers.util.XmlUtils;
 
-public abstract class AbstractPedanticEnforcer implements EnforcerRule2 {
+public abstract class AbstractPedanticEnforcer extends AbstractEnforcerRule {
 
-  private EnforcerRuleHelper helper;
+  private final ExpressionEvaluator helper;
+  
+  private final MavenProject project;
+  
   private Document pom;
   private ProjectModel projectModel;
 
@@ -42,14 +47,18 @@ public abstract class AbstractPedanticEnforcer implements EnforcerRule2 {
    * @since 2.0.0
    */
   private boolean warnOnly;
+  
+  public AbstractPedanticEnforcer(final MavenProject project, final ExpressionEvaluator helper) {
+	  this.project = Objects.requireNonNull(project);
+	  this.helper = Objects.requireNonNull(helper);
+  }
 
   @Override
-  public final void execute(EnforcerRuleHelper helper) throws EnforcerRuleException {
-    MavenProject project = EnforcerRuleUtils.getMavenProject(helper);
+  public final void execute() throws EnforcerRuleException {
     Document pom = XmlUtils.parseXml(project.getFile());
     ProjectModel model = JAXB.unmarshal(project.getFile(), ProjectModel.class);
-
-    initialize(helper, pom, model);
+    
+    initialize(pom, model);
 
     ErrorReport report = new ErrorReport(getDescription());
     doEnforce(report);
@@ -67,14 +76,17 @@ public abstract class AbstractPedanticEnforcer implements EnforcerRule2 {
    * @param pom POM Document.
    * @param projectModel Project model.
    */
-  void initialize(EnforcerRuleHelper helper, Document pom, ProjectModel projectModel) {
-    this.helper = helper;
+  void initialize(Document pom, ProjectModel projectModel) {
     this.pom = pom;
     this.projectModel = projectModel;
   }
 
-  protected EnforcerRuleHelper getHelper() {
+  protected ExpressionEvaluator getHelper() {
     return this.helper;
+  }
+  
+  protected MavenProject getMavenProject() {
+	return this.project;
   }
 
   protected Document getPom() {
@@ -94,16 +106,6 @@ public abstract class AbstractPedanticEnforcer implements EnforcerRule2 {
   @Override
   public EnforcerLevel getLevel() {
     return this.warnOnly ? EnforcerLevel.WARN : EnforcerLevel.ERROR;
-  }
-
-  @Override
-  public boolean isCacheable() {
-    return false;
-  }
-
-  @Override
-  public boolean isResultValid(EnforcerRule cachedRule) {
-    return false;
   }
 
   @Override

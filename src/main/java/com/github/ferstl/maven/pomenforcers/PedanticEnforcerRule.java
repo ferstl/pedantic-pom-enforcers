@@ -15,6 +15,9 @@
  */
 package com.github.ferstl.maven.pomenforcers;
 
+import org.apache.maven.project.MavenProject;
+import org.codehaus.plexus.component.configurator.expression.ExpressionEvaluator;
+
 /**
  * Each pedantic enforcer rule is identified by an ID. These IDs can be used within the
  * {@link CompoundPedanticEnforcer} to enable specific rules. The compound enforcer is more efficient
@@ -25,7 +28,7 @@ public enum PedanticEnforcerRule {
 
   COMPOUND("One does not simply write a POM file!") {
     @Override
-    public AbstractPedanticEnforcer createEnforcerRule() {
+    public AbstractPedanticEnforcer createEnforcerRule(final MavenProject project, final ExpressionEvaluator helper) {
       throw new UnsupportedOperationException(
           "The " + CompoundPedanticEnforcer.class.getSimpleName()
               + " is not supposed to be instantiated outside the maven-enforcer-plugin.");
@@ -37,8 +40,8 @@ public enum PedanticEnforcerRule {
    */
   POM_SECTION_ORDER("One does not simply write a POM file!") {
     @Override
-    public AbstractPedanticEnforcer createEnforcerRule() {
-      return new PedanticPomSectionOrderEnforcer();
+    public AbstractPedanticEnforcer createEnforcerRule(final MavenProject project, final ExpressionEvaluator helper) {
+      return new PedanticPomSectionOrderEnforcer(project, helper);
     }
   },
   /**
@@ -46,8 +49,8 @@ public enum PedanticEnforcerRule {
    */
   MODULE_ORDER("One does not simply declare modules!") {
     @Override
-    public AbstractPedanticEnforcer createEnforcerRule() {
-      return new PedanticModuleOrderEnforcer();
+    public AbstractPedanticEnforcer createEnforcerRule(final MavenProject project, final ExpressionEvaluator helper) {
+      return new PedanticModuleOrderEnforcer(project, helper);
     }
   },
   /**
@@ -55,8 +58,8 @@ public enum PedanticEnforcerRule {
    */
   DEPENDENCY_MANAGEMENT_ORDER("One does not simply declare dependency management!") {
     @Override
-    public AbstractPedanticEnforcer createEnforcerRule() {
-      return new PedanticDependencyManagementOrderEnforcer();
+    public AbstractPedanticEnforcer createEnforcerRule(final MavenProject project, final ExpressionEvaluator helper) {
+      return new PedanticDependencyManagementOrderEnforcer(project, helper);
     }
   },
   /**
@@ -64,8 +67,8 @@ public enum PedanticEnforcerRule {
    */
   DEPENDENCY_MANAGEMENT_LOCATION("One does not simply declare dependency management!") {
     @Override
-    public AbstractPedanticEnforcer createEnforcerRule() {
-      return new PedanticDependencyManagementLocationEnforcer();
+    public AbstractPedanticEnforcer createEnforcerRule(final MavenProject project, final ExpressionEvaluator helper) {
+      return new PedanticDependencyManagementLocationEnforcer(project, helper);
     }
   },
   /**
@@ -73,8 +76,8 @@ public enum PedanticEnforcerRule {
    */
   DEPENDENCY_ORDER("One does not simply declare dependencies!") {
     @Override
-    public AbstractPedanticEnforcer createEnforcerRule() {
-      return new PedanticDependencyOrderEnforcer();
+    public AbstractPedanticEnforcer createEnforcerRule(final MavenProject project, final ExpressionEvaluator helper) {
+      return new PedanticDependencyOrderEnforcer(project, helper);
     }
   },
   /**
@@ -82,8 +85,8 @@ public enum PedanticEnforcerRule {
    */
   DEPENDENCY_CONFIGURATION("One does not simply configure dependencies!") {
     @Override
-    public AbstractPedanticEnforcer createEnforcerRule() {
-      return new PedanticDependencyConfigurationEnforcer();
+    public AbstractPedanticEnforcer createEnforcerRule(final MavenProject project, final ExpressionEvaluator helper) {
+      return new PedanticDependencyConfigurationEnforcer(project, helper);
     }
   },
 
@@ -92,8 +95,8 @@ public enum PedanticEnforcerRule {
    */
   DEPENDENCY_ELEMENT("One does not simply declare a dependency!") {
     @Override
-    public AbstractPedanticEnforcer createEnforcerRule() {
-      return new PedanticDependencyElementEnforcer();
+    public AbstractPedanticEnforcer createEnforcerRule(final MavenProject project, final ExpressionEvaluator helper) {
+      return new PedanticDependencyElementEnforcer(project, helper);
     }
   },
 
@@ -102,8 +105,8 @@ public enum PedanticEnforcerRule {
    */
   DEPENDENCY_SCOPE("One does not simply declare dependency scopes!") {
     @Override
-    public AbstractPedanticEnforcer createEnforcerRule() {
-      return new PedanticDependencyScopeEnforcer();
+    public AbstractPedanticEnforcer createEnforcerRule(final MavenProject project, final ExpressionEvaluator helper) {
+      return new PedanticDependencyScopeEnforcer(project, helper);
     }
   },
   /**
@@ -111,8 +114,8 @@ public enum PedanticEnforcerRule {
    */
   PLUGIN_MANAGEMENT_ORDER("One does not simply declare plugin management!") {
     @Override
-    public AbstractPedanticEnforcer createEnforcerRule() {
-      return new PedanticPluginManagementOrderEnforcer();
+    public AbstractPedanticEnforcer createEnforcerRule(final MavenProject project, final ExpressionEvaluator helper) {
+      return new PedanticPluginManagementOrderEnforcer(project, helper);
     }
   },
   /**
@@ -120,8 +123,8 @@ public enum PedanticEnforcerRule {
    */
   PLUGIN_CONFIGURATION("One does not simply configure plugins!") {
     @Override
-    public AbstractPedanticEnforcer createEnforcerRule() {
-      return new PedanticPluginConfigurationEnforcer();
+    public AbstractPedanticEnforcer createEnforcerRule(final MavenProject project, final ExpressionEvaluator helper) {
+      return new PedanticPluginConfigurationEnforcer(project, helper);
     }
   },
 
@@ -130,8 +133,8 @@ public enum PedanticEnforcerRule {
    */
   PLUGIN_ELEMENT("One does not simple declare a plugin!") {
     @Override
-    public AbstractPedanticEnforcer createEnforcerRule() {
-      return new PedanticPluginElementEnforcer();
+    public AbstractPedanticEnforcer createEnforcerRule(final MavenProject project, final ExpressionEvaluator helper) {
+      return new PedanticPluginElementEnforcer(project, helper);
     }
   },
   /**
@@ -139,8 +142,8 @@ public enum PedanticEnforcerRule {
    */
   PLUGIN_MANAGEMENT_LOCATION("One does not simply declare plugin management!") {
     @Override
-    public AbstractPedanticEnforcer createEnforcerRule() {
-      return new PedanticPluginManagementLocationEnforcer();
+    public AbstractPedanticEnforcer createEnforcerRule(final MavenProject project, final ExpressionEvaluator helper) {
+      return new PedanticPluginManagementLocationEnforcer(project, helper);
     }
   };
 
@@ -154,5 +157,5 @@ public enum PedanticEnforcerRule {
     return this.slogan;
   }
 
-  public abstract AbstractPedanticEnforcer createEnforcerRule();
+  public abstract AbstractPedanticEnforcer createEnforcerRule(final MavenProject project, final ExpressionEvaluator helper);
 }

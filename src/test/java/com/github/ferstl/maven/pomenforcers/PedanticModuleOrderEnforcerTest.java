@@ -15,26 +15,31 @@
  */
 package com.github.ferstl.maven.pomenforcers;
 
-import java.util.Arrays;
-import org.junit.Before;
-import org.junit.Test;
-import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.util.Arrays;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.TestInstance.Lifecycle;
+
 /**
  * JUnit tests for {@link PedanticModuleOrderEnforcer}.
  */
+@TestInstance(Lifecycle.PER_CLASS)
 public class PedanticModuleOrderEnforcerTest extends AbstractPedanticEnforcerTest<PedanticModuleOrderEnforcer> {
 
   @Override
   PedanticModuleOrderEnforcer createRule() {
-    return new PedanticModuleOrderEnforcer();
+    return new PedanticModuleOrderEnforcer(mockMavenProject, mockHelper);
   }
 
-  @Before
+  @BeforeEach
   public void before() {
     when(this.mockMavenProject.getPackaging()).thenReturn("pom");
   }

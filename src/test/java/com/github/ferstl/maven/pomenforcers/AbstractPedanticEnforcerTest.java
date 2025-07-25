@@ -15,30 +15,31 @@
  */
 package com.github.ferstl.maven.pomenforcers;
 
-import java.util.LinkedList;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-import org.apache.maven.enforcer.rule.api.EnforcerRuleHelper;
-import org.apache.maven.model.Dependency;
-import org.apache.maven.model.DependencyManagement;
-import org.apache.maven.model.PluginManagement;
-import org.apache.maven.monitor.logging.DefaultLog;
-import org.apache.maven.project.MavenProject;
-import org.codehaus.plexus.logging.Logger;
-import org.codehaus.plexus.logging.console.ConsoleLogger;
-import org.junit.Before;
-import org.junit.Test;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import com.github.ferstl.maven.pomenforcers.model.DependencyModel;
-import com.github.ferstl.maven.pomenforcers.model.DependencyScope;
-import com.github.ferstl.maven.pomenforcers.model.ProjectModel;
 import static com.github.ferstl.maven.pomenforcers.ErrorReportMatcher.hasErrors;
 import static com.github.ferstl.maven.pomenforcers.ErrorReportMatcher.hasNoErrors;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+
+import java.util.LinkedList;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+
+import org.apache.maven.model.Dependency;
+import org.apache.maven.model.DependencyManagement;
+import org.apache.maven.model.PluginManagement;
+import org.apache.maven.project.MavenProject;
+import org.codehaus.plexus.component.configurator.expression.ExpressionEvaluator;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+
+import com.github.ferstl.maven.pomenforcers.model.DependencyModel;
+import com.github.ferstl.maven.pomenforcers.model.DependencyScope;
+import com.github.ferstl.maven.pomenforcers.model.ProjectModel;
 
 
 public abstract class AbstractPedanticEnforcerTest<T extends AbstractPedanticEnforcer> {
@@ -49,10 +50,12 @@ public abstract class AbstractPedanticEnforcerTest<T extends AbstractPedanticEnf
   MavenProject mockMavenProject;
   T testRule;
   ErrorReport report;
+  
+  ExpressionEvaluator mockHelper;
 
-  @Before
+  @BeforeEach
   public void setup() throws Exception {
-    EnforcerRuleHelper mockHelper = mock(EnforcerRuleHelper.class);
+	this.mockHelper = mock(ExpressionEvaluator.class);
     this.projectModel = mock(ProjectModel.class);
     this.mockMavenProject = mock(MavenProject.class);
 
@@ -68,13 +71,10 @@ public abstract class AbstractPedanticEnforcerTest<T extends AbstractPedanticEnf
     when(this.mockMavenProject.getDependencyManagement()).thenReturn(depMgmtMock);
     when(this.mockMavenProject.getPluginManagement()).thenReturn(pluginMgmtMock);
 
-    ConsoleLogger plexusLogger = new ConsoleLogger(Logger.LEVEL_DEBUG, "testLogger");
-    when(mockHelper.getLog()).thenReturn(new DefaultLog(plexusLogger));
-
     when(mockHelper.evaluate("${project}")).thenReturn(this.mockMavenProject);
 
     this.testRule = createRule();
-    this.testRule.initialize(mockHelper, createEmptyPom(), this.projectModel);
+    this.testRule.initialize(createEmptyPom(), this.projectModel);
     this.report = new ErrorReport(this.testRule.getDescription());
   }
 
