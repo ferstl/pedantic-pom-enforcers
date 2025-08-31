@@ -29,7 +29,7 @@ import static org.mockito.Mockito.when;
  * JUnit tests for {@link PedanticModuleOrderEnforcer}.
  */
 @TestInstance(Lifecycle.PER_CLASS)
-public class PedanticModuleOrderEnforcerTest extends AbstractPedanticEnforcerTest<PedanticModuleOrderEnforcer> {
+class PedanticModuleOrderEnforcerTest extends AbstractPedanticEnforcerTest<PedanticModuleOrderEnforcer> {
 
   @Override
   PedanticModuleOrderEnforcer createRule() {
@@ -37,19 +37,19 @@ public class PedanticModuleOrderEnforcerTest extends AbstractPedanticEnforcerTes
   }
 
   @BeforeEach
-  public void before() {
+  void before() {
     when(this.mockMavenProject.getPackaging()).thenReturn("pom");
   }
 
   @Override
   @Test
-  public void getDescription() {
+  void getDescription() {
     assertThat(this.testRule.getDescription()).isEqualTo(PedanticEnforcerRule.MODULE_ORDER);
   }
 
   @Override
   @Test
-  public void accept() {
+  void accept() {
     PedanticEnforcerVisitor visitor = mock(PedanticEnforcerVisitor.class);
     this.testRule.accept(visitor);
 
@@ -57,14 +57,14 @@ public class PedanticModuleOrderEnforcerTest extends AbstractPedanticEnforcerTes
   }
 
   @Test
-  public void correctOrder() {
+  void correctOrder() {
     when(this.projectModel.getModules()).thenReturn(Arrays.asList("m1", "m2", "m3"));
 
     executeRuleAndCheckReport(false);
   }
 
   @Test
-  public void correctOrderWithIgnores() {
+  void correctOrderWithIgnores() {
     when(this.projectModel.getModules()).thenReturn(Arrays.asList("m9", "m8", "m1", "m2", "m7", "m3"));
     this.testRule.setIgnoredModules("m9,m8,m7");
 
@@ -72,7 +72,7 @@ public class PedanticModuleOrderEnforcerTest extends AbstractPedanticEnforcerTes
   }
 
   @Test
-  public void noPomPackaging() {
+  void noPomPackaging() {
     when(this.mockMavenProject.getPackaging()).thenReturn("jar");
     when(this.projectModel.getModules()).thenReturn(null);
 
@@ -80,14 +80,14 @@ public class PedanticModuleOrderEnforcerTest extends AbstractPedanticEnforcerTes
   }
 
   @Test
-  public void incorrectOrder() {
+  void incorrectOrder() {
     when(this.projectModel.getModules()).thenReturn(Arrays.asList("m2", "m1"));
 
     executeRuleAndCheckReport(true);
   }
 
   @Test
-  public void incorrectOrderWithIgnores() {
+  void incorrectOrderWithIgnores() {
     when(this.projectModel.getModules()).thenReturn(Arrays.asList("m9", "m2", "m1"));
     this.testRule.setIgnoredModules("m9");
 

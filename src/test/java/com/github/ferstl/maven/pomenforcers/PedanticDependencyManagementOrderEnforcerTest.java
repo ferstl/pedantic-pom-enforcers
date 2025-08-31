@@ -23,7 +23,7 @@ import static org.mockito.Mockito.verify;
 /**
  * JUnit tests for {@link PedanticDependencyManagementOrderEnforcer}:
  */
-public class PedanticDependencyManagementOrderEnforcerTest extends AbstractPedanticDependencyOrderEnforcerTest<PedanticDependencyManagementOrderEnforcer> {
+class PedanticDependencyManagementOrderEnforcerTest extends AbstractPedanticDependencyOrderEnforcerTest<PedanticDependencyManagementOrderEnforcer> {
 
   @Override
   PedanticDependencyManagementOrderEnforcer createRule() {
@@ -32,13 +32,13 @@ public class PedanticDependencyManagementOrderEnforcerTest extends AbstractPedan
 
   @Test
   @Override
-  public void getDescription() {
+  void getDescription() {
     assertThat(this.testRule.getDescription()).isEqualTo(PedanticEnforcerRule.DEPENDENCY_MANAGEMENT_ORDER);
   }
 
   @Test
   @Override
-  public void accept() {
+  void accept() {
     PedanticEnforcerVisitor visitor = mock(PedanticEnforcerVisitor.class);
     this.testRule.accept(visitor);
 
@@ -46,7 +46,7 @@ public class PedanticDependencyManagementOrderEnforcerTest extends AbstractPedan
   }
 
   @Override
-  public DependencyAdder createDependencyAdder() {
+  protected DependencyAdder createDependencyAdder() {
     return this::addManagedDependency;
   }
 }

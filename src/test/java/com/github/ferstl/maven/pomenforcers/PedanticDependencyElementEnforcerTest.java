@@ -27,21 +27,21 @@ import com.github.ferstl.maven.pomenforcers.util.XmlUtils;
 import static com.github.ferstl.maven.pomenforcers.ErrorReportAssert.assertThat;
 import static org.mockito.Mockito.mock;
 
-public class PedanticDependencyElementEnforcerTest {
+class PedanticDependencyElementEnforcerTest {
 
   private ErrorReport errorReport;
   MavenProject mockMavenProject;
   ExpressionEvaluator mockHelper;
 
   @BeforeEach
-  public void before() {
+  void before() {
     this.errorReport = new ErrorReport(PedanticEnforcerRule.DEPENDENCY_ELEMENT);
     this.mockHelper = mock(ExpressionEvaluator.class);
     this.mockMavenProject = mock(MavenProject.class);
   }
 
   @Test
-  public void defaultOrdering() {
+  void defaultOrdering() {
     // arrange
     Path pomFile = Paths.get("src/test/projects/example-project/module1/pom.xml");
     PedanticDependencyElementEnforcer enforcer = createEnforcer(pomFile);
@@ -54,7 +54,7 @@ public class PedanticDependencyElementEnforcerTest {
   }
 
   @Test
-  public void customOrderingForDependencies() {
+  void customOrderingForDependencies() {
     // arrange
     Path pomFile = Paths.get("src/test/projects/example-project/module1/pom.xml");
     PedanticDependencyElementEnforcer enforcer = createEnforcer(pomFile);
@@ -69,7 +69,7 @@ public class PedanticDependencyElementEnforcerTest {
   }
 
   @Test
-  public void customOrderingForDependencyManagement() {
+  void customOrderingForDependencyManagement() {
     // arrange
     Path pomFile = Paths.get("src/test/projects/example-project/pom.xml");
     PedanticDependencyElementEnforcer enforcer = createEnforcer(pomFile);

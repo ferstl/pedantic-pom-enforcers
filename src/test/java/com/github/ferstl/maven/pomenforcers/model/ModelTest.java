@@ -19,16 +19,16 @@ import java.io.File;
 import javax.xml.bind.Binder;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBElement;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import com.github.ferstl.maven.pomenforcers.util.XmlUtils;
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class ModelTest {
+class ModelTest {
 
   @Test
-  public void test() throws Exception {
+  void test() throws Exception {
     Document pom = XmlUtils.parseXml(new File("src/test/projects/example-project/pom.xml"));
     JAXBContext ctx = JAXBContext.newInstance(ProjectModel.class);
 

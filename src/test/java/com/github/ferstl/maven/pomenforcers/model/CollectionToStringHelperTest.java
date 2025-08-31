@@ -15,14 +15,14 @@
  */
 package com.github.ferstl.maven.pomenforcers.model;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import static java.util.Arrays.asList;
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class CollectionToStringHelperTest {
+class CollectionToStringHelperTest {
 
   @Test
-  public void toStringWithValues() {
+  void toStringWithValues() {
     // act
     String result = CollectionToStringHelper.toString("Test", asList("a", "b", "c"));
 
@@ -37,7 +37,7 @@ public class CollectionToStringHelperTest {
 
 
   @Test
-  public void toStringWithNullCollection() {
+  void toStringWithNullCollection() {
     // act
     String result = CollectionToStringHelper.toString("Test", null);
 

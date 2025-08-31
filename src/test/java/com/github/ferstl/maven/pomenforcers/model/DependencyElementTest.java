@@ -15,14 +15,14 @@
  */
 package com.github.ferstl.maven.pomenforcers.model;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 
 
-public class DependencyElementTest {
+class DependencyElementTest {
 
   @Test
-  public void testGetByElementName() {
+  void testGetByElementName() {
     DependencyElement.values();
     for (DependencyElement element : DependencyElement.values()) {
       assertThat(element).isEqualTo(DependencyElement.getByElementName(element.getElementName()));

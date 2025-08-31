@@ -25,7 +25,7 @@ import static org.mockito.Mockito.verify;
 /**
  * JUnit tests for {@link PedanticPluginManagementOrderEnforcer}.
  */
-public class PedanticPluginManagementOrderEnforcerTest extends AbstractPedanticEnforcerTest<PedanticPluginManagementOrderEnforcer> {
+class PedanticPluginManagementOrderEnforcerTest extends AbstractPedanticEnforcerTest<PedanticPluginManagementOrderEnforcer> {
 
   @Override
   PedanticPluginManagementOrderEnforcer createRule() {
@@ -34,13 +34,13 @@ public class PedanticPluginManagementOrderEnforcerTest extends AbstractPedanticE
 
   @Test
   @Override
-  public void getDescription() {
+  void getDescription() {
     assertThat(this.testRule.getDescription()).isEqualTo(PedanticEnforcerRule.PLUGIN_MANAGEMENT_ORDER);
   }
 
   @Test
   @Override
-  public void accept() {
+  void accept() {
     PedanticEnforcerVisitor visitor = mock(PedanticEnforcerVisitor.class);
     this.testRule.accept(visitor);
 
@@ -48,7 +48,7 @@ public class PedanticPluginManagementOrderEnforcerTest extends AbstractPedanticE
   }
 
   @Test
-  public void defaultSettingsCorrect() {
+  void defaultSettingsCorrect() {
     addManagedPlugin("a.b.c", "a");
     addManagedPlugin("a.b.c", "b");
 
@@ -56,7 +56,7 @@ public class PedanticPluginManagementOrderEnforcerTest extends AbstractPedanticE
   }
 
   @Test
-  public void defaultSettingsWrongGroupIdOrder() {
+  void defaultSettingsWrongGroupIdOrder() {
     addManagedPlugin("d.e.f", "a");
     addManagedPlugin("a.b.c", "a");
 
@@ -64,7 +64,7 @@ public class PedanticPluginManagementOrderEnforcerTest extends AbstractPedanticE
   }
 
   @Test
-  public void defaultSettingsWrongArtifactIdOrder() {
+  void defaultSettingsWrongArtifactIdOrder() {
     addManagedPlugin("a.b.c", "b");
     addManagedPlugin("a.b.c", "a");
 
@@ -72,7 +72,7 @@ public class PedanticPluginManagementOrderEnforcerTest extends AbstractPedanticE
   }
 
   @Test
-  public void groupIdPriorities() {
+  void groupIdPriorities() {
     this.testRule.setGroupIdPriorities("x.y.z,u.v.w");
 
     addManagedPlugin("x.y.z", "a");
@@ -83,7 +83,7 @@ public class PedanticPluginManagementOrderEnforcerTest extends AbstractPedanticE
   }
 
   @Test
-  public void artifactIdPriorities() {
+  void artifactIdPriorities() {
     this.testRule.setArtifactIdPriorities("z,y");
 
     addManagedPlugin("a.b.c", "z");
@@ -94,7 +94,7 @@ public class PedanticPluginManagementOrderEnforcerTest extends AbstractPedanticE
   }
 
   @Test
-  public void orderBy() {
+  void orderBy() {
     this.testRule.setOrderBy("artifactId,groupId");
 
     addManagedPlugin("x.y.z", "a");

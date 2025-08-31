@@ -26,7 +26,7 @@ import static org.mockito.Mockito.when;
 /**
  * JUnit tests for {@link PedanticPluginManagementLocationEnforcer}.
  */
-public class PedanticPluginManagementLocationEnforcerTest extends AbstractPedanticEnforcerTest<PedanticPluginManagementLocationEnforcer> {
+class PedanticPluginManagementLocationEnforcerTest extends AbstractPedanticEnforcerTest<PedanticPluginManagementLocationEnforcer> {
 
   @Override
   PedanticPluginManagementLocationEnforcer createRule() {
@@ -34,7 +34,7 @@ public class PedanticPluginManagementLocationEnforcerTest extends AbstractPedant
   }
 
   @BeforeEach
-  public void before() {
+  void before() {
     when(this.mockMavenProject.getGroupId()).thenReturn("a.b.c");
     when(this.mockMavenProject.getArtifactId()).thenReturn("parent");
     this.projectModel.getManagedPlugins().add(new PluginModel("a.b.c", "a", "1.0"));
@@ -42,13 +42,13 @@ public class PedanticPluginManagementLocationEnforcerTest extends AbstractPedant
 
   @Override
   @Test
-  public void getDescription() {
+  void getDescription() {
     assertThat(this.testRule.getDescription()).isEqualTo(PedanticEnforcerRule.PLUGIN_MANAGEMENT_LOCATION);
   }
 
   @Override
   @Test
-  public void accept() {
+  void accept() {
     PedanticEnforcerVisitor visitor = mock(PedanticEnforcerVisitor.class);
     this.testRule.accept(visitor);
 
@@ -56,31 +56,31 @@ public class PedanticPluginManagementLocationEnforcerTest extends AbstractPedant
   }
 
   @Test
-  public void noPluginManagingPomsDeclared() {
+  void noPluginManagingPomsDeclared() {
     executeRuleAndCheckReport(false);
   }
 
   @Test
-  public void isPluginManagingPom() {
+  void isPluginManagingPom() {
     this.testRule.setPluginManagingPoms("a.b.c:parent");
 
     executeRuleAndCheckReport(false);
   }
 
   @Test
-  public void isNotPluginManagingPom() {
+  void isNotPluginManagingPom() {
     this.testRule.setPluginManagingPoms("some.other:pom");
 
     executeRuleAndCheckReport(true);
   }
 
-  public void pluginManagementAllowedInParentPom() {
+  void pluginManagementAllowedInParentPom() {
     when(this.mockMavenProject.getPackaging()).thenReturn("pom");
 
     executeRuleAndCheckReport(true);
   }
 
-  public void pluginManagementNotAllowedInParentPom() {
+  void pluginManagementNotAllowedInParentPom() {
     when(this.mockMavenProject.getPackaging()).thenReturn("pom");
     this.testRule.setAllowParentPoms(false);
 
@@ -88,7 +88,7 @@ public class PedanticPluginManagementLocationEnforcerTest extends AbstractPedant
   }
 
   @Test
-  public void pluginManagementInNonParentPom() {
+  void pluginManagementInNonParentPom() {
     when(this.mockMavenProject.getPackaging()).thenReturn("jar");
 
     executeRuleAndCheckReport(false);

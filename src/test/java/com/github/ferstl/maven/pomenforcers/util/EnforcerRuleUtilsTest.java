@@ -15,27 +15,27 @@
  */
 package com.github.ferstl.maven.pomenforcers.util;
 
-import org.apache.maven.enforcer.rule.api.EnforcerRuleHelper;
-import org.junit.Before;
-import org.junit.Test;
+import org.codehaus.plexus.component.configurator.expression.ExpressionEvaluator;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import static com.github.ferstl.maven.pomenforcers.util.EnforcerRuleUtils.evaluateProperties;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-public class EnforcerRuleUtilsTest {
+class EnforcerRuleUtilsTest {
 
-  private EnforcerRuleHelper mockHelper;
+  private ExpressionEvaluator mockHelper;
 
-  @Before
-  public void setup() throws Exception {
-    this.mockHelper = mock(EnforcerRuleHelper.class);
+  @BeforeEach
+  void setup() throws Exception {
+    this.mockHelper = mock(ExpressionEvaluator.class);
     when(this.mockHelper.evaluate(anyString())).thenReturn("test");
   }
 
   @Test
-  public void testEvaluateProperties() {
+  void testEvaluateProperties() {
     assertThat(evaluateProperties("foo-${user.name}-bar", this.mockHelper)).isEqualTo("foo-test-bar");
     assertThat(evaluateProperties("foo-${x}-bar-${y}", this.mockHelper)).isEqualTo("foo-test-bar-test");
     assertThat(evaluateProperties("foo", this.mockHelper)).isEqualTo("foo");

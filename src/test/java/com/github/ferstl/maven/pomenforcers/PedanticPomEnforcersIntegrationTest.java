@@ -23,8 +23,9 @@ import io.takari.maven.testing.executor.MavenRuntime;
 import io.takari.maven.testing.executor.MavenVersions;
 import io.takari.maven.testing.executor.junit.MavenPluginTest;
 
-@MavenVersions({"3.8.2", "3.6.3"})
-public class PedanticPomEnforcersIntegrationTest {
+// Enforcer plugin requires at least Maven version 3.6.3
+@MavenVersions({"3.9.11", "3.6.3"})
+class PedanticPomEnforcersIntegrationTest {
 
   @RegisterExtension
   public final TestResources5 resources = new TestResources5();
@@ -32,14 +33,14 @@ public class PedanticPomEnforcersIntegrationTest {
   private final MavenRuntime mavenRuntime;
 
 
-  public PedanticPomEnforcersIntegrationTest(MavenRuntime.MavenRuntimeBuilder builder) throws Exception {
+  PedanticPomEnforcersIntegrationTest(MavenRuntime.MavenRuntimeBuilder builder) throws Exception {
     this.mavenRuntime = builder
         .withCliOptions("-B")
         .build();
   }
 
   @MavenPluginTest
-  public void simpleProject() throws Exception {
+  void simpleProject() throws Exception {
     File basedir = this.resources.getBasedir("simple-project");
     MavenExecutionResult result = this.mavenRuntime
         .forProject(basedir)
@@ -49,7 +50,7 @@ public class PedanticPomEnforcersIntegrationTest {
   }
 
   @MavenPluginTest
-  public void exampleProject() throws Exception {
+  void exampleProject() throws Exception {
     File basedir = this.resources.getBasedir("example-project");
     MavenExecutionResult result = this.mavenRuntime
         .forProject(basedir)
@@ -59,7 +60,7 @@ public class PedanticPomEnforcersIntegrationTest {
   }
 
   @MavenPluginTest
-  public void issue2() throws Exception {
+  void issue2() throws Exception {
     File basedir = this.resources.getBasedir("issue-2");
     MavenExecutionResult result = this.mavenRuntime
         .forProject(basedir)
@@ -69,7 +70,7 @@ public class PedanticPomEnforcersIntegrationTest {
   }
 
   @MavenPluginTest
-  public void issue23() throws Exception {
+  void issue23() throws Exception {
     File basedir = this.resources.getBasedir("issue-23");
     MavenExecutionResult result = this.mavenRuntime
         .forProject(basedir)
@@ -80,7 +81,7 @@ public class PedanticPomEnforcersIntegrationTest {
   }
 
   @MavenPluginTest
-  public void warnOnly() throws Exception {
+  void warnOnly() throws Exception {
     File basedir = this.resources.getBasedir("warn-only");
     MavenExecutionResult result = this.mavenRuntime
         .forProject(basedir)

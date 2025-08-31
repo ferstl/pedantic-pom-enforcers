@@ -30,7 +30,7 @@ import static org.mockito.Mockito.when;
  * JUnit tests for {@link PedanticPluginConfigurationEnforcer}.
  */
 @TestInstance(Lifecycle.PER_CLASS)
-public class PedanticPluginConfigurationEnforcerTest extends AbstractPedanticEnforcerTest<PedanticPluginConfigurationEnforcer> {
+class PedanticPluginConfigurationEnforcerTest extends AbstractPedanticEnforcerTest<PedanticPluginConfigurationEnforcer> {
 
   @Override
   PedanticPluginConfigurationEnforcer createRule() {
@@ -39,13 +39,13 @@ public class PedanticPluginConfigurationEnforcerTest extends AbstractPedanticEnf
 
   @Override
   @Test
-  public void getDescription() {
+  void getDescription() {
     assertThat(this.testRule.getDescription()).isEqualTo(PedanticEnforcerRule.PLUGIN_CONFIGURATION);
   }
 
   @Override
   @Test
-  public void accept() {
+  void accept() {
     PedanticEnforcerVisitor visitor = mock(PedanticEnforcerVisitor.class);
     this.testRule.accept(visitor);
 
@@ -53,14 +53,14 @@ public class PedanticPluginConfigurationEnforcerTest extends AbstractPedanticEnf
   }
 
   @Test
-  public void defaultSettingsCorrect() {
+  void defaultSettingsCorrect() {
     addPlugin(false, false, false);
 
     executeRuleAndCheckReport(false);
   }
 
   @Test
-  public void allowedUnmanagedConfiguration() {
+  void allowedUnmanagedConfiguration() {
     this.testRule.setManageConfigurations(false);
     addPlugin(false, true, false);
 
@@ -68,7 +68,7 @@ public class PedanticPluginConfigurationEnforcerTest extends AbstractPedanticEnf
   }
 
   @Test
-  public void forbiddenUnmanagedConfiguration() {
+  void forbiddenUnmanagedConfiguration() {
     this.testRule.setManageConfigurations(true);
     addPlugin(false, true, false);
 
@@ -76,7 +76,7 @@ public class PedanticPluginConfigurationEnforcerTest extends AbstractPedanticEnf
   }
 
   @Test
-  public void allowedUnmanagedDependencies() {
+  void allowedUnmanagedDependencies() {
     this.testRule.setManageDependencies(false);
     addPlugin(false, false, true);
 
@@ -84,7 +84,7 @@ public class PedanticPluginConfigurationEnforcerTest extends AbstractPedanticEnf
   }
 
   @Test
-  public void forbiddenUnmanagedDependencies() {
+  void forbiddenUnmanagedDependencies() {
     this.testRule.setManageDependencies(true);
     addPlugin(false, false, true);
 
@@ -92,7 +92,7 @@ public class PedanticPluginConfigurationEnforcerTest extends AbstractPedanticEnf
   }
 
   @Test
-  public void allowedManagedVersion() {
+  void allowedManagedVersion() {
     this.testRule.setManageVersions(false);
     addPlugin(true, false, false);
 
@@ -100,7 +100,7 @@ public class PedanticPluginConfigurationEnforcerTest extends AbstractPedanticEnf
   }
 
   @Test
-  public void forbiddenManagedVersion() {
+  void forbiddenManagedVersion() {
     this.testRule.setManageVersions(true);
     addPlugin(true, false, false);
 
@@ -108,7 +108,7 @@ public class PedanticPluginConfigurationEnforcerTest extends AbstractPedanticEnf
   }
 
   @Test
-  public void allowedProjectVersion1() {
+  void allowedProjectVersion1() {
     this.testRule.setAllowUnmanagedProjectVersions(true);
     PluginModel plugin = addPlugin(false, false, false);
     when(plugin.getVersion()).thenReturn("${project.version}");
@@ -117,7 +117,7 @@ public class PedanticPluginConfigurationEnforcerTest extends AbstractPedanticEnf
   }
 
   @Test
-  public void allowedProjectVersion2() {
+  void allowedProjectVersion2() {
     PluginModel plugin = addPlugin(false, false, false);
     when(plugin.getVersion()).thenReturn("${version}");
 
@@ -125,7 +125,7 @@ public class PedanticPluginConfigurationEnforcerTest extends AbstractPedanticEnf
   }
 
   @Test
-  public void forbiddenProjectVersion() {
+  void forbiddenProjectVersion() {
     this.testRule.setAllowUnmanagedProjectVersions(false);
     PluginModel plugin = addPlugin(false, false, false);
     when(plugin.getVersion()).thenReturn("${project.version}");
@@ -134,7 +134,7 @@ public class PedanticPluginConfigurationEnforcerTest extends AbstractPedanticEnf
   }
 
   @Test
-  public void allowedVersionWithProps() {
+  void allowedVersionWithProps() {
     this.testRule.setAllowedUnmanagedProjectVersionProperties("some.version");
     addPlugin(false, false, false);
 
@@ -142,7 +142,7 @@ public class PedanticPluginConfigurationEnforcerTest extends AbstractPedanticEnf
   }
 
   @Test
-  public void allowedVersionWithDisabledProps1() {
+  void allowedVersionWithDisabledProps1() {
     this.testRule.setManageVersions(false);
     this.testRule.setAllowedUnmanagedProjectVersionProperties("some.version");
     addPlugin(true, false, false);
@@ -151,7 +151,7 @@ public class PedanticPluginConfigurationEnforcerTest extends AbstractPedanticEnf
   }
 
   @Test
-  public void allowedVersionWithDisabledProps2() {
+  void allowedVersionWithDisabledProps2() {
     this.testRule.setAllowUnmanagedProjectVersions(false);
     this.testRule.setAllowedUnmanagedProjectVersionProperties("some.version");
     addPlugin(false, false, false);
@@ -160,7 +160,7 @@ public class PedanticPluginConfigurationEnforcerTest extends AbstractPedanticEnf
   }
 
   @Test
-  public void forbiddenVersionWithCustomProps1() {
+  void forbiddenVersionWithCustomProps1() {
     this.testRule.setAllowedUnmanagedProjectVersionProperties("some.version");
     addPlugin(true, false, false);
 
@@ -168,7 +168,7 @@ public class PedanticPluginConfigurationEnforcerTest extends AbstractPedanticEnf
   }
 
   @Test
-  public void forbiddenVersionWithCustomProps2() {
+  void forbiddenVersionWithCustomProps2() {
     this.testRule.setAllowedUnmanagedProjectVersionProperties("some.version");
     PluginModel plugin = addPlugin(true, false, false);
     when(plugin.getVersion()).thenReturn("${project.version}");
@@ -177,7 +177,7 @@ public class PedanticPluginConfigurationEnforcerTest extends AbstractPedanticEnf
   }
 
   @Test
-  public void allowedVersionWithActiveCustomProps1() {
+  void allowedVersionWithActiveCustomProps1() {
     this.testRule.setAllowedUnmanagedProjectVersionProperties("some.version");
     PluginModel plugin = addPlugin(true, false, false);
     when(plugin.getVersion()).thenReturn("${some.version}");
@@ -186,7 +186,7 @@ public class PedanticPluginConfigurationEnforcerTest extends AbstractPedanticEnf
   }
 
   @Test
-  public void allowedVersionWithActiveCustomProps2() {
+  void allowedVersionWithActiveCustomProps2() {
     this.testRule.setAllowedUnmanagedProjectVersionProperties("some.version,some.other.version");
     PluginModel plugin = addPlugin(true, false, false);
     when(plugin.getVersion()).thenReturn("${some.other.version}");

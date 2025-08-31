@@ -15,22 +15,22 @@
  */
 package com.github.ferstl.maven.pomenforcers.model.functions;
 
-import org.apache.maven.enforcer.rule.api.EnforcerRuleHelper;
 import org.apache.maven.model.Plugin;
-import org.junit.Before;
-import org.junit.Test;
+import org.codehaus.plexus.component.configurator.expression.ExpressionEvaluator;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import com.github.ferstl.maven.pomenforcers.model.PluginModel;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
 
 public class PluginMatcherTest {
 
   private PluginMatcher pluginMatcher;
 
-  @Before
+  @BeforeEach
   public void before() {
-    this.pluginMatcher = new PluginMatcher(mock(EnforcerRuleHelper.class));
+    this.pluginMatcher = new PluginMatcher(mock(ExpressionEvaluator.class));
   }
 
   @Test

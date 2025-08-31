@@ -17,16 +17,16 @@ package com.github.ferstl.maven.pomenforcers.priority;
 
 import java.util.ArrayList;
 import java.util.function.Function;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import com.google.common.collect.Lists;
 import static org.assertj.core.api.Assertions.assertThat;
 
 
-public class PriorityOrderingTest {
+class PriorityOrderingTest {
 
 
   @Test
-  public void testCompare() {
+  void testCompare() {
     ArrayList<String> prioritizedItems = Lists.newArrayList("z", "y", "x");
     Function<String, String> transformer = Function.identity();
     PriorityOrdering<String, String> testComparator = new PriorityOrdering<>(prioritizedItems, transformer);
@@ -46,7 +46,7 @@ public class PriorityOrderingTest {
   }
 
   @Test
-  public void testCompareWithoutPriorities() {
+  void testCompareWithoutPriorities() {
     ArrayList<String> prioritizedItems = Lists.newArrayList();
     Function<String, String> identity = Function.identity();
     PriorityOrdering<String, String> testComparator = new PriorityOrdering<>(prioritizedItems, identity);

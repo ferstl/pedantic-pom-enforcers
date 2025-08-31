@@ -15,8 +15,8 @@
  */
 package com.github.ferstl.maven.pomenforcers;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import com.github.ferstl.maven.pomenforcers.model.DependencyScope;
 
 
@@ -27,20 +27,20 @@ import com.github.ferstl.maven.pomenforcers.model.DependencyScope;
  * on the managed dependencies and one on the dependencies themselves.
  * </p>
  */
-public abstract class AbstractPedanticDependencyOrderEnforcerTest<T extends AbstractPedanticDependencyOrderEnforcer>
+abstract class AbstractPedanticDependencyOrderEnforcerTest<T extends AbstractPedanticDependencyOrderEnforcer>
     extends AbstractPedanticEnforcerTest<T> {
 
   private DependencyAdder dependencyAdder;
 
-  @Before
-  public void setupDependencyAdder() {
+  @BeforeEach
+  void setupDependencyAdder() {
     this.dependencyAdder = createDependencyAdder();
   }
 
   protected abstract DependencyAdder createDependencyAdder();
 
   @Test
-  public void defaultSettingsCorrect() {
+  void defaultSettingsCorrect() {
     this.dependencyAdder.addDependency("d.e.f", "a", DependencyScope.IMPORT);
     this.dependencyAdder.addDependency("d.e.f", "b", DependencyScope.IMPORT);
 
@@ -60,7 +60,7 @@ public abstract class AbstractPedanticDependencyOrderEnforcerTest<T extends Abst
   }
 
   @Test
-  public void defaultSettingsWrongScopeOrder() {
+  void defaultSettingsWrongScopeOrder() {
     // Test before compile
     this.dependencyAdder.addDependency("a.b.c", "a", DependencyScope.TEST);
     this.dependencyAdder.addDependency("x.y.z", "z", DependencyScope.COMPILE);
@@ -69,7 +69,7 @@ public abstract class AbstractPedanticDependencyOrderEnforcerTest<T extends Abst
   }
 
   @Test
-  public void defaultSettingsWrongGroupIdOrder() {
+  void defaultSettingsWrongGroupIdOrder() {
     this.dependencyAdder.addDependency("d.e.f", "a", DependencyScope.COMPILE);
     this.dependencyAdder.addDependency("a.b.c", "a", DependencyScope.COMPILE);
 
@@ -77,7 +77,7 @@ public abstract class AbstractPedanticDependencyOrderEnforcerTest<T extends Abst
   }
 
   @Test
-  public void defaultSettingsWrongArtifactIdOrder() {
+  void defaultSettingsWrongArtifactIdOrder() {
     this.dependencyAdder.addDependency("a.b.c", "b", DependencyScope.COMPILE);
     this.dependencyAdder.addDependency("a.b.c", "a", DependencyScope.COMPILE);
 
@@ -85,7 +85,7 @@ public abstract class AbstractPedanticDependencyOrderEnforcerTest<T extends Abst
   }
 
   @Test
-  public void groupIdPriorities() {
+  void groupIdPriorities() {
     this.testRule.setGroupIdPriorities("u.v.w,x.y.z");
 
     this.dependencyAdder.addDependency("u.v.w", "z", DependencyScope.COMPILE);
@@ -97,7 +97,7 @@ public abstract class AbstractPedanticDependencyOrderEnforcerTest<T extends Abst
 
 
   @Test
-  public void artifactIdPriorities() {
+  void artifactIdPriorities() {
     this.testRule.setArtifactIdPriorities("z,y");
 
     this.dependencyAdder.addDependency("a.b.c", "z", DependencyScope.COMPILE);
@@ -108,7 +108,7 @@ public abstract class AbstractPedanticDependencyOrderEnforcerTest<T extends Abst
   }
 
   @Test
-  public void scopePriorities() {
+  void scopePriorities() {
     this.testRule.setScopePriorities("system,compile");
 
     this.dependencyAdder.addDependency("x.y.z", "z", DependencyScope.SYSTEM);
@@ -118,7 +118,7 @@ public abstract class AbstractPedanticDependencyOrderEnforcerTest<T extends Abst
   }
 
   @Test
-  public void orderBy() {
+  void orderBy() {
     this.testRule.setOrderBy("groupId,artifactId");
 
     this.dependencyAdder.addDependency("a.b.c", "a", DependencyScope.TEST);

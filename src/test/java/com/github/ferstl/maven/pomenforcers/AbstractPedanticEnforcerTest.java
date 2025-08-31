@@ -36,7 +36,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 
-public abstract class AbstractPedanticEnforcerTest<T extends AbstractPedanticEnforcer> {
+abstract class AbstractPedanticEnforcerTest<T extends AbstractPedanticEnforcer> {
 
   private static final String DEFAULT_VERSION = "1.0";
 
@@ -48,7 +48,7 @@ public abstract class AbstractPedanticEnforcerTest<T extends AbstractPedanticEnf
   ExpressionEvaluator mockHelper;
 
   @BeforeEach
-  public void setup() throws Exception {
+  void setup() throws Exception {
     this.mockHelper = mock(ExpressionEvaluator.class);
     this.projectModel = mock(ProjectModel.class);
     this.mockMavenProject = mock(MavenProject.class);
@@ -75,10 +75,10 @@ public abstract class AbstractPedanticEnforcerTest<T extends AbstractPedanticEnf
   abstract T createRule();
 
   @Test
-  public abstract void getDescription();
+  abstract void getDescription();
 
   @Test
-  public abstract void accept();
+  abstract void accept();
 
   protected void executeRuleAndCheckReport(boolean hasErrors) {
     this.testRule.doEnforce(this.report);

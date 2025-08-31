@@ -27,22 +27,22 @@ import static org.mockito.Mockito.when;
 /**
  * JUnit tests for {@link PedanticDependencyConfigurationEnforcer}.
  */
-public class PedanticDependencyConfigurationEnforcerTest extends AbstractPedanticEnforcerTest<PedanticDependencyConfigurationEnforcer> {
+class PedanticDependencyConfigurationEnforcerTest extends AbstractPedanticEnforcerTest<PedanticDependencyConfigurationEnforcer> {
 
   @Override
   PedanticDependencyConfigurationEnforcer createRule() {
-    return new PedanticDependencyConfigurationEnforcer(mockMavenProject, mockHelper);
+    return new PedanticDependencyConfigurationEnforcer(this.mockMavenProject, this.mockHelper);
   }
 
   @Override
   @Test
-  public void getDescription() {
+  void getDescription() {
     assertThat(this.testRule.getDescription()).isEqualTo(PedanticEnforcerRule.DEPENDENCY_CONFIGURATION);
   }
 
   @Override
   @Test
-  public void accept() {
+  void accept() {
     PedanticEnforcerVisitor visitor = mock(PedanticEnforcerVisitor.class);
     this.testRule.accept(visitor);
 
@@ -50,14 +50,14 @@ public class PedanticDependencyConfigurationEnforcerTest extends AbstractPedanti
   }
 
   @Test
-  public void defaultSettingsCorrect() {
+  void defaultSettingsCorrect() {
     this.projectModel.getDependencies().add(createDependency(false, false));
 
     executeRuleAndCheckReport(false);
   }
 
   @Test
-  public void allowedProjectVersion1() {
+  void allowedProjectVersion1() {
     DependencyModel dependency = createDependency(false, false);
     when(dependency.getVersion()).thenReturn("${project.version}");
     this.projectModel.getDependencies().add(dependency);
@@ -66,7 +66,7 @@ public class PedanticDependencyConfigurationEnforcerTest extends AbstractPedanti
   }
 
   @Test
-  public void allowedProjectVersion2() {
+  void allowedProjectVersion2() {
     DependencyModel dependency = createDependency(false, false);
     when(dependency.getVersion()).thenReturn("${version}");
     this.projectModel.getDependencies().add(dependency);
@@ -75,7 +75,7 @@ public class PedanticDependencyConfigurationEnforcerTest extends AbstractPedanti
   }
 
   @Test
-  public void forbiddenProjectVersion() {
+  void forbiddenProjectVersion() {
     this.testRule.setAllowUnmanagedProjectVersions(false);
     DependencyModel dependency = createDependency(false, false);
     when(dependency.getVersion()).thenReturn("${project.version}");
@@ -85,14 +85,14 @@ public class PedanticDependencyConfigurationEnforcerTest extends AbstractPedanti
   }
 
   @Test
-  public void forbiddenManagedExclusion() {
+  void forbiddenManagedExclusion() {
     this.projectModel.getDependencies().add(createDependency(false, true));
 
     executeRuleAndCheckReport(true);
   }
 
   @Test
-  public void allowedManagedExclusion() {
+  void allowedManagedExclusion() {
     this.testRule.setManageExclusions(false);
     this.projectModel.getDependencies().add(createDependency(false, true));
 
@@ -100,14 +100,14 @@ public class PedanticDependencyConfigurationEnforcerTest extends AbstractPedanti
   }
 
   @Test
-  public void forbiddenVersion() {
+  void forbiddenVersion() {
     this.projectModel.getDependencies().add(createDependency(true, false));
 
     executeRuleAndCheckReport(true);
   }
 
   @Test
-  public void allowedVersion() {
+  void allowedVersion() {
     this.testRule.setManageVersions(false);
     this.projectModel.getDependencies().add(createDependency(true, false));
 
@@ -115,7 +115,7 @@ public class PedanticDependencyConfigurationEnforcerTest extends AbstractPedanti
   }
 
   @Test
-  public void allowedVersionWithProps() {
+  void allowedVersionWithProps() {
     this.testRule.setAllowedUnmanagedProjectVersionProperties("some.version");
     this.projectModel.getDependencies().add(createDependency(false, false));
 
@@ -123,7 +123,7 @@ public class PedanticDependencyConfigurationEnforcerTest extends AbstractPedanti
   }
 
   @Test
-  public void allowedVersionWithDisabledProps1() {
+  void allowedVersionWithDisabledProps1() {
     this.testRule.setManageVersions(false);
     this.testRule.setAllowedUnmanagedProjectVersionProperties("some.version");
     this.projectModel.getDependencies().add(createDependency(true, false));
@@ -132,7 +132,7 @@ public class PedanticDependencyConfigurationEnforcerTest extends AbstractPedanti
   }
 
   @Test
-  public void allowedVersionWithDisabledProps2() {
+  void allowedVersionWithDisabledProps2() {
     this.testRule.setAllowUnmanagedProjectVersions(false);
     this.testRule.setAllowedUnmanagedProjectVersionProperties("some.version");
     this.projectModel.getDependencies().add(createDependency(false, false));
@@ -141,7 +141,7 @@ public class PedanticDependencyConfigurationEnforcerTest extends AbstractPedanti
   }
 
   @Test
-  public void forbiddenVersionWithCustomProps1() {
+  void forbiddenVersionWithCustomProps1() {
     this.testRule.setAllowedUnmanagedProjectVersionProperties("some.version");
     this.projectModel.getDependencies().add(createDependency(true, false));
 
@@ -149,7 +149,7 @@ public class PedanticDependencyConfigurationEnforcerTest extends AbstractPedanti
   }
 
   @Test
-  public void forbiddenVersionWithCustomProps2() {
+  void forbiddenVersionWithCustomProps2() {
     this.testRule.setAllowedUnmanagedProjectVersionProperties("some.version");
     DependencyModel dependency = createDependency(true, false);
     when(dependency.getVersion()).thenReturn("${project.version}");
@@ -159,7 +159,7 @@ public class PedanticDependencyConfigurationEnforcerTest extends AbstractPedanti
   }
 
   @Test
-  public void allowedVersionWithActiveCustomProps1() {
+  void allowedVersionWithActiveCustomProps1() {
     this.testRule.setAllowedUnmanagedProjectVersionProperties("some.version");
     DependencyModel dependency = createDependency(true, false);
     when(dependency.getVersion()).thenReturn("${some.version}");
@@ -169,7 +169,7 @@ public class PedanticDependencyConfigurationEnforcerTest extends AbstractPedanti
   }
 
   @Test
-  public void allowedVersionWithActiveCustomProps2() {
+  void allowedVersionWithActiveCustomProps2() {
     this.testRule.setAllowedUnmanagedProjectVersionProperties("some.version,some.other.version");
     DependencyModel dependency = createDependency(true, false);
     when(dependency.getVersion()).thenReturn("${some.other.version}");

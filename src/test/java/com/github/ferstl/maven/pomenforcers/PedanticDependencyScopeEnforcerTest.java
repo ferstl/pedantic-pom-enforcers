@@ -36,7 +36,7 @@ import static org.mockito.Mockito.verify;
 /**
  * JUnit tests for {@link PedanticDependencyScopeEnforcer}.
  */
-public class PedanticDependencyScopeEnforcerTest extends AbstractPedanticEnforcerTest<PedanticDependencyScopeEnforcer> {
+class PedanticDependencyScopeEnforcerTest extends AbstractPedanticEnforcerTest<PedanticDependencyScopeEnforcer> {
 
   /**
    * Creates test data for each possible dependency scope. The data will be used as theory to test the enforcer rule
@@ -63,19 +63,19 @@ public class PedanticDependencyScopeEnforcerTest extends AbstractPedanticEnforce
   }
 
   @BeforeEach
-  public void before() {
+  void before() {
     addDependenciesForAllScopes();
   }
 
   @Override
   @Test
-  public void getDescription() {
+  void getDescription() {
     assertThat(this.testRule.getDescription()).isEqualTo(PedanticEnforcerRule.DEPENDENCY_SCOPE);
   }
 
   @Override
   @Test
-  public void accept() {
+  void accept() {
     PedanticEnforcerVisitor visitor = mock(PedanticEnforcerVisitor.class);
     this.testRule.accept(visitor);
 
@@ -83,27 +83,27 @@ public class PedanticDependencyScopeEnforcerTest extends AbstractPedanticEnforce
   }
 
   @Test
-  public void nothingConfigured() {
+  void nothingConfigured() {
     executeRuleAndCheckReport(false);
   }
 
   @ParameterizedTest
   @MethodSource("ruleConfigurations")
-  public void allConfigurations(RuleConfiguration param) throws Throwable {
+  void allConfigurations(RuleConfiguration param) throws Throwable {
     param.configureRule(this.testRule);
 
     executeRuleAndCheckReport(param.resultHasErrors);
   }
 
   @Test
-  public void correctCompileDependencies() {
+  void correctCompileDependencies() {
     this.testRule.setCompileDependencies("a.b.c:dep-compile");
 
     executeRuleAndCheckReport(false);
   }
 
   @Test
-  public void wrongCompileDependencies() {
+  void wrongCompileDependencies() {
     this.testRule.setCompileDependencies("a.b.c:dep-test,a.b.c:dep-runtime");
     this.testRule.setRuntimeDependencies("a.b.c:dep-test");
 
@@ -111,7 +111,7 @@ public class PedanticDependencyScopeEnforcerTest extends AbstractPedanticEnforce
   }
 
   @Test
-  public void wildcardGroupId() {
+  void wildcardGroupId() {
     this.testRule.setCompileDependencies("a.b.c:*-runtime");
 
     executeRuleAndCheckReport(true);

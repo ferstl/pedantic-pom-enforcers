@@ -15,63 +15,64 @@
  */
 package com.github.ferstl.maven.pomenforcers.model;
 
-import org.junit.Test;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 
-public class ArtifactModelTest {
+class ArtifactModelTest {
 
-  @Test(expected = IllegalArgumentException.class)
-  public void constructorWithInvalidWildcard() {
-    new ArtifactModel("group", "invalid*wildcard*positions");
+  @Test
+  void constructorWithInvalidWildcard() {
+    assertThrows(IllegalArgumentException.class, () -> new ArtifactModel("group", "invalid*wildcard*positions"));
   }
 
   @Test
-  public void toStringNoGroupId() {
+  void toStringNoGroupId() {
     ArtifactModel model = new ArtifactModel(null, "artifact", "1.0.0");
 
     assertEquals(":artifact:1.0.0", model.toString());
   }
 
   @Test
-  public void toStringNoVersion() {
+  void toStringNoVersion() {
     ArtifactModel model = new ArtifactModel("group", "artifact");
 
     assertEquals("group:artifact:", model.toString());
   }
 
   @Test
-  public void toStringNoGroupIdAndNoVersion() {
+  void toStringNoGroupIdAndNoVersion() {
     ArtifactModel model = new ArtifactModel(null, "artifact");
 
     assertEquals(":artifact:", model.toString());
   }
 
   @Test
-  public void matchesWithFullWildcard() {
+  void matchesWithFullWildcard() {
     wildcardTest("something", "*", true);
   }
 
   @Test
-  public void matchesWithLeadingWildcard() {
+  void matchesWithLeadingWildcard() {
     wildcardTest("prefix-foo", "*-foo", true);
   }
 
   @Test
-  public void matchesWithTrailingWildcard() {
+  void matchesWithTrailingWildcard() {
     wildcardTest("foo-suffix", "foo-*", true);
   }
 
   @Test
-  public void matchesWithContainsWildcard() {
+  void matchesWithContainsWildcard() {
     wildcardTest("foo-contains-bar", "*contains*", true);
     wildcardTest("foo-something-bar", "*contains*", false);
   }
 
   @Test
-  public void matchesWithMismatchingGroupId() {
+  void matchesWithMismatchingGroupId() {
     ArtifactModel model = new ArtifactModel("group", "artifact");
     ArtifactModel pattern = new ArtifactModel("*", "different-artifact");
 
@@ -79,7 +80,7 @@ public class ArtifactModelTest {
   }
 
   @Test
-  public void matchesWithMismatchingArtifactId() {
+  void matchesWithMismatchingArtifactId() {
     ArtifactModel model = new ArtifactModel("group", "artifact");
     ArtifactModel pattern = new ArtifactModel("different-group", "*");
 
@@ -87,7 +88,7 @@ public class ArtifactModelTest {
   }
 
   @Test
-  public void matchesOnPatterns() {
+  void matchesOnPatterns() {
     ArtifactModel pattern1 = new ArtifactModel("*", "artifact");
     ArtifactModel pattern1Copy = new ArtifactModel("*", "artifact");
     ArtifactModel pattern2 = new ArtifactModel("group", "*");
@@ -97,14 +98,14 @@ public class ArtifactModelTest {
   }
 
   @Test
-  public void matchesOnSelf() {
+  void matchesOnSelf() {
     ArtifactModel pattern = new ArtifactModel("*", "artifact");
 
     assertTrue(pattern.matches(pattern));
   }
 
   @Test
-  public void matchesOnNull() {
+  void matchesOnNull() {
     ArtifactModel pattern = new ArtifactModel("*", "artifact");
 
     assertFalse(pattern.matches(null));

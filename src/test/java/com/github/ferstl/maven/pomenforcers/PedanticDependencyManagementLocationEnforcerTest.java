@@ -26,7 +26,7 @@ import static org.mockito.Mockito.when;
 /**
  * JUnit tests for {@link PedanticDependencyManagementLocationEnforcer}.
  */
-public class PedanticDependencyManagementLocationEnforcerTest extends AbstractPedanticEnforcerTest<PedanticDependencyManagementLocationEnforcer> {
+class PedanticDependencyManagementLocationEnforcerTest extends AbstractPedanticEnforcerTest<PedanticDependencyManagementLocationEnforcer> {
 
   @Override
   PedanticDependencyManagementLocationEnforcer createRule() {
@@ -34,7 +34,7 @@ public class PedanticDependencyManagementLocationEnforcerTest extends AbstractPe
   }
 
   @BeforeEach
-  public void before() {
+  void before() {
     when(this.mockMavenProject.getGroupId()).thenReturn("a.b.c");
     when(this.mockMavenProject.getArtifactId()).thenReturn("parent");
     this.projectModel.getManagedDependencies().add(new DependencyModel("a.b.c", "a", "1.0", null, null, null));
@@ -42,13 +42,13 @@ public class PedanticDependencyManagementLocationEnforcerTest extends AbstractPe
 
   @Override
   @Test
-  public void getDescription() {
+  void getDescription() {
     assertThat(this.testRule.getDescription()).isEqualTo(PedanticEnforcerRule.DEPENDENCY_MANAGEMENT_LOCATION);
   }
 
   @Override
   @Test
-  public void accept() {
+  void accept() {
     PedanticEnforcerVisitor visitor = mock(PedanticEnforcerVisitor.class);
     this.testRule.accept(visitor);
 
@@ -56,38 +56,38 @@ public class PedanticDependencyManagementLocationEnforcerTest extends AbstractPe
   }
 
   @Test
-  public void noDependencyManagingPomsDeclared() {
+  void noDependencyManagingPomsDeclared() {
     executeRuleAndCheckReport(false);
   }
 
   @Test
-  public void noDependencyManagementDeclared() {
+  void noDependencyManagementDeclared() {
     this.projectModel.getManagedDependencies().clear();
 
     executeRuleAndCheckReport(false);
   }
 
   @Test
-  public void isDependencyManagingPom() {
+  void isDependencyManagingPom() {
     this.testRule.setDependencyManagingPoms("a.b.c:parent");
 
     executeRuleAndCheckReport(false);
   }
 
   @Test
-  public void isNotDependencyManagingPom() {
+  void isNotDependencyManagingPom() {
     this.testRule.setDependencyManagingPoms("some.other:pom");
 
     executeRuleAndCheckReport(true);
   }
 
-  public void dependencyManagementAllowedInParentPom() {
+  void dependencyManagementAllowedInParentPom() {
     when(this.mockMavenProject.getPackaging()).thenReturn("pom");
 
     executeRuleAndCheckReport(true);
   }
 
-  public void dependencyManagementNotAllowedInParentPom() {
+  void dependencyManagementNotAllowedInParentPom() {
     when(this.mockMavenProject.getPackaging()).thenReturn("pom");
     this.testRule.setAllowParentPoms(false);
 
@@ -95,7 +95,7 @@ public class PedanticDependencyManagementLocationEnforcerTest extends AbstractPe
   }
 
   @Test
-  public void dependencyManagementInNonParentPom() {
+  void dependencyManagementInNonParentPom() {
     when(this.mockMavenProject.getPackaging()).thenReturn("jar");
 
     executeRuleAndCheckReport(false);

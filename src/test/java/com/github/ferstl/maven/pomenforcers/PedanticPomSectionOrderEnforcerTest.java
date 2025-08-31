@@ -30,22 +30,22 @@ import static org.mockito.Mockito.verify;
 /**
  * JUnit tests for {@link PedanticPomSectionOrderEnforcer}.
  */
-public class PedanticPomSectionOrderEnforcerTest extends AbstractPedanticEnforcerTest<PedanticPomSectionOrderEnforcer> {
+class PedanticPomSectionOrderEnforcerTest extends AbstractPedanticEnforcerTest<PedanticPomSectionOrderEnforcer> {
 
   @Override
   PedanticPomSectionOrderEnforcer createRule() {
-    return new PedanticPomSectionOrderEnforcer(mockMavenProject, mockHelper);
+    return new PedanticPomSectionOrderEnforcer(this.mockMavenProject, this.mockHelper);
   }
 
   @Override
   @Test
-  public void getDescription() {
+  void getDescription() {
     assertThat(this.testRule.getDescription()).isSameAs(PedanticEnforcerRule.POM_SECTION_ORDER);
   }
 
   @Override
   @Test
-  public void accept() {
+  void accept() {
     PedanticEnforcerVisitor visitor = mock(PedanticEnforcerVisitor.class);
     this.testRule.accept(visitor);
 
@@ -53,14 +53,14 @@ public class PedanticPomSectionOrderEnforcerTest extends AbstractPedanticEnforce
   }
 
   @Test
-  public void defaultSettingsCorrect() {
+  void defaultSettingsCorrect() {
     configurePom(Arrays.asList(PomSection.values()));
 
     executeRuleAndCheckReport(false);
   }
 
   @Test
-  public void defaultSettingsWrongOrder() {
+  void defaultSettingsWrongOrder() {
     // Put <dependencyManagement> and <dependencies> in the wrong order.
     List<PomSection> sections = Arrays.asList(PomSection.values());
     swapSections(sections, PomSection.DEPENDENCY_MANAGEMENT, PomSection.DEPENDENCIES);
@@ -70,7 +70,7 @@ public class PedanticPomSectionOrderEnforcerTest extends AbstractPedanticEnforce
   }
 
   @Test
-  public void customSettingsCorrect() {
+  void customSettingsCorrect() {
     // Parent declaration after project coordinates
     this.testRule.setSectionPriorities("modelVersion,groupId,artifactId,version,packaging,name,description,url,parent");
 
@@ -90,7 +90,7 @@ public class PedanticPomSectionOrderEnforcerTest extends AbstractPedanticEnforce
 
 
   @Test
-  public void customSettingsWrongOrder() {
+  void customSettingsWrongOrder() {
     this.testRule.setSectionPriorities("modelVersion,groupId,artifactId,version,packaging,name,description,url,parent");
 
     configurePom(Arrays.asList(PomSection.values()));
