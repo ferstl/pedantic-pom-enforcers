@@ -15,21 +15,27 @@
  */
 package com.github.ferstl.maven.pomenforcers;
 
+import static com.github.ferstl.maven.pomenforcers.model.PluginElement.ARTIFACT_ID;
+import static com.github.ferstl.maven.pomenforcers.model.PluginElement.GROUP_ID;
+
 import java.util.Collection;
 import java.util.LinkedHashSet;
 import java.util.Set;
+
+import javax.inject.Inject;
+import javax.inject.Named;
+
 import org.apache.maven.model.Plugin;
 import org.apache.maven.project.MavenProject;
+import org.codehaus.plexus.component.configurator.expression.ExpressionEvaluator;
+
 import com.github.ferstl.maven.pomenforcers.model.PluginElement;
 import com.github.ferstl.maven.pomenforcers.model.PluginModel;
 import com.github.ferstl.maven.pomenforcers.model.functions.PluginMatcher;
 import com.github.ferstl.maven.pomenforcers.priority.CompoundPriorityOrdering;
 import com.github.ferstl.maven.pomenforcers.util.CommaSeparatorUtils;
-import com.github.ferstl.maven.pomenforcers.util.EnforcerRuleUtils;
 import com.google.common.collect.BiMap;
 import com.google.common.collect.Sets;
-import static com.github.ferstl.maven.pomenforcers.model.PluginElement.ARTIFACT_ID;
-import static com.github.ferstl.maven.pomenforcers.model.PluginElement.GROUP_ID;
 
 
 /**
@@ -53,11 +59,14 @@ import static com.github.ferstl.maven.pomenforcers.model.PluginElement.GROUP_ID;
  * @id {@link PedanticEnforcerRule#PLUGIN_MANAGEMENT_ORDER}
  * @since 1.0.0
  */
+@Named("pluginManagementOrder")
 public class PedanticPluginManagementOrderEnforcer extends AbstractPedanticEnforcer {
 
   private final CompoundPriorityOrdering<PluginModel, String, PluginElement> pluginOrdering;
 
-  public PedanticPluginManagementOrderEnforcer() {
+  @Inject
+  public PedanticPluginManagementOrderEnforcer(final MavenProject project, final ExpressionEvaluator helper) {
+	super(project, helper);
     this.pluginOrdering = CompoundPriorityOrdering.orderBy(GROUP_ID, ARTIFACT_ID);
   }
 
@@ -121,7 +130,7 @@ public class PedanticPluginManagementOrderEnforcer extends AbstractPedanticEnfor
 
   @Override
   protected void doEnforce(ErrorReport report) {
-    MavenProject project = EnforcerRuleUtils.getMavenProject(getHelper());
+    MavenProject project = getMavenProject();
 
     Collection<PluginModel> declaredManagedPlugins = getProjectModel().getManagedPlugins();
     Collection<Plugin> managedPlugins = project.getPluginManagement().getPlugins();

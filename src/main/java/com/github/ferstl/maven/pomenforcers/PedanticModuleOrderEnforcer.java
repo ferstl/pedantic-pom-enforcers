@@ -15,16 +15,22 @@
  */
 package com.github.ferstl.maven.pomenforcers;
 
+import static com.github.ferstl.maven.pomenforcers.ErrorReport.toList;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
+
+import javax.inject.Inject;
+import javax.inject.Named;
+
 import org.apache.maven.project.MavenProject;
+import org.codehaus.plexus.component.configurator.expression.ExpressionEvaluator;
+
 import com.github.ferstl.maven.pomenforcers.util.CommaSeparatorUtils;
-import com.github.ferstl.maven.pomenforcers.util.EnforcerRuleUtils;
 import com.google.common.collect.Ordering;
 import com.google.common.collect.Sets;
-import static com.github.ferstl.maven.pomenforcers.ErrorReport.toList;
 
 
 /**
@@ -44,6 +50,7 @@ import static com.github.ferstl.maven.pomenforcers.ErrorReport.toList;
  * @id {@link PedanticEnforcerRule#MODULE_ORDER}
  * @since 1.0.0
  */
+@Named("moduleOrder")
 public class PedanticModuleOrderEnforcer extends AbstractPedanticEnforcer {
 
   /**
@@ -51,7 +58,9 @@ public class PedanticModuleOrderEnforcer extends AbstractPedanticEnforcer {
    */
   private final Set<String> ignoredModules;
 
-  public PedanticModuleOrderEnforcer() {
+  @Inject
+  public PedanticModuleOrderEnforcer(final MavenProject project, final ExpressionEvaluator helper) {
+	super(project, helper);
     this.ignoredModules = Sets.newLinkedHashSet();
   }
 
@@ -79,7 +88,7 @@ public class PedanticModuleOrderEnforcer extends AbstractPedanticEnforcer {
 
   @Override
   protected void doEnforce(ErrorReport report) {
-    MavenProject project = EnforcerRuleUtils.getMavenProject(getHelper());
+    MavenProject project = getMavenProject();
     // Do nothing if the project is not a parent project
     if (!isPomProject(project)) {
       return;

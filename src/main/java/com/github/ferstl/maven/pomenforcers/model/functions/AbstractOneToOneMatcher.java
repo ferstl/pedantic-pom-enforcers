@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import org.apache.maven.enforcer.rule.api.EnforcerRuleHelper;
+import org.codehaus.plexus.component.configurator.expression.ExpressionEvaluator;
 
 import com.google.common.collect.BiMap;
 import com.google.common.collect.ImmutableBiMap;
@@ -28,9 +28,9 @@ import com.google.common.collect.ImmutableBiMap.Builder;
 
 public abstract class AbstractOneToOneMatcher<U, V> {
 
-  private final EnforcerRuleHelper helper;
+  private final ExpressionEvaluator helper;
 
-  AbstractOneToOneMatcher(EnforcerRuleHelper helper) {
+  AbstractOneToOneMatcher(ExpressionEvaluator helper) {
     this.helper = helper;
   }
 
@@ -67,7 +67,7 @@ public abstract class AbstractOneToOneMatcher<U, V> {
 
   protected abstract boolean matches(V supersetItem, V subsetItem);
 
-  EnforcerRuleHelper getHelper() {
+  ExpressionEvaluator getHelper() {
     return this.helper;
   }
 

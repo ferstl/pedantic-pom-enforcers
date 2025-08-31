@@ -21,6 +21,13 @@ import java.util.List;
 import java.util.Set;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
+
+import javax.inject.Inject;
+import javax.inject.Named;
+
+import org.apache.maven.project.MavenProject;
+import org.codehaus.plexus.component.configurator.expression.ExpressionEvaluator;
+
 import com.github.ferstl.maven.pomenforcers.model.DependencyModel;
 import com.github.ferstl.maven.pomenforcers.util.CommaSeparatorUtils;
 import com.google.common.collect.ImmutableSet;
@@ -48,6 +55,7 @@ import static com.github.ferstl.maven.pomenforcers.ErrorReport.toList;
  * @id {@link PedanticEnforcerRule#DEPENDENCY_CONFIGURATION}
  * @since 1.0.0
  */
+@Named("dependencyConfiguration")
 public class PedanticDependencyConfigurationEnforcer extends AbstractPedanticEnforcer {
 
   /**
@@ -75,7 +83,11 @@ public class PedanticDependencyConfigurationEnforcer extends AbstractPedanticEnf
    */
   private boolean manageExclusions = true;
 
-
+  @Inject
+  public PedanticDependencyConfigurationEnforcer(final MavenProject project, final ExpressionEvaluator helper) {
+	super(project, helper);
+  }
+  
   /**
    * If set to <code>true</code>, all dependency versions have to be defined in the dependency management.
    *

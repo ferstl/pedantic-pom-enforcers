@@ -19,8 +19,8 @@ import static com.github.ferstl.maven.pomenforcers.util.EnforcerRuleUtils.evalua
 
 import java.util.Objects;
 
-import org.apache.maven.enforcer.rule.api.EnforcerRuleHelper;
 import org.apache.maven.model.Dependency;
+import org.codehaus.plexus.component.configurator.expression.ExpressionEvaluator;
 
 import com.github.ferstl.maven.pomenforcers.model.DependencyModel;
 import com.github.ferstl.maven.pomenforcers.model.DependencyScope;
@@ -31,7 +31,7 @@ import com.google.common.collect.ImmutableBiMap.Builder;
  */
 public class DependencyMatcher extends AbstractOneToOneMatcher<Dependency, DependencyModel> {
 
-  public DependencyMatcher(EnforcerRuleHelper helper) {
+  public DependencyMatcher(ExpressionEvaluator helper) {
     super(helper);
   }
 

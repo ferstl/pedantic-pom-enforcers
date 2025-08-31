@@ -23,6 +23,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.Function;
+
+import javax.inject.Inject;
+import javax.inject.Named;
+
+import org.apache.maven.project.MavenProject;
+import org.codehaus.plexus.component.configurator.expression.ExpressionEvaluator;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -52,6 +58,7 @@ import static java.util.Arrays.asList;
  * @id {@link PedanticEnforcerRule#DEPENDENCY_ELEMENT}
  * @since 2.0.0
  */
+@Named("dependencyElements")
 public class PedanticDependencyElementEnforcer extends AbstractPedanticEnforcer {
 
   private static final Set<String> DEFAULT_ORDER = newLinkedHashSet(asList("groupId", "artifactId", "version", "classifier", "type", "scope", "systemPath", "optional", "exclusions"));
@@ -60,7 +67,9 @@ public class PedanticDependencyElementEnforcer extends AbstractPedanticEnforcer 
   private boolean checkDependencies;
   private boolean checkDependencyManagement;
 
-  public PedanticDependencyElementEnforcer() {
+  @Inject
+  public PedanticDependencyElementEnforcer(final MavenProject project, final ExpressionEvaluator helper) {
+	super(project, helper);
     this.elementOrdering = new PriorityOrdering<>(DEFAULT_ORDER, Function.identity());
     this.checkDependencies = true;
     this.checkDependencyManagement = true;

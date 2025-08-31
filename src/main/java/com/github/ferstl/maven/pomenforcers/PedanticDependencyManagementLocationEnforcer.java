@@ -15,15 +15,21 @@
  */
 package com.github.ferstl.maven.pomenforcers;
 
+import static com.github.ferstl.maven.pomenforcers.ErrorReport.toList;
+import static com.github.ferstl.maven.pomenforcers.util.CommaSeparatorUtils.splitAndAddToCollection;
+
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
+
+import javax.inject.Inject;
+import javax.inject.Named;
+
 import org.apache.maven.project.MavenProject;
+import org.codehaus.plexus.component.configurator.expression.ExpressionEvaluator;
+
 import com.github.ferstl.maven.pomenforcers.model.ArtifactModel;
 import com.github.ferstl.maven.pomenforcers.model.functions.StringToArtifactTransformer;
-import com.github.ferstl.maven.pomenforcers.util.EnforcerRuleUtils;
-import static com.github.ferstl.maven.pomenforcers.ErrorReport.toList;
-import static com.github.ferstl.maven.pomenforcers.util.CommaSeparatorUtils.splitAndAddToCollection;
 
 /**
  * Enforces that only a well-defined set of POMs may declare dependency management.
@@ -40,12 +46,15 @@ import static com.github.ferstl.maven.pomenforcers.util.CommaSeparatorUtils.spli
  * @id {@link PedanticEnforcerRule#DEPENDENCY_MANAGEMENT_LOCATION}
  * @since 1.0.0
  */
+@Named("dependencyManagementLocation")
 public class PedanticDependencyManagementLocationEnforcer extends AbstractPedanticEnforcer {
 
   private boolean allowParentPoms;
   private final Set<ArtifactModel> dependencyManagingPoms;
 
-  public PedanticDependencyManagementLocationEnforcer() {
+  @Inject
+  public PedanticDependencyManagementLocationEnforcer(final MavenProject project, final ExpressionEvaluator helper) {
+	super(project, helper);
     this.allowParentPoms = false;
     this.dependencyManagingPoms = new HashSet<>();
   }
@@ -87,7 +96,7 @@ public class PedanticDependencyManagementLocationEnforcer extends AbstractPedant
 
   @Override
   protected void doEnforce(ErrorReport report) {
-    MavenProject mavenProject = EnforcerRuleUtils.getMavenProject(getHelper());
+    MavenProject mavenProject = getMavenProject();
     if (containsDependencyManagement() && !isDependencyManagementAllowed(mavenProject)) {
       report.addLine("Only these POMs are allowed to manage dependencies:")
           .addLine(toList(Collections.singletonList("All parent POMs, i.e. POMs with <packaging>pom</packaging>")))

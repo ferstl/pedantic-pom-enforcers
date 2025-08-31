@@ -15,24 +15,30 @@
  */
 package com.github.ferstl.maven.pomenforcers;
 
-import java.util.Collections;
-import org.junit.Test;
-import com.github.ferstl.maven.pomenforcers.model.DependencyModel;
-import com.github.ferstl.maven.pomenforcers.model.PluginModel;
-import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.util.Collections;
+
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.TestInstance.Lifecycle;
+
+import com.github.ferstl.maven.pomenforcers.model.DependencyModel;
+import com.github.ferstl.maven.pomenforcers.model.PluginModel;
+
 /**
  * JUnit tests for {@link PedanticPluginConfigurationEnforcer}.
  */
+@TestInstance(Lifecycle.PER_CLASS)
 public class PedanticPluginConfigurationEnforcerTest extends AbstractPedanticEnforcerTest<PedanticPluginConfigurationEnforcer> {
 
   @Override
   PedanticPluginConfigurationEnforcer createRule() {
-    return new PedanticPluginConfigurationEnforcer();
+    return new PedanticPluginConfigurationEnforcer(mockMavenProject, mockHelper);
   }
 
   @Override
