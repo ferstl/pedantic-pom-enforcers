@@ -15,20 +15,13 @@
  */
 package com.github.ferstl.maven.pomenforcers;
 
-import static com.github.ferstl.maven.pomenforcers.model.DependencyElement.ARTIFACT_ID;
-import static com.github.ferstl.maven.pomenforcers.model.DependencyElement.GROUP_ID;
-import static com.github.ferstl.maven.pomenforcers.model.DependencyElement.SCOPE;
-import static java.util.stream.Collectors.toList;
-
 import java.util.Collection;
 import java.util.EnumSet;
 import java.util.LinkedHashSet;
 import java.util.Set;
-
 import org.apache.maven.model.Dependency;
 import org.apache.maven.project.MavenProject;
 import org.codehaus.plexus.component.configurator.expression.ExpressionEvaluator;
-
 import com.github.ferstl.maven.pomenforcers.model.DependencyElement;
 import com.github.ferstl.maven.pomenforcers.model.DependencyModel;
 import com.github.ferstl.maven.pomenforcers.model.DependencyScope;
@@ -37,6 +30,10 @@ import com.github.ferstl.maven.pomenforcers.priority.CompoundPriorityOrdering;
 import com.github.ferstl.maven.pomenforcers.util.CommaSeparatorUtils;
 import com.google.common.collect.BiMap;
 import com.google.common.collect.Sets;
+import static com.github.ferstl.maven.pomenforcers.model.DependencyElement.ARTIFACT_ID;
+import static com.github.ferstl.maven.pomenforcers.model.DependencyElement.GROUP_ID;
+import static com.github.ferstl.maven.pomenforcers.model.DependencyElement.SCOPE;
+import static java.util.stream.Collectors.toList;
 
 
 abstract class AbstractPedanticDependencyOrderEnforcer extends AbstractPedanticEnforcer {
@@ -44,7 +41,7 @@ abstract class AbstractPedanticDependencyOrderEnforcer extends AbstractPedanticE
   private final CompoundPriorityOrdering<DependencyModel, String, DependencyElement> artifactOrdering;
 
   public AbstractPedanticDependencyOrderEnforcer(final MavenProject project, final ExpressionEvaluator helper) {
-	super(project, helper);
+    super(project, helper);
     this.artifactOrdering = CompoundPriorityOrdering.orderBy(SCOPE, GROUP_ID, ARTIFACT_ID);
     Iterable<String> scopePriorities = EnumSet.allOf(DependencyScope.class)
         .stream()

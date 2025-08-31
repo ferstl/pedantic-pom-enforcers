@@ -36,6 +36,7 @@ public class StringStartsWithEquivalence extends Equivalence<String> {
     return t.hashCode();
   }
 
-  private StringStartsWithEquivalence() {}
+  private StringStartsWithEquivalence() {
+  }
 
 }

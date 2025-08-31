@@ -21,6 +21,5 @@ package com.github.ferstl.maven.pomenforcers.model;
 
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlSchema;
-
 import static javax.xml.bind.annotation.XmlAccessType.FIELD;
 

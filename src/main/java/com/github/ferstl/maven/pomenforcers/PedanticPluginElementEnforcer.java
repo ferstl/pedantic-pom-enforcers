@@ -23,10 +23,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.Function;
-
 import javax.inject.Inject;
 import javax.inject.Named;
-
 import org.apache.maven.project.MavenProject;
 import org.codehaus.plexus.component.configurator.expression.ExpressionEvaluator;
 import org.w3c.dom.Element;
@@ -69,7 +67,7 @@ public class PedanticPluginElementEnforcer extends AbstractPedanticEnforcer {
 
   @Inject
   public PedanticPluginElementEnforcer(final MavenProject project, final ExpressionEvaluator helper) {
-	super(project, helper);
+    super(project, helper);
     this.elementOrdering = new PriorityOrdering<>(DEFAULT_ORDER, Function.identity());
     this.checkPlugins = true;
     this.checkPluginManagement = true;

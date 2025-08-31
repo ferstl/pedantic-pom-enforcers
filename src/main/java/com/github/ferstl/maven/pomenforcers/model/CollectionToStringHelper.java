@@ -17,7 +17,6 @@ package com.github.ferstl.maven.pomenforcers.model;
 
 import com.google.common.base.Joiner;
 import com.google.common.collect.Iterables;
-
 import static java.util.Collections.emptyList;
 
 final class CollectionToStringHelper {

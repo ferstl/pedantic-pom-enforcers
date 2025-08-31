@@ -17,7 +17,6 @@ package com.github.ferstl.maven.pomenforcers.util;
 
 import java.io.File;
 import java.io.IOException;
-
 import javax.xml.namespace.QName;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -27,7 +26,6 @@ import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpression;
 import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
-
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -38,6 +36,7 @@ public final class XmlUtils {
 
   /**
    * Parses the given file into an XML {@link Document}.
+   *
    * @param file The file to parse.
    * @return The created XML {@link Document}.
    */
@@ -55,6 +54,7 @@ public final class XmlUtils {
 
   /**
    * Returns the XML {@link Element} matching the given XPath expression.
+   *
    * @param expression XPath expression.
    * @param document XML document to search for the element.
    * @return The matching XML {@link Element}.
@@ -65,6 +65,7 @@ public final class XmlUtils {
 
   /**
    * Returns the XML {@link NodeList} matching the given XPath expression.
+   *
    * @param expression XPath expression.
    * @param document XML document to search for the node list.
    * @return The matching XML {@link NodeList}.
@@ -75,6 +76,7 @@ public final class XmlUtils {
 
   /**
    * Creates a XML document with the given root element and the given {@link NodeList} as content.
+   *
    * @param root The root element of the XML document.
    * @param content Content of the XML document.
    * @return The created XML document.
@@ -116,5 +118,6 @@ public final class XmlUtils {
     }
   }
 
-  private XmlUtils() {}
+  private XmlUtils() {
+  }
 }

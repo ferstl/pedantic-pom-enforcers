@@ -19,5 +19,6 @@ import java.util.Collection;
 
 
 public interface PriorityOrderingFactory<P extends Comparable<? super P>, T> {
+
   PriorityOrdering<P, T> createPriorityOrdering(Collection<P> priorityCollection);
 }

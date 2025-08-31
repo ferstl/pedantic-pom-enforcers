@@ -21,8 +21,8 @@
     <xs:annotation>
       <xs:documentation source="version">3.0.0+</xs:documentation>
       <xs:documentation source="description">
-         The &lt;code&gt;&amp;lt;project&amp;gt;&lt;/code&gt; element is the root of the descriptor.
-         The following table lists all of the possible child elements.
+        The &lt;code&gt;&amp;lt;project&amp;gt;&lt;/code&gt; element is the root of the descriptor.
+        The following table lists all of the possible child elements.
       </xs:documentation>
     </xs:annotation>
     <!-- The original XSD declares this complex type as Model outside of the project. This complex
@@ -31,8 +31,8 @@
       <xs:annotation>
         <xs:documentation source="version">3.0.0+</xs:documentation>
         <xs:documentation source="description">
-           The &lt;code&gt;&amp;lt;project&amp;gt;&lt;/code&gt; element is the root of the descriptor.
-           The following table lists all of the possible child elements.
+          The &lt;code&gt;&amp;lt;project&amp;gt;&lt;/code&gt; element is the root of the descriptor.
+          The following table lists all of the possible child elements.
         </xs:documentation>
       </xs:annotation>
       <xs:all>
@@ -77,9 +77,9 @@
             <xs:documentation source="version">4.0.0</xs:documentation>
             <xs:documentation source="description">
               The type of artifact this project produces, for example &lt;code&gt;jar&lt;/code&gt;
-                &lt;code&gt;war&lt;/code&gt;
-                &lt;code&gt;ear&lt;/code&gt;
-                &lt;code&gt;pom&lt;/code&gt;.
+              &lt;code&gt;war&lt;/code&gt;
+              &lt;code&gt;ear&lt;/code&gt;
+              &lt;code&gt;pom&lt;/code&gt;.
               Plugins can create their own packaging, and
               therefore their own packaging types,
               so this list does not contain all possible types.
@@ -118,7 +118,7 @@
           <xs:annotation>
             <xs:documentation source="version">3.0.0+</xs:documentation>
             <xs:documentation source="description">
-               The URL to the project&apos;s homepage.
+              The URL to the project&apos;s homepage.
             </xs:documentation>
           </xs:annotation>
         </xs:element>
@@ -194,10 +194,10 @@
           <xs:annotation>
             <xs:documentation source="version">3.0.0+</xs:documentation>
             <xs:documentation source="description">
-              This element describes all of the licenses for this project.  
-              Each license is described by a &lt;code&gt;license&lt;/code&gt; element, which 
+              This element describes all of the licenses for this project.
+              Each license is described by a &lt;code&gt;license&lt;/code&gt; element, which
               is then described by additional elements.
-              Projects should only list the license(s) that applies to the project 
+              Projects should only list the license(s) that applies to the project
               and not the licenses that apply to dependencies.
               If multiple licenses are listed, it is assumed that the user can select any of them, not that they
               must accept all.
@@ -213,7 +213,8 @@
           <xs:annotation>
             <xs:documentation source="version">4.0.0</xs:documentation>
             <xs:documentation source="description">
-              Specification for the SCM used by the project, such as CVS, Subversion, etc.</xs:documentation>
+              Specification for the SCM used by the project, such as CVS, Subversion, etc.
+            </xs:documentation>
           </xs:annotation>
         </xs:element>
         <xs:element name="organization" minOccurs="0" type="Organization">
@@ -221,7 +222,7 @@
             <xs:documentation source="version">3.0.0+</xs:documentation>
             <xs:documentation source="description">
               This element describes various attributes of the organization to
-              which the project belongs.  These attributes are utilized when
+              which the project belongs. These attributes are utilized when
               documentation is created (for copyright notices and links).
             </xs:documentation>
           </xs:annotation>
@@ -263,7 +264,8 @@
           <xs:annotation>
             <xs:documentation source="version">4.0.0</xs:documentation>
             <xs:documentation source="description">The lists of the remote repositories for discovering dependencies and
-            extensions.</xs:documentation>
+              extensions.
+            </xs:documentation>
           </xs:annotation>
           <xs:complexType>
             <xs:sequence>
@@ -275,7 +277,8 @@
           <xs:annotation>
             <xs:documentation source="version">4.0.0</xs:documentation>
             <xs:documentation source="description">
-              The lists of the remote repositories for discovering plugins for builds and reports.</xs:documentation>
+              The lists of the remote repositories for discovering plugins for builds and reports.
+            </xs:documentation>
           </xs:annotation>
           <xs:complexType>
             <xs:sequence>
@@ -287,13 +290,13 @@
           <xs:annotation>
             <xs:documentation source="version">3.0.0+</xs:documentation>
             <xs:documentation source="description">
-                This element describes all of the dependencies associated with a
-                project.
-                These dependencies are used to construct a classpath for your 
-                project during the build process. They are automatically downloaded from the
-                repositories defined in this project.
-                See &lt;a href=&quot;http://maven.apache.org/guides/introduction/introduction-to-dependency-mechanism.html&quot;&gt;the
-                dependency mechanism&lt;/a&gt; for more information.
+              This element describes all of the dependencies associated with a
+              project.
+              These dependencies are used to construct a classpath for your
+              project during the build process. They are automatically downloaded from the
+              repositories defined in this project.
+              See &lt;a href=&quot;http://maven.apache.org/guides/introduction/introduction-to-dependency-mechanism.html&quot;&gt;the
+              dependency mechanism&lt;/a&gt; for more information.
             </xs:documentation>
           </xs:annotation>
           <xs:complexType>
@@ -320,7 +323,7 @@
             <xs:documentation source="version">4.0.0</xs:documentation>
             <xs:documentation source="description">
               This element includes the specification of report plugins to use to generate the reports on the
-              Maven-generated site.  These reports will be run when a user executes &lt;code&gt;mvn site&lt;/code&gt;.  All of the
+              Maven-generated site. These reports will be run when a user executes &lt;code&gt;mvn site&lt;/code&gt;. All of the
               reports will be included in the navigation bar for browsing.
             </xs:documentation>
           </xs:annotation>
@@ -331,7 +334,7 @@
             <xs:documentation source="description">
               Default dependency information for projects that inherit from
               this one. The dependencies in this section are not immediately resolved.
-              Instead, when a POM derived from this one declares a dependency 
+              Instead, when a POM derived from this one declares a dependency
               described by a matching groupId and artifactId, the version and other values from this
               section are used for that dependency if they were not already specified.
             </xs:documentation>
@@ -341,15 +344,16 @@
           <xs:annotation>
             <xs:documentation source="version">4.0.0</xs:documentation>
             <xs:documentation source="description">Distribution information for a project that enables deployment of the site
-            and artifacts to remote web servers and repositories respectively.</xs:documentation>
+              and artifacts to remote web servers and repositories respectively.
+            </xs:documentation>
           </xs:annotation>
         </xs:element>
         <xs:element name="properties" minOccurs="0">
           <xs:annotation>
             <xs:documentation source="version">4.0.0</xs:documentation>
             <xs:documentation source="description">
-               Properties that can be used throughout the POM as a substitution, and are used as filters in resources
-               if enabled. The format is &lt;code&gt;&amp;lt;name&amp;gt;value&amp;lt;/name&amp;gt;&lt;/code&gt;.
+              Properties that can be used throughout the POM as a substitution, and are used as filters in resources
+              if enabled. The format is &lt;code&gt;&amp;lt;name&amp;gt;value&amp;lt;/name&amp;gt;&lt;/code&gt;.
             </xs:documentation>
           </xs:annotation>
           <xs:complexType>
@@ -405,7 +409,7 @@
         <xs:annotation>
           <xs:documentation source="version">3.0.0+</xs:documentation>
           <xs:documentation source="description">
-            The roles the contributor plays in the project.  Each role is
+            The roles the contributor plays in the project. Each role is
             described by a &lt;code&gt;role&lt;/code&gt; element, the body of which is a
             role name. This can also be used to describe the contribution.
           </xs:documentation>
@@ -451,14 +455,16 @@
         <xs:annotation>
           <xs:documentation source="version">4.0.0</xs:documentation>
           <xs:documentation source="description">The identifier of this build profile. This used both for command line activation, and identifies
-            identical profiles to merge with during inheritance.</xs:documentation>
+            identical profiles to merge with during inheritance.
+          </xs:documentation>
         </xs:annotation>
       </xs:element>
       <xs:element name="activation" minOccurs="0" type="Activation">
         <xs:annotation>
           <xs:documentation source="version">4.0.0</xs:documentation>
           <xs:documentation source="description">The conditional logic which will automatically
-            trigger the inclusion of this profile.</xs:documentation>
+            trigger the inclusion of this profile.
+          </xs:documentation>
         </xs:annotation>
       </xs:element>
       <xs:element name="build" minOccurs="0" type="BuildBase">
@@ -485,7 +491,8 @@
         <xs:annotation>
           <xs:documentation source="version">4.0.0</xs:documentation>
           <xs:documentation source="description">The lists of the remote repositories for discovering dependencies and
-          extensions.</xs:documentation>
+            extensions.
+          </xs:documentation>
         </xs:annotation>
         <xs:complexType>
           <xs:sequence>
@@ -497,7 +504,8 @@
         <xs:annotation>
           <xs:documentation source="version">4.0.0</xs:documentation>
           <xs:documentation source="description">
-            The lists of the remote repositories for discovering plugins for builds and reports.</xs:documentation>
+            The lists of the remote repositories for discovering plugins for builds and reports.
+          </xs:documentation>
         </xs:annotation>
         <xs:complexType>
           <xs:sequence>
@@ -509,13 +517,13 @@
         <xs:annotation>
           <xs:documentation source="version">3.0.0+</xs:documentation>
           <xs:documentation source="description">
-              This element describes all of the dependencies associated with a
-              project.
-              These dependencies are used to construct a classpath for your 
-              project during the build process. They are automatically downloaded from the
-              repositories defined in this project.
-              See &lt;a href=&quot;http://maven.apache.org/guides/introduction/introduction-to-dependency-mechanism.html&quot;&gt;the
-              dependency mechanism&lt;/a&gt; for more information.
+            This element describes all of the dependencies associated with a
+            project.
+            These dependencies are used to construct a classpath for your
+            project during the build process. They are automatically downloaded from the
+            repositories defined in this project.
+            See &lt;a href=&quot;http://maven.apache.org/guides/introduction/introduction-to-dependency-mechanism.html&quot;&gt;the
+            dependency mechanism&lt;/a&gt; for more information.
           </xs:documentation>
         </xs:annotation>
         <xs:complexType>
@@ -542,7 +550,7 @@
           <xs:documentation source="version">4.0.0</xs:documentation>
           <xs:documentation source="description">
             This element includes the specification of report plugins to use to generate the reports on the
-            Maven-generated site.  These reports will be run when a user executes &lt;code&gt;mvn site&lt;/code&gt;.  All of the
+            Maven-generated site. These reports will be run when a user executes &lt;code&gt;mvn site&lt;/code&gt;. All of the
             reports will be included in the navigation bar for browsing.
           </xs:documentation>
         </xs:annotation>
@@ -553,7 +561,7 @@
           <xs:documentation source="description">
             Default dependency information for projects that inherit from
             this one. The dependencies in this section are not immediately resolved.
-            Instead, when a POM derived from this one declares a dependency 
+            Instead, when a POM derived from this one declares a dependency
             described by a matching groupId and artifactId, the version and other values from this
             section are used for that dependency if they were not already specified.
           </xs:documentation>
@@ -563,15 +571,16 @@
         <xs:annotation>
           <xs:documentation source="version">4.0.0</xs:documentation>
           <xs:documentation source="description">Distribution information for a project that enables deployment of the site
-          and artifacts to remote web servers and repositories respectively.</xs:documentation>
+            and artifacts to remote web servers and repositories respectively.
+          </xs:documentation>
         </xs:annotation>
       </xs:element>
       <xs:element name="properties" minOccurs="0">
         <xs:annotation>
           <xs:documentation source="version">4.0.0</xs:documentation>
           <xs:documentation source="description">
-             Properties that can be used throughout the POM as a substitution, and are used as filters in resources
-             if enabled. The format is &lt;code&gt;&amp;lt;name&amp;gt;value&amp;lt;/name&amp;gt;&lt;/code&gt;.
+            Properties that can be used throughout the POM as a substitution, and are used as filters in resources
+            if enabled. The format is &lt;code&gt;&amp;lt;name&amp;gt;value&amp;lt;/name&amp;gt;&lt;/code&gt;.
           </xs:documentation>
         </xs:annotation>
         <xs:complexType>
@@ -626,8 +635,8 @@
         <xs:annotation>
           <xs:documentation source="version">4.0.0</xs:documentation>
           <xs:documentation source="description">
-             Specifies that this profile will be activated based on existence of a file.
-             </xs:documentation>
+            Specifies that this profile will be activated based on existence of a file.
+          </xs:documentation>
         </xs:annotation>
       </xs:element>
     </xs:all>
@@ -637,7 +646,7 @@
       <xs:documentation source="version">4.0.0</xs:documentation>
       <xs:documentation source="description">
         This is the file specification used to activate the profile. The missing value will be the location
-        of a file that needs to exist, and if it doesn&apos;t the profile will be activated.  On the other hand exists will test
+        of a file that needs to exist, and if it doesn&apos;t the profile will be activated. On the other hand exists will test
         for the existence of the file and if it is there the profile will be activated.
       </xs:documentation>
     </xs:annotation>
@@ -693,14 +702,16 @@
         <xs:annotation>
           <xs:documentation source="version">4.0.0</xs:documentation>
           <xs:documentation source="description">The name of the operating system to be used to activate the profile. This must be an exact match
-          of the &lt;code&gt;${os.name}&lt;/code&gt; Java property, such as &lt;code&gt;Windows XP&lt;/code&gt;.</xs:documentation>
+            of the &lt;code&gt;${os.name}&lt;/code&gt; Java property, such as &lt;code&gt;Windows XP&lt;/code&gt;.
+          </xs:documentation>
         </xs:annotation>
       </xs:element>
       <xs:element name="family" minOccurs="0" type="xs:string">
         <xs:annotation>
           <xs:documentation source="version">4.0.0</xs:documentation>
           <xs:documentation source="description">
-            The general family of the OS to be used to activate the profile, such as &lt;code&gt;windows&lt;/code&gt; or &lt;code&gt;unix&lt;/code&gt;.</xs:documentation>
+            The general family of the OS to be used to activate the profile, such as &lt;code&gt;windows&lt;/code&gt; or &lt;code&gt;unix&lt;/code&gt;.
+          </xs:documentation>
         </xs:annotation>
       </xs:element>
       <xs:element name="arch" minOccurs="0" type="xs:string">
@@ -879,7 +890,8 @@
         <xs:annotation>
           <xs:documentation source="version">4.0.0</xs:documentation>
           <xs:documentation source="description">If true, then the default reports are not included in the site generation. This includes the
-            reports in the &quot;Project Info&quot; menu.</xs:documentation>
+            reports in the &quot;Project Info&quot; menu.
+          </xs:documentation>
         </xs:annotation>
       </xs:element>
       <xs:element name="outputDirectory" minOccurs="0" type="xs:string">
@@ -932,7 +944,8 @@
         <xs:annotation>
           <xs:documentation source="version">4.0.0</xs:documentation>
           <xs:documentation source="description">Whether the configuration in this plugin should be made available to projects that
-            inherit from this one.</xs:documentation>
+            inherit from this one.
+          </xs:documentation>
         </xs:annotation>
       </xs:element>
       <xs:element name="configuration" minOccurs="0">
@@ -950,7 +963,8 @@
         <xs:annotation>
           <xs:documentation source="version">4.0.0</xs:documentation>
           <xs:documentation source="description">Multiple specifications of a set of reports, each having (possibly) different
-            configuration. This is the reporting parallel to an &lt;code&gt;execution&lt;/code&gt; in the build.</xs:documentation>
+            configuration. This is the reporting parallel to an &lt;code&gt;execution&lt;/code&gt; in the build.
+          </xs:documentation>
         </xs:annotation>
         <xs:complexType>
           <xs:sequence>
@@ -987,7 +1001,8 @@
         <xs:annotation>
           <xs:documentation source="version">4.0.0</xs:documentation>
           <xs:documentation source="description">
-            Whether any configuration should be propagated to child POMs.</xs:documentation>
+            Whether any configuration should be propagated to child POMs.
+          </xs:documentation>
         </xs:annotation>
       </xs:element>
       <xs:element name="reports" minOccurs="0">
@@ -1067,7 +1082,7 @@
         <xs:annotation>
           <xs:documentation source="version">4.0.0</xs:documentation>
           <xs:documentation source="description">
-          The list of filter properties files that are used when filtering is enabled.
+            The list of filter properties files that are used when filtering is enabled.
           </xs:documentation>
         </xs:annotation>
         <xs:complexType>
@@ -1080,7 +1095,7 @@
         <xs:annotation>
           <xs:documentation source="version">4.0.0</xs:documentation>
           <xs:documentation source="description">
-            Default plugin information to be made available for reference by 
+            Default plugin information to be made available for reference by
             projects derived from this one. This plugin configuration will not
             be resolved or bound to the lifecycle unless referenced. Any local
             configuration for a given plugin will override the plugin&apos;s entire
@@ -1130,7 +1145,8 @@
         <xs:annotation>
           <xs:documentation source="version">4.0.0</xs:documentation>
           <xs:documentation source="description">Whether to load Maven extensions (such as packaging and type handlers) from this
-            plugin. For performance reasons, this should only be enabled when necessary.</xs:documentation>
+            plugin. For performance reasons, this should only be enabled when necessary.
+          </xs:documentation>
         </xs:annotation>
       </xs:element>
       <xs:element name="executions" minOccurs="0">
@@ -1138,7 +1154,8 @@
           <xs:documentation source="version">4.0.0</xs:documentation>
           <xs:documentation source="description">Multiple specifications of a set of goals to execute during the build lifecycle, each having
             (possibly) different
-            configuration.</xs:documentation>
+            configuration.
+          </xs:documentation>
         </xs:annotation>
         <xs:complexType>
           <xs:sequence>
@@ -1150,7 +1167,8 @@
         <xs:annotation>
           <xs:documentation source="version">4.0.0</xs:documentation>
           <xs:documentation source="description">Additional dependencies that this project needs to introduce to the plugin&apos;s
-            classloader.</xs:documentation>
+            classloader.
+          </xs:documentation>
         </xs:annotation>
         <xs:complexType>
           <xs:sequence>
@@ -1175,7 +1193,8 @@
         <xs:annotation>
           <xs:documentation source="version">4.0.0</xs:documentation>
           <xs:documentation source="description">
-            Whether any configuration should be propagated to child POMs.</xs:documentation>
+            Whether any configuration should be propagated to child POMs.
+          </xs:documentation>
         </xs:annotation>
       </xs:element>
       <xs:element name="configuration" minOccurs="0">
@@ -1199,14 +1218,16 @@
         <xs:annotation>
           <xs:documentation source="version">4.0.0</xs:documentation>
           <xs:documentation source="description">The identifier of this execution for labelling the goals during the build, and for matching
-            exections to merge during inheritance.</xs:documentation>
+            exections to merge during inheritance.
+          </xs:documentation>
         </xs:annotation>
       </xs:element>
       <xs:element name="phase" minOccurs="0" type="xs:string">
         <xs:annotation>
           <xs:documentation source="version">4.0.0</xs:documentation>
           <xs:documentation source="description">The build lifecycle phase to bind the goals in this execution to. If omitted, the goals will
-            be bound to the default specified in their metadata.</xs:documentation>
+            be bound to the default specified in their metadata.
+          </xs:documentation>
         </xs:annotation>
       </xs:element>
       <xs:element name="goals" minOccurs="0">
@@ -1224,7 +1245,8 @@
         <xs:annotation>
           <xs:documentation source="version">4.0.0</xs:documentation>
           <xs:documentation source="description">
-            Whether any configuration should be propagated to child POMs.</xs:documentation>
+            Whether any configuration should be propagated to child POMs.
+          </xs:documentation>
         </xs:annotation>
       </xs:element>
       <xs:element name="configuration" minOccurs="0">
@@ -1275,9 +1297,9 @@
         <xs:annotation>
           <xs:documentation source="version">3.0.0+</xs:documentation>
           <xs:documentation source="description">
-            Describe the resource target path. For example, if you want that 
+            Describe the resource target path. For example, if you want that
             resource to appear in a specific package
-            (&lt;code&gt;org.apache.maven.messages&lt;/code&gt;), you must specify this 
+            (&lt;code&gt;org.apache.maven.messages&lt;/code&gt;), you must specify this
             element with this value: &lt;code&gt;org/apache/maven/messages&lt;/code&gt;.
             This is not required if you simply put the resources in that directory structure at the source, however.
           </xs:documentation>
@@ -1396,7 +1418,7 @@
     <xs:annotation>
       <xs:documentation source="version">4.0.0</xs:documentation>
       <xs:documentation source="description">
-         Contains the information needed for deploying websites.
+        Contains the information needed for deploying websites.
       </xs:documentation>
     </xs:annotation>
     <xs:all>
@@ -1421,7 +1443,7 @@
         <xs:annotation>
           <xs:documentation source="version">4.0.0</xs:documentation>
           <xs:documentation source="description">
-             The url of the location where website is deployed, in the form &lt;code&gt;protocol://hostname/path&lt;/code&gt;.
+            The url of the location where website is deployed, in the form &lt;code&gt;protocol://hostname/path&lt;/code&gt;.
           </xs:documentation>
         </xs:annotation>
       </xs:element>
@@ -1431,7 +1453,8 @@
     <xs:annotation>
       <xs:documentation source="version">4.0.0</xs:documentation>
       <xs:documentation source="description">Describes where an artifact has moved to. If any of the values are omitted, it is assumed to be the
-        same as it was before.</xs:documentation>
+        same as it was before.
+      </xs:documentation>
     </xs:annotation>
     <xs:all>
       <xs:element name="groupId" minOccurs="0" type="xs:string">
@@ -1472,7 +1495,8 @@
         <xs:annotation>
           <xs:documentation source="version">4.0.0</xs:documentation>
           <xs:documentation source="description">Whether to assign snapshots a unique version comprised of the timestamp and build number, or to
-            use the same version each time</xs:documentation>
+            use the same version each time
+          </xs:documentation>
         </xs:annotation>
       </xs:element>
       <xs:element name="id" minOccurs="0" type="xs:string">
@@ -1496,7 +1520,7 @@
         <xs:annotation>
           <xs:documentation source="version">4.0.0</xs:documentation>
           <xs:documentation source="description">
-             The url of the repository, in the form &lt;code&gt;protocol://hostname/path&lt;/code&gt;.
+            The url of the repository, in the form &lt;code&gt;protocol://hostname/path&lt;/code&gt;.
           </xs:documentation>
         </xs:annotation>
       </xs:element>
@@ -1552,7 +1576,7 @@
         <xs:annotation>
           <xs:documentation source="version">4.0.0</xs:documentation>
           <xs:documentation source="description">
-             The url of the repository, in the form &lt;code&gt;protocol://hostname/path&lt;/code&gt;.
+            The url of the repository, in the form &lt;code&gt;protocol://hostname/path&lt;/code&gt;.
           </xs:documentation>
         </xs:annotation>
       </xs:element>
@@ -1641,7 +1665,7 @@
           <xs:documentation source="version">3.0.0+</xs:documentation>
           <xs:documentation source="description">
             The email address or link that can be used to unsubscribe to
-            the mailing list.  If this is an email address, a
+            the mailing list. If this is an email address, a
             &lt;code&gt;mailto:&lt;/code&gt; link will automatically be created
             when the documentation is created.
           </xs:documentation>
@@ -1652,7 +1676,7 @@
           <xs:documentation source="version">3.0.0+</xs:documentation>
           <xs:documentation source="description">
             The email address or link that can be used to post to
-            the mailing list.  If this is an email address, a
+            the mailing list. If this is an email address, a
             &lt;code&gt;mailto:&lt;/code&gt; link will automatically be created
             when the documentation is created.
           </xs:documentation>
@@ -1804,7 +1828,7 @@
         <xs:annotation>
           <xs:documentation source="version">4.0.0</xs:documentation>
           <xs:documentation source="description">
-          The list of filter properties files that are used when filtering is enabled.
+            The list of filter properties files that are used when filtering is enabled.
           </xs:documentation>
         </xs:annotation>
         <xs:complexType>
@@ -1817,7 +1841,7 @@
         <xs:annotation>
           <xs:documentation source="version">4.0.0</xs:documentation>
           <xs:documentation source="description">
-            Default plugin information to be made available for reference by 
+            Default plugin information to be made available for reference by
             projects derived from this one. This plugin configuration will not
             be resolved or bound to the lifecycle unless referenced. Any local
             configuration for a given plugin will override the plugin&apos;s entire
@@ -1952,21 +1976,23 @@
         <xs:annotation>
           <xs:documentation source="version">4.0.0</xs:documentation>
           <xs:documentation source="description">
-            The name of the continuous integration system, e.g. &lt;code&gt;continuum&lt;/code&gt;.</xs:documentation>
+            The name of the continuous integration system, e.g. &lt;code&gt;continuum&lt;/code&gt;.
+          </xs:documentation>
         </xs:annotation>
       </xs:element>
       <xs:element name="url" minOccurs="0" type="xs:string">
         <xs:annotation>
           <xs:documentation source="version">4.0.0</xs:documentation>
           <xs:documentation source="description">
-            URL for the continuous integration system used by the project if it has a web interface.</xs:documentation>
+            URL for the continuous integration system used by the project if it has a web interface.
+          </xs:documentation>
         </xs:annotation>
       </xs:element>
       <xs:element name="notifiers" minOccurs="0">
         <xs:annotation>
           <xs:documentation source="version">4.0.0</xs:documentation>
           <xs:documentation source="description">
-            Configuration for notifying developers/users when a build is 
+            Configuration for notifying developers/users when a build is
             unsuccessful, including user information and notification mode.
           </xs:documentation>
         </xs:annotation>
@@ -2041,7 +2067,7 @@
     <xs:annotation>
       <xs:documentation source="version">3.0.0+</xs:documentation>
       <xs:documentation source="description">
-        Describes the licenses for this project.  This is used to generate
+        Describes the licenses for this project. This is used to generate
         the license page of the project&apos;s web site, as well as being taken into consideration in other reporting and
         validation. The licenses listed for the project are that of the project itself, and not of dependencies.
       </xs:documentation>
@@ -2063,12 +2089,12 @@
         <xs:annotation>
           <xs:documentation source="version">3.0.0+</xs:documentation>
           <xs:documentation source="description">
-              The primary method by which this project may be distributed.
+            The primary method by which this project may be distributed.
             &lt;dl&gt;
-              &lt;dt&gt;repo&lt;/dt&gt;
-              &lt;dd&gt;may be downloaded from the Maven repository&lt;/dd&gt;
-              &lt;dt&gt;manual&lt;/dt&gt;
-              &lt;dd&gt;user must manually download and install the dependency.&lt;/dd&gt;
+            &lt;dt&gt;repo&lt;/dt&gt;
+            &lt;dd&gt;may be downloaded from the Maven repository&lt;/dd&gt;
+            &lt;dt&gt;manual&lt;/dt&gt;
+            &lt;dd&gt;user must manually download and install the dependency.&lt;/dd&gt;
             &lt;/dl&gt;
           </xs:documentation>
         </xs:annotation>
@@ -2131,7 +2157,7 @@
         <xs:annotation>
           <xs:documentation source="version">3.0.0+</xs:documentation>
           <xs:documentation source="description">
-            The roles the contributor plays in the project.  Each role is
+            The roles the contributor plays in the project. Each role is
             described by a &lt;code&gt;role&lt;/code&gt; element, the body of which is a
             role name. This can also be used to describe the contribution.
           </xs:documentation>
@@ -2174,12 +2200,12 @@
         <xs:annotation>
           <xs:documentation source="version">4.0.0</xs:documentation>
           <xs:documentation source="description">
-              The source control management system URL
-              that describes the repository and how to connect to the
-              repository. For more information, see the
-              &lt;a href=&quot;http://maven.apache.org/scm/scm-url-format.html&quot;&gt;URL format&lt;/a&gt;
-              and &lt;a href=&quot;http://maven.apache.org/scm/scms-overview.html&quot;&gt;list of supported SCMs&lt;/a&gt;.
-              This connection is read-only.
+            The source control management system URL
+            that describes the repository and how to connect to the
+            repository. For more information, see the
+            &lt;a href=&quot;http://maven.apache.org/scm/scm-url-format.html&quot;&gt;URL format&lt;/a&gt;
+            and &lt;a href=&quot;http://maven.apache.org/scm/scms-overview.html&quot;&gt;list of supported SCMs&lt;/a&gt;.
+            This connection is read-only.
           </xs:documentation>
         </xs:annotation>
       </xs:element>
@@ -2204,7 +2230,8 @@
         <xs:annotation>
           <xs:documentation source="version">4.0.0</xs:documentation>
           <xs:documentation source="description">
-            The URL to the project&apos;s browsable SCM repository, such as ViewVC or Fisheye.</xs:documentation>
+            The URL to the project&apos;s browsable SCM repository, such as ViewVC or Fisheye.
+          </xs:documentation>
         </xs:annotation>
       </xs:element>
     </xs:all>

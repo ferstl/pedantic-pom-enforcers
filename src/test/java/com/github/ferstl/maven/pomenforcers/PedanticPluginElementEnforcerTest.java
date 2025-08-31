@@ -15,23 +15,20 @@
  */
 package com.github.ferstl.maven.pomenforcers;
 
-import static com.github.ferstl.maven.pomenforcers.ErrorReportMatcher.hasErrors;
-import static com.github.ferstl.maven.pomenforcers.ErrorReportMatcher.hasNoErrors;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.mockito.Mockito.mock;
-
 import java.nio.file.Path;
 import java.nio.file.Paths;
-
 import org.apache.maven.project.MavenProject;
 import org.codehaus.plexus.component.configurator.expression.ExpressionEvaluationException;
 import org.codehaus.plexus.component.configurator.expression.ExpressionEvaluator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.w3c.dom.Document;
-
 import com.github.ferstl.maven.pomenforcers.model.ProjectModel;
 import com.github.ferstl.maven.pomenforcers.util.XmlUtils;
+import static com.github.ferstl.maven.pomenforcers.ErrorReportMatcher.hasErrors;
+import static com.github.ferstl.maven.pomenforcers.ErrorReportMatcher.hasNoErrors;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.mockito.Mockito.mock;
 
 public class PedanticPluginElementEnforcerTest {
 
@@ -41,7 +38,7 @@ public class PedanticPluginElementEnforcerTest {
 
   @BeforeEach
   public void before() throws ExpressionEvaluationException {
-	this.mockHelper = mock(ExpressionEvaluator.class);
+    this.mockHelper = mock(ExpressionEvaluator.class);
     this.mockMavenProject = mock(MavenProject.class);
     this.errorReport = new ErrorReport(PedanticEnforcerRule.PLUGIN_ELEMENT);
   }
@@ -71,7 +68,7 @@ public class PedanticPluginElementEnforcerTest {
     enforcer.doEnforce(this.errorReport);
 
     // assert
-    assertThat(this.errorReport, hasErrors());    
+    assertThat(this.errorReport, hasErrors());
   }
 
   @Test

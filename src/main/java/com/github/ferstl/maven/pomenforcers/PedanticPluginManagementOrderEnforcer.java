@@ -15,20 +15,14 @@
  */
 package com.github.ferstl.maven.pomenforcers;
 
-import static com.github.ferstl.maven.pomenforcers.model.PluginElement.ARTIFACT_ID;
-import static com.github.ferstl.maven.pomenforcers.model.PluginElement.GROUP_ID;
-
 import java.util.Collection;
 import java.util.LinkedHashSet;
 import java.util.Set;
-
 import javax.inject.Inject;
 import javax.inject.Named;
-
 import org.apache.maven.model.Plugin;
 import org.apache.maven.project.MavenProject;
 import org.codehaus.plexus.component.configurator.expression.ExpressionEvaluator;
-
 import com.github.ferstl.maven.pomenforcers.model.PluginElement;
 import com.github.ferstl.maven.pomenforcers.model.PluginModel;
 import com.github.ferstl.maven.pomenforcers.model.functions.PluginMatcher;
@@ -36,6 +30,8 @@ import com.github.ferstl.maven.pomenforcers.priority.CompoundPriorityOrdering;
 import com.github.ferstl.maven.pomenforcers.util.CommaSeparatorUtils;
 import com.google.common.collect.BiMap;
 import com.google.common.collect.Sets;
+import static com.github.ferstl.maven.pomenforcers.model.PluginElement.ARTIFACT_ID;
+import static com.github.ferstl.maven.pomenforcers.model.PluginElement.GROUP_ID;
 
 
 /**
@@ -66,7 +62,7 @@ public class PedanticPluginManagementOrderEnforcer extends AbstractPedanticEnfor
 
   @Inject
   public PedanticPluginManagementOrderEnforcer(final MavenProject project, final ExpressionEvaluator helper) {
-	super(project, helper);
+    super(project, helper);
     this.pluginOrdering = CompoundPriorityOrdering.orderBy(GROUP_ID, ARTIFACT_ID);
   }
 

@@ -21,13 +21,10 @@ import java.util.List;
 import java.util.Set;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
-
 import javax.inject.Inject;
 import javax.inject.Named;
-
 import org.apache.maven.project.MavenProject;
 import org.codehaus.plexus.component.configurator.expression.ExpressionEvaluator;
-
 import com.github.ferstl.maven.pomenforcers.model.DependencyModel;
 import com.github.ferstl.maven.pomenforcers.util.CommaSeparatorUtils;
 import com.google.common.collect.ImmutableSet;
@@ -85,9 +82,9 @@ public class PedanticDependencyConfigurationEnforcer extends AbstractPedanticEnf
 
   @Inject
   public PedanticDependencyConfigurationEnforcer(final MavenProject project, final ExpressionEvaluator helper) {
-	super(project, helper);
+    super(project, helper);
   }
-  
+
   /**
    * If set to <code>true</code>, all dependency versions have to be defined in the dependency management.
    *
@@ -126,8 +123,8 @@ public class PedanticDependencyConfigurationEnforcer extends AbstractPedanticEnf
   public void setAllowedUnmanagedProjectVersionProperties(String allowedUnmanagedProjectVersionProperties) {
     CommaSeparatorUtils.splitAndAddToCollection(
         allowedUnmanagedProjectVersionProperties,
-            this.allowedUnmanagedProjectVersionProperties,
-            property -> String.format("${%s}", property));
+        this.allowedUnmanagedProjectVersionProperties,
+        property -> String.format("${%s}", property));
   }
 
   /**
@@ -169,8 +166,8 @@ public class PedanticDependencyConfigurationEnforcer extends AbstractPedanticEnf
     // Filter all project versions if allowed
     if (this.allowUnmanagedProjectVersions) {
       versionedDependencies = versionedDependencies.stream()
-              .filter(dep -> !this.allowedUnmanagedProjectVersionProperties.contains(dep.getVersion()))
-              .collect(Collectors.toList());
+          .filter(dep -> !this.allowedUnmanagedProjectVersionProperties.contains(dep.getVersion()))
+          .collect(Collectors.toList());
     }
 
     if (!versionedDependencies.isEmpty()) {

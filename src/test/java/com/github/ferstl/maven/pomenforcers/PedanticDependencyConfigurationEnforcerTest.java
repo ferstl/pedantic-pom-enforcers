@@ -15,17 +15,14 @@
  */
 package com.github.ferstl.maven.pomenforcers;
 
+import java.util.Collections;
+import org.junit.jupiter.api.Test;
+import com.github.ferstl.maven.pomenforcers.model.ArtifactModel;
+import com.github.ferstl.maven.pomenforcers.model.DependencyModel;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-
-import java.util.Collections;
-
-import org.junit.jupiter.api.Test;
-
-import com.github.ferstl.maven.pomenforcers.model.ArtifactModel;
-import com.github.ferstl.maven.pomenforcers.model.DependencyModel;
 
 /**
  * JUnit tests for {@link PedanticDependencyConfigurationEnforcer}.
@@ -170,6 +167,7 @@ public class PedanticDependencyConfigurationEnforcerTest extends AbstractPedanti
 
     executeRuleAndCheckReport(false);
   }
+
   @Test
   public void allowedVersionWithActiveCustomProps2() {
     this.testRule.setAllowedUnmanagedProjectVersionProperties("some.version,some.other.version");

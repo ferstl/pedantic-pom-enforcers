@@ -16,9 +16,7 @@
 package com.github.ferstl.maven.pomenforcers;
 
 import java.io.File;
-
 import org.junit.jupiter.api.extension.RegisterExtension;
-
 import io.takari.maven.testing.TestResources5;
 import io.takari.maven.testing.executor.MavenExecutionResult;
 import io.takari.maven.testing.executor.MavenRuntime;

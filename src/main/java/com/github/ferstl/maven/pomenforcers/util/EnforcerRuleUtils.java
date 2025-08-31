@@ -17,10 +17,8 @@ package com.github.ferstl.maven.pomenforcers.util;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
 import org.codehaus.plexus.component.configurator.expression.ExpressionEvaluationException;
 import org.codehaus.plexus.component.configurator.expression.ExpressionEvaluator;
-
 import com.google.common.base.Strings;
 
 public final class EnforcerRuleUtils {

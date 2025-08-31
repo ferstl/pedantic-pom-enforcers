@@ -15,16 +15,13 @@
  */
 package com.github.ferstl.maven.pomenforcers.model.functions;
 
-import static com.github.ferstl.maven.pomenforcers.util.EnforcerRuleUtils.evaluateProperties;
-
 import java.util.Objects;
-
 import org.apache.maven.model.Dependency;
 import org.codehaus.plexus.component.configurator.expression.ExpressionEvaluator;
-
 import com.github.ferstl.maven.pomenforcers.model.DependencyModel;
 import com.github.ferstl.maven.pomenforcers.model.DependencyScope;
 import com.google.common.collect.ImmutableBiMap.Builder;
+import static com.github.ferstl.maven.pomenforcers.util.EnforcerRuleUtils.evaluateProperties;
 
 /**
  * Matches Maven {@link Dependency} objects with {@link DependencyModel} objects.

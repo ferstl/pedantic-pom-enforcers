@@ -15,18 +15,10 @@
  */
 package com.github.ferstl.maven.pomenforcers;
 
-import static com.github.ferstl.maven.pomenforcers.ErrorReportMatcher.hasErrors;
-import static com.github.ferstl.maven.pomenforcers.ErrorReportMatcher.hasNoErrors;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-
 import java.util.LinkedList;
-
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
-
 import org.apache.maven.model.Dependency;
 import org.apache.maven.model.DependencyManagement;
 import org.apache.maven.model.PluginManagement;
@@ -36,10 +28,14 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-
 import com.github.ferstl.maven.pomenforcers.model.DependencyModel;
 import com.github.ferstl.maven.pomenforcers.model.DependencyScope;
 import com.github.ferstl.maven.pomenforcers.model.ProjectModel;
+import static com.github.ferstl.maven.pomenforcers.ErrorReportMatcher.hasErrors;
+import static com.github.ferstl.maven.pomenforcers.ErrorReportMatcher.hasNoErrors;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 
 public abstract class AbstractPedanticEnforcerTest<T extends AbstractPedanticEnforcer> {
@@ -50,12 +46,12 @@ public abstract class AbstractPedanticEnforcerTest<T extends AbstractPedanticEnf
   MavenProject mockMavenProject;
   T testRule;
   ErrorReport report;
-  
+
   ExpressionEvaluator mockHelper;
 
   @BeforeEach
   public void setup() throws Exception {
-	this.mockHelper = mock(ExpressionEvaluator.class);
+    this.mockHelper = mock(ExpressionEvaluator.class);
     this.projectModel = mock(ProjectModel.class);
     this.mockMavenProject = mock(MavenProject.class);
 

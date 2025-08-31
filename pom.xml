@@ -164,13 +164,13 @@
         </exclusion>
       </exclusions>
     </dependency>
-    
-	<dependency>
-	    <groupId>org.junit.jupiter</groupId>
-	    <artifactId>junit-jupiter-params</artifactId>
-	    <version>5.11.4</version>
-	    <scope>test</scope>
-	</dependency>    
+
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter-params</artifactId>
+      <version>5.11.4</version>
+      <scope>test</scope>
+    </dependency>
     <dependency>
       <groupId>org.hamcrest</groupId>
       <artifactId>java-hamcrest</artifactId>
@@ -189,12 +189,12 @@
         </exclusion>
       </exclusions>
     </dependency>
-	<dependency>
-		<groupId>org.assertj</groupId>
-		<artifactId>assertj-core</artifactId>
-      	<version>3.27.3</version>
-        <scope>test</scope>
-	</dependency>
+    <dependency>
+      <groupId>org.assertj</groupId>
+      <artifactId>assertj-core</artifactId>
+      <version>3.27.3</version>
+      <scope>test</scope>
+    </dependency>
 
   </dependencies>
 
@@ -223,14 +223,14 @@
           <artifactId>takari-lifecycle-plugin</artifactId>
           <version>${takari-lifecycle-plugin.version}</version>
           <executions>
-          <execution>
-            <id>testProperties</id>
-            <goals>
-              <goal>testProperties</goal>
-            </goals>
-            <phase>process-test-resources</phase>
-          </execution>
-        </executions>
+            <execution>
+              <id>testProperties</id>
+              <goals>
+                <goal>testProperties</goal>
+              </goals>
+              <phase>process-test-resources</phase>
+            </execution>
+          </executions>
         </plugin>
 
         <plugin>

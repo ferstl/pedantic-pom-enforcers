@@ -15,22 +15,18 @@
  */
 package com.github.ferstl.maven.pomenforcers;
 
-import static com.github.ferstl.maven.pomenforcers.ErrorReport.toList;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
-
 import javax.inject.Inject;
 import javax.inject.Named;
-
 import org.apache.maven.project.MavenProject;
 import org.codehaus.plexus.component.configurator.expression.ExpressionEvaluator;
-
 import com.github.ferstl.maven.pomenforcers.util.CommaSeparatorUtils;
 import com.google.common.collect.Ordering;
 import com.google.common.collect.Sets;
+import static com.github.ferstl.maven.pomenforcers.ErrorReport.toList;
 
 
 /**
@@ -60,7 +56,7 @@ public class PedanticModuleOrderEnforcer extends AbstractPedanticEnforcer {
 
   @Inject
   public PedanticModuleOrderEnforcer(final MavenProject project, final ExpressionEvaluator helper) {
-	super(project, helper);
+    super(project, helper);
     this.ignoredModules = Sets.newLinkedHashSet();
   }
 

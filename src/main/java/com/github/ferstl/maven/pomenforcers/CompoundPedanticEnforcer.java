@@ -18,13 +18,10 @@ package com.github.ferstl.maven.pomenforcers;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-
 import javax.inject.Inject;
 import javax.inject.Named;
-
 import org.apache.maven.project.MavenProject;
 import org.codehaus.plexus.component.configurator.expression.ExpressionEvaluator;
-
 import com.github.ferstl.maven.pomenforcers.util.CommaSeparatorUtils;
 import com.google.common.base.Strings;
 import com.google.common.collect.Sets;
@@ -214,10 +211,10 @@ public class CompoundPedanticEnforcer extends AbstractPedanticEnforcer {
   /**
    * See
    * {@link PedanticDependencyConfigurationEnforcer#setAllowUnmanagedProjectVersions(boolean)} and
+   *
    * @link PedanticPluginConfigurationEnforcer#setAllowUnmanagedProjectVersions(boolean)}. This property configures both.
    * Note that this property contains a typo since the very beginning. Don't use it anymore!
    * Use <code>allowUnmanagedProjectVersions</code> instead.
-   *
    * @configParam
    * @since 1.0.0
    * @deprecated Since 2.2.0. Will be removed in 3.x . Use <code>allowUnmanagedProjectVersions</code>.
@@ -228,8 +225,8 @@ public class CompoundPedanticEnforcer extends AbstractPedanticEnforcer {
   /**
    * See
    * {@link PedanticDependencyConfigurationEnforcer#setAllowUnmanagedProjectVersions(boolean)} and
-   * @link PedanticPluginConfigurationEnforcer#setAllowUnmanagedProjectVersions(boolean)}. This property configures both.
    *
+   * @link PedanticPluginConfigurationEnforcer#setAllowUnmanagedProjectVersions(boolean)}. This property configures both.
    * @configParam
    * @since 2.2.0
    */
@@ -238,8 +235,8 @@ public class CompoundPedanticEnforcer extends AbstractPedanticEnforcer {
   /**
    * See
    * {@link PedanticDependencyConfigurationEnforcer#setAllowedUnmanagedProjectVersionProperties(String)} and
-   * @link PedanticPluginConfigurationEnforcer#setAllowedUnmanagedProjectVersionProperties(String)}. This property configures both.
    *
+   * @link PedanticPluginConfigurationEnforcer#setAllowedUnmanagedProjectVersionProperties(String)}. This property configures both.
    * @configParam
    * @since 2.2.0
    */
@@ -464,7 +461,7 @@ public class CompoundPedanticEnforcer extends AbstractPedanticEnforcer {
 
   @Inject
   public CompoundPedanticEnforcer(final MavenProject project, final ExpressionEvaluator helper) {
-	super(project, helper);
+    super(project, helper);
     this.enforcers = Sets.newLinkedHashSet();
     this.propertyInitializer = new PropertyInitializationVisitor();
   }

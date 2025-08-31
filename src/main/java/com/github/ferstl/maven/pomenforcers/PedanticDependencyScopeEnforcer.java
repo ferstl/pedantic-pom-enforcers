@@ -15,25 +15,14 @@
  */
 package com.github.ferstl.maven.pomenforcers;
 
-import static com.github.ferstl.maven.pomenforcers.model.DependencyScope.COMPILE;
-import static com.github.ferstl.maven.pomenforcers.model.DependencyScope.IMPORT;
-import static com.github.ferstl.maven.pomenforcers.model.DependencyScope.PROVIDED;
-import static com.github.ferstl.maven.pomenforcers.model.DependencyScope.RUNTIME;
-import static com.github.ferstl.maven.pomenforcers.model.DependencyScope.SYSTEM;
-import static com.github.ferstl.maven.pomenforcers.model.DependencyScope.TEST;
-import static java.util.stream.Collectors.toSet;
-
 import java.util.Collection;
 import java.util.Map.Entry;
 import java.util.Set;
-
 import javax.inject.Inject;
 import javax.inject.Named;
-
 import org.apache.maven.model.Dependency;
 import org.apache.maven.project.MavenProject;
 import org.codehaus.plexus.component.configurator.expression.ExpressionEvaluator;
-
 import com.github.ferstl.maven.pomenforcers.model.ArtifactModel;
 import com.github.ferstl.maven.pomenforcers.model.DependencyScope;
 import com.github.ferstl.maven.pomenforcers.model.functions.StringToArtifactTransformer;
@@ -42,6 +31,13 @@ import com.google.common.base.Joiner;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.Sets;
+import static com.github.ferstl.maven.pomenforcers.model.DependencyScope.COMPILE;
+import static com.github.ferstl.maven.pomenforcers.model.DependencyScope.IMPORT;
+import static com.github.ferstl.maven.pomenforcers.model.DependencyScope.PROVIDED;
+import static com.github.ferstl.maven.pomenforcers.model.DependencyScope.RUNTIME;
+import static com.github.ferstl.maven.pomenforcers.model.DependencyScope.SYSTEM;
+import static com.github.ferstl.maven.pomenforcers.model.DependencyScope.TEST;
+import static java.util.stream.Collectors.toSet;
 
 
 /**
@@ -73,7 +69,7 @@ public class PedanticDependencyScopeEnforcer extends AbstractPedanticEnforcer {
 
   @Inject
   public PedanticDependencyScopeEnforcer(final MavenProject project, final ExpressionEvaluator helper) {
-	super(project, helper);
+    super(project, helper);
     this.scopedDependencies = HashMultimap.create();
   }
 

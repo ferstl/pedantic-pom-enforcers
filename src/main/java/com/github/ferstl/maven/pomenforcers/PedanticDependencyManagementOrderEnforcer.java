@@ -17,15 +17,12 @@ package com.github.ferstl.maven.pomenforcers;
 
 import java.util.Collection;
 import java.util.Collections;
-
 import javax.inject.Inject;
 import javax.inject.Named;
-
 import org.apache.maven.model.Dependency;
 import org.apache.maven.model.DependencyManagement;
 import org.apache.maven.project.MavenProject;
 import org.codehaus.plexus.component.configurator.expression.ExpressionEvaluator;
-
 import com.github.ferstl.maven.pomenforcers.model.DependencyModel;
 
 
@@ -34,7 +31,6 @@ import com.github.ferstl.maven.pomenforcers.model.DependencyModel;
  * ordered. The ordering can be defined by any combination of <code>scope</code>,
  * <code>groupId</code> and <code>artifactId</code>. Each of these attributes
  * may be given a priority.
- *
  * <pre>
  * ### Example
  *     &lt;rules&gt;
@@ -56,10 +52,10 @@ import com.github.ferstl.maven.pomenforcers.model.DependencyModel;
  */
 @Named("dependencyManagementOrder")
 public class PedanticDependencyManagementOrderEnforcer extends AbstractPedanticDependencyOrderEnforcer {
-	
+
   @Inject
   public PedanticDependencyManagementOrderEnforcer(final MavenProject project, final ExpressionEvaluator helper) {
-	super(project, helper);
+    super(project, helper);
   }
 
   @Override
@@ -91,7 +87,7 @@ public class PedanticDependencyManagementOrderEnforcer extends AbstractPedanticD
   protected void reportError(ErrorReport report, Collection<DependencyModel> resolvedDependencies, Collection<DependencyModel> sortedDependencies) {
 
     report.addLine("Your dependency management has to be ordered this way:")
-          .emptyLine()
-          .addDiffUsingToString(resolvedDependencies, sortedDependencies, "Actual Order", "Required Order");
+        .emptyLine()
+        .addDiffUsingToString(resolvedDependencies, sortedDependencies, "Actual Order", "Required Order");
   }
 }

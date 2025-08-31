@@ -16,7 +16,6 @@
 package com.github.ferstl.maven.pomenforcers.model;
 
 import org.junit.Test;
-
 import static org.junit.Assert.assertEquals;
 
 

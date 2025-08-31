@@ -21,13 +21,10 @@ import java.util.List;
 import java.util.Set;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
-
 import javax.inject.Inject;
 import javax.inject.Named;
-
 import org.apache.maven.project.MavenProject;
 import org.codehaus.plexus.component.configurator.expression.ExpressionEvaluator;
-
 import com.github.ferstl.maven.pomenforcers.model.PluginModel;
 import com.github.ferstl.maven.pomenforcers.util.CommaSeparatorUtils;
 import com.google.common.collect.ImmutableSet;
@@ -90,10 +87,10 @@ public class PedanticPluginConfigurationEnforcer extends AbstractPedanticEnforce
    * If enabled, plugin dependencies have to be declared in <code>&lt;pluginManagement&gt;</code>.
    */
   private boolean manageDependencies = true;
-  
+
   @Inject
   public PedanticPluginConfigurationEnforcer(final MavenProject project, final ExpressionEvaluator helper) {
-	super(project, helper);
+    super(project, helper);
   }
 
   /**
@@ -134,8 +131,8 @@ public class PedanticPluginConfigurationEnforcer extends AbstractPedanticEnforce
   public void setAllowedUnmanagedProjectVersionProperties(String allowedUnmanagedProjectVersionProperties) {
     CommaSeparatorUtils.splitAndAddToCollection(
         allowedUnmanagedProjectVersionProperties,
-            this.allowedUnmanagedProjectVersionProperties,
-            property -> String.format("${%s}", property));
+        this.allowedUnmanagedProjectVersionProperties,
+        property -> String.format("${%s}", property));
   }
 
   /**
@@ -194,8 +191,8 @@ public class PedanticPluginConfigurationEnforcer extends AbstractPedanticEnforce
     // Filter all project versions if allowed
     if (this.allowUnmanagedProjectVersions) {
       versionedPlugins = versionedPlugins.stream()
-              .filter(plugin -> !this.allowedUnmanagedProjectVersionProperties.contains(plugin.getVersion()))
-              .collect(Collectors.toList());
+          .filter(plugin -> !this.allowedUnmanagedProjectVersionProperties.contains(plugin.getVersion()))
+          .collect(Collectors.toList());
     }
 
     if (!versionedPlugins.isEmpty()) {

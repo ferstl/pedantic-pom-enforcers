@@ -15,15 +15,12 @@
  */
 package com.github.ferstl.maven.pomenforcers.model.functions;
 
-import static com.github.ferstl.maven.pomenforcers.util.EnforcerRuleUtils.evaluateProperties;
-import static com.google.common.base.Strings.isNullOrEmpty;
-
 import java.util.Objects;
-
 import org.apache.maven.model.Plugin;
 import org.codehaus.plexus.component.configurator.expression.ExpressionEvaluator;
-
 import com.github.ferstl.maven.pomenforcers.model.PluginModel;
+import static com.github.ferstl.maven.pomenforcers.util.EnforcerRuleUtils.evaluateProperties;
+import static com.google.common.base.Strings.isNullOrEmpty;
 
 /**
  * Matches Maven {@link Plugin} objects with {@link PluginModel} objects.

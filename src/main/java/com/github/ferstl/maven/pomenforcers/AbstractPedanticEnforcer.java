@@ -16,25 +16,22 @@
 package com.github.ferstl.maven.pomenforcers;
 
 import java.util.Objects;
-
 import javax.xml.bind.JAXB;
-
 import org.apache.maven.enforcer.rule.api.AbstractEnforcerRule;
 import org.apache.maven.enforcer.rule.api.EnforcerLevel;
 import org.apache.maven.enforcer.rule.api.EnforcerRuleException;
 import org.apache.maven.project.MavenProject;
 import org.codehaus.plexus.component.configurator.expression.ExpressionEvaluator;
 import org.w3c.dom.Document;
-
 import com.github.ferstl.maven.pomenforcers.model.ProjectModel;
 import com.github.ferstl.maven.pomenforcers.util.XmlUtils;
 
 public abstract class AbstractPedanticEnforcer extends AbstractEnforcerRule {
 
   private final ExpressionEvaluator helper;
-  
+
   private final MavenProject project;
-  
+
   private Document pom;
   private ProjectModel projectModel;
 
@@ -47,17 +44,17 @@ public abstract class AbstractPedanticEnforcer extends AbstractEnforcerRule {
    * @since 2.0.0
    */
   private boolean warnOnly;
-  
+
   public AbstractPedanticEnforcer(final MavenProject project, final ExpressionEvaluator helper) {
-	  this.project = Objects.requireNonNull(project);
-	  this.helper = Objects.requireNonNull(helper);
+    this.project = Objects.requireNonNull(project);
+    this.helper = Objects.requireNonNull(helper);
   }
 
   @Override
   public final void execute() throws EnforcerRuleException {
     Document pom = XmlUtils.parseXml(project.getFile());
     ProjectModel model = JAXB.unmarshal(project.getFile(), ProjectModel.class);
-    
+
     initialize(pom, model);
 
     ErrorReport report = new ErrorReport(getDescription());
@@ -84,9 +81,9 @@ public abstract class AbstractPedanticEnforcer extends AbstractEnforcerRule {
   protected ExpressionEvaluator getHelper() {
     return this.helper;
   }
-  
+
   protected MavenProject getMavenProject() {
-	return this.project;
+    return this.project;
   }
 
   protected Document getPom() {

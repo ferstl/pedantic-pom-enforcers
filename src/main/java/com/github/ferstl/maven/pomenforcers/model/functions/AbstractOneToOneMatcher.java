@@ -18,9 +18,7 @@ package com.github.ferstl.maven.pomenforcers.model.functions;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-
 import org.codehaus.plexus.component.configurator.expression.ExpressionEvaluator;
-
 import com.google.common.collect.BiMap;
 import com.google.common.collect.ImmutableBiMap;
 import com.google.common.collect.ImmutableBiMap.Builder;
@@ -59,7 +57,7 @@ public abstract class AbstractOneToOneMatcher<U, V> {
     return mapBuilder.build();
   }
 
-  protected void handleUnmatchedItem(Builder<V,V> mapBuilder, V subsetItem) {
+  protected void handleUnmatchedItem(Builder<V, V> mapBuilder, V subsetItem) {
     throw new IllegalArgumentException("Could not match item " + subsetItem + " with superset");
   }
 

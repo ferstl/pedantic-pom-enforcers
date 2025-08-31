@@ -15,16 +15,14 @@
  */
 package com.github.ferstl.maven.pomenforcers;
 
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import com.github.ferstl.maven.pomenforcers.model.PluginModel;
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-
-import com.github.ferstl.maven.pomenforcers.model.PluginModel;
 
 /**
  * JUnit tests for {@link PedanticPluginManagementLocationEnforcer}.

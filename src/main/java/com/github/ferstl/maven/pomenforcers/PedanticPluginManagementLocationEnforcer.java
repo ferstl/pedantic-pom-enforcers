@@ -15,21 +15,17 @@
  */
 package com.github.ferstl.maven.pomenforcers;
 
-import static com.github.ferstl.maven.pomenforcers.ErrorReport.toList;
-
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
-
 import javax.inject.Inject;
 import javax.inject.Named;
-
 import org.apache.maven.project.MavenProject;
 import org.codehaus.plexus.component.configurator.expression.ExpressionEvaluator;
-
 import com.github.ferstl.maven.pomenforcers.model.ArtifactModel;
 import com.github.ferstl.maven.pomenforcers.model.functions.StringToArtifactTransformer;
 import com.github.ferstl.maven.pomenforcers.util.CommaSeparatorUtils;
+import static com.github.ferstl.maven.pomenforcers.ErrorReport.toList;
 
 
 /**
@@ -55,7 +51,7 @@ public class PedanticPluginManagementLocationEnforcer extends AbstractPedanticEn
 
   @Inject
   public PedanticPluginManagementLocationEnforcer(final MavenProject project, final ExpressionEvaluator helper) {
-	super(project, helper);
+    super(project, helper);
     this.allowParentPoms = false;
     this.pluginManagingPoms = new HashSet<>();
   }

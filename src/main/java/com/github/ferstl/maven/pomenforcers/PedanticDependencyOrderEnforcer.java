@@ -14,15 +14,13 @@
  * limitations under the License.
  */
 package com.github.ferstl.maven.pomenforcers;
-import java.util.Collection;
 
+import java.util.Collection;
 import javax.inject.Inject;
 import javax.inject.Named;
-
 import org.apache.maven.model.Dependency;
 import org.apache.maven.project.MavenProject;
 import org.codehaus.plexus.component.configurator.expression.ExpressionEvaluator;
-
 import com.github.ferstl.maven.pomenforcers.model.DependencyModel;
 
 
@@ -30,7 +28,6 @@ import com.github.ferstl.maven.pomenforcers.model.DependencyModel;
  * This enforcer makes sure that all artifacts in your dependencies section are
  * ordered. The ordering can be defined by any combination of <code>scope</code>, <code>groupId</code>
  * and <code>artifactId</code>. Each of these attributes may be given a priority.
- *
  * <pre>
  * ### Example
  *     &lt;rules&gt;
@@ -52,10 +49,10 @@ import com.github.ferstl.maven.pomenforcers.model.DependencyModel;
  */
 @Named("dependencyOrder")
 public class PedanticDependencyOrderEnforcer extends AbstractPedanticDependencyOrderEnforcer {
-	
+
   @Inject
   public PedanticDependencyOrderEnforcer(final MavenProject project, final ExpressionEvaluator helper) {
-	super(project, helper);
+    super(project, helper);
   }
 
   @Override
@@ -82,7 +79,7 @@ public class PedanticDependencyOrderEnforcer extends AbstractPedanticDependencyO
   protected void reportError(ErrorReport report, Collection<DependencyModel> resolvedDependencies, Collection<DependencyModel> sortedDependencies) {
 
     report.addLine("Your dependencies have to be sorted this way:")
-          .emptyLine()
-          .addDiffUsingToString(resolvedDependencies, sortedDependencies, "Actual Order", "Required Order");
+        .emptyLine()
+        .addDiffUsingToString(resolvedDependencies, sortedDependencies, "Actual Order", "Required Order");
   }
 }
