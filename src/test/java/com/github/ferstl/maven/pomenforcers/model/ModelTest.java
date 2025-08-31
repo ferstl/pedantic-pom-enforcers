@@ -23,9 +23,7 @@ import org.junit.Test;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import com.github.ferstl.maven.pomenforcers.util.XmlUtils;
-import static org.hamcrest.Matchers.not;
-import static org.hamcrest.Matchers.nullValue;
-import static org.junit.Assert.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class ModelTest {
 
@@ -37,7 +35,7 @@ public class ModelTest {
     Binder<Node> binder = ctx.createBinder();
     JAXBElement<ProjectModel> projectModel = binder.unmarshal(pom, ProjectModel.class);
 
-    assertThat(projectModel, not(nullValue()));
+    assertThat(projectModel).isNotNull();
   }
 
 }

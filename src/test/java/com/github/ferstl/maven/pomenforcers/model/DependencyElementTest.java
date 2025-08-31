@@ -16,8 +16,7 @@
 package com.github.ferstl.maven.pomenforcers.model;
 
 import org.junit.Test;
-import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 
 
 public class DependencyElementTest {
@@ -26,7 +25,7 @@ public class DependencyElementTest {
   public void testGetByElementName() {
     DependencyElement.values();
     for (DependencyElement element : DependencyElement.values()) {
-      assertThat(element, is(DependencyElement.getByElementName(element.getElementName())));
+      assertThat(element).isEqualTo(DependencyElement.getByElementName(element.getElementName()));
     }
   }
 

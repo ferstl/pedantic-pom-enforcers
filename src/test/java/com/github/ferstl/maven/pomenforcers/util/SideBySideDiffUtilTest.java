@@ -19,16 +19,14 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
-import org.hamcrest.Description;
-import org.hamcrest.Matcher;
-import org.hamcrest.TypeSafeDiagnosingMatcher;
+import org.assertj.core.api.AbstractAssert;
 import org.junit.Test;
 import com.github.ferstl.maven.pomenforcers.model.PomSection;
 import com.google.common.collect.Ordering;
 import static com.github.ferstl.maven.pomenforcers.util.SideBySideDiffUtil.diff;
+import static com.github.ferstl.maven.pomenforcers.util.SideBySideDiffUtilTest.SideBySideDiffAssert.assertThat;
 import static java.util.Arrays.asList;
 import static java.util.Collections.singletonList;
-import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.assertEquals;
 
 /**
@@ -43,7 +41,7 @@ public class SideBySideDiffUtilTest {
         asList("abc", "zyx", "def", "wvu", "ghi", "tsr", "jkl", "qpo"),
         "", "");
 
-    assertThat(diff, hasContent(
+    assertThat(diff).hasContent(
         "  abc |   abc",
         "      | + zyx",
         "  def |   def",
@@ -52,7 +50,7 @@ public class SideBySideDiffUtilTest {
         "      | + tsr",
         "  jkl |   jkl",
         "      | + qpo"
-    ));
+    );
   }
 
 
@@ -63,7 +61,7 @@ public class SideBySideDiffUtilTest {
         asList("abc", "def", "ghi", "jkl"),
         "", "");
 
-    assertThat(diff, hasContent(
+    assertThat(diff).hasContent(
         "  abc |   abc",
         "- zyx |",
         "  def |   def",
@@ -72,7 +70,7 @@ public class SideBySideDiffUtilTest {
         "- tsr |",
         "  jkl |   jkl",
         "- qpo |"
-    ));
+    );
   }
 
   @Test
@@ -82,14 +80,14 @@ public class SideBySideDiffUtilTest {
         asList("abc", "zyx", "jkl", "wvu"),
         "", "");
 
-    assertThat(diff, hasContent(
+    assertThat(diff).hasContent(
         "  abc |   abc",
         "- def | + zyx",
         "- ghi |",
         "  jkl |   jkl",
         "- mno | + wvu",
         "- pqr |"
-    ));
+    );
   }
 
   @Test
@@ -99,7 +97,7 @@ public class SideBySideDiffUtilTest {
         asList("zyx", "wvu", "def", "ghi", "wvu", "tsr", "mno", "pqr"),
         "", "");
 
-    assertThat(diff, hasContent(
+    assertThat(diff).hasContent(
         "- abc | + zyx",
         "      | + wvu",
         "  def |   def",
@@ -108,33 +106,33 @@ public class SideBySideDiffUtilTest {
         "      | + tsr",
         "  mno |   mno",
         "  pqr |   pqr"
-    ));
+    );
   }
 
   @Test
   public void titleLongerThanContent() {
     String diff = diff(asList("a", "b", "c"), asList("a", "b"), "leftTitle", "rightTitle");
 
-    assertThat(diff, hasContent(
+    assertThat(diff).hasContent(
         "leftTitle | rightTitle",
         "----------------------",
         "  a       |   a",
         "  b       |   b",
         "- c       |"
-    ));
+    );
   }
 
   @Test
   public void titleShorterThanContent() {
     String diff = diff(asList("abcdef", "ghijkl", "mnopqr"), asList("stuvwx", "yz"), "L", "R");
 
-    assertThat(diff, hasContent(
+    assertThat(diff).hasContent(
         "L        | R",
         "-------------------",
         "- abcdef | + stuvwx",
         "- ghijkl | + yz",
         "- mnopqr |"
-    ));
+    );
   }
 
   @Test
@@ -155,55 +153,55 @@ public class SideBySideDiffUtilTest {
   public void originalTextEmpty() {
     String diff = diff(Collections.emptyList(), asList("abc", "def"), "", "");
 
-    assertThat(diff, hasContent(
+    assertThat(diff).hasContent(
         "   | + abc",
         "   | + def"
-    ));
+    );
   }
 
   @Test
   public void revisedTextEmpty() {
     String diff = diff(asList("abc", "def"), Collections.emptyList(), "", "");
 
-    assertThat(diff, hasContent(
+    assertThat(diff).hasContent(
         "- abc |",
         "- def |"
-    ));
+    );
   }
 
   @Test
   public void differentTexts() {
     String diff = diff(asList("abc", "def", "ghi"), asList("jklm", "nopq"), "", "");
 
-    assertThat(diff, hasContent(
+    assertThat(diff).hasContent(
         "- abc | + jklm",
         "- def | + nopq",
         "- ghi |"
-    ));
+    );
   }
 
   @Test
   public void differentLengthsShortOriginal() {
     String diff = diff(singletonList("abc"), asList("def", "ghi", "jkl", "abc"), "", "");
 
-    assertThat(diff, hasContent(
+    assertThat(diff).hasContent(
         "      | + def",
         "      | + ghi",
         "      | + jkl",
         "  abc |   abc"
-    ));
+    );
   }
 
   @Test
   public void differentLengthsShortRevised() {
     String diff = diff(asList("def", "ghi", "jkl", "abc"), singletonList("abc"), "", "");
 
-    assertThat(diff, hasContent(
+    assertThat(diff).hasContent(
         "- def |",
         "- ghi |",
         "- jkl |",
         "  abc |   abc"
-    ));
+    );
   }
 
   /**
@@ -218,7 +216,7 @@ public class SideBySideDiffUtilTest {
 
     String diff = diff(actual, required, "", "");
 
-    assertThat(diff, hasContent(
+    assertThat(diff).hasContent(
         "                         | + modelVersion",
         "                         | + prerequisites",
         "                         | + parent",
@@ -263,51 +261,49 @@ public class SideBySideDiffUtilTest {
         "- scm                    |",
         "- url                    |",
         "- version                |"
-    ));
+    );
   }
 
-  private static Matcher<String> hasContent(String... expectedContent) {
-    return new SideBySideDiffMatcher(expectedContent);
-  }
+  static class SideBySideDiffAssert extends AbstractAssert<SideBySideDiffAssert, String> {
 
-  static class SideBySideDiffMatcher extends TypeSafeDiagnosingMatcher<String> {
-
-    private final String[] expectedContent;
-
-    SideBySideDiffMatcher(String[] expectedContent) {
-      this.expectedContent = expectedContent;
+    SideBySideDiffAssert(String expectedContent) {
+      super(expectedContent, SideBySideDiffAssert.class);
     }
 
-    @Override
-    public void describeTo(Description description) {
-      description.appendText("Diff output:\n");
-      for (String string : this.expectedContent) {
-        description.appendText("'").appendText(string).appendText("'\n");
-      }
+    static SideBySideDiffAssert assertThat(String actual) {
+      return new SideBySideDiffAssert(actual);
     }
 
-    @Override
-    protected boolean matchesSafely(String actualDiff, Description mismatchDescription) {
-      String[] lines = actualDiff.split("\\r|\\n|\\r\\n");
+    SideBySideDiffAssert hasContent(String... expectedContent) {
+      String[] actualContentLines = this.actual.split("\\r|\\n|\\r\\n");
+      StringBuilder mismatchDescription = new StringBuilder();
       boolean result = true;
 
-      if (lines.length != this.expectedContent.length) {
-        mismatchDescription.appendText("Expected and actual diffs do not have the same number of lines.");
+      if (expectedContent.length != actualContentLines.length) {
+        mismatchDescription.append("Expected and actual diffs do not have the same number of lines.\n");
         result = false;
       }
 
-      int minLength = Math.min(this.expectedContent.length, lines.length);
+      int minLength = Math.min(actualContentLines.length, expectedContent.length);
       for (int i = 0; i < minLength; i++) {
-        if (!this.expectedContent[i].equals(lines[i])) {
-          mismatchDescription.appendText("Mismatch in line").appendValue(i + 1).appendText(":\n")
-              .appendText("Expected: '").appendText(this.expectedContent[i]).appendText("'\n")
-              .appendText("but was : '").appendText(lines[i]).appendText("'\n");
+        if (!actualContentLines[i].equals(expectedContent[i])) {
+          mismatchDescription.append("Mismatch in line").append(i + 1).append(":\n")
+              .append("Expected: '").append(expectedContent[i]).append("'\n")
+              .append("but was : '").append(actualContentLines[i]).append("'\n");
 
           result = false;
         }
       }
 
-      return result;
+      if (!result) {
+        mismatchDescription.append("\nWhole diff:\n");
+        for (String actualContentLine : actualContentLines) {
+          mismatchDescription.append(actualContentLine).append("\n");
+        }
+        failWithMessage(mismatchDescription.toString());
+      }
+
+      return this;
     }
   }
 }

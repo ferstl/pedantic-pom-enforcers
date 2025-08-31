@@ -18,8 +18,7 @@ package com.github.ferstl.maven.pomenforcers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import com.github.ferstl.maven.pomenforcers.model.DependencyModel;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -31,7 +30,7 @@ public class PedanticDependencyManagementLocationEnforcerTest extends AbstractPe
 
   @Override
   PedanticDependencyManagementLocationEnforcer createRule() {
-    return new PedanticDependencyManagementLocationEnforcer(mockMavenProject, mockHelper);
+    return new PedanticDependencyManagementLocationEnforcer(this.mockMavenProject, this.mockHelper);
   }
 
   @BeforeEach
@@ -44,7 +43,7 @@ public class PedanticDependencyManagementLocationEnforcerTest extends AbstractPe
   @Override
   @Test
   public void getDescription() {
-    assertThat(this.testRule.getDescription(), equalTo(PedanticEnforcerRule.DEPENDENCY_MANAGEMENT_LOCATION));
+    assertThat(this.testRule.getDescription()).isEqualTo(PedanticEnforcerRule.DEPENDENCY_MANAGEMENT_LOCATION);
   }
 
   @Override

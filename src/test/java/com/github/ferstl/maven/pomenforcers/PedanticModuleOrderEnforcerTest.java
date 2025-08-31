@@ -20,8 +20,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -34,7 +33,7 @@ public class PedanticModuleOrderEnforcerTest extends AbstractPedanticEnforcerTes
 
   @Override
   PedanticModuleOrderEnforcer createRule() {
-    return new PedanticModuleOrderEnforcer(mockMavenProject, mockHelper);
+    return new PedanticModuleOrderEnforcer(this.mockMavenProject, this.mockHelper);
   }
 
   @BeforeEach
@@ -45,7 +44,7 @@ public class PedanticModuleOrderEnforcerTest extends AbstractPedanticEnforcerTes
   @Override
   @Test
   public void getDescription() {
-    assertThat(this.testRule.getDescription(), equalTo(PedanticEnforcerRule.MODULE_ORDER));
+    assertThat(this.testRule.getDescription()).isEqualTo(PedanticEnforcerRule.MODULE_ORDER);
   }
 
   @Override

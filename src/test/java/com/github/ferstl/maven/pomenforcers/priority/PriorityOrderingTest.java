@@ -17,13 +17,9 @@ package com.github.ferstl.maven.pomenforcers.priority;
 
 import java.util.ArrayList;
 import java.util.function.Function;
-import org.hamcrest.Matchers;
 import org.junit.Test;
 import com.google.common.collect.Lists;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.greaterThan;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.lessThan;
+import static org.assertj.core.api.Assertions.assertThat;
 
 
 public class PriorityOrderingTest {
@@ -36,17 +32,17 @@ public class PriorityOrderingTest {
     PriorityOrdering<String, String> testComparator = new PriorityOrdering<>(prioritizedItems, transformer);
 
     // x is in the priority list, a isn't -> a > x
-    assertThat(testComparator.compare("a", "x"), greaterThan(0));
+    assertThat(testComparator.compare("a", "x")).isGreaterThan(0);
     // x is located after y in the priority list -> x > y
-    assertThat(testComparator.compare("x", "y"), greaterThan(0));
+    assertThat(testComparator.compare("x", "y")).isGreaterThan(0);
     // x is located after y in the priority list -> y < x
-    assertThat(testComparator.compare("y", "x"), lessThan(0));
+    assertThat(testComparator.compare("y", "x")).isLessThan(0);
     // equality applies to values in the priority list
-    assertThat(testComparator.compare("x", "x"), Matchers.is(0));
+    assertThat(testComparator.compare("x", "x")).isEqualTo(0);
     // regular comparison for values that are not in the priority list
-    assertThat(testComparator.compare("b", "c"), lessThan(0));
-    assertThat(testComparator.compare("b", "b"), is(0));
-    assertThat(testComparator.compare("c", "b"), greaterThan(0));
+    assertThat(testComparator.compare("b", "c")).isLessThan(0);
+    assertThat(testComparator.compare("b", "b")).isEqualTo(0);
+    assertThat(testComparator.compare("c", "b")).isGreaterThan(0);
   }
 
   @Test
@@ -55,9 +51,9 @@ public class PriorityOrderingTest {
     Function<String, String> identity = Function.identity();
     PriorityOrdering<String, String> testComparator = new PriorityOrdering<>(prioritizedItems, identity);
 
-    assertThat(testComparator.compare("a", "b"), lessThan(0));
-    assertThat(testComparator.compare("a", "a"), is(0));
-    assertThat(testComparator.compare("b", "a"), greaterThan(0));
+    assertThat(testComparator.compare("a", "b")).isLessThan(0);
+    assertThat(testComparator.compare("a", "a")).isEqualTo(0);
+    assertThat(testComparator.compare("b", "a")).isGreaterThan(0);
   }
 
 

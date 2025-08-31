@@ -24,9 +24,7 @@ import org.junit.jupiter.api.Test;
 import org.w3c.dom.Document;
 import com.github.ferstl.maven.pomenforcers.model.ProjectModel;
 import com.github.ferstl.maven.pomenforcers.util.XmlUtils;
-import static com.github.ferstl.maven.pomenforcers.ErrorReportMatcher.hasErrors;
-import static com.github.ferstl.maven.pomenforcers.ErrorReportMatcher.hasNoErrors;
-import static org.hamcrest.MatcherAssert.assertThat;
+import static com.github.ferstl.maven.pomenforcers.ErrorReportAssert.assertThat;
 import static org.mockito.Mockito.mock;
 
 public class PedanticDependencyElementEnforcerTest {
@@ -52,7 +50,7 @@ public class PedanticDependencyElementEnforcerTest {
     enforcer.doEnforce(this.errorReport);
 
     // assert
-    assertThat(this.errorReport, hasNoErrors());
+    assertThat(this.errorReport).hasNoErrors();
   }
 
   @Test
@@ -67,7 +65,7 @@ public class PedanticDependencyElementEnforcerTest {
     enforcer.doEnforce(this.errorReport);
 
     // assert
-    assertThat(this.errorReport, hasErrors());
+    assertThat(this.errorReport).hasErrors();
   }
 
   @Test
@@ -82,12 +80,12 @@ public class PedanticDependencyElementEnforcerTest {
     enforcer.doEnforce(this.errorReport);
 
     // assert
-    assertThat(this.errorReport, hasErrors());
+    assertThat(this.errorReport).hasErrors();
   }
 
   private PedanticDependencyElementEnforcer createEnforcer(Path pomFile) {
     Document document = XmlUtils.parseXml(pomFile.toFile());
-    PedanticDependencyElementEnforcer enforcer = new PedanticDependencyElementEnforcer(mockMavenProject, mockHelper);
+    PedanticDependencyElementEnforcer enforcer = new PedanticDependencyElementEnforcer(this.mockMavenProject, this.mockHelper);
 
     enforcer.initialize(document, new ProjectModel());
     return enforcer;

@@ -21,8 +21,7 @@ import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
 import com.github.ferstl.maven.pomenforcers.model.DependencyModel;
 import com.github.ferstl.maven.pomenforcers.model.PluginModel;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -35,13 +34,13 @@ public class PedanticPluginConfigurationEnforcerTest extends AbstractPedanticEnf
 
   @Override
   PedanticPluginConfigurationEnforcer createRule() {
-    return new PedanticPluginConfigurationEnforcer(mockMavenProject, mockHelper);
+    return new PedanticPluginConfigurationEnforcer(this.mockMavenProject, this.mockHelper);
   }
 
   @Override
   @Test
   public void getDescription() {
-    assertThat(this.testRule.getDescription(), equalTo(PedanticEnforcerRule.PLUGIN_CONFIGURATION));
+    assertThat(this.testRule.getDescription()).isEqualTo(PedanticEnforcerRule.PLUGIN_CONFIGURATION);
   }
 
   @Override

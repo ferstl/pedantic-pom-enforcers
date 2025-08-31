@@ -18,8 +18,7 @@ package com.github.ferstl.maven.pomenforcers;
 import org.apache.maven.model.Plugin;
 import org.junit.jupiter.api.Test;
 import com.github.ferstl.maven.pomenforcers.model.PluginModel;
-import static org.hamcrest.Matchers.equalTo;
-import static org.junit.Assert.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
@@ -30,13 +29,13 @@ public class PedanticPluginManagementOrderEnforcerTest extends AbstractPedanticE
 
   @Override
   PedanticPluginManagementOrderEnforcer createRule() {
-    return new PedanticPluginManagementOrderEnforcer(mockMavenProject, mockHelper);
+    return new PedanticPluginManagementOrderEnforcer(this.mockMavenProject, this.mockHelper);
   }
 
   @Test
   @Override
   public void getDescription() {
-    assertThat(this.testRule.getDescription(), equalTo(PedanticEnforcerRule.PLUGIN_MANAGEMENT_ORDER));
+    assertThat(this.testRule.getDescription()).isEqualTo(PedanticEnforcerRule.PLUGIN_MANAGEMENT_ORDER);
   }
 
   @Test

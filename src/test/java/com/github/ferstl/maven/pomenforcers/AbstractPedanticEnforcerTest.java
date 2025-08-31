@@ -31,9 +31,7 @@ import org.w3c.dom.Element;
 import com.github.ferstl.maven.pomenforcers.model.DependencyModel;
 import com.github.ferstl.maven.pomenforcers.model.DependencyScope;
 import com.github.ferstl.maven.pomenforcers.model.ProjectModel;
-import static com.github.ferstl.maven.pomenforcers.ErrorReportMatcher.hasErrors;
-import static com.github.ferstl.maven.pomenforcers.ErrorReportMatcher.hasNoErrors;
-import static org.hamcrest.MatcherAssert.assertThat;
+import static com.github.ferstl.maven.pomenforcers.ErrorReportAssert.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -67,7 +65,7 @@ public abstract class AbstractPedanticEnforcerTest<T extends AbstractPedanticEnf
     when(this.mockMavenProject.getDependencyManagement()).thenReturn(depMgmtMock);
     when(this.mockMavenProject.getPluginManagement()).thenReturn(pluginMgmtMock);
 
-    when(mockHelper.evaluate("${project}")).thenReturn(this.mockMavenProject);
+    when(this.mockHelper.evaluate("${project}")).thenReturn(this.mockMavenProject);
 
     this.testRule = createRule();
     this.testRule.initialize(createEmptyPom(), this.projectModel);
@@ -86,9 +84,9 @@ public abstract class AbstractPedanticEnforcerTest<T extends AbstractPedanticEnf
     this.testRule.doEnforce(this.report);
 
     if (hasErrors) {
-      assertThat(this.report, hasErrors());
+      assertThat(this.report).hasErrors();
     } else {
-      assertThat(this.report, hasNoErrors());
+      assertThat(this.report).hasNoErrors();
     }
   }
 

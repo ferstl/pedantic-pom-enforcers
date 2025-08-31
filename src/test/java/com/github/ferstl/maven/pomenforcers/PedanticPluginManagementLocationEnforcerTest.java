@@ -18,8 +18,7 @@ package com.github.ferstl.maven.pomenforcers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import com.github.ferstl.maven.pomenforcers.model.PluginModel;
-import static org.hamcrest.Matchers.equalTo;
-import static org.junit.Assert.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -31,7 +30,7 @@ public class PedanticPluginManagementLocationEnforcerTest extends AbstractPedant
 
   @Override
   PedanticPluginManagementLocationEnforcer createRule() {
-    return new PedanticPluginManagementLocationEnforcer(mockMavenProject, mockHelper);
+    return new PedanticPluginManagementLocationEnforcer(this.mockMavenProject, this.mockHelper);
   }
 
   @BeforeEach
@@ -44,7 +43,7 @@ public class PedanticPluginManagementLocationEnforcerTest extends AbstractPedant
   @Override
   @Test
   public void getDescription() {
-    assertThat(this.testRule.getDescription(), equalTo(PedanticEnforcerRule.PLUGIN_MANAGEMENT_LOCATION));
+    assertThat(this.testRule.getDescription()).isEqualTo(PedanticEnforcerRule.PLUGIN_MANAGEMENT_LOCATION);
   }
 
   @Override

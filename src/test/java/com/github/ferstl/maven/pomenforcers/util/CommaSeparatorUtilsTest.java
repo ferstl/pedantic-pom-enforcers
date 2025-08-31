@@ -21,8 +21,7 @@ import java.util.Map;
 import org.junit.Test;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
-import static org.hamcrest.Matchers.equalTo;
-import static org.junit.Assert.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class CommaSeparatorUtilsTest {
 
@@ -36,7 +35,7 @@ public class CommaSeparatorUtilsTest {
     for (Map.Entry<String, List<String>> test : tests.entrySet()) {
       List<String> l = new ArrayList<>();
       CommaSeparatorUtils.splitAndAddToCollection(test.getKey(), l);
-      assertThat(l, equalTo(test.getValue()));
+      assertThat(l).isEqualTo(test.getValue());
     }
   }
 }

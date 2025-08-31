@@ -29,8 +29,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 import com.github.ferstl.maven.pomenforcers.model.DependencyScope;
 import com.google.common.base.Joiner;
 import com.google.common.collect.Collections2;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
@@ -60,7 +59,7 @@ public class PedanticDependencyScopeEnforcerTest extends AbstractPedanticEnforce
 
   @Override
   PedanticDependencyScopeEnforcer createRule() {
-    return new PedanticDependencyScopeEnforcer(mockMavenProject, mockHelper);
+    return new PedanticDependencyScopeEnforcer(this.mockMavenProject, this.mockHelper);
   }
 
   @BeforeEach
@@ -71,7 +70,7 @@ public class PedanticDependencyScopeEnforcerTest extends AbstractPedanticEnforce
   @Override
   @Test
   public void getDescription() {
-    assertThat(this.testRule.getDescription(), equalTo(PedanticEnforcerRule.DEPENDENCY_SCOPE));
+    assertThat(this.testRule.getDescription()).isEqualTo(PedanticEnforcerRule.DEPENDENCY_SCOPE);
   }
 
   @Override
