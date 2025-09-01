@@ -54,10 +54,11 @@
     <url>${project.url}</url>
     <tag>HEAD</tag>
   </scm>
-  
+
   <properties>
     <!-- Plugin versions. -->
     <central-publishing-maven-plugin.version>0.8.0</central-publishing-maven-plugin.version>
+    <flatten-maven-plugin.version>1.7.2</flatten-maven-plugin.version>
     <license-maven-plugin.version>4.2</license-maven-plugin.version>
     <maven-clean-plugin.version>3.1.0</maven-clean-plugin.version>
     <maven-compiler-plugin.version>3.11.0</maven-compiler-plugin.version>
@@ -318,6 +319,12 @@
         </plugin>
 
         <plugin>
+          <groupId>org.codehaus.mojo</groupId>
+          <artifactId>flatten-maven-plugin</artifactId>
+          <version>${flatten-maven-plugin.version}</version>
+        </plugin>
+
+        <plugin>
           <groupId>org.eluder.coveralls</groupId>
           <artifactId>coveralls-maven-plugin</artifactId>
           <version>${coveralls-maven-plugin.version}</version>
@@ -367,6 +374,32 @@
             <id>attach-sources</id>
             <goals>
               <goal>jar-no-fork</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>flatten-maven-plugin</artifactId>
+        <configuration>
+        </configuration>
+        <executions>
+          <!-- enable flattening -->
+          <execution>
+            <id>flatten</id>
+            <phase>process-resources</phase>
+            <goals>
+              <goal>flatten</goal>
+            </goals>
+            <configuration>
+              <flattenMode>ossrh</flattenMode>
+            </configuration>
+          </execution>
+          <!-- ensure proper cleanup -->
+          <execution>
+            <id>flatten-clean</id>
+            <goals>
+              <goal>clean</goal>
             </goals>
           </execution>
         </executions>
