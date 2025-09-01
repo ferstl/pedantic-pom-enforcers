@@ -22,7 +22,7 @@ jobs:
           distribution: 'zulu'
           cache: 'maven'
       - name: Maven Build
-        run: mvn clean install javadoc:javadoc
+        run: mvn clean verify javadoc:javadoc
 
   post-build:
     needs: [ build ]

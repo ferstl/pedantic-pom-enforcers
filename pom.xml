@@ -88,7 +88,7 @@
     <maven-surefire-plugin.version>3.5.2</maven-surefire-plugin.version>
     <coveralls-maven-plugin.version>4.3.0</coveralls-maven-plugin.version>
     <jacoco-maven-plugin.version>0.8.10</jacoco-maven-plugin.version>
-    <takari-lifecycle-plugin.version>2.3.2</takari-lifecycle-plugin.version>
+    <takari-lifecycle-plugin.version>2.0.8</takari-lifecycle-plugin.version>
 
     <!-- Other settings. -->
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -140,7 +140,7 @@
     <dependency>
       <groupId>io.takari.maven.plugins</groupId>
       <artifactId>takari-plugin-integration-testing</artifactId>
-      <version>3.1.1</version>
+      <version>2.9.2</version>
       <type>pom</type>
       <scope>test</scope>
     </dependency>
@@ -148,7 +148,7 @@
     <dependency>
       <groupId>io.takari.maven.plugins</groupId>
       <artifactId>takari-plugin-testing</artifactId>
-      <version>3.1.1</version>
+      <version>2.9.2</version>
       <scope>test</scope>
     </dependency>
 
@@ -165,12 +165,12 @@
       </exclusions>
     </dependency>
     
-	<dependency>
-	    <groupId>org.junit.jupiter</groupId>
-	    <artifactId>junit-jupiter-params</artifactId>
-	    <version>5.11.4</version>
-	    <scope>test</scope>
-	</dependency>    
+    <dependency>
+        <groupId>org.junit.jupiter</groupId>
+        <artifactId>junit-jupiter-params</artifactId>
+        <version>5.11.4</version>
+        <scope>test</scope>
+    </dependency>
     <dependency>
       <groupId>org.hamcrest</groupId>
       <artifactId>java-hamcrest</artifactId>
@@ -180,7 +180,7 @@
     <dependency>
       <groupId>org.mockito</groupId>
       <artifactId>mockito-core</artifactId>
-      <version>5.14.2</version>
+      <version>3.12.4</version>
       <scope>test</scope>
       <exclusions>
         <exclusion>
@@ -189,12 +189,12 @@
         </exclusion>
       </exclusions>
     </dependency>
-	<dependency>
-		<groupId>org.assertj</groupId>
-		<artifactId>assertj-core</artifactId>
-      	<version>3.27.3</version>
+    <dependency>
+        <groupId>org.assertj</groupId>
+        <artifactId>assertj-core</artifactId>
+        <version>3.27.3</version>
         <scope>test</scope>
-	</dependency>
+    </dependency>
 
   </dependencies>
 
@@ -336,6 +336,11 @@
           <artifactId>maven-surefire-plugin</artifactId>
           <version>${maven-surefire-plugin.version}</version>
         </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-failsafe-plugin</artifactId>
+          <version>${maven-surefire-plugin.version}</version>
+        </plugin>
 
         <plugin>
           <groupId>org.eluder.coveralls</groupId>
@@ -384,6 +389,30 @@
             </goals>
           </execution>
         </executions>
+      </plugin>
+
+      <!-- use failsafe-plugin to exectue the integration-test because JDK8 compatible version of takari-plugin-integration-testing only supports junit 4 -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-failsafe-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>junit4</id>
+            <goals>
+              <goal>integration-test</goal>
+            </goals>
+            <configuration>
+                <includes>**/PedanticPomEnforcersIntegrationTest.java</includes>
+            </configuration>
+          </execution>
+        </executions>
+        <dependencies>
+          <dependency>
+            <groupId>org.apache.maven.surefire</groupId>
+            <artifactId>surefire-junit47</artifactId>
+            <version>3.5.3</version>
+          </dependency>
+        </dependencies>
       </plugin>
     </plugins>
   </build>
