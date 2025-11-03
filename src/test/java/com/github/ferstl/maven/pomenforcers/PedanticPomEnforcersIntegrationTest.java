@@ -81,6 +81,17 @@ class PedanticPomEnforcersIntegrationTest {
   }
 
   @MavenPluginTest
+  void issue53() throws Exception {
+    File basedir = this.resources.getBasedir("issue-53");
+    MavenExecutionResult result = this.mavenRuntime
+        .forProject(basedir)
+        .execute("enforcer:enforce");
+
+    result.assertLogText("Dependency exclusions have to be declared in <dependencyManagement>");
+    result.assertLogText("BUILD FAILURE");
+  }
+
+  @MavenPluginTest
   void warnOnly() throws Exception {
     File basedir = this.resources.getBasedir("warn-only");
     MavenExecutionResult result = this.mavenRuntime
