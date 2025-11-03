@@ -105,8 +105,4 @@ public abstract class AbstractPedanticEnforcer extends AbstractEnforcerRule {
     return this.warnOnly ? EnforcerLevel.WARN : EnforcerLevel.ERROR;
   }
 
-  @Override
-  public String getCacheId() {
-    return getClass() + "-uncachable";
-  }
 }
