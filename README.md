@@ -14,6 +14,7 @@ The *Pedantic POM Enforcers* consist of several Maven enforcer rules that help y
 
 ### Release Notes / Solved Issues
 
+- [Version 2.3.1](https://github.com/ferstl/pedantic-pom-enforcers/releases/tag/pedantic-pom-enforcers-2.3.1) (2025-11-04, Maintenance Release)
 - [Version 2.3.0](https://github.com/ferstl/pedantic-pom-enforcers/releases/tag/pedantic-pom-enforcers-2.3.0) (2025-09-01, Maintenance Release)
 - [Version 2.2.0](https://github.com/ferstl/pedantic-pom-enforcers/releases/tag/pedantic-pom-enforcers-2.2.0) (2023-07-16, Feature Release)
 - [Version 2.1.0](https://github.com/ferstl/pedantic-pom-enforcers/releases/tag/pedantic-pom-enforcers-2.1.0) (2021-09-02, Feature Release)
@@ -41,7 +42,7 @@ To activate the enforcer rules, just declare them in the configuration of the [`
             <dependency>
               <groupId>com.github.ferstl</groupId>
               <artifactId>pedantic-pom-enforcers</artifactId>
-              <version>2.3.0</version>
+              <version>2.3.1</version>
             </dependency>
           </dependencies>
           <!-- Configure the enforcer rules -->
